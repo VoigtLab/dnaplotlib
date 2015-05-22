@@ -1,7 +1,0 @@
-from_partname,type,to_partname,arrowhead_length,linestyle,linewidth,color
-HlyIIR(js),Repression,pHlyIIR,2,-,,0.42;0.24;0.60
-QacR,Repression,pQacR,2,-,,0.98;0.60;0.60
-SrpR,Repression,pSrpR,2,-,,0.12;0.47;0.71
-LitR,Repression,pLitR,2,-,,0.99;0.75;0.44
-BM3R1,Repression,pBM3R1,2,-,,0.20;0.63;0.17
-PhlF,Repression,pPhlF,2,-,,0.89;0.10;0.11

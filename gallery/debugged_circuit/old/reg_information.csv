@@ -1,0 +1,1 @@
+from_partname,type,to_partname,arrowhead_length,linestyle,linewidth,colorC_AmtR,Repression,P_AmtR,2,-,1,1.0;0.75;0.17C_LitR,Repression,P_LitR,2,-,1,0.38;0.82;0.32C_BM3R1,Repression,P_BM3R1,2,-,1,0.95;0.30;0.25C_SrpR,Repression,P_SrpR,2,-,1,0.38;0.65;0.87C_PhlF,Repression,P_PhlF,2,-,1,0.55;0.35;0.64

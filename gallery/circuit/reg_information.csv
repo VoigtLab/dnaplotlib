@@ -1,0 +1,4 @@
+from_partname,type,to_partname,arrowhead_length,linestyle,linewidth,color
+SrpR,Repression,pSrpR,2,--,2,1;0.5;0
+NOR_rbs1-PhlF,Repression,pPhlF,2,-,2,1;0;0
+AmtR,Activation,pAmtR,2,-,2,0;0;1

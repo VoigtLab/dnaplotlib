@@ -1,0 +1,11 @@
+from_partname,type,to_partname,arrowhead_length,linestyle,linewidth,color
+g0,Repression,p0,1,-,,0.0;0.0;0.0
+g1,Repression,p1,1,-,,0.0;0.0;0.0
+g2,Repression,p2,1,-,,0.0;0.0;0.0
+g3,Repression,p3,1,-,,0.0;0.0;0.0
+g4,Repression,p4,1,-,,0.0;0.0;0.0
+g5,Repression,p5,1,-,,0.0;0.0;0.0
+g6,Repression,p6,1,-,,0.0;0.0;0.0
+g7,Repression,p7,1,-,,0.0;0.0;0.0
+g8,Repression,p8,1,-,,0.0;0.0;0.0
+g9,Repression,p9,1,-,,0.0;0.0;0.0

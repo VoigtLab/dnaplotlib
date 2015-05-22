@@ -1,0 +1,1 @@
+part_name,type,x_extent,y_extent,start_pad,end_pad,color,hatch,arrowhead_height,arrowhead_length,linestyle,linewidth,label,label_style,label_size,label_y_offset,label_x_offset,label_colorP,Promoter,,,,,,,,,,,,,,,,R,RBS,,,,,,,,,,,,,,,,C1,CDS,,,,,,,,,,,,,,,,C2,CDS,50,,,,0.95;0.30;0.25,,10,,,,,,,,,C3,CDS,40,12,,,0.38;0.65;0.87,,0,,,,LacZ,,,,-3,T,Terminator,,,,,,,,,,,,,,,,

@@ -1,0 +1,7 @@
+from_partname,type,to_partname,arrowhead_length,linestyle,linewidth,color
+QacR_ON,Repression,pQacR,2,-,,0.98;0.60;0.60
+SrpR_ON,Repression,pSrpR,2,-,,0.12;0.47;0.71
+LitR_ON,Repression,pLitR,2,-,,0.99;0.75;0.44
+AmtR_ON,Repression,pAmtR(js),2,-,,1.00;0.50;0.00
+BM3R1_ON,Repression,pBM3R1,2,-,,0.20;0.63;0.17
+PhlF_ON,Repression,pPhlF,2,-,,0.89;0.10;0.11

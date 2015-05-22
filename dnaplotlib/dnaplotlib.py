@@ -49,7 +49,7 @@ DNAplotlib
 #    Bryan Der <bder@mit.edu>
 #    Emerson Glassey <eglassey@mit.edu>
 #    All rights reserved.
-#    OSI Non-Profit Open Software License ("Non-Profit OSL") 3.0 license.
+#    OSI Open Software License 3.0 (OSL-3.0) license.
 
 # Set the backend to use (important for headless servers)
 import matplotlib

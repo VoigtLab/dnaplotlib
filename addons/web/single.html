@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+    <script src="js/download.js"></script>
+    <script src="js/pdfobject.js"></script>
+    <script src="js/jquery.autosize.min.js"></script>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="shortcut icon" href="images/cds_icon.jpg">
+
+    <title>dnaplotapp</title>
+</head>
+<body>
+
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="index.html">DNAplotlib</a>
+            <ul class="nav">
+                <li><a href="index.html">Home</a></li>
+                <li class="active"><a href="single.html">Single design</a></li>
+                <li><a href="library.html">Library design</a></li>
+                <li><a href="examples.html">Examples</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="margin-top:50px; height: 400px">
+
+    <br>
+    <p style="width: 500px">
+    <b>Quickly construct a single genetic design.</b><br>
+    By selecting the part color and part types required,
+    a textual representation of the design is automatically generated.
+    This can be manually updated if required and then visualized by pressing `Submit'.
+    </p>
+    <br>
+
+    <div>
+        <div style="width: 500px">
+            <canvas class="swatch" id="black"       style="background-color: #000000; border: 5px solid black"></canvas>
+            <canvas class="swatch" id="gray"        style="background-color: #888888" ></canvas>
+            <canvas class="swatch" id="red"         style="background-color: #E31A1C" ></canvas>
+            <canvas class="swatch" id="lightred"    style="background-color: #FB9A99" ></canvas>
+            <canvas class="swatch" id="orange"      style="background-color: #FF7F00" ></canvas>
+            <canvas class="swatch" id="lightorange" style="background-color: #FDBF6F" ></canvas>
+            <canvas class="swatch" id="yellow"      style="background-color: #FFFF00" ></canvas>
+        </div>
+        <div style="width: 500px">
+            <canvas class="swatch" id="lightyellow" style="background-color: #FFFF99" ></canvas>
+            <canvas class="swatch" id="green"       style="background-color: #33A02C" ></canvas>
+            <canvas class="swatch" id="lightgreen"  style="background-color: #B2DF8A" ></canvas>
+            <canvas class="swatch" id="blue"        style="background-color: #1F78B4" ></canvas>
+            <canvas class="swatch" id="lightblue"   style="background-color: #A6CEE3" ></canvas>
+            <canvas class="swatch" id="purple"      style="background-color: #6A3D9A" ></canvas>
+            <canvas class="swatch" id="lightpurple" style="background-color: #CAB2D6" ></canvas>
+        </div>
+    </div>
+
+    <div>
+        <div style="width: 500px">
+            <img class="particon" src="images/p.png" id="Promoter">
+            <img class="particon" src="images/i.png" id="Ribozyme">
+            <img class="particon" src="images/r.png" id="RBS">
+            <img class="particon" src="images/c.png" id="CDS">
+            <img class="particon" src="images/t.png" id="Terminator">
+            <img class="particon" src="images/s.png" id="Spacer">
+        </div>
+        <div style="width: 500px">
+            <img class="particon" src="images/=.png" id="Scar">
+            <img class="reverse_particon" src="images/t.png" id="rTerminator">
+            <img class="reverse_particon" src="images/c.png" id="rCDS">
+            <img class="reverse_particon" src="images/r.png" id="rRBS">
+            <img class="reverse_particon" src="images/i.png" id="rRibozyme">
+            <img class="reverse_particon" src="images/p.png" id="rPromoter">
+        </div>
+    </div>
+
+    <br>
+    <textarea class="center" id="quick_input" style="width: 485px"> </textarea>
+    <br>
+
+</div>
+<div class="container">
+    <form id="formSubmit" action="JavaScript:plotDNA()" method="post">
+        <div>
+            <button class="btn btn-large btn-success" type="submit" id="submit">submit</button>
+            <a id="download_pdf" style="display: block" download="">download PDF</a>
+        </div>
+    </form>
+
+    <div>
+        <h4 id="wait-message" style="display: none">job is running</h4>
+        <img id="img_jpg" src="">
+    </div>
+
+</div>
+
+</body>
+</html>
+
+
+
+<script>
+
+    var out_pdf = null;
+
+    function plotDNA() {
+        jobID = new Date() / 1000;
+        jobID *= 1000;//milliseconds since epoch
+
+        var in_text = $('#quick_input').val();
+        out_pdf = jobID + "_out.pdf";
+        var out_jpg = jobID + "_out.jpg";
+
+        $('#wait-message').show();
+
+        $.ajax({
+            url: "/dnaplotapp/cgi-bin/run_quick.pl",
+            type: "GET",
+            data: "in_text="+in_text + '&out_pdf='+out_pdf,
+            success: function() {
+                $('#wait-message').hide();
+                $('#img_jpg').attr('src', "/dnaplotapp/results/"+out_jpg);
+                $('#img_jpg').css('border', '1px solid black');
+                $('#download_pdf').attr('href', '/dnaplotapp/results/'+out_pdf);
+            }
+        });
+    }
+
+    var color = "black";
+    //respond to color click
+    $(document).ready(function(){
+        $("canvas").mousedown(function(){
+
+            $("canvas").each(function() {
+                $('#'+this.id).css('border','5px solid white');
+            });
+
+            color = this.id;
+            $('#'+this.id).css('border','5px solid black');
+        });
+    });
+
+
+    //respond to part click
+    $(document).ready(function(){
+        $(".particon").mouseenter(function() {
+            $('#'+this.id).css('border','3px solid black');
+        });
+        $(".particon").mouseleave(function() {
+            $('#'+this.id).css('border','3px solid white');
+        });
+        $(".reverse_particon").mouseenter(function() {
+            $('#'+this.id).css('border','3px solid black');
+        });
+        $(".reverse_particon").mouseleave(function() {
+            $('#'+this.id).css('border','3px solid white');
+        });
+
+        $(".particon").mousedown(function(){
+
+            var letter = "";
+            if (this.id == 'Promoter') {
+                letter = 'p';
+            }
+            if (this.id == 'Ribozyme') {
+                letter = 'i';
+            }
+            if (this.id == 'RBS') {
+                letter = 'r';
+            }
+            if (this.id == 'CDS') {
+                letter = 'c';
+            }
+            if (this.id == 'Terminator') {
+                letter = 't';
+            }
+            if (this.id == 'Spacer') {
+                letter = 's';
+            }
+            if (this.id == 'Scar') {
+                letter = '=';
+            }
+            $('#quick_input').val($('#quick_input').val() + letter + '.' + color + ' ');
+            //$('#quick_input').autosize();
+            //$('#quick_input').trigger('autosize.resize');
+
+        });
+
+        $(".reverse_particon").mousedown(function(){
+
+            var letter = "";
+            if (this.id == 'rPromoter') {
+                letter = '-p';
+            }
+            if (this.id == 'rRibozyme') {
+                letter = '-i';
+            }
+            if (this.id == 'rRBS') {
+                letter = '-r';
+            }
+            if (this.id == 'rCDS') {
+                letter = '-c';
+            }
+            if (this.id == 'rTerminator') {
+                letter = '-t';
+            }
+            if (this.id == 'rSpacer') {
+                letter = '-s';
+            }
+            if (this.id == 'rScar') {
+                letter = '-=';
+            }
+            $('#quick_input').val($('#quick_input').val() + letter + '.' + color + ' ');
+        });
+    });
+
+
+
+</script>
+
+<style>
+    #img_jpg{
+        width: auto;
+        max-width:500px;
+        max-height: 150px;
+    }
+
+    .waiting { cursor: wait; }
+
+</style>

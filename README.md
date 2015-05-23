@@ -5,7 +5,7 @@ DNAplotlib is a computational toolkit that enables highly customizable visualiza
 ##Installation
 The DNAplotlib library is contained within the `dnaplotlib.py` file in the `lib` directory and requires Python 2.6 and matplotlib 1.2 or newer. To install add the location of this file to your `PYTHONPATH` and you are good to: `import dnaplotlib`
 
-DNAplotlib is cross-platform and open-source software developed using Python and released under the OSI Open Software License 3.0 (OSL-3.0) license (see LICENSE.txt).
+DNAplotlib is cross-platform and open-source software developed using Python and released under the OSI Open Software License 3.0 (OSL-3.0) license.
 
 ##Getting Started
 We provide an extensive gallery of use cases for DNAplotlib in the `gallery` directory. Click on a thumbnail below to go directly to the example:

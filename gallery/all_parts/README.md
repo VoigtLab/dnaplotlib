@@ -1,6 +1,6 @@
 #All SBOL Visual Parts + Customization
 
-<img src="all_parts.png" width="400px"/>
+<img src="all_parts.png" width="600px"/>
 
 Information about the plot should go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,

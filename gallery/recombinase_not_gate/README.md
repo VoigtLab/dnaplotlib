@@ -1,6 +1,6 @@
-#Order and Orientation Library
+#Recombinase NOT-gate
 
-<img src="order_orientation_library.png" width="400px"/>
+<img src="recombinase_not_gate.png" width="400px"/>
 
 Information about the plot should go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,

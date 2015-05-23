@@ -13,19 +13,20 @@ DNAplotlib is cross-platform and open-source software developed using Python and
 ##Getting Started
 We provide an extensive gallery of use cases for DNAplotlib in the `gallery` directory. Click on a thumbnail below to go directly to the example:
 
-###Single designs and annotation
+###Single Designs and Annotation
 <a href="gallery/all_parts"><img src="gallery/all_parts/all_parts.png" height="200px"/></a>
 <a href="gallery/xnor_truthtable"><img src="gallery/xnor_truthtable/xnor_truthtable.png" height="200px"/></a>
 <a href="gallery/scatter_annotate"><img src="gallery/scatter_annotate/scatter_annotate.png" height="200px"/></a>
 
-###Extensions to new part types
+###New Part Types
+<a href="gallery/recombinase_not_gate"><img src="gallery/recombinase_not_gate/recombinase_not_gate.png" height="200px"/></a>
+<a href="gallery/recombinase_array"><img src="gallery/recombinase_array/recombinase_array.png" height="200px"/></a>
 
-
-###Trace-based rendering
+###Trace-based Rendering
 <a href="gallery/multiple_traces"><img src="gallery/multiple_traces/multiple_traces.png" height="200px"/></a>
 <a href="gallery/rotated_design"><img src="gallery/rotated_design/rotated_design.png" height="200px"/></a>
 
-###Library visualisation
+###Library Visualisation
 <a href="gallery/variants_library"><img src="gallery/variants_library/variants_library.png" height="200px"/></a>
 <a href="gallery/order_orientation_library"><img src="gallery/order_orientation_library/order_orientation_library.png" height="200px"/></a>
 

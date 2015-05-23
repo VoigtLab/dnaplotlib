@@ -10,12 +10,12 @@ DNAplotlib is cross-platform and open-source software developed using Python and
 ##Getting Started
 We provide an extensive gallery of use cases for DNAplotlib in the `gallery` directory. Click on a thumbnail below to go directly to the example:
 
-###Single Designs and Annotation
-<a href="gallery/all_parts"><img src="gallery/all_parts/all_parts.png" height="160px"/></a>
-<a href="gallery/xnor_truthtable"><img src="gallery/xnor_truthtable/xnor_truthtable.png" height="160px"/></a>
-<a href="gallery/scatter_annotate"><img src="gallery/scatter_annotate/scatter_annotate.png" height="160px"/></a>
+###Genetic Designs and Annotation
+<a href="gallery/all_parts"><img src="gallery/all_parts/all_parts.png" height="160px" style="padding-right:10px"/></a>
+<a href="gallery/xnor_truthtable"><img src="gallery/xnor_truthtable/xnor_truthtable.png" height="160px" style="padding-right:10px"/></a>
+<a href="gallery/scatter_annotate"><img src="gallery/scatter_annotate/scatter_annotate.png" height="160px" style="padding-right:10px"/></a>
 
-###New Part Types
+###New Part Types and Regulation
 <a href="gallery/recombinase_not_gate"><img src="gallery/recombinase_not_gate/recombinase_not_gate.png" height="160px"/></a>
 <a href="gallery/recombinase_array"><img src="gallery/recombinase_array/recombinase_array.png" height="160px"/></a>
 
@@ -26,7 +26,7 @@ We provide an extensive gallery of use cases for DNAplotlib in the `gallery` dir
 ###Dynamics and Evolution
 <a href="gallery/repressilator_animate"><img src="gallery/repressilator_animate/repressilator_animate.png" height="380px"/></a>
 
-###Library Visualisation
+###Variant Libraries
 <a href="gallery/variants_library"><img src="gallery/variants_library/variants_library.png" height="500px"/></a>
 <a href="gallery/order_orientation_library"><img src="gallery/order_orientation_library/order_orientation_library.png" height="500px"/></a>
 

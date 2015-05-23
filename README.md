@@ -11,9 +11,9 @@ DNAplotlib is cross-platform and open-source software developed using Python and
 We provide an extensive gallery of use cases for DNAplotlib in the `gallery` directory. Click on a thumbnail below to go directly to the example:
 
 ###Single Designs and Annotation
-<a href="gallery/all_parts"><img src="gallery/all_parts/all_parts.png" height="200px"/></a>
-<a href="gallery/xnor_truthtable"><img src="gallery/xnor_truthtable/xnor_truthtable.png" height="200px"/></a>
-<a href="gallery/scatter_annotate"><img src="gallery/scatter_annotate/scatter_annotate.png" height="200px"/></a>
+<a href="gallery/all_parts"><img src="gallery/all_parts/all_parts.png" height="150px"/></a>
+<a href="gallery/xnor_truthtable"><img src="gallery/xnor_truthtable/xnor_truthtable.png" height="150px"/></a>
+<a href="gallery/scatter_annotate"><img src="gallery/scatter_annotate/scatter_annotate.png" height="150px"/></a>
 
 ###New Part Types
 <a href="gallery/recombinase_not_gate"><img src="gallery/recombinase_not_gate/recombinase_not_gate.png" height="200px"/></a>

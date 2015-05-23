@@ -1,6 +1,6 @@
-#SBOL Visual Parts & Customization
+#Library of Design Variants
 
-<img src="all_parts.png" width="600px"/>
+<img src="variants_library.png" width="400px"/>
 
 Information about the plot should go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,

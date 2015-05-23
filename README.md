@@ -24,7 +24,7 @@ We provide an extensive gallery of use cases for DNAplotlib in the `gallery` dir
 <a href="gallery/rotated_design"><img src="gallery/rotated_design/rotated_design.png" height="200px"/></a>
 
 ###Dynamics and Evolution
-<a href="gallery/repressilator_animate"><img src="gallery/repressilator_animate/repressilator_animate.png" height="200px"/></a>
+<a href="gallery/repressilator_animate"><img src="gallery/repressilator_animate/repressilator_animate.png" height="380px"/></a>
 
 ###Library Visualisation
 <a href="gallery/variants_library"><img src="gallery/variants_library/variants_library.png" height="500px"/></a>

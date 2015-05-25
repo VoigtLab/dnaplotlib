@@ -67,7 +67,7 @@ import math
 __author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT\n\
                Bryan Der <bder@mit.edu>, Voigt Lab, MIT\n\
                Emerson Glassey <eglassey@mit.edu>, Voigt Lab, MIT'
-__license__ = 'OSI Non-Profit OSL 3.0'
+__license__ = 'OSI OSL 3.0'
 __version__ = '1.0'
 
 ###############################################################################

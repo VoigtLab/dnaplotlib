@@ -1,13 +1,17 @@
 #!/usr/bin/env python
 """
-	Example of trace plotting from a GeneClusterLibrary object.
+	Use trace-based renderer to plot multiple traces at nucleotide resolution.
 """
 
-import dnaplotlib as dpl
-import matplotlib.pyplot as plt
 import csv
 import numpy as np
+import dnaplotlib as dpl
+import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+
+__author__  = 'Thomas Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'
+__license__ = 'OSI OSL 3.0'
+__version__ = '1.0'
 
 # Calculates a lighter color
 def lighten_color (col, fac):
@@ -16,7 +20,7 @@ def lighten_color (col, fac):
 	b = col[2] + (fac*(1.0-col[2]))
 	return (r,g,b)
 
-# Color maps
+# Color maps for formatting
 col_map = {}
 col_map['red']     = (0.95, 0.30, 0.25)
 col_map['green']   = (0.38, 0.82, 0.32)
@@ -28,6 +32,7 @@ col_map['grey']    = (0.70, 0.70, 0.70)
 col_map['dark_grey'] = (0.60, 0.60, 0.60)
 col_map['light_grey'] = (0.9, 0.9, 0.9)
 
+# CDS formatting options
 opt_CDS1 = {'label':'nifV', 'label_style':'italic', 'label_y_offset':-5, 'color':col_map['light_grey']}
 opt_CDS2 = {'label':'nifS', 'label_style':'italic', 'label_y_offset':-5, 'color':col_map['dark_grey']}
 opt_CDS3 = {'label':'nifZ', 'label_style':'italic', 'label_y_offset':-5, 'color':col_map['light_grey']}
@@ -51,12 +56,14 @@ T1 = {'type':'Terminator', 'name':'T1', 'start':2595, 'end':2643, 'fwd':True, 'o
 # A design is merely a list of parts and their properties
 design = [P1, RBS1, CDS1, RBS2, CDS2, T1, P2, CDS3, RBS3, P3, CDS4, RBS4, P4]
 
+# Loads a sequence file
 def load_seq (filename_in):
 	f_in = open(filename_in, 'rU')
 	seq = f_in.readline().strip()
 	f_in.close()
 	return seq
 
+# Calculate the GC% for a moving window
 def gc_window(seq, window_len):
 	out = [0]*len(seq)
 	for idx in range(len(seq)):
@@ -69,6 +76,7 @@ def gc_window(seq, window_len):
 		out[idx] = gc_count/float(window_len)
 	return np.array(out)
 
+# Loads a file containing trace information
 def load_trace (filename_in):
 	# data[0] is forward strand
 	# data[1] is reverse strand
@@ -78,60 +86,56 @@ def load_trace (filename_in):
 	data[1] = np.array([float(x) for x in next(trace_reader)])
 	return data
 
+# Plot a double trace (e.g, strand-specific data)
 def plot_trace_2 (ax_trace, data, col, lab='', hightlight=[0,0]):
+	# Plot the traces
 	trace_len = len(data[0])
 	ax_trace.fill_between(range(trace_len),data[0],np.zeros(trace_len), color=lighten_color(col,0.5), edgecolor=lighten_color(col,0.5), linewidth=1, zorder=1)
 	ax_trace.fill_between(range(trace_len),-data[1],np.zeros(trace_len), color=lighten_color(col,0.5), edgecolor=lighten_color(col,0.5), linewidth=1, zorder=1)
-	
 	# Hightlighted region
 	r = np.arange(hightlight[0], hightlight[1])
 	ax_trace.fill_between(r,data[0][hightlight[0]:hightlight[1]],np.zeros(len(r)), color=col, edgecolor=col, linewidth=1, zorder=1.5)
 	ax_trace.fill_between(r,-data[1][hightlight[0]:hightlight[1]],np.zeros(len(r)), color=col, edgecolor=col, linewidth=1, zorder=1.5)
-	
+	# Adjust formatting
 	ax_trace.plot(range(trace_len), np.zeros(trace_len), color=(0,0,0), linewidth=1, zorder=2)
 	max_read_depth = max(data[0])
 	max_read_depth_1 = max(data[1])
 	if max_read_depth_1 > max_read_depth:
 		max_read_depth = max_read_depth_1
-	# Scale the y-axis of the traces appropriately
 	max_read_depth *= 1.02
 	ax_trace.set_ylim([-max_read_depth,max_read_depth])
-	ax_trace.spines["right"].set_visible(False)
-	ax_trace.spines["top"].set_visible(False)
-	ax_trace.spines["bottom"].set_visible(False)
+	ax_trace.spines['right'].set_visible(False)
+	ax_trace.spines['top'].set_visible(False)
+	ax_trace.spines['bottom'].set_visible(False)
 	ax_trace.tick_params(axis='both', direction='out')
 	ax_trace.set_xticks([])
-	#ax_trace.set_yticks([])
 	ax_trace.get_yaxis().tick_left()
 	ax_trace.tick_params('both', length=2, width=0.5, which='major')
-	ax_trace.tick_params(axis='y', which='major', pad=2)
-	ax_trace.tick_params(axis='y', labelsize=8)
+	ax_trace.tick_params(axis='y', which='major', pad=2, labelsize=8)
 	ax_trace.set_ylabel(lab, fontsize=8, labelpad=6)
 
+# Plot a single trace
 def plot_trace_1 (ax_trace, data, col, scale=None, min_y=0, max_y=None, lab='', hightlight=[0,0]):
+	# Plot the trace
 	trace_len = len(data)
 	ax_trace.fill_between(range(trace_len),data,np.zeros(trace_len), color=lighten_color(col,0.5), edgecolor=lighten_color(col,0.5), linewidth=1, zorder=1)
-	
-	# Hightlighted region
+	# Hightlight region
 	r = np.arange(hightlight[0], hightlight[1])
 	ax_trace.fill_between(r,data[hightlight[0]:hightlight[1]],np.zeros(len(r)), color=col, edgecolor=col, linewidth=1, zorder=1.5)
-	
+	# Adjust formatting
 	ax_trace.plot(range(trace_len), np.zeros(trace_len), color=(0,0,0), linewidth=1, zorder=2)
 	max_read_depth = max(data) * 1.02
 	if max_y == None:
 		ax_trace.set_ylim([min_y,max_read_depth])
 	else:
 		ax_trace.set_ylim([min_y,max_y])
-	ax_trace.spines["right"].set_visible(False)
-	ax_trace.spines["top"].set_visible(False)
-	#ax_trace.spines["bottom"].set_visible(False)
+	ax_trace.spines['right'].set_visible(False)
+	ax_trace.spines['top'].set_visible(False)
 	ax_trace.tick_params(axis='both', direction='out')
 	ax_trace.set_xticks([])
-	#ax_trace.set_yticks([])
 	ax_trace.get_yaxis().tick_left()
 	ax_trace.tick_params('both', length=2, width=0.5, which='major')
-	ax_trace.tick_params(axis='y', which='major', pad=2)
-	ax_trace.tick_params(axis='y', labelsize=8)
+	ax_trace.tick_params(axis='y', which='major', pad=2, labelsize=8)
 	if scale != None:
 		ax_trace.set_yscale(scale)
 	ax_trace.set_ylabel(lab, fontsize=8, labelpad=1)
@@ -144,13 +148,11 @@ ax_trace1 = plt.subplot(gs[1], sharex=ax_dna)
 ax_trace1.set_yticklabels(['', '50', '0', '50'])
 ax_trace1.text(0.01, 0.86, 'sense', horizontalalignment='left', verticalalignment='center', transform=ax_trace1.transAxes, fontsize=8)
 ax_trace1.text(0.01, 0.14, 'anti-sense', horizontalalignment='left', verticalalignment='center', transform=ax_trace1.transAxes, fontsize=8)
-
 ax_trace2 = plt.subplot(gs[2], sharex=ax_dna)
 ax_trace3 = plt.subplot(gs[3], sharex=ax_dna)
 
-# Load the trace data
+# Load/calculate the data
 data_rnaseq = load_trace('data_rnaseq.csv')
-#data_promoter = load_trace('./data/promoter_fwd_rev.csv')
 data_rbs = load_trace('data_rbs.csv')
 seq = load_seq('data_seq.txt')
 data_gc = gc_window(seq, 50)
@@ -169,12 +171,12 @@ ax_dna.set_xlim([start-20, end+20])
 ax_dna.set_ylim([-8,8])
 ax_dna.plot([start-20,end+20], [0,0], color=(0,0,0), linewidth=1.0, zorder=1)
 ax_dna.axis('off')
-
-# Make spacing between subplot less
 plt.subplots_adjust(hspace=.08, left=.12, right=.99, top=0.99, bottom=0.02)
+
 # Save the figure
 fig.savefig('multiple_traces.pdf', transparent=True)
 fig.savefig('multiple_traces.png', dpi=300)
+
 # Clear the plotting cache
 plt.close('all')
 

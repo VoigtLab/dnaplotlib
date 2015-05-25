@@ -1,25 +1,22 @@
 #!/usr/bin/env python
 """
-	Short description goes here.
+	Recombinase NOT-gate
 """
 
+import math
 import dnaplotlib as dpl
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
-
 from matplotlib.patches import Polygon, Ellipse, Wedge, Circle, PathPatch
 from matplotlib.path import Path
 from matplotlib.lines import Line2D
 from matplotlib.patheffects import Stroke
 import matplotlib.patches as patches
-import math
 
-
-__author__  = 'Bryan Der <bder@mit.edu>, Voigt Lab, MIT'
-__license__ = 'OSI Non-Profit OSL 3.0'
+__author__  = 'Bryan Der <bder@mit.edu>, Voigt Lab, MIT\n\
+               Thomas Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'
+__license__ = 'OSI OSL 3.0'
 __version__ = '1.0'
-
-
 
 def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL recombinase site renderer.
@@ -88,8 +85,6 @@ def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, op
 		return prev_end, final_start
 	else:
 		return prev_end, final_end
-
-
 
 def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL recombinase site renderer ()
@@ -173,8 +168,6 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	ax.add_patch(p1)
 	ax.add_patch(p2)	
 
-	
-
 	if opts != None and 'label' in opts.keys():
 		if final_start > final_end:
 			write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
@@ -186,131 +179,51 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	else:
 		return prev_end, final_end
 
-
-
 def flip_arrow (ax, type, num, from_part, to_part, scale, linewidth, arc_height_index, opts):
-	""" General function for drawing regulation arcs.
+	""" Regulation arcs for recombinase sites
 	"""
-
 	color = (0.0,0.0,0.0)
-	arrowhead_length = 4
-	linestyle = '-'
-	arcHeightConst = 15
-	arcHeightSpacing = 5
 	arcHeightStart = 10
-	arcHeight = arcHeightConst + arc_height_index*arcHeightSpacing
-	arcHeightEnd = arcHeightStart*1.5
-	
+	arcHeightEnd = 10
+
 	# Reset defaults if provided
 	if opts != None:
-		if 'arrowhead_length' in opts.keys():
-			arrowhead_length = opts['arrowhead_length']
-		if 'linestyle' in opts.keys():
-			linestyle = opts['linestyle']
 		if 'linewidth' in opts.keys():
 			linewidth = opts['linewidth']
 		if 'color' in opts.keys():
 			color = opts['color']
-		if 'arc_height' in opts.keys():
-			arcHeight = opts['arc_height']
-		if 'arc_height_const' in opts.keys():
-			arcHeightConst = opts['arc_height_const']
-		if 'arc_height_spacing' in opts.keys():
-			arcHeightSpacing = opts['arc_height_spacing']
 		if 'arc_height_start' in opts.keys():
 			arcHeightStart = opts['arc_height_start']
 		if 'arc_height_end' in opts.keys():
 			arcHeightEnd = opts['arc_height_end']
-
-	if opts == None or 'arc_height' not in opts.keys():
-		arcHeight = arcHeightConst + arc_height_index*arcHeightSpacing
-	startHeight = arcHeightStart
-
 	start = (from_part['start'] + from_part['end']) / 2
 	end   = (to_part['start']   + to_part['end']) / 2
-
-	top = arcHeight;
-	base = startHeight;
-	indHeight = arrowhead_length
-	
-	if(to_part['fwd'] == False and type != 'Connection'):
-		#base = -1*startHeight
+	if start > end:
+		arcHeightStart = -arcHeightStart
 		arcHeightEnd = -arcHeightEnd
-		top  = -1*arcHeight
-		indHeight = -1*arrowhead_length
+	ax.annotate('', (end, arcHeightEnd), (start, arcHeightStart), ha="right", va="center", size=8, arrowprops=dict(arrowstyle='->',connectionstyle="arc3,rad=-.4",lw=linewidth, color=color))
 
-	line_away   = Line2D([start,start],[base,top], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
-	line_across = Line2D([start,end],[top,top], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
-	line_toward = Line2D([end,end],[top,arcHeightEnd], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
-	line_rep    = Line2D([end-arrowhead_length,end+arrowhead_length],[arcHeightEnd,arcHeightEnd], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle='-')
-	line_ind1   = Line2D([end-arrowhead_length,end],[arcHeightEnd+indHeight,arcHeightEnd], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle='-')
-	line_ind2    = Line2D([end+arrowhead_length,end],[arcHeightEnd+indHeight,arcHeightEnd], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle='-')
-
-	if(type == 'Repression'):
-		ax.add_line(line_rep)
-		ax.add_line(line_away)
-		ax.add_line(line_across)
-		ax.add_line(line_toward)
-
-	if(type == 'Activation'):
-		ax.add_line(line_ind1)
-		ax.add_line(line_ind2)
-		ax.add_line(line_away)
-		ax.add_line(line_across)
-		ax.add_line(line_toward)
-
-	if(type == 'Connection'):
-		
-		if start > end:
-			base = -base
-
-		verts = [ (start, base), (start, top), (end, top),  (end, base) ]
-		#codes = [Path.MOVETO, Path.CURVE4, Path.CURVE4, Path.CURVE4]
-		#path1 = Path(verts, codes)
-		#astyle = patches.ArrowStyle.Fancy(head_length=2.0, head_width=.8)
-		#patch = patches.PathPatch(path1, facecolor='none', lw=linewidth, edgecolor=color)
-		#patch = patches.FancyArrowPatch( path=path1, arrowstyle="tail_width=1.", facecolor='none', lw=linewidth, edgecolor=color)
-		#ax.add_patch(patch)
-		ax.annotate('', (end, base), (start, base),
-                ha="right", va="center",
-                size=8,
-                arrowprops=dict(arrowstyle='->',
-                                connectionstyle="arc3,rad=-.4",
-                                lw=linewidth, color=color
-                                ))
-
-
-# Color maps (let's make sure we use similar colors)
+# Color maps 
 col_map = {}
 col_map['red']     = (0.95, 0.30, 0.25)
 col_map['green']   = (0.38, 0.82, 0.32)
 col_map['blue']    = (0.38, 0.65, 0.87)
 col_map['orange']  = (1.00, 0.75, 0.17)
 col_map['purple']  = (0.55, 0.35, 0.64)
-col_map['yellow']  = (0.98, 0.97, 0.35)
 
 def dark (col, fac=2.0):
 	return (col[0]/fac, col[1]/fac, col[2]/fac)
-
 
 lw = 1.0
 
 # Create the DNAplotlib renderer
 dr = dpl.DNARenderer()
 
-
 reg_renderers = dr.std_reg_renderers()
 reg_renderers['Connection'] = flip_arrow
 part_renderers = dr.SBOL_part_renderers()
 part_renderers['RecombinaseSite'] = sbol_recombinase1
 part_renderers['RecombinaseSite2'] = sbol_recombinase2
-
 
 # Create the construct programmably to plot
 sp = {'type':'EmptySpace', 'name':'S1', 'fwd':True, 'opts':{'x_extent':1}}
@@ -330,11 +243,8 @@ ribo_f = {'type':'Ribozyme', 'name':'ribo', 'fwd':True}
 rbs_f = {'type':'RBS', 'name':'rbs', 'fwd':True, 'opts':{'color':(0.0,0.0,0.0)}}
 cds_f = {'type':'CDS', 'name':'cds', 'fwd':True, 'opts':{'color':col_map['green'], 'label':'GFP', 'label_x_offset':-2, 'label_y_offset':-0.5, 'label_style':'italic'}}
 
-
 design1 = [sp, prom, ins, rec1f, cds_r, rbs_r, ribo_r, rec1r, term, sp]
 design2 = [sp, prom, ins, rec2f, ribo_f, rbs_f, cds_f, rec2r, term, sp]
-
-
 
 arc1 = {'type':'Connection', 'from_part':rec1f, 'to_part':rec1r, 'opts':{'color':col_map['blue'],    'linewidth':lw, 'arc_height_start':10, 'arc_height_end':10}}
 arc2 = {'type':'Connection', 'from_part':rec2r, 'to_part':rec2f, 'opts':{'color':col_map['blue'],    'linewidth':lw, 'arc_height_start':10, 'arc_height_end':10}}
@@ -346,29 +256,15 @@ fig = plt.figure(figsize=(2.2,1.8))
 
 gs = gridspec.GridSpec(3, 1)
 
-#side-by-side
-#ax_dna1 = plt.axes([0.0, 0.5, 0.4, 0.5])
-#ax_dna2 = plt.axes([0.5, 0.5, 0.4, 0.5])
-
-#top-bottom
-#ax_dna1 = plt.axes([0.0, 0.6, 1, 0.5])
-#ax_dna2 = plt.axes([0.0, 0.2, 1, 0.5])
-
 ax_dna1 = plt.subplot(gs[0])
 ax_dna2 = plt.subplot(gs[1])
 ax_dna3 = plt.subplot(gs[2])
-
-#arc1 = {'type':'Connection', 'from_part':a1f, 'to_part':a2f, 'opts':{'color':col_map['red'],    'linewidth':lw, 'arc_height_start':10, 'arc_height_end':10}}
-#reg1 = [arc1]
-
-
 
 # Redender the DNA to axis
 
 start, end = dr.renderDNA(ax_dna1, design1, part_renderers, regs=reg1, reg_renderers=reg_renderers)
 start, end = dr.renderDNA(ax_dna2, design2, part_renderers, regs=reg2, reg_renderers=reg_renderers)
 start, end = dr.renderDNA(ax_dna3, design1, part_renderers)
-
 
 # Set bounds and display options for the axis
 dna_len = end-start
@@ -393,10 +289,9 @@ ax_dna3.axis('off')
 
 plt.subplots_adjust(hspace=0.01, left=0.05, right=0.95, top=0.92, bottom=0.01)
 
-
 # Save the figure
 fig.savefig('recombinase_not_gate.pdf', transparent=True)
 fig.savefig('recombinase_not_gate.png', dpi=300)
+
 # Clear the plotting cache
 plt.close('all')
-

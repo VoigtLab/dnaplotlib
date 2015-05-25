@@ -1,27 +1,7 @@
 #!/usr/bin/env python
 """
-    plot_SBOL_designs.py
-
-    Plot the design of DNA constructs using SBOL notation.
-
-    Usage:
-    ------
-    python plot_SBOL_designs.py  -params     PARAM_FILENAME 
-                                 -parts      PART_FILENAME 
-                                 -designs    DESIGN_FILENAME 
-                                [-regulation REG_FILENAME]
-                                 -output     OUT_FILENAME
+    Customised version of plot_SBOL_designs.py app.
 """
-#    Plot SBOL Designs
-#    Copyright (C) 2014 by
-#    Thomas E. Gorochowski <tom@chofski.co.uk>
-#    Bryan Der <bder@mit.edu>
-#    All rights reserved.
-#    OSI Non-Profit Open Software License ("Non-Profit OSL") 3.0 license.
-
-# Set the backend to use (important for headless servers)
-import matplotlib
-matplotlib.use('Agg')
 
 import sys
 import getopt
@@ -44,7 +24,6 @@ def make_float_if_needed (s):
 	except ValueError:
 		return s
 
-
 def load_plot_parameters (filename):
 	plot_params = {}
 	param_reader = csv.reader(open(filename, 'rU'), delimiter=',')
@@ -56,7 +35,6 @@ def load_plot_parameters (filename):
 			if row[1] != '':
 				plot_params[row[0]] = make_float_if_needed(row[1])
 	return plot_params
-
 
 def load_part_information (filename):
 	part_info = {}
@@ -134,7 +112,6 @@ def load_dna_designs (filename, part_info):
 			dna_design_order.append(row[0])
 	return dna_designs, dna_design_order
 
-
 def extract_dict_attribs (d, dict_keys, attrib_key):
 	out = []
 	for d_key in dict_keys:
@@ -167,7 +144,6 @@ def plot_dna (dna_designs, dna_design_order, out_filename, plot_params, perf_dat
 		                 backbone_pad_left=left_pad, 
 		                 backbone_pad_right=right_pad)
 
-	
 	# We default to the SBOL part renderers
 	part_renderers = dr.SBOL_part_renderers()
 
@@ -180,8 +156,6 @@ def plot_dna (dna_designs, dna_design_order, out_filename, plot_params, perf_dat
 	num_of_designs = len(design_list)
 	ax_list = []
 	max_dna_len = 0.0
-
-
 	gs = gridspec.GridSpec(num_of_designs,2, width_ratios=[1,12])
 
 	for i in range(len(dna_design_order)):
@@ -209,13 +183,7 @@ def plot_dna (dna_designs, dna_design_order, out_filename, plot_params, perf_dat
 		ax.set_aspect('equal')
 		ax.set_axis_off()
 
-
-
 	# Plot the performance data
-
-	#ax_perf = plt.subplot2grid((num_of_designs,2), (1, 0), colspan=2)
-
-
 	perf_vals = extract_dict_attribs(perf_data, dna_design_order, 'Activity')
 	perf_sd_vals = extract_dict_attribs(perf_data, dna_design_order, 'Activity_SD')
 
@@ -227,13 +195,8 @@ def plot_dna (dna_designs, dna_design_order, out_filename, plot_params, perf_dat
 	ax_perf.spines['top'].set_visible(False)
 	ax_perf.spines['bottom'].set_visible(False)
 	ax_perf.spines['right'].set_visible(False)
-	
-	#ax_perf.invert_xaxis()
 	ax_perf.invert_yaxis()
 	ax_perf.set_xticks([])
-
-
-
 	ax_perf.yaxis.tick_left()
 	ax_perf.yaxis.set_ticks_position('left')
 	ax_perf.tick_params(axis='y', direction='out')
@@ -251,19 +214,10 @@ def plot_dna (dna_designs, dna_design_order, out_filename, plot_params, perf_dat
 	ax_perf.set_xlim([0, 1062606*1.05])
 
 	# Save the figure
-	#plt.tight_layout()
 	plt.subplots_adjust(hspace=0.001, wspace=0.05, top=0.99, bottom=0.01, left=0.06, right=0.99)
-
 	fig.savefig(out_filename, transparent=True, dpi=300)
 	# Clear the plotting cache
 	plt.close('all')
-
-
-def is_valid_file(parser, arg):
-    if not os.path.exists(arg):
-        parser.error("The file %s does not exist!" % arg)
-    else:
-        return open(arg, 'r')  # return an open file handle
 
 def main():	
 	# Process arguments

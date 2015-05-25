@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-	Example of trace plotting from a GeneClusterLibrary object.
+	Rotated genetic design
 """
 
 import numpy as np
@@ -17,6 +17,9 @@ import mpl_toolkits.axisartist.grid_helper_curvelinear as gh
 from mpl_toolkits.axes_grid.parasite_axes import SubplotHost, ParasiteAxesAuxTrans
 from matplotlib import colors
 
+__author__  = 'Thomas Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'
+__license__ = 'OSI OSL 3.0'
+__version__ = '1.0'
 
 # Color maps
 col_map = {}
@@ -44,8 +47,6 @@ opt_map['g1'] = {'color':col_map['green'], 'label':'g1', 'label_style':'italic',
 opt_map['g2'] = {'color':(1,1,1), 'label':'g2', 'label_style':'italic', 'label_y_offset':4, 'label_color':(0,0,0)}
 opt_map['g3'] = {'color':col_map['blue'], 'label':'g3', 'label_style':'italic', 'label_y_offset':4, 'label_color':col_map['blue']}
 opt_map['g5'] = {'color':col_map['orange'], 'label':'g5', 'label_style':'italic', 'label_y_offset':4, 'label_color':col_map['orange']}
-
-
 
 def load_design (filename, opt_map):
 	design = []
@@ -139,34 +140,17 @@ def homology_matrix2(seq, window_len=20):
 			# Calculate homology (include reverse complement)
 			if cur_seq1 == cur_seq2 or cur_seq1 == revcomp(cur_seq2):
 				h_matrix[start_bp1:end_bp1,start_bp2:end_bp2] = 1
-			
-			#h = homology(cur_seq1, cur_seq2)
-			#h2 = homology(revcomp(cur_seq1), cur_seq2)
-			#if h2 > h:
-			#	h = h2
-			#h_matrix[idx1,idx2] = h
 	return h_matrix
 
-
 design, seq, parts = load_design('data_design.txt', opt_map)
-#design, seq = load_design('./data/parts_unique_terminators.txt', opt_map)
-
-
-
 
 # create regulation
-
 arc1 = {'type':'Repression', 'from_part':parts['g5'][0], 'to_part':parts['pA5'][0], 'opts':{'color':col_map['orange'], 'linewidth':1.0, 'arrowhead_length':8, 'arc_height_start':8, 'arc_height_const':9, 'arc_height_spacing':1.1, 'arc_height_end':7.5}}
 arc2 = {'type':'Repression', 'from_part':parts['g1'][0], 'to_part':parts['pA1'][0], 'opts':{'color':col_map['green'], 'linewidth':1.0, 'arrowhead_length':8, 'arc_height_start':8, 'arc_height_const':9, 'arc_height_spacing':1.1, 'arc_height_end':7.5}}
 arc3 = {'type':'Repression', 'from_part':parts['g3'][0], 'to_part':parts['pA3'][0], 'opts':{'color':col_map['blue'], 'linewidth':1.0, 'arrowhead_length':8, 'arc_height_start':8, 'arc_height_const':9, 'arc_height_spacing':1.1, 'arc_height_end':7.5}}
 arc4 = {'type':'Repression', 'from_part':parts['g3'][1], 'to_part':parts['pA3'][0], 'opts':{'color':col_map['blue'], 'linewidth':1.0, 'arrowhead_length':8, 'arc_height_start':8, 'arc_height_const':9, 'arc_height_spacing':1.1, 'arc_height_end':7.5}}
 
 regs = [arc1, arc2, arc3, arc4]
-
-
-
-
-
 
 h_matrix_60 = homology_matrix2(seq, window_len=60)
 h_matrix_30 = homology_matrix2(seq, window_len=30)
@@ -191,7 +175,6 @@ ax_dna_x = plt.subplot(gs[1])
 dr = dpl.DNARenderer(scale=1, linewidth=0.9)
 start, end = dr.renderDNA(ax_dna_x, design, dr.trace_part_renderers(), regs=regs, reg_renderers=dr.std_reg_renderers())
 # Set bounds and display options for the DNA axis
-
 dna_len = end-start
 ax_dna_x.set_xlim([start, end])
 ax_dna_x.set_ylim([-6,13])
@@ -211,12 +194,6 @@ def setup_rot_axes(fig, rect):
 	ax1.axis['top', 'right', 'left', 'bottom'].set_visible(False)
 	return ax1, ax2
 
-
-
-
-
-
-
 ax_dna_y_main, ax_dna_y = setup_rot_axes(fig, gs[2])
 # before rendering remove all labels (simplify the render)
 for el in design:
@@ -224,14 +201,11 @@ for el in design:
 		el['opts']['label'] = ''
 
 start, end = dr.renderDNA(ax_dna_y, design, dr.trace_part_renderers())
-
 ax_data = plt.subplot(gs[3], sharex=ax_dna_x)
-
 cmap = colors.ListedColormap(['white', 'grey', 'red'])
 bounds=[0,10,18,21]
 norm = colors.BoundaryNorm(bounds, cmap.N)
-#plt.imshow(h_matrix, extent=[0,end,0,end], interpolation='nearest', origin='upper', cmap=pylab.cm.gray_r)#, norm=norm)
-ax_data.matshow(h_matrix, cmap=pylab.cm.gray_r)#, norm=norm)
+ax_data.matshow(h_matrix, cmap=pylab.cm.gray_r)
 
 ax_data.set_aspect('auto')
 ax_data.set_xticks([])
@@ -245,7 +219,6 @@ plt.subplots_adjust(hspace=.04, wspace=.04, left=.01, right=.99, top=0.99, botto
 # Save the figure
 fig.savefig('rotated_design.pdf', transparent=True)
 fig.savefig('rotated_design.png', dpi=300)
+
 # Clear the plotting cache
 plt.close('all')
-
-

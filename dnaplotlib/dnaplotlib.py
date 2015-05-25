@@ -1770,8 +1770,8 @@ def regulation (ax, type, num, from_part, to_part, scale, linewidth, arc_height_
 	base = startHeight;
 	indHeight = arrowhead_length
 	
-	if(to_part['fwd'] == False and type != 'Connection'):
-		#base = -1*startHeight
+	if to_part['fwd'] == False:
+		base = -1*startHeight
 		arcHeightEnd = -arcHeightEnd
 		top  = -1*arcHeight
 		indHeight = -1*arrowhead_length

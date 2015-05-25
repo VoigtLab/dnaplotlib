@@ -1,25 +1,34 @@
+#!/usr/bin/env python
+"""
+	Recombinase NOT-gate
+"""
+
+import numpy as np
+from scipy.integrate import odeint
+import dnaplotlib
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
-from scipy.integrate import odeint
-import numpy as np
-import dnaplotlib
 
-#Initialize Simulation
-#Initial concentration of mRNA and Protein for each repressor
+__author__  = 'Emerson Glassey <eglassey@mit.edu>, Voigt Lab, MIT'
+__license__ = 'OSI OSL 3.0'
+__version__ = '1.0'
+
+# Initialize Simulation
+# Initial concentration of mRNA and Protein for each repressor
 mtet, mlac, mgamma, tet, lac, gamma = initial = [1, 1, 1, 2, 1, 1]
-#Non-dimensionalized production rate
+# Non-dimensionalized production rate
 alpha = 15
-#Degradation Rate
+# Degradation Rate
 beta = 2000
-#Repressor/Promoter Leak
+# Repressor/Promoter Leak
 leak = 1
-#Hill Coefficient
+# Hill Coefficient
 n = 8
 
 # Initialize Parts
-#tetr is orange [1.00, 0.75, 0.17]
-#lacI is green [0.38, 0.82, 0.32]
-#gamma is blue [0.38, 0.65, 0.87]
+# tetr  is orange [1.00, 0.75, 0.17]
+# lacI  is green  [0.38, 0.82, 0.32]
+# gamma is blue   [0.38, 0.65, 0.87]
 plac = {'name':'P_lac', 'start':1, 'end':10, 'type':'Promoter', 'opts': {'color':[0.38, 0.82, 0.32]}}
 rbs1 = {'name':'RBS', 'start':11, 'end':20, 'type':'RBS', 'opts':{'linewidth': 0, 'color':[0.0, 0.0, 0.0]}}
 tetr = {'name':'tetR', 'start':21, 'end':40, 'type':'CDS', 'opts':{'label': 'tetR', 'fontsize': 8,  'label_y_offset': 0, 'label_x_offset': -2, 'label_style':'italic', 'color':[1.00, 0.75, 0.17]}}
@@ -67,12 +76,11 @@ def rescale(val, lims):
     new_val = (val*(lims[1]-lims[0])) + lims[0]
     return new_val
     
-    
 def plot_construct(ax, t, ymtet, ymlac, ymgamma, ytet, ylac, ygamma):
 	tind = int(t*10)
 	exp_lims = (1.0, 4.0)
 	ax.set_title('t = {}'.format(t), fontsize=8)
-	#Set color for each of the CDSs
+	# Set color for each of the CDSs
 	tetr['opts']['color'] = [rescale(1 - expression(ymtet[tind], exp_lims), (1.0, 1.0)),
 								rescale(1 - expression(ymtet[tind], exp_lims), (0.75, 1.0)),
 								rescale(1 - expression(ymtet[tind], exp_lims), (0.17, 1.0))]
@@ -82,14 +90,14 @@ def plot_construct(ax, t, ymtet, ymlac, ymgamma, ytet, ylac, ygamma):
 	gamma['opts']['color'] = [rescale(1 - expression(ymgamma[tind], exp_lims), (0.38, 1.0)),
 								rescale(1 - expression(ymgamma[tind], exp_lims), (0.65, 1.0)),
 								rescale(1 - expression(ymgamma[tind], exp_lims), (0.87, 1.0))]
-	#Set transparency for each of the regulatory lines
+	# Set transparency for each of the regulatory lines
 	lac_repress['opts']['color'] = [0.38, 0.82, 0.32,
 								rescale(repression(ylac[tind], 2.0, 8), (0.2, 1.0))]
 	gamma_repress['opts']['color'] = [0.38, 0.65, 0.87,
 								rescale(repression(ygamma[tind], 2.0, 8), (0.2, 1.0))]
 	tet_repress['opts']['color'] = [1.00, 0.75, 0.17,
 								rescale(repression(ytet[tind], 2.0, 8), (0.2, 1.0))]
-	#Set width for each of the regulatory lines
+	# Set width for each of the regulatory lines
 	lac_repress['opts']['linewidth'] = rescale(repression(ylac[tind], 2.0, 8), (0.5, 2.0))						
 	gamma_repress['opts']['linewidth'] = rescale(repression(ygamma[tind], 2.0, 8), (0.5, 2.0))							
 	tet_repress['opts']['linewidth'] = rescale(repression(ytet[tind], 2.0, 8), (0.5, 2.0))
@@ -122,24 +130,20 @@ def movie(ts, ymtet, ymlac, ymgamma, ytet, ylac, ygamma):
 		plot_construct(ax, t, ymtet, ymlac, ymgamma, ytet, ylac, ygamma)
 		plt.savefig("movie/repressilator_t{}.jpg".format(t), dpi=300)
 	
-
 def main():
 	t = np.arange(0, 30.1, 0.1)
 	ymtet, ymlac, ymgamma, ytet, ylac, ygamma = zip(*odeint(repressilator, initial, t))
-
-
-
 	plt.close()
 	plt.figure(figsize=(3.5, 6.5))
 	gs = gridspec.GridSpec(8, 1, height_ratios=[1, 2.5, 0.1, 1, 1, 1, 1, 1])
 
-	#Plot of repressilator circuit
+	# Plot of repressilator circuit
 	ax = plt.subplot(gs[0])
 	dnaplotlib.plot_sbol_designs([ax], [[plac, rbs1, tetr, term1, pgamma, rbs2, laci, term2, ptet, rbs3, gamma, term3]],
 				[[lac_repress, gamma_repress, tet_repress]])
 	ax.set_ylim([-10, 31])
 
-	#Plot of repressilator dynamics
+	# Plot of repressilator dynamics
 	ax = plt.subplot(gs[1])
 	plt.plot(t, ytet, color=[1.00, 0.75, 0.17])
 	plt.plot(t, ylac, color=[0.38, 0.82, 0.32])
@@ -157,7 +161,7 @@ def main():
 	ax.set_ylabel('Protein Concentration', fontsize=8, labelpad=2)
 	plt.legend(['tetR', 'lacI', 'gamma'], frameon=False, fontsize=8, labelspacing=0.15, loc=(0.06,0.65))
 
-	#Plot of each timepoint
+	# Plot of each timepoint
 	ax = plt.subplot(gs[3])
 	plot_construct(ax, 1, ymtet, ymlac, ymgamma, ytet, ylac, ygamma)
 

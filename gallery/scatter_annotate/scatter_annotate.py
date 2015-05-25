@@ -115,64 +115,6 @@ p2_3 = {'type':'Promoter', 'name':'pA', 'fwd':False, 'opts':{'linewidth':lw, 'co
 design3 = [p1_3, rbs_1_3, gA_3, t1_3, t2_3, gB_3, rbs_2_3, p2_3]
 
 
-
-
-
-
-
-
-g0 = {'type':'CDS', 'name':'g0_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white']}}
-g1 = {'type':'CDS', 'name':'g1_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['red']}}
-g2 = {'type':'CDS', 'name':'g2_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['blue']}}
-g3 = {'type':'CDS', 'name':'g3_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['green']}}
-g4 = {'type':'CDS', 'name':'g4_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['orange']}}
-g5 = {'type':'CDS', 'name':'g5_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['purple']}}
-g6 = {'type':'CDS', 'name':'g6_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['yellow']}}
-
-i0 = {'type':'Ribozyme', 'name':'i0', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black']}}
-i1 = {'type':'Ribozyme', 'name':'i1', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['red']}}
-i2 = {'type':'Ribozyme', 'name':'i2', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['blue']}}
-i3 = {'type':'Ribozyme', 'name':'i3', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['green']}}
-i4 = {'type':'Ribozyme', 'name':'i4', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['orange']}}
-i5 = {'type':'Ribozyme', 'name':'i5', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['purple']}}
-i6 = {'type':'Ribozyme', 'name':'i6', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['yellow']}}
-
-pA = {'type':'Promoter', 'name':'pA', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black']}}
-pB = {'type':'Promoter', 'name':'pB', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black']}}
-p1 = {'type':'Promoter', 'name':'p1', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['red']}}
-p2 = {'type':'Promoter', 'name':'p2', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['blue']}}
-p3 = {'type':'Promoter', 'name':'p3', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['green']}}
-p4 = {'type':'Promoter', 'name':'p4', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['orange']}}
-p5 = {'type':'Promoter', 'name':'p5', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['purple']}}
-p6 = {'type':'Promoter', 'name':'p6', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['yellow']}}
-
-t0 = {'type':'Terminator', 'name':'t0', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black']}}
-t1 = {'type':'Terminator', 'name':'t1', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['red']}}
-t2 = {'type':'Terminator', 'name':'t2', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['blue']}}
-t3 = {'type':'Terminator', 'name':'t3', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['green']}}
-t4 = {'type':'Terminator', 'name':'t4', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['orange']}}
-t5 = {'type':'Terminator', 'name':'t5', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['purple']}}
-t6 = {'type':'Terminator', 'name':'t6', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['yellow']}}
-
-u0 = {'type':'RBS', 'name':'u0', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black']}}
-u1 = {'type':'RBS', 'name':'u1', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['red']}}
-u2 = {'type':'RBS', 'name':'u2', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['blue']}}
-u3 = {'type':'RBS', 'name':'u3', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['green']}}
-u4 = {'type':'RBS', 'name':'u4', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['orange']}}
-u5 = {'type':'RBS', 'name':'u5', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['purple']}}
-u6 = {'type':'RBS', 'name':'u6', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['yellow']}}
-
-
-# A design is merely a list of parts and their properties
-#design1 = [pA, pB, i4, u4, g4, t4,  pB, p4, i3, u3, g3, t3,  pA, p4, i2, u2, g2, t2,  p3, p2, i1, u1, g1, t1,  p1, i0, u0, g0, t0]
-#design2 = [pA, pB, i5, u5, g5, t5,  pB, p5, i1, u1, g1, t1,  pA, p5, i2, u2, g2, t2,  p1, p2, i4, u4, g4, t4,  p4, i0, u0, g0, t0]
-#design3 = [pA, pB, i3, u3, g3, t3,  pB, p3, i2, u2, g2, t2,  pA, p3, i4, u4, g4, t4,  p2, p4, i5, u5, g5, t5,  p5, i0, u0, g0, t0]
-#design1 = [pA, pB, i4, u4, g4, t4,  pB, p4, i3, u3, g3, t3,  pA, p4, i2, u2, g2, t2,  p3, p2, i1, u1, g1, t1,  p1]
-#design2 = [pA, pB, i5, u5, g5, t5,  pB, p5, i1, u1, g1, t1,  pA, p5, i2, u2, g2, t2,  p1, p2, i4, u4, g4, t4,  p4]
-#design3 = [pA, pB, i3, u3, g3, t3,  pB, p3, i2, u2, g2, t2,  pA, p3, i4, u4, g4, t4,  p2, p4, i5, u5, g5, t5,  p5]
-
-
-
 ax_dna1 = plt.axes([0.35, 0.83, 0.35, 0.12])
 ax_dna2 = plt.axes([0.61, 0.65, 0.4, 0.12])
 ax_dna3 = plt.axes([0.58,  0.32, 0.4, 0.12])

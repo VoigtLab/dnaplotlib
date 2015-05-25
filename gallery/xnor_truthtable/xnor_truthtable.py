@@ -35,8 +35,6 @@ barlist[2].set_facecolor('white')
 barlist[3].set_color('black')
 barlist[3].set_facecolor('black')
 
-
-
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 ax.yaxis.tick_left()
@@ -50,9 +48,6 @@ plt.yticks(pos, ('+/+', '-/+', '+/-', '-/-'))
 plt.xlabel('Output (REU)', fontsize=8, labelpad=0)
 plt.ylabel('Input', fontsize=8, labelpad=-1)
 plt.grid(False)
-
-
-
 
 ##########################################################
 # Color maps (let's make sure we use similar colors)
@@ -85,32 +80,6 @@ g4_OFF = {'type':'CDS', 'name':'g4_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'co
 g4_ON  = {'type':'CDS', 'name':'g4_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['orange'], 'edgecolor':col_map['orange'], 'x_extent':24, 'label':'A', 'label_style':'italic', 'label_color':(1,1,1), 'label_x_offset':-3, 'label_y_offset':-1}}
 
 
-
-"""
-g0_OFF = {'type':'CDS', 'name':'g0_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white'], 'hatch':"/////"}} #output
-g0_ON  = {'type':'CDS', 'name':'g0_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white']}}
-
-g1_OFF = {'type':'CDS', 'name':'g1_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['red'], 'hatch':"/////"}}
-g1_ON  = {'type':'CDS', 'name':'g1_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['red']}}
-
-g2_OFF = {'type':'CDS', 'name':'g2_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['blue'], 'hatch':"/////"}}
-g2_ON  = {'type':'CDS', 'name':'g2_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['blue']}}
-
-g3_OFF = {'type':'CDS', 'name':'g3_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['green'], 'hatch':"/////"}}
-g3_ON  = {'type':'CDS', 'name':'g3_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['green']}}
-
-g4_OFF = {'type':'CDS', 'name':'g4_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['orange'], 'hatch':"/////"}}
-g4_ON  = {'type':'CDS', 'name':'g4_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['orange']}}
-
-"""
-
-
-i0 = {'type':'Ribozyme', 'name':'i0', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black']}}
-i1 = {'type':'Ribozyme', 'name':'i1', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black']}}
-i2 = {'type':'Ribozyme', 'name':'i2', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black']}}
-i3 = {'type':'Ribozyme', 'name':'i3', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black']}}
-i4 = {'type':'Ribozyme', 'name':'i4', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black']}}
-
 pA = {'type':'Promoter', 'name':'pA', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'label':'p1', 'label_y_offset':-8}}
 pB = {'type':'Promoter', 'name':'pB', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'label':'p2', 'label_y_offset':-8}}
 p1 = {'type':'Promoter', 'name':'p3', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['red']}}
@@ -129,8 +98,6 @@ p3_OFF = {'type':'Promoter', 'name':'p5', 'fwd':True, 'opts':{'linewidth':lw, 'c
 p4_1_OFF = {'type':'Promoter', 'name':'p6', 'fwd':True, 'opts':{'linewidth':lw, 'color':lighten_color(col_map['orange'],off_fac)}}
 p4_2_OFF = {'type':'Promoter', 'name':'p6', 'fwd':True, 'opts':{'linewidth':lw, 'color':lighten_color(col_map['orange'],off_fac)}}
 
-
-
 t0 = {'type':'Terminator', 'name':'t0', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'start_pad':-1}}
 t1 = {'type':'Terminator', 'name':'t1', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'start_pad':-1}}
 t2 = {'type':'Terminator', 'name':'t2', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'start_pad':-1}}
@@ -143,26 +110,16 @@ u2 = {'type':'RBS', 'name':'u2', 'fwd':True, 'opts':{'linewidth':lw, 'color':col
 u3 = {'type':'RBS', 'name':'u3', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'start_pad':-6, 'x_extent':6}}
 u4 = {'type':'RBS', 'name':'u4', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'start_pad':-6, 'x_extent':6}}
 
-
-
 arc1 = {'type':'Repression', 'from_part':g1_ON, 'to_part':p1_OFF, 'opts':{'color':col_map['red'],    'linewidth':lw}}
 arc2 = {'type':'Repression', 'from_part':g2_ON, 'to_part':p2_OFF, 'opts':{'color':col_map['blue'],   'linewidth':lw}}
 arc3 = {'type':'Repression', 'from_part':g3_ON, 'to_part':p3_OFF, 'opts':{'color':col_map['green'],  'linewidth':lw, 'arc_height':25}}
 arc4 = {'type':'Repression', 'from_part':g4_ON, 'to_part':p4_1_OFF, 'opts':{'color':col_map['orange'], 'linewidth':lw, 'arc_height':20}}
 arc5 = {'type':'Repression', 'from_part':g4_ON, 'to_part':p4_2_OFF, 'opts':{'color':col_map['orange'], 'linewidth':lw, 'arc_height':20}}
 
-
 reg1 = [arc2, arc3]
 reg2 = [arc1, arc2, arc4, arc5]
 reg3 = [arc1, arc3, arc4, arc5]
 reg4 = [arc2, arc3, arc4, arc5]
-
-
-#Design row1: XNOR_row1,p5,p6,i4,u4,g4_OFF,t4,p6,p4,i3,u3,g3_ON,t3,  p5,p4,i2,u2,g2_ON,t2,p3,p2,i1,u1,g1_OFF,t1,p1,i0,u0,g0_ON,t0,
-#Design row2: XNOR_row2,p5,p6,i4,u4,g4_ON,t4, p6,p4,i3,u3,g3_OFF,t3, p5,p4,i2,u2,g2_ON,t2,p3,p2,i1,u1,g1_ON,t1,p1,i0,u0,g0_OFF,t0,
-#Design row3: XNOR_row3,p5,p6,i4,u4,g4_ON,t4, p6,p4,i3,u3,g3_ON,t3,  p5,p4,i2,u2,g2_OFF,t2,p3,p2,i1,u1,g1_ON,t1,p1,i0,u0,g0_OFF,t0,
-#Design row4: XNOR_row4,p5,p6,i4,u4,g4_ON,t4, p6,p4,i3,u3,g3_ON,t3,  p5,p4,i2,u2,g2_ON,t2,p3,p2,i1,u1,g1_OFF,t1,p1,i0,u0,g0_ON,t0,
-
 
 
 # A design is merely a list of parts and their properties

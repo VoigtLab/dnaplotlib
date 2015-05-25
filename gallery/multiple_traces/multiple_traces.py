@@ -28,38 +28,28 @@ col_map['grey']    = (0.70, 0.70, 0.70)
 col_map['dark_grey'] = (0.60, 0.60, 0.60)
 col_map['light_grey'] = (0.9, 0.9, 0.9)
 
-opt_black = {'color':(0,0,0)}
-opt_red = {'color':col_map['red']}
-opt_green = {'color':col_map['green']}
-opt_blue = {'color':col_map['blue']}
-opt_orange = {'color':col_map['orange']}
-opt_purple = {'color':col_map['purple']}
-opt_grey = {'color':col_map['grey']}
-
 opt_CDS1 = {'label':'nifV', 'label_style':'italic', 'label_y_offset':-5, 'color':col_map['light_grey']}
 opt_CDS2 = {'label':'nifS', 'label_style':'italic', 'label_y_offset':-5, 'color':col_map['dark_grey']}
 opt_CDS3 = {'label':'nifZ', 'label_style':'italic', 'label_y_offset':-5, 'color':col_map['light_grey']}
 opt_CDS4 = {'label':'nifM', 'label_style':'italic', 'label_y_offset':-5, 'color':col_map['light_grey']}
 
 # Design of the construct
-P1 = {'type':'Promoter', 'name':'P1', 'start':0,    'end':23,   'fwd':True, 'opts':opt_green}
-P2 = {'type':'Promoter', 'name':'P2', 'start':2643, 'end':2666, 'fwd':True, 'opts':opt_green}
-P3 = {'type':'Promoter', 'name':'P3', 'start':3320, 'end':3297, 'fwd':False, 'opts':opt_green}
-P4 = {'type':'Promoter', 'name':'P4', 'start':4336, 'end':4313, 'fwd':False, 'opts':opt_green}
-RBS1 = {'type':'RBS', 'name':'RBS1', 'start':72,   'end':106,  'fwd':True, 'opts':opt_blue}
-RBS2 = {'type':'RBS', 'name':'RBS2', 'start':1353, 'end':1392, 'fwd':True, 'opts':opt_blue}
-RBS3 = {'type':'RBS', 'name':'RBS4', 'start':3248, 'end':3217, 'fwd':False, 'opts':opt_blue}
-RBS4 = {'type':'RBS', 'name':'RBS3', 'start':4209, 'end':4175, 'fwd':False, 'opts':opt_blue}
+P1 = {'type':'Promoter', 'name':'P1', 'start':0,    'end':23,   'fwd':True, 'opts':{'color':col_map['green']}}
+P2 = {'type':'Promoter', 'name':'P2', 'start':2643, 'end':2666, 'fwd':True, 'opts':{'color':col_map['green']}}
+P3 = {'type':'Promoter', 'name':'P3', 'start':3320, 'end':3297, 'fwd':False, 'opts':{'color':col_map['green']}}
+P4 = {'type':'Promoter', 'name':'P4', 'start':4336, 'end':4313, 'fwd':False, 'opts':{'color':col_map['green']}}
+RBS1 = {'type':'RBS', 'name':'RBS1', 'start':72,   'end':106,  'fwd':True, 'opts':{'color':col_map['blue']}}
+RBS2 = {'type':'RBS', 'name':'RBS2', 'start':1353, 'end':1392, 'fwd':True, 'opts':{'color':col_map['blue']}}
+RBS3 = {'type':'RBS', 'name':'RBS4', 'start':3248, 'end':3217, 'fwd':False, 'opts':{'color':col_map['blue']}}
+RBS4 = {'type':'RBS', 'name':'RBS3', 'start':4209, 'end':4175, 'fwd':False, 'opts':{'color':col_map['blue']}}
 CDS1 = {'type':'CDS', 'name':'CDS1', 'start':106,  'end':1249, 'fwd':True, 'opts':opt_CDS1}
 CDS2 = {'type':'CDS', 'name':'CDS2', 'start':1392, 'end':2595, 'fwd':True, 'opts':opt_CDS2}
 CDS3 = {'type':'CDS', 'name':'CDS3', 'start':3217, 'end':2770, 'fwd':False, 'opts':opt_CDS3}
 CDS4 = {'type':'CDS', 'name':'CDS4', 'start':4175, 'end':3374, 'fwd':False, 'opts':opt_CDS4}
-T1 = {'type':'Terminator', 'name':'T1', 'start':2595, 'end':2643, 'fwd':True, 'opts':opt_red}
+T1 = {'type':'Terminator', 'name':'T1', 'start':2595, 'end':2643, 'fwd':True, 'opts':{'color':col_map['red']}}
 
 # A design is merely a list of parts and their properties
 design = [P1, RBS1, CDS1, RBS2, CDS2, T1, P2, CDS3, RBS3, P3, CDS4, RBS4, P4]
-
-
 
 def load_seq (filename_in):
 	f_in = open(filename_in, 'rU')
@@ -98,7 +88,6 @@ def plot_trace_2 (ax_trace, data, col, lab='', hightlight=[0,0]):
 	ax_trace.fill_between(r,data[0][hightlight[0]:hightlight[1]],np.zeros(len(r)), color=col, edgecolor=col, linewidth=1, zorder=1.5)
 	ax_trace.fill_between(r,-data[1][hightlight[0]:hightlight[1]],np.zeros(len(r)), color=col, edgecolor=col, linewidth=1, zorder=1.5)
 	
-
 	ax_trace.plot(range(trace_len), np.zeros(trace_len), color=(0,0,0), linewidth=1, zorder=2)
 	max_read_depth = max(data[0])
 	max_read_depth_1 = max(data[1])
@@ -123,14 +112,10 @@ def plot_trace_1 (ax_trace, data, col, scale=None, min_y=0, max_y=None, lab='', 
 	trace_len = len(data)
 	ax_trace.fill_between(range(trace_len),data,np.zeros(trace_len), color=lighten_color(col,0.5), edgecolor=lighten_color(col,0.5), linewidth=1, zorder=1)
 	
-
 	# Hightlighted region
 	r = np.arange(hightlight[0], hightlight[1])
 	ax_trace.fill_between(r,data[hightlight[0]:hightlight[1]],np.zeros(len(r)), color=col, edgecolor=col, linewidth=1, zorder=1.5)
 	
-
-
-
 	ax_trace.plot(range(trace_len), np.zeros(trace_len), color=(0,0,0), linewidth=1, zorder=2)
 	max_read_depth = max(data) * 1.02
 	if max_y == None:
@@ -162,7 +147,6 @@ ax_trace1.text(0.01, 0.14, 'anti-sense', horizontalalignment='left', verticalali
 
 ax_trace2 = plt.subplot(gs[2], sharex=ax_dna)
 ax_trace3 = plt.subplot(gs[3], sharex=ax_dna)
-
 
 # Load the trace data
 data_rnaseq = load_trace('data_rnaseq.csv')

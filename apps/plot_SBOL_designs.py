@@ -43,7 +43,6 @@ def make_float_if_needed (s):
 	except ValueError:
 		return s
 
-
 def load_plot_parameters (filename):
 	plot_params = {}
 	param_reader = csv.reader(open(filename, 'rU'), delimiter=',')
@@ -55,7 +54,6 @@ def load_plot_parameters (filename):
 			if row[1] != '':
 				plot_params[row[0]] = make_float_if_needed(row[1])
 	return plot_params
-
 
 def load_part_information (filename):
 	part_info = {}
@@ -78,7 +76,6 @@ def load_part_information (filename):
 		part_type = row[header_map['type']]
 		part_info[part_name] = [part_name, part_type, part_attribs_map]
 	return part_info
-
 
 def load_dna_designs (filename, part_info):
 	dna_designs = {}
@@ -113,7 +110,6 @@ def load_dna_designs (filename, part_info):
 					part_list.append(part_design)
 			dna_designs[row[0]] = part_list
 	return dna_designs
-
 
 def load_regulatory_information (filename, part_info, dna_designs):
 	regs_info = {}
@@ -173,7 +169,6 @@ def load_regulatory_information (filename, part_info, dna_designs):
 							reg_info['opts'] = reg_attribs_map
 							regs_info[i].append(reg_info)
 	return regs_info
-
 
 def plot_dna (dna_designs, out_filename, plot_params, regs_info):
 	# Create the renderer
@@ -256,13 +251,11 @@ def plot_dna (dna_designs, out_filename, plot_params, regs_info):
 	# Clear the plotting cache
 	plt.close('all')
 
-
 def is_valid_file(parser, arg):
     if not os.path.exists(arg):
         parser.error("The file %s does not exist!" % arg)
     else:
         return open(arg, 'r')  # return an open file handle
-
 
 def main():	
 	# Parse the arguments
@@ -288,21 +281,9 @@ def main():
 	part_info = load_part_information(args.parts.name)
 	dna_designs = load_dna_designs (args.designs.name, part_info)
 
-#	for param in plot_params.items():
-#		print param
-#	for part in part_info.items():
-#		print part
-#	for dna in dna_designs.items():
-#		print dna[0]
-#		for construct in dna[1]:
-#			print construct
-	
 	regs_info = None
 	if(args.regulation):
 		regs_info = load_regulatory_information(args.regulation.name, part_info, dna_designs)
-		
-#		for reg in regs_info.items():
-#			print reg
 
 	plot_dna(dna_designs, args.output_pdf, plot_params, regs_info)
 

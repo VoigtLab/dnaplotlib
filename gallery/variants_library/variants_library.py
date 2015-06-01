@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """
-    Customised version of plot_SBOL_designs.py app.
+    Plots a set of designs and related performance informations. This
+    has been adapted from the "plot_SBOL_designs.py" app, showing how
+    existing scripts can easily be extended to include new functionality.
 """
 
 import sys
@@ -17,6 +19,7 @@ __author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'
 __license__ = 'OSI Non-Profit OSL 3.0'
 __version__ = '1.0'
 
+# Function that converts string to float (if possible)
 def make_float_if_needed (s):
 	try:
 		float(s)
@@ -24,6 +27,7 @@ def make_float_if_needed (s):
 	except ValueError:
 		return s
 
+# Function to load the parameters data file
 def load_plot_parameters (filename):
 	plot_params = {}
 	param_reader = csv.reader(open(filename, 'rU'), delimiter=',')
@@ -36,6 +40,7 @@ def load_plot_parameters (filename):
 				plot_params[row[0]] = make_float_if_needed(row[1])
 	return plot_params
 
+# Function to load the part information data file
 def load_part_information (filename):
 	part_info = {}
 	parts_reader = csv.reader(open(filename, 'rU'), delimiter=',')
@@ -58,6 +63,7 @@ def load_part_information (filename):
 		part_info[part_name] = [part_name, part_type, part_attribs_map]
 	return part_info
 
+# Function to load the performance data file
 def load_perf_information (filename):
 	perf_info = {}
 	perf_reader = csv.reader(open(filename, 'rU'), delimiter=',')
@@ -76,6 +82,7 @@ def load_perf_information (filename):
 		perf_info[variant] = perf_attribs_map
 	return perf_info
 
+# Function to load the DNA designs data file
 def load_dna_designs (filename, part_info):
 	dna_design_order = []
 	dna_designs = {}
@@ -98,8 +105,8 @@ def load_dna_designs (filename, part_info):
 					part_design = {}
 					cur_part_info = part_info[part_name]
 					part_design['type'] = cur_part_info[1]
-					part_design['name'] = part_name #needed to add part name for regulation
-					part_design['fwd']  = fwd       #needed to add fwd for regulation
+					part_design['name'] = part_name
+					part_design['fwd']  = fwd 
 					if fwd == True:
 						part_design['start'] = i
 						part_design['end'] = i+1
@@ -112,14 +119,16 @@ def load_dna_designs (filename, part_info):
 			dna_design_order.append(row[0])
 	return dna_designs, dna_design_order
 
+# Function to all of the values for a given attribute from a dictionary
 def extract_dict_attribs (d, dict_keys, attrib_key):
 	out = []
 	for d_key in dict_keys:
 		out.append(d[d_key][attrib_key])
 	return out
 
+# Function to plot the designs and performance information
 def plot_dna (dna_designs, dna_design_order, out_filename, plot_params, perf_data):
-	# Create the renderer
+	# Default parameters for the plotting
 	if 'axis_y' not in plot_params.keys():
 		plot_params['axis_y'] = 35
 	left_pad = 0.0
@@ -128,6 +137,7 @@ def plot_dna (dna_designs, dna_design_order, out_filename, plot_params, perf_dat
 	linewidth = 1.0
 	fig_y = 5.0
 	fig_x = 5.0
+	# Update parameters if needed
 	if 'backbone_pad_left' in plot_params.keys():
 		left_pad = plot_params['backbone_pad_left']
 	if 'backbone_pad_right' in plot_params.keys():
@@ -152,23 +162,19 @@ def plot_dna (dna_designs, dna_design_order, out_filename, plot_params, perf_dat
 
 	# Cycle through the designs an plot on individual axes
 	design_list = sorted(dna_designs.keys())
-	
 	num_of_designs = len(design_list)
 	ax_list = []
 	max_dna_len = 0.0
 	gs = gridspec.GridSpec(num_of_designs,2, width_ratios=[1,12])
 
+	# Plot the genetic designs
 	for i in range(len(dna_design_order)):
 		# Create axis for the design and plot
 		design =  dna_designs[dna_design_order[i]]
-
 		ax = plt.subplot(gs[i, 1])
-
-		#ax = fig.add_subplot(num_of_designs,2,(i*2)+2)
 		if 'show_title' in plot_params.keys() and plot_params['show_title'] == 'Y':
 			ax.set_title(design_list[i], fontsize=8)
 		start, end = dr.renderDNA(ax, design, part_renderers)
-
 		dna_len = end-start
 		if max_dna_len < dna_len:
 			max_dna_len = dna_len
@@ -183,14 +189,11 @@ def plot_dna (dna_designs, dna_design_order, out_filename, plot_params, perf_dat
 		ax.set_aspect('equal')
 		ax.set_axis_off()
 
-	# Plot the performance data
+	# Plot the performance data (bar charts)
 	perf_vals = extract_dict_attribs(perf_data, dna_design_order, 'Activity')
 	perf_sd_vals = extract_dict_attribs(perf_data, dna_design_order, 'Activity_SD')
-
 	ax_perf = plt.subplot(gs[:, 0])
-
 	bar_height = 0.3
-
 	ax_perf.plot([1],[1])
 	ax_perf.spines['top'].set_visible(False)
 	ax_perf.spines['bottom'].set_visible(False)
@@ -201,31 +204,28 @@ def plot_dna (dna_designs, dna_design_order, out_filename, plot_params, perf_dat
 	ax_perf.yaxis.set_ticks_position('left')
 	ax_perf.tick_params(axis='y', direction='out')
 	ax_perf.tick_params('y', length=3, width=0.8, which='major', pad=2, labelsize=8)
-
 	pos1 = np.arange(len(perf_vals))
 	ax_perf.barh(pos1, perf_vals, height=bar_height, color=(0.6,0.6,0.6), edgecolor=(0.6,0.6,0.6))
-
 	ax_perf.errorbar(perf_vals, pos1+(bar_height/2.0), fmt='none', xerr=perf_sd_vals, ecolor=(0,0,0), capthick=1)
-
 	ax_perf.set_yticks(pos1+(bar_height/2.0))
 	ax_perf.set_yticklabels(dna_design_order)
-
 	ax_perf.set_ylim([max(pos1)+0.65, -0.35])
 	ax_perf.set_xlim([0, 1062606*1.05])
 
 	# Save the figure
 	plt.subplots_adjust(hspace=0.001, wspace=0.05, top=0.99, bottom=0.01, left=0.06, right=0.99)
 	fig.savefig(out_filename, transparent=True, dpi=300)
+	
 	# Clear the plotting cache
 	plt.close('all')
 
 def main():	
-	# Process arguments
+	# Load the data
 	plot_params = load_plot_parameters('plot_parameters.csv')
 	part_info = load_part_information('part_information.csv')
 	dna_designs, dna_design_order = load_dna_designs ('dna_designs.csv', part_info)
 	perf_data =load_perf_information('performance.csv')
-
+	# Plot the libraries
 	plot_dna(dna_designs, dna_design_order, 'variants_library.pdf', plot_params, perf_data)
 	plot_dna(dna_designs, dna_design_order, 'variants_library.png', plot_params, perf_data)
 

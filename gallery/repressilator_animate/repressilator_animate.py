@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-	Recombinase NOT-gate
+	Animation of the repressilator gene circuit
 """
 
 import numpy as np
@@ -164,24 +164,23 @@ def main():
 	# Plot of each timepoint
 	ax = plt.subplot(gs[3])
 	plot_construct(ax, 1, ymtet, ymlac, ymgamma, ytet, ylac, ygamma)
-
 	ax = plt.subplot(gs[4])
 	plot_construct(ax, 12, ymtet, ymlac, ymgamma, ytet, ylac, ygamma)
-
 	ax = plt.subplot(gs[5])
 	plot_construct(ax, 25.3, ymtet, ymlac, ymgamma, ytet, ylac, ygamma)
-
 	ax = plt.subplot(gs[6])
 	plot_construct(ax, 27.3, ymtet, ymlac, ymgamma, ytet, ylac, ygamma)
-
 	ax = plt.subplot(gs[7])
 	plot_construct(ax, 29.4, ymtet, ymlac, ymgamma, ytet, ylac, ygamma)
 
+	# Update subplot spacing
 	plt.subplots_adjust(hspace=0.4, left=0.12, right=0.95, top=0.99, bottom=0.01)
 	
+	# Save the figure
 	plt.savefig('repressilator_animate.pdf', transparent=True)
 	plt.savefig('repressilator_animate.png', dpi=300)
 	
+	# Generate the movie frames
 	movie(t, ymtet, ymlac, ymgamma, ytet, ylac, ygamma)
 	
 if __name__ == '__main__':

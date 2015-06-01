@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-	Rotated genetic design
+	Rotated genetic design to generate a homology matrix for CRISPRi circuit
 """
 
 import numpy as np
@@ -21,7 +21,7 @@ __author__  = 'Thomas Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'
 __license__ = 'OSI OSL 3.0'
 __version__ = '1.0'
 
-# Color maps
+# Color maps (we use these throughout)
 col_map = {}
 col_map['red']     = (0.95, 0.30, 0.25)
 col_map['green']   = (0.38, 0.82, 0.32)
@@ -31,23 +31,22 @@ col_map['purple']  = (0.55, 0.35, 0.64)
 col_map['yellow']  = (0.98, 0.97, 0.35)
 col_map['grey']    = (0.80, 0.80, 0.80)
 
+# Options dictionary map (makes it easier to apply same styling)
 opt_map = {}
 opt_map['Promoter'] = {'color':col_map['green']}
 opt_map['UserDefined'] = {'color':col_map['grey']}
 opt_map['Terminator'] = {'color':col_map['red']}
-
 opt_map['pTet'] = {'color':[0,0,0], 'label':'pTet', 'label_y_offset':-4, 'x_extent':50}
 opt_map['pTac'] = {'color':[0,0,0], 'label':'pTac', 'label_y_offset':-4, 'x_extent':50}
-
 opt_map['pA1'] = {'color':col_map['green'], 'label':'pA1', 'label_y_offset':-4, 'label_color':col_map['green'], 'x_extent':50}
 opt_map['pA3'] = {'color':col_map['blue'], 'label':'pA3', 'label_y_offset':-4, 'label_color':col_map['blue'], 'x_extent':50}
 opt_map['pA5'] = {'color':col_map['orange'], 'label':'pA5', 'label_y_offset':-4, 'label_color':col_map['orange'], 'x_extent':50}
-
 opt_map['g1'] = {'color':col_map['green'], 'label':'g1', 'label_style':'italic', 'label_y_offset':4, 'label_color':col_map['green']}
 opt_map['g2'] = {'color':(1,1,1), 'label':'g2', 'label_style':'italic', 'label_y_offset':4, 'label_color':(0,0,0)}
 opt_map['g3'] = {'color':col_map['blue'], 'label':'g3', 'label_style':'italic', 'label_y_offset':4, 'label_color':col_map['blue']}
 opt_map['g5'] = {'color':col_map['orange'], 'label':'g5', 'label_style':'italic', 'label_y_offset':4, 'label_color':col_map['orange']}
 
+# Function to load the design of the circuit from a text file
 def load_design (filename, opt_map):
 	design = []
 	parts = {}
@@ -70,7 +69,7 @@ def load_design (filename, opt_map):
 			            'end':cur_bp+len(p_seq),
 			            'fwd':True,
 			            'opts':p_opts}
-			# return all the parts by name
+			# Return all the parts by name
 			if p_name not in parts.keys():
 				parts[p_name] = [new_part]
 			else:
@@ -80,9 +79,11 @@ def load_design (filename, opt_map):
 			cur_bp = cur_bp+len(p_seq)
 	return design, seq, parts
 
+# Function to calculate the reverse complement of a sequence
 def revcomp(seq, trans=string.maketrans("ACGT", "TGCA")):
 	return "".join(reversed(seq.translate(trans)))
 
+# Function to calculate number of shared bases between two sequences
 def homology(seq1, seq2):
 	same_count = 0
 	for idx in range(len(seq1)):
@@ -91,38 +92,8 @@ def homology(seq1, seq2):
 				same_count += 1
 	return same_count
 
-def homology_matrix(seq, window_len=20):
-	extent = window_len/2
-	h_matrix = np.zeros((len(seq), len(seq)))
-	for idx1 in range(len(seq)):
-		# Extract the first seqeunce
-		start_bp = idx1-extent
-		if start_bp < 0:
-			start_bp = 0
-		end_bp = idx1+extent
-		if end_bp > len(seq):
-			end_bp = len(seq)
-		cur_seq1 = seq[start_bp:end_bp]
-
-		for idx2 in range(len(seq)):
-			# Extract the second sequence
-			start_bp = idx2-extent
-			if start_bp < 0:
-				start_bp = 0
-			end_bp = idx2+extent
-			if end_bp > len(seq):
-				end_bp = len(seq)
-			cur_seq2 = seq[start_bp:end_bp]
-
-			# Calculate homology (include reverse complement)
-			h = homology(cur_seq1, cur_seq2)
-			h2 = homology(revcomp(cur_seq1), cur_seq2)
-			if h2 > h:
-				h = h2
-			h_matrix[idx1,idx2] = h
-	return h_matrix
-
-
+# Generate a homology matrix for a given sequence and window length
+# (Homology is calculated against itself)
 def homology_matrix2(seq, window_len=20):
 	h_matrix = np.zeros((len(seq), len(seq)))
 	for idx1 in range(len(seq)-window_len):
@@ -142,9 +113,10 @@ def homology_matrix2(seq, window_len=20):
 				h_matrix[start_bp1:end_bp1,start_bp2:end_bp2] = 1
 	return h_matrix
 
+# Load the design
 design, seq, parts = load_design('data_design.txt', opt_map)
 
-# create regulation
+# Create regulation
 arc1 = {'type':'Repression', 'from_part':parts['g5'][0], 'to_part':parts['pA5'][0], 'opts':{'color':col_map['orange'], 'linewidth':1.0, 'arrowhead_length':8, 'arc_height_start':8, 'arc_height_const':9, 'arc_height_spacing':1.1, 'arc_height_end':7.5}}
 arc2 = {'type':'Repression', 'from_part':parts['g1'][0], 'to_part':parts['pA1'][0], 'opts':{'color':col_map['green'], 'linewidth':1.0, 'arrowhead_length':8, 'arc_height_start':8, 'arc_height_const':9, 'arc_height_spacing':1.1, 'arc_height_end':7.5}}
 arc3 = {'type':'Repression', 'from_part':parts['g3'][0], 'to_part':parts['pA3'][0], 'opts':{'color':col_map['blue'], 'linewidth':1.0, 'arrowhead_length':8, 'arc_height_start':8, 'arc_height_const':9, 'arc_height_spacing':1.1, 'arc_height_end':7.5}}
@@ -152,10 +124,12 @@ arc4 = {'type':'Repression', 'from_part':parts['g3'][1], 'to_part':parts['pA3'][
 
 regs = [arc1, arc2, arc3, arc4]
 
+# Calculate homology
 h_matrix_60 = homology_matrix2(seq, window_len=60)
 h_matrix_30 = homology_matrix2(seq, window_len=30)
 h_matrix_15 = homology_matrix2(seq, window_len=15)
 
+# Collate homology results so that different levels of homology are coloured differently
 h_matrix = np.zeros((len(seq), len(seq)))
 for idx1 in range(len(seq)):
 	for idx2 in range(len(seq)):
@@ -173,7 +147,9 @@ ax_dna_x = plt.subplot(gs[1])
 
 # Redender the DNA
 dr = dpl.DNARenderer(scale=1, linewidth=0.9)
-start, end = dr.renderDNA(ax_dna_x, design, dr.trace_part_renderers(), regs=regs, reg_renderers=dr.std_reg_renderers())
+start, end = dr.renderDNA(ax_dna_x, design, dr.trace_part_renderers(), 
+	                      regs=regs, reg_renderers=dr.std_reg_renderers())
+
 # Set bounds and display options for the DNA axis
 dna_len = end-start
 ax_dna_x.set_xlim([start, end])
@@ -181,6 +157,7 @@ ax_dna_x.set_ylim([-6,13])
 ax_dna_x.plot([start-20,end+20], [0,0], color=(0,0,0), linewidth=1.0, zorder=1)
 ax_dna_x.axis('off')
 
+# Setup the rotated axis
 def setup_rot_axes(fig, rect):
 	tr = Affine2D().rotate_deg(90.0)
 	grid_helper = gh.GridHelperCurveLinear(tr)
@@ -194,26 +171,27 @@ def setup_rot_axes(fig, rect):
 	ax1.axis['top', 'right', 'left', 'bottom'].set_visible(False)
 	return ax1, ax2
 
+# Generate the rotated axis.
 ax_dna_y_main, ax_dna_y = setup_rot_axes(fig, gs[2])
-# before rendering remove all labels (simplify the render)
+
+# Before rendering rotated circuit remove all labels (simplify plot)
 for el in design:
 	if 'label' in el['opts'].keys():
 		el['opts']['label'] = ''
 
+# Render the rotated design normally (rotation done by matplotlib)
 start, end = dr.renderDNA(ax_dna_y, design, dr.trace_part_renderers())
-ax_data = plt.subplot(gs[3], sharex=ax_dna_x)
-cmap = colors.ListedColormap(['white', 'grey', 'red'])
-bounds=[0,10,18,21]
-norm = colors.BoundaryNorm(bounds, cmap.N)
-ax_data.matshow(h_matrix, cmap=pylab.cm.gray_r)
 
+# Plot the homology matrix (make sure aspect the same)
+ax_data = plt.subplot(gs[3], sharex=ax_dna_x)
+ax_data.matshow(h_matrix, cmap=pylab.cm.gray_r)
 ax_data.set_aspect('auto')
 ax_data.set_xticks([])
 ax_data.set_yticks([])
 ax_data.set_ylim([end, start])
 ax_data.set_xlim([start, end])
 
-# Make spacing between subplot less
+# Sort out subplot spacing
 plt.subplots_adjust(hspace=.04, wspace=.04, left=.01, right=.99, top=0.99, bottom=0.01)
 
 # Save the figure

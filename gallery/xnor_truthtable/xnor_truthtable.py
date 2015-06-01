@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-    Annotated bar chart.
+    Annotation of standard bar chart with genetic constructs
 """
 
 from pylab import *
@@ -12,24 +12,22 @@ __author__  = 'Bryan Der <bder@mit.edu>, Voigt Lab, MIT\n\
 __license__ = 'OSI OSL 3.0'
 __version__ = '1.0'
 
-val = [2.5, 0.008, 0.012, 2.5]
-pos = arange(4)+.5
-
+# Function to generate a ligher colour
 def lighten_color (col, fac):
 	r = col[0] + (fac*(1.0-col[0]))
 	g = col[1] + (fac*(1.0-col[1]))
 	b = col[2] + (fac*(1.0-col[2]))
 	return (r,g,b)
 
+# Plot bar chart
 fig = plt.figure(figsize=(3.7,2.32))
-
 ax = plt.axes([0.08, 0.14, 0.21, 0.80])
 ax.set_xscale('log')
 ax.tick_params(axis='y', labelsize=8)
 ax.tick_params(axis='x', labelsize=8)
-
 ax.tick_params(axis='y', which='major', pad=3)
-
+val = [2.5, 0.008, 0.012, 2.5]
+pos = arange(4)+.5
 barlist=ax.barh(pos,val,0.3, align='center', log=True)
 barlist[0].set_color('black')
 barlist[0].set_facecolor('black')
@@ -39,19 +37,18 @@ barlist[2].set_color('black')
 barlist[2].set_facecolor('white')
 barlist[3].set_color('black')
 barlist[3].set_facecolor('black')
-
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 ax.yaxis.tick_left()
 ax.xaxis.tick_bottom()
 ax.set_xlim([0.005,10])
 ax.set_ylim([-0.1,3.9])
-
 plt.yticks(pos, ('+/+', '-/+', '+/-', '-/-'))
 plt.xlabel('Output (REU)', fontsize=8, labelpad=0)
 plt.ylabel('Input', fontsize=8, labelpad=-1)
 plt.grid(False)
 
+# Colour map
 col_map = {}
 col_map['black']   = (0.00, 0.00, 0.00)
 col_map['white']   = (1.00, 1.00, 1.00)
@@ -59,11 +56,11 @@ col_map['red']     = (0.95, 0.30, 0.25)
 col_map['green']   = (0.38, 0.82, 0.32)
 col_map['blue']    = (0.38, 0.65, 0.87)
 col_map['orange']  = (1.00, 0.75, 0.17)
-col_map['purple']  = (0.55, 0.35, 0.64)
-col_map['yellow']  = (0.98, 0.97, 0.35)
 
+# Global line width
 lw = 1.0
 
+# Define the parts
 g0_OFF = {'type':'CDS', 'name':'g0_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white'], 'edgecolor':col_map['black'], 'x_extent':24}} #output
 g0_ON  = {'type':'CDS', 'name':'g0_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'edgecolor':col_map['black'], 'x_extent':24, 'label':'Out', 'label_style':'italic', 'label_color':(1,1,1), 'label_x_offset':-3, 'label_y_offset':-1}}
 g1_OFF = {'type':'CDS', 'name':'g1_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white'], 'edgecolor':col_map['red'], 'x_extent':24}}
@@ -83,6 +80,7 @@ p3 = {'type':'Promoter', 'name':'p5', 'fwd':True, 'opts':{'linewidth':lw, 'color
 p4_1 = {'type':'Promoter', 'name':'p6', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['orange']}}
 p4_2 = {'type':'Promoter', 'name':'p6', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['orange']}}
 
+# How much to lighten OFF components
 off_fac = 0.7
 
 pA_OFF = {'type':'Promoter', 'name':'pA', 'fwd':True, 'opts':{'linewidth':lw, 'color':lighten_color(col_map['black'],off_fac)}}
@@ -105,6 +103,7 @@ u2 = {'type':'RBS', 'name':'u2', 'fwd':True, 'opts':{'linewidth':lw, 'color':col
 u3 = {'type':'RBS', 'name':'u3', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'start_pad':-6, 'x_extent':6}}
 u4 = {'type':'RBS', 'name':'u4', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'start_pad':-6, 'x_extent':6}}
 
+# Define the regulation
 arc1 = {'type':'Repression', 'from_part':g1_ON, 'to_part':p1_OFF, 'opts':{'color':col_map['red'],    'linewidth':lw}}
 arc2 = {'type':'Repression', 'from_part':g2_ON, 'to_part':p2_OFF, 'opts':{'color':col_map['blue'],   'linewidth':lw}}
 arc3 = {'type':'Repression', 'from_part':g3_ON, 'to_part':p3_OFF, 'opts':{'color':col_map['green'],  'linewidth':lw, 'arc_height':25}}
@@ -116,13 +115,13 @@ reg2 = [arc1, arc2, arc4, arc5]
 reg3 = [arc1, arc3, arc4, arc5]
 reg4 = [arc2, arc3, arc4, arc5]
 
-
 # A design is merely a list of parts and their properties
 design1 = [pA_OFF, pB_OFF, u4, g4_OFF, t4,  pB_OFF, p4_1, u3, g3_ON,  t3,  pA_OFF, p4_2, u2, g2_ON,  t2,  p3_OFF, p2_OFF, u1, g1_OFF, t1,  p1, u0, g0_ON,  t0]
 design2 = [pA, pB_OFF, u4, g4_ON,  t4,  pB_OFF, p4_1_OFF, u3, g3_OFF, t3,  pA, p4_2_OFF, u2, g2_ON,  t2,  p3, p2_OFF, u1, g1_ON,  t1,  p1_OFF, u0, g0_OFF, t0]
 design3 = [pA_OFF, pB, u4, g4_ON,  t4,  pB, p4_1_OFF, u3, g3_ON,  t3,  pA_OFF, p4_2_OFF, u2, g2_OFF, t2,  p3_OFF, p2, u1, g1_ON,  t1,  p1_OFF, u0, g0_OFF, t0]
 design4 = [pA, pB, u4, g4_ON,  t4,  pB, p4_1_OFF, u3, g3_ON,  t3,  pA, p4_2_OFF, u2, g2_ON,  t2,  p3_OFF, p2_OFF, u1, g1_OFF, t1,  p1, u0, g0_ON,  t0]
 
+# Set up the axes for the genetic constructs
 ax_dna1 = plt.axes([0.135, 0.75, 1, 0.2])
 ax_dna2 = plt.axes([0.135, 0.55, 1, 0.2])
 ax_dna3 = plt.axes([0.135, 0.35, 1, 0.2])
@@ -132,31 +131,32 @@ ax_dna4 = plt.axes([0.135, 0.15, 1, 0.2])
 dr = dpl.DNARenderer()
 
 # Redender the DNA to axis
-start, end = dr.renderDNA(ax_dna1, design1, dr.SBOL_part_renderers(), regs=reg1, reg_renderers=dr.std_reg_renderers())
+start, end = dr.renderDNA(ax_dna1, design1, dr.SBOL_part_renderers(), 
+	                      regs=reg1, reg_renderers=dr.std_reg_renderers())
 ax_dna1.set_xlim([start, end])
 ax_dna1.set_ylim([-27,27])
 ax_dna1.set_aspect('equal')
 ax_dna1.set_xticks([])
 ax_dna1.set_yticks([])
 ax_dna1.axis('off')
-
-start, end = dr.renderDNA(ax_dna2, design2, dr.SBOL_part_renderers(), regs=reg2, reg_renderers=dr.std_reg_renderers())
+start, end = dr.renderDNA(ax_dna2, design2, dr.SBOL_part_renderers(),
+	                      regs=reg2, reg_renderers=dr.std_reg_renderers())
 ax_dna2.set_xlim([start, end])
 ax_dna2.set_ylim([-27,27])
 ax_dna2.set_aspect('equal')
 ax_dna2.set_xticks([])
 ax_dna2.set_yticks([])
 ax_dna2.axis('off')
-
-start, end = dr.renderDNA(ax_dna3, design3, dr.SBOL_part_renderers(), regs=reg3, reg_renderers=dr.std_reg_renderers())
+start, end = dr.renderDNA(ax_dna3, design3, dr.SBOL_part_renderers(), 
+	                      regs=reg3, reg_renderers=dr.std_reg_renderers())
 ax_dna3.set_xlim([start, end])
 ax_dna3.set_ylim([-27,27])
 ax_dna3.set_aspect('equal')
 ax_dna3.set_xticks([])
 ax_dna3.set_yticks([])
 ax_dna3.axis('off')
-
-start, end = dr.renderDNA(ax_dna4, design4, dr.SBOL_part_renderers(), regs=reg4, reg_renderers=dr.std_reg_renderers())
+start, end = dr.renderDNA(ax_dna4, design4, dr.SBOL_part_renderers(), 
+	                      regs=reg4, reg_renderers=dr.std_reg_renderers())
 ax_dna4.set_xlim([start, end])
 ax_dna4.set_ylim([-27,27])
 ax_dna4.set_aspect('equal')
@@ -164,8 +164,10 @@ ax_dna4.set_xticks([])
 ax_dna4.set_yticks([])
 ax_dna4.axis('off')
 
+# Save the figure
 fig.savefig('xnor_truthtable.pdf', transparent=True)
 fig.savefig('xnor_truthtable.png', dpi=300)
 
 # Clear the plotting cache
 plt.close('all')
+

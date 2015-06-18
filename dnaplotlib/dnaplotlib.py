@@ -1876,9 +1876,9 @@ def trace_promoter (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth,
 		else:
 			write_label(ax, opts['label'], start_bp+((end_bp-start_bp)/2.0), opts=opts)
 	if start_bp > end_bp:
-		return prev_end, start_bp
+		return end_bp, start_bp
 	else:
-		return prev_end, end_bp
+		return start_bp, end_bp
 
 def trace_rbs (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts):
 	""" Built-in trace-based ribosome binding site renderer.
@@ -1924,9 +1924,9 @@ def trace_rbs (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
 		else:
 			write_label(ax, opts['label'], start_bp+((end_bp-start_bp)/2.0), opts=opts)
 	if start_bp > end_bp:
-		return prev_end, start_bp
+		return end_bp, start_bp
 	else:
-		return prev_end, end_bp
+		return start_bp, end_bp
 
 def trace_user_defined (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts):
 	""" Built-in trace-based coding sequence renderer.
@@ -1966,9 +1966,9 @@ def trace_user_defined (ax, type, num, start_bp, end_bp, prev_end, scale, linewi
 		else:
 			write_label(ax, opts['label'], start_bp+((end_bp-start_bp)/2.0), opts=opts)
 	if start_bp > end_bp:
-		return prev_end, start_bp
+		return end_bp, start_bp
 	else:
-		return prev_end, end_bp
+		return start_bp, end_bp
 
 def trace_cds (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts):
 	""" Built-in trace-based coding sequence renderer.
@@ -2017,9 +2017,9 @@ def trace_cds (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
 		else:
 			write_label(ax, opts['label'], start_bp+((end_bp-start_bp)/2.0), opts=opts)
 	if start_bp > end_bp:
-		return prev_end, start_bp
+		return end_bp, start_bp
 	else:
-		return prev_end, end_bp
+		return start_bp, end_bp
 
 def trace_terminator (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts):
 	""" Built-in trace-based terminator renderer.
@@ -2065,9 +2065,9 @@ def trace_terminator (ax, type, num, start_bp, end_bp, prev_end, scale, linewidt
 		else:
 			write_label(ax, opts['label'], start_bp+((end_bp-start_bp)/2.0), opts=opts)
 	if start_bp > end_bp:
-		return prev_end, start_bp
+		return end_bp, start_bp
 	else:
-		return prev_end, end_bp
+		return start_bp, end_bp
 
 ###############################################################################
 # The DNA renderer
@@ -2207,8 +2207,8 @@ class DNARenderer:
 	    	Regulation present in the design. This is a list of dicts, where each dict
 	    	relates to a single regulation arc and must contain the following keys:
 	    	- type (string)
-	    	- from_part (int)  
-	    	- to_part (int)
+	    	- from_part (part object dict)  
+	    	- to_part (part object dict)
 	    	These will then be drawn in accordance with the renders selected.
 
 	    reg_renderers : dict(functions) (default=None)

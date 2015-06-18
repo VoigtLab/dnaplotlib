@@ -1915,7 +1915,7 @@ def trace_rbs (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
  	p2 = Polygon([(start_bp, -highlight_y_extent), 
  		          (start_bp, highlight_y_extent),
  		          (end_bp, highlight_y_extent),
- 		          (end_bp, -highlight_y_extent)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=13, 
+ 		          (end_bp, -highlight_y_extent)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 	ax.add_patch(p2)
 	if opts != None and 'label' in opts.keys():

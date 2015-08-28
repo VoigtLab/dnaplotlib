@@ -176,4 +176,3 @@ class SBOLRenderer(dnaplotlib.DNARenderer):
 
         # Return type differs from renderDNA
         return dpl_design
-

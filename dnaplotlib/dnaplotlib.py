@@ -1241,7 +1241,7 @@ def sbol_spacer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL spacer renderer.
 	"""
 	# Default options
-	color = (0,0,0)
+	color = (1,1,1)
 	edgecolor = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0

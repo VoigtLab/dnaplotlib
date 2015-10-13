@@ -1241,6 +1241,7 @@ def sbol_spacer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	"""
 	# Default options
 	color = (0,0,0)
+	edgecolor = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
 	x_extent = 6.0
@@ -1248,6 +1249,8 @@ def sbol_spacer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	linestyle = '-'
 	# Reset defaults if provided
 	if opts != None:
+		if 'edgecolor' in opts.keys():
+			edgecolor = opts['edgecolor']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -1278,11 +1281,11 @@ def sbol_spacer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	delta = radius - 0.5 * radius * math.sqrt(2)
 
 	l1 = Line2D([start+delta,end-delta],[radius-delta,-1*radius+delta], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		        linewidth=linewidth, color=edgecolor, zorder=12, linestyle=linestyle)
 	l2 = Line2D([start+delta,end-delta],[-1*radius+delta,radius-delta], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
-	c1 = Circle(rbs_center, x_extent/2.0, linewidth=linewidth, edgecolor=color, 
-		        facecolor=(1,1,1), zorder=12)
+		        linewidth=linewidth, color=edgecolor, zorder=12, linestyle=linestyle)
+	c1 = Circle(rbs_center, x_extent/2.0, linewidth=linewidth, edgecolor=edgecolor, 
+		        facecolor=color, zorder=12)
 	
 	ax.add_patch(c1)
 	ax.add_line(l1)
@@ -2109,7 +2112,7 @@ class DNARenderer:
 	                 'Activation',
 	                 'Connection']
 
-	def __init__(self, scale=1.0, linewidth=1.0, 
+	def __init__(self, scale=1.0, linewidth=1.0, linecolor=(0,0,0), 
 		         backbone_pad_left=0.0, backbone_pad_right=0.0):
 		""" Constructor to generate an empty DNARenderer.
 
@@ -2129,6 +2132,7 @@ class DNARenderer:
 		"""
 		self.scale = scale
 		self.linewidth = linewidth
+		self.linecolor = linecolor
 		self.backbone_pad_left = backbone_pad_left
 		self.backbone_pad_right = backbone_pad_right
 		self.reg_height = 15
@@ -2426,7 +2430,7 @@ class DNARenderer:
 				reg_num += 1
 		# Plot the backbone (z=1)
 		l1 = Line2D([first_start-self.backbone_pad_left,prev_end+self.backbone_pad_right],[0,0], 
-			        linewidth=self.linewidth, color=(0,0,0), zorder=10)
+			        linewidth=self.linewidth, color=self.linecolor, zorder=10)
 		ax.add_line(l1)
 		return first_start, prev_end
 

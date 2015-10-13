@@ -5,7 +5,7 @@ DNAplotlib is a library that enables highly customizable visualization of indivi
 
 DEPENDENCIES
 ============
-NumPy, matplotlib
+NumPy, matplotlib, pySBOL (optional)
 
 INSTALLATION
 ============

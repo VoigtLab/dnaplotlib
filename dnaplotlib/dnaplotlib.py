@@ -77,6 +77,7 @@ __version__ = '1.0'
 def write_label (ax, label_text, x_pos, opts=None):
 	""" Renders labels on parts.
 	"""
+	zorder_add = 0.0
 	y_offset = 0.0
 	label_style = 'normal'
 	label_size = 7
@@ -85,6 +86,8 @@ def write_label (ax, label_text, x_pos, opts=None):
 	label_color = (0,0,0)
 	label_rotation = 0
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'y_offset' in opts.keys():
 			y_offset = opts['y_offset']
 		if 'label_style' in opts.keys():
@@ -101,12 +104,13 @@ def write_label (ax, label_text, x_pos, opts=None):
 			label_rotation = opts['label_rotation']
 	ax.text(x_pos+label_x_offset, label_y_offset+y_offset, label_text, horizontalalignment='center',
 		    verticalalignment='center', fontsize=label_size, fontstyle=label_style, 
-		    color=label_color, rotation=label_rotation, zorder=30)
+		    color=label_color, rotation=label_rotation, zorder=30+zorder_add)
 
 def sbol_promoter (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL promoter renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0.0,0.0,0.0)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -116,6 +120,8 @@ def sbol_promoter (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	arrowhead_length = 4
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -149,10 +155,10 @@ def sbol_promoter (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 		final_end = end+end_pad
 	# Draw the promoter symbol
 	l1 = Line2D([start,start],[0,dir_fac*y_extent], linewidth=linewidth, 
-		        color=color, zorder=9)
+		        color=color, zorder=9+zorder_add)
 	l2 = Line2D([start,start+dir_fac*x_extent-dir_fac*(arrowhead_length*0.5)],
                 [dir_fac*y_extent,dir_fac*x_extent], linewidth=linewidth, 
-                color=color, zorder=10)
+                color=color, zorder=10+zorder_add)
 	ax.add_line(l1)
 	ax.add_line(l2)
 	p1 = Polygon([(start+dir_fac*x_extent-dir_fac*arrowhead_length, 
@@ -160,7 +166,7 @@ def sbol_promoter (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 		          (start+dir_fac*x_extent, dir_fac*y_extent),
 		          (start+dir_fac*x_extent-dir_fac*arrowhead_length, 
 		           dir_fac*y_extent-(arrowhead_height))],
-		          facecolor=color, edgecolor=color, linewidth=linewidth, 
+		          facecolor=color, edgecolor=color, linewidth=linewidth,  zorder=1+zorder_add,
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0
 	ax.add_patch(p1)
 	if opts != None and 'label' in opts.keys():
@@ -177,6 +183,7 @@ def sbol_cds (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL coding sequence renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0.7,0.7,0.7)
 	hatch = ''
 	start_pad = 1.0
@@ -188,6 +195,8 @@ def sbol_cds (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	edgecolor = (0,0,0)
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'hatch' in opts.keys():
@@ -233,7 +242,7 @@ def sbol_cds (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 		          (end-dir_fac*arrowhead_length, y_extent+arrowhead_height),
 		          (end-dir_fac*arrowhead_length, y_extent)],
 		          edgecolor=edgecolor, facecolor=color, linewidth=linewidth, 
-		          hatch=hatch, zorder=11, 
+		          hatch=hatch, zorder=11+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0
 	ax.add_patch(p1)
 	if opts != None and 'label' in opts.keys():
@@ -250,6 +259,7 @@ def sbol_terminator (ax, type, num, start, end, prev_end, scale, linewidth, opts
 	""" Built-in SBOL terminator renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -257,6 +267,8 @@ def sbol_terminator (ax, type, num, start, end, prev_end, scale, linewidth, opts
 	x_extent = 8.0
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -286,9 +298,9 @@ def sbol_terminator (ax, type, num, start, end, prev_end, scale, linewidth, opts
 		final_end = end+end_pad
 	# Draw the terminator symbol
 	l1 = Line2D([start+dir_fac*(x_extent/2.0),start+dir_fac*(x_extent/2.0)],[0,dir_fac*y_extent], linewidth=linewidth, 
-		        color=color, zorder=8)
+		        color=color, zorder=8+zorder_add)
 	l2 = Line2D([start,start+(dir_fac*x_extent)],[dir_fac*y_extent,dir_fac*y_extent], 
-		        linewidth=linewidth, color=color, zorder=9)
+		        linewidth=linewidth, color=color, zorder=9+zorder_add)
 	ax.add_line(l1)
 	ax.add_line(l2)
 	if opts != None and 'label' in opts.keys():
@@ -305,12 +317,15 @@ def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL ribosome binding site renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0.7,0.7,0.7)
 	start_pad = 2.0
 	end_pad = 2.0
 	x_extent = 10.0
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -334,7 +349,7 @@ def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 		final_end = start+start_pad
 		rbs_center = (end+((start-end)/2.0),0)
 		w1 = Wedge(rbs_center, x_extent/2.0, 180, 360, linewidth=linewidth, 
-			       facecolor=color, zorder=8)
+			       facecolor=color, zorder=8+zorder_add)
 		ax.add_patch(w1)
 	else:
 		start = prev_end+start_pad
@@ -342,7 +357,7 @@ def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 		final_end = end+end_pad
 		rbs_center = (start+((end-start)/2.0),0)
 		w1 = Wedge(rbs_center, x_extent/2.0, 0, 180, linewidth=linewidth, 
-			       facecolor=color, zorder=8)
+			       facecolor=color, zorder=8+zorder_add)
 		ax.add_patch(w1)
 	if opts != None and 'label' in opts.keys():
 		if final_start > final_end:
@@ -354,19 +369,21 @@ def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	else:
 		return prev_end, final_end
 
-
 def sbol_ribozyme (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL ribozyme renderer.
 	"""
 	return stick_figure(ax,type,num,start,end,prev_end,scale,linewidth,opts)	
+
 def sbol_protein_stability (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL protein stability element renderer.
 	"""
 	return stick_figure(ax,type,num,start,end,prev_end,scale,linewidth,opts)	
+
 def sbol_protease (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL protease site renderer.
 	"""
 	return stick_figure(ax,type,num,start,end,prev_end,scale,linewidth,opts)
+
 def sbol_ribonuclease (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL ribonuclease site renderer.
 	"""
@@ -376,13 +393,13 @@ def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" General function for drawing stick based parts (e.g., ribozyme and protease sites).
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
 	x_extent = 5.0
 	y_extent = 10.0
 	linestyle = '-'
-	
 	linetype  = "";
 	shapetype = "";
 	if(type == "Ribozyme"):
@@ -400,6 +417,8 @@ def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -426,20 +445,20 @@ def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 		final_end = start+start_pad
 		rbs_center = (end+((start-end)/2.0),-y_extent)
 		c1 = Circle(rbs_center, x_extent/2.0, linewidth=linewidth, edgecolor=color, 
-			        facecolor=(1,1,1), zorder=8)
+			        facecolor=(1,1,1), zorder=8+zorder_add)
 		x1 = Line2D([start,end],[-y_extent*1.25,-y_extent/1.5], 
-		        	linewidth=linewidth, color=color, zorder=12, linestyle='-')
+		        	linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
 		x2 = Line2D([start,end],[-y_extent/1.5,-y_extent*1.25], 
-		        	linewidth=linewidth, color=color, zorder=12, linestyle='-')
+		        	linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
 
 		dash1  = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,-y_extent/4], 
-			        linewidth=linewidth, color=color, zorder=8, linestyle=linestyle)
+			        linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
 		dash2  = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[-y_extent/2,-y_extent+(x_extent/2.0)], 
-			        linewidth=linewidth, color=color, zorder=8, linestyle=linestyle)
+			        linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
 		solidO = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,-y_extent+(x_extent/2.0)], 
-			        linewidth=linewidth, color=color, zorder=8, linestyle=linestyle)
+			        linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
 		solidX = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,-y_extent], 
-			        linewidth=linewidth, color=color, zorder=8, linestyle=linestyle)
+			        linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
 
 		if(headgroup == "O" and linetype == "dash"):
 			ax.add_patch(c1)
@@ -457,27 +476,26 @@ def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 			ax.add_line(x1)
 			ax.add_line(x2)
 			ax.add_line(solidX)
-		
 	else:
 		start = prev_end+start_pad
 		end = start+x_extent
 		final_end = end+end_pad
 		rbs_center = (start+((end-start)/2.0),y_extent)
 		c1 = Circle(rbs_center, x_extent/2.0, linewidth=linewidth, edgecolor=color, 
-			        facecolor=(1,1,1), zorder=8)
+			        facecolor=(1,1,1), zorder=8+zorder_add)
 		x1 = Line2D([start,end],[y_extent*1.25,y_extent/1.5], 
-		        	linewidth=linewidth, color=color, zorder=12, linestyle='-')
+		        	linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
 		x2 = Line2D([start,end],[y_extent/1.5,y_extent*1.25], 
-		        	linewidth=linewidth, color=color, zorder=12, linestyle='-')
+		        	linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
 
 		dash1 = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,y_extent/4], 
-			        linewidth=linewidth, color=color, zorder=8, linestyle=linestyle)
+			        linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
 		dash2 = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[y_extent/2,y_extent-(x_extent/2.0)], 
-			        linewidth=linewidth, color=color, zorder=8, linestyle=linestyle)
+			        linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
 		solidO = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,y_extent-(x_extent/2.0)], 
-			        linewidth=linewidth, color=color, zorder=8, linestyle=linestyle)
+			        linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
 		solidX = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,y_extent], 
-			        linewidth=linewidth, color=color, zorder=8, linestyle=linestyle)
+			        linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
 
 		if(headgroup == 'O' and linetype == 'dash'):
 			ax.add_patch(c1)
@@ -511,6 +529,7 @@ def sbol_scar (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL scar renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -519,6 +538,8 @@ def sbol_scar (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	linestyle = '-'
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -544,15 +565,15 @@ def sbol_scar (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	final_end = end+end_pad
 	
 	l_top    = Line2D([start,start+x_extent],[y_extent,y_extent], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		        linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	l_bottom = Line2D([start,start+x_extent],[-1*y_extent,-1*y_extent], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		        linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	#white rectangle overlays backbone line
 	p1 = Polygon([(start, y_extent), 
 		          (start, -y_extent),
 		          (start+x_extent, -y_extent),
 		          (start+x_extent, y_extent)],
-		          edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=linewidth, zorder=11, 
+		          edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=linewidth, zorder=11+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 
 	ax.add_patch(p1)
@@ -574,9 +595,12 @@ def sbol_empty_space (ax, type, num, start, end, prev_end, scale, linewidth, opt
 	""" Built-in empty space renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	x_extent = 12.0
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'x_extent' in opts.keys():
 			x_extent = opts['x_extent']
 	# Check direction add start padding
@@ -597,6 +621,7 @@ def sbol_5_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
 	""" Built-in SBOL 5' overhang renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 0.0
 	end_pad = 2.0
@@ -605,6 +630,8 @@ def sbol_5_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
 	linestyle = '-'
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -630,15 +657,15 @@ def sbol_5_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
 	final_end = end+end_pad
 	
 	l_top    = Line2D([start,start+x_extent],[y_extent,y_extent], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		        linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	l_bottom = Line2D([start+(x_extent/2.0),start+x_extent],[-1*y_extent,-1*y_extent], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		        linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	#white rectangle overlays backbone line
 	p1 = Polygon([(start, y_extent), 
 		          (start, -y_extent),
 		          (start+x_extent, -y_extent),
 		          (start+x_extent, y_extent)],
-		          edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=linewidth, zorder=11, 
+		          edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=linewidth, zorder=11+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)		
 
 	ax.add_patch(p1)
@@ -660,6 +687,7 @@ def sbol_3_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
 	""" Built-in SBOL 3' overhang renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 0.0
@@ -668,6 +696,8 @@ def sbol_3_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
 	linestyle = '-'
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -693,15 +723,15 @@ def sbol_3_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
 	final_end = end+end_pad
 	
 	l_top    = Line2D([start,start+x_extent],[y_extent,y_extent], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		        linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	l_bottom = Line2D([start,start+(x_extent/2.0)],[-1*y_extent,-1*y_extent], 
-		        linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		        linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	#white rectangle overlays backbone line
 	p1 = Polygon([(start, y_extent), 
 		          (start, -y_extent),
 		          (start+x_extent, -y_extent),
 		          (start+x_extent, y_extent)],
-		          edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=linewidth, zorder=11, 
+		          edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=linewidth, zorder=11+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)		
 
 	ax.add_patch(p1)
@@ -723,6 +753,7 @@ def sbol_blunt_restriction_site (ax, type, num, start, end, prev_end, scale, lin
 	""" Built-in SBOL blunt-end restriction site renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -732,6 +763,8 @@ def sbol_blunt_restriction_site (ax, type, num, start, end, prev_end, scale, lin
 	linestyle = '-'
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'site_space' in opts.keys():
@@ -765,18 +798,18 @@ def sbol_blunt_restriction_site (ax, type, num, start, end, prev_end, scale, lin
 	final_end = end+end_pad
 	
 	l1        = Line2D([start+x_extent,start+x_extent],[-y_extent,y_extent], 
-		           linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		           linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	l1_top    = Line2D([start,start+x_extent],[y_extent,y_extent], 
-		           linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		           linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	l1_bottom = Line2D([start,start+x_extent],[-y_extent,-y_extent], 
-		           linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		           linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 
 	l2        = Line2D([end-x_extent,end-x_extent],[-y_extent,y_extent], 
-		           linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		           linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	l2_top    = Line2D([end,end-x_extent],[y_extent,y_extent], 
-		           linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		           linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	l2_bottom = Line2D([end,end-x_extent],[-y_extent,-y_extent], 
-		           linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		           linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	
 	ax.add_line(l1)
 	ax.add_line(l1_top)
@@ -794,6 +827,7 @@ def sbol_primer_binding_site (ax, type, num, start, end, prev_end, scale, linewi
 	""" Built-in SBOL primer binding site renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -804,6 +838,8 @@ def sbol_primer_binding_site (ax, type, num, start, end, prev_end, scale, linewi
 	linestyle = '-'
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -850,13 +886,13 @@ def sbol_primer_binding_site (ax, type, num, start, end, prev_end, scale, linewi
 		verts = [(start, y_offset), (end, y_offset), (end-arrowhead_length, y_offset+y_extent)]
 		codes = [Path.MOVETO, Path.LINETO, Path.LINETO]
 		path = Path(verts, codes)
-		patch = PathPatch(path, lw=linewidth, edgecolor=color, facecolor=(1,1,1))
+		patch = PathPatch(path, lw=linewidth, edgecolor=color, facecolor=(1,1,1), zorder=1+zorder_add)
 		ax.add_patch(patch)
 	else:
 		verts = [(start, -y_offset), (end, -y_offset), (end+arrowhead_length, -y_offset-y_extent)]
 		codes = [Path.MOVETO, Path.LINETO, Path.LINETO]
 		path = Path(verts, codes)
-		patch = PathPatch(path, lw=linewidth, edgecolor=color, facecolor=(1,1,1))
+		patch = PathPatch(path, lw=linewidth, edgecolor=color, facecolor=(1,1,1), zorder=1+zorder_add)
 		ax.add_patch(patch)
 
 	if opts != None and 'label' in opts.keys():
@@ -874,6 +910,7 @@ def sbol_5_sticky_restriction_site  (ax, type, num, start, end, prev_end, scale,
 	""" Built-in SBOL 5' sticky-end restriction site renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -883,6 +920,8 @@ def sbol_5_sticky_restriction_site  (ax, type, num, start, end, prev_end, scale,
 	linestyle = '-'
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'end_space' in opts.keys():
@@ -916,11 +955,11 @@ def sbol_5_sticky_restriction_site  (ax, type, num, start, end, prev_end, scale,
 	final_end = end+end_pad
 	
 	l1        = Line2D([start+end_space,start+end_space+x_extent],[0,0], 
-		           linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		           linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	l1_top    = Line2D([start+end_space,start+end_space],[0,y_extent], 
-		           linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		           linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	l1_bottom = Line2D([start+end_space+x_extent,start+end_space+x_extent],[0,-y_extent], 
-		           linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		           linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	ax.add_line(l1)
 	ax.add_line(l1_top)
 	ax.add_line(l1_bottom)
@@ -930,7 +969,7 @@ def sbol_5_sticky_restriction_site  (ax, type, num, start, end, prev_end, scale,
 		          (start, -y_extent),
 		          (end, -y_extent),
 		          (end, y_extent)],
-		          edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=linewidth, zorder=11, 
+		          edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=linewidth, zorder=11+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)		
 
 	ax.add_patch(p1)
@@ -944,6 +983,7 @@ def sbol_3_sticky_restriction_site  (ax, type, num, start, end, prev_end, scale,
 	""" Built-in SBOL 3' sticky-end restriction site renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -953,6 +993,8 @@ def sbol_3_sticky_restriction_site  (ax, type, num, start, end, prev_end, scale,
 	linestyle = '-'
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'end_space' in opts.keys():
@@ -986,11 +1028,11 @@ def sbol_3_sticky_restriction_site  (ax, type, num, start, end, prev_end, scale,
 	final_end = end+end_pad
 	
 	l1        = Line2D([start+end_space,start+end_space+x_extent],[0,0], 
-		           linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		           linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	l1_top    = Line2D([start+end_space+x_extent,start+end_space+x_extent],[0,y_extent], 
-		           linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		           linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	l1_bottom = Line2D([start+end_space,start+end_space],[0,-y_extent], 
-		           linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		           linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	ax.add_line(l1)
 	ax.add_line(l1_top)
 	ax.add_line(l1_bottom)
@@ -1000,7 +1042,7 @@ def sbol_3_sticky_restriction_site  (ax, type, num, start, end, prev_end, scale,
 		          (start, -y_extent),
 		          (end, -y_extent),
 		          (end, y_extent)],
-		          edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=linewidth, zorder=11, 
+		          edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=linewidth, zorder=11+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)		
 
 	ax.add_patch(p1)
@@ -1014,6 +1056,7 @@ def sbol_user_defined  (ax, type, num, start, end, prev_end, scale, linewidth, o
 	""" Built-in SBOL user-defined element renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -1023,6 +1066,8 @@ def sbol_user_defined  (ax, type, num, start, end, prev_end, scale, linewidth, o
 	fill_color = (1,1,1)
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'fill_color' in opts.keys():
@@ -1054,7 +1099,7 @@ def sbol_user_defined  (ax, type, num, start, end, prev_end, scale, linewidth, o
 		          (start, -y_extent),
 		          (start+x_extent, -y_extent),
 		          (start+x_extent, y_extent)],
-		          edgecolor=color, facecolor=fill_color, linewidth=linewidth, zorder=11, 
+		          edgecolor=color, facecolor=fill_color, linewidth=linewidth, zorder=11+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)		
 
 	ax.add_patch(p1)
@@ -1074,6 +1119,7 @@ def sbol_signature  (ax, type, num, start, end, prev_end, scale, linewidth, opts
 	""" Built-in SBOL signature renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -1083,6 +1129,8 @@ def sbol_signature  (ax, type, num, start, end, prev_end, scale, linewidth, opts
 	fill_color = (1,1,1)
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'fill_color' in opts.keys():
@@ -1131,7 +1179,7 @@ def sbol_signature  (ax, type, num, start, end, prev_end, scale, linewidth, opts
 			          (start, -y_extent),
 			          (start+x_extent, -y_extent),
 			          (start+x_extent, y_extent)],
-			          edgecolor=color, facecolor=fill_color, linewidth=linewidth, zorder=11, 
+			          edgecolor=color, facecolor=fill_color, linewidth=linewidth, zorder=11+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)		
 		ax.add_patch(p1)
 		top1x = start + indent_fac
@@ -1143,20 +1191,20 @@ def sbol_signature  (ax, type, num, start, end, prev_end, scale, linewidth, opts
 		bot2x = start + cross_width
 		bot2y = -y_extent + indent_fac
 		lcross1 = Line2D([top1x,bot2x],[top1y,bot2y], 
-		                  linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		                  linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 		lcross2 = Line2D([top2x,bot1x],[top2y,bot1y], 
-		                  linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		                  linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 		ax.add_line(lcross1)
 		ax.add_line(lcross2)
 		lsign = Line2D([bot2x+indent_fac,end-indent_fac],[-y_extent+indent_fac,-y_extent+indent_fac], 
-		               linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		               linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 		ax.add_line(lsign)
 	else:
 		p1 = Polygon([(start, y_extent), 
 			          (start, -y_extent),
 			          (start-x_extent, -y_extent),
 			          (start-x_extent, y_extent)],
-			          edgecolor=color, facecolor=fill_color, linewidth=linewidth, zorder=11, 
+			          edgecolor=color, facecolor=fill_color, linewidth=linewidth, zorder=11+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 		ax.add_patch(p1)
 		top1x = start - indent_fac
@@ -1168,13 +1216,13 @@ def sbol_signature  (ax, type, num, start, end, prev_end, scale, linewidth, opts
 		bot2x = start - cross_width
 		bot2y = -y_extent + indent_fac
 		lcross1 = Line2D([top1x,bot2x],[top1y,bot2y], 
-		                  linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		                  linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 		lcross2 = Line2D([top2x,bot1x],[top2y,bot1y], 
-		                  linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		                  linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 		ax.add_line(lcross1)
 		ax.add_line(lcross2)
 		lsign = Line2D([bot2x-indent_fac,end+indent_fac],[y_extent-indent_fac,y_extent-indent_fac], 
-		               linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		               linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 		ax.add_line(lsign)
 
 	if opts != None and 'label' in opts.keys():
@@ -1192,6 +1240,7 @@ def sbol_restriction_site (ax, type, num, start, end, prev_end, scale, linewidth
 	""" Built-in SBOL restriction site renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -1199,6 +1248,8 @@ def sbol_restriction_site (ax, type, num, start, end, prev_end, scale, linewidth
 	linestyle = '-'
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -1222,7 +1273,7 @@ def sbol_restriction_site (ax, type, num, start, end, prev_end, scale, linewidth
 	final_end = end+end_pad
 	
 	l1    = Line2D([start,start],[-y_extent,y_extent], 
-		           linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
+		           linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	ax.add_line(l1)
 
 	if opts != None and 'label' in opts.keys():
@@ -1241,6 +1292,7 @@ def sbol_spacer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL spacer renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (1,1,1)
 	edgecolor = (0,0,0)
 	start_pad = 2.0
@@ -1250,6 +1302,8 @@ def sbol_spacer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	linestyle = '-'
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'edgecolor' in opts.keys():
 			edgecolor = opts['edgecolor']
 		if 'color' in opts.keys():
@@ -1282,11 +1336,11 @@ def sbol_spacer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	delta = radius - 0.5 * radius * math.sqrt(2)
 
 	l1 = Line2D([start+delta,end-delta],[radius-delta,-1*radius+delta], 
-		        linewidth=linewidth, color=edgecolor, zorder=12, linestyle=linestyle)
+		        linewidth=linewidth, color=edgecolor, zorder=12+zorder_add, linestyle=linestyle)
 	l2 = Line2D([start+delta,end-delta],[-1*radius+delta,radius-delta], 
-		        linewidth=linewidth, color=edgecolor, zorder=12, linestyle=linestyle)
+		        linewidth=linewidth, color=edgecolor, zorder=12+zorder_add, linestyle=linestyle)
 	c1 = Circle(rbs_center, x_extent/2.0, linewidth=linewidth, edgecolor=edgecolor, 
-		        facecolor=color, zorder=12)
+		        facecolor=color, zorder=12+zorder_add)
 	
 	ax.add_patch(c1)
 	ax.add_line(l1)
@@ -1308,6 +1362,7 @@ def sbol_origin (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL origin renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -1316,6 +1371,8 @@ def sbol_origin (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	linestyle = '-'
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -1342,7 +1399,7 @@ def sbol_origin (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	ori_center = (start+((end-start)/2.0),0)
 	
 	c1 = Circle(ori_center, x_extent/2.0, linewidth=linewidth, edgecolor=color, 
-		        facecolor=(1,1,1), zorder=12)
+		        facecolor=(1,1,1), zorder=12+zorder_add)
 	
 	ax.add_patch(c1)
 	
@@ -1361,6 +1418,7 @@ def sbol_operator (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL operator renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -1369,6 +1427,8 @@ def sbol_operator (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	linestyle = '-'
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -1398,7 +1458,7 @@ def sbol_operator (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 		          (start, -y_extent),
 		          (start+x_extent, -y_extent),
 		          (start+x_extent, y_extent)],
-		          edgecolor=(0,0,0), facecolor=(1,1,1), linewidth=linewidth, zorder=11, 
+		          edgecolor=(0,0,0), facecolor=(1,1,1), linewidth=linewidth, zorder=11+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)		
 
 	ax.add_patch(p1)
@@ -1418,6 +1478,7 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
 	""" Built-in SBOL insulator renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0,0,0)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -1426,6 +1487,8 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
 	linestyle = '-'
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -1455,7 +1518,7 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
 		          (start, -y_extent),
 		          (start+x_extent, -y_extent),
 		          (start+x_extent, y_extent)],
-		          edgecolor=(0,0,0), facecolor=(1,1,1), linewidth=linewidth, zorder=11, 
+		          edgecolor=(0,0,0), facecolor=(1,1,1), linewidth=linewidth, zorder=11+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)		
 
 	bits = 5.0
@@ -1468,7 +1531,7 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
 		          (x_inset_start, -y_extent+gap_size),
 		          (x_inset_end, -y_extent+gap_size),
 		          (x_inset_end,  y_extent-gap_size)],
-		          edgecolor=(0,0,0), facecolor=(1,1,1), linewidth=linewidth, zorder=12, 
+		          edgecolor=(0,0,0), facecolor=(1,1,1), linewidth=linewidth, zorder=12+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)		
 
 	ax.add_patch(p1)
@@ -1488,6 +1551,7 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
 # Not used at present
 def temporary_repressor (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	# Default options
+	zorder_add = 0.0
 	color = (0.7,0.7,0.7)
 	start_pad = 2.0
 	end_pad = 2.0
@@ -1497,6 +1561,8 @@ def temporary_repressor (ax, type, num, start, end, prev_end, scale, linewidth, 
 	arrowhead_length = 4
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'start_pad' in opts.keys():
@@ -1533,9 +1599,9 @@ def temporary_repressor (ax, type, num, start, end, prev_end, scale, linewidth, 
 	e2center = (start+((end-start)/2.0)+x_extent/3.75,0)
 
 	e1 = Ellipse(e1center, y_extent/2, y_extent, edgecolor=(0,0,0), facecolor=color, 
-				linewidth=linewidth, fill=True, zorder=12)
+				linewidth=linewidth, fill=True, zorder=12+zorder_add)
 	e2 = Ellipse(e2center, y_extent/2, y_extent, edgecolor=(0,0,0), facecolor=color, 
-				linewidth=linewidth, fill=True, zorder=11)
+				linewidth=linewidth, fill=True, zorder=11+zorder_add)
 
 	ax.add_patch(e1)
 	ax.add_patch(e2)
@@ -1656,6 +1722,7 @@ def trace_promoter (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth,
 	""" Built-in trace-based promoter renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0.0,0.0,1.0)
 	y_offset = 0.0
 	y_extent = 6.0
@@ -1665,6 +1732,8 @@ def trace_promoter (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth,
 	highlight_y_extent = 0.8
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'y_offset' in opts.keys():
@@ -1690,10 +1759,10 @@ def trace_promoter (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth,
 		y_offset = -y_offset
 	# Draw the promoter symbol
 	l1 = Line2D([start_bp,start_bp],[0+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, 
-		        color=color, zorder=14)
+		        color=color, zorder=14+zorder_add)
 	l2 = Line2D([start_bp,start_bp+dir_fac*x_extent*scale-dir_fac*arrowhead_length*0.5*scale],
                 [dir_fac*y_extent+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, 
-                color=color, zorder=14)
+                color=color, zorder=14+zorder_add)
 	ax.add_line(l1)
 	ax.add_line(l2)
 	p1 = Polygon([(start_bp+dir_fac*x_extent*scale-dir_fac*arrowhead_length*scale, 
@@ -1701,14 +1770,14 @@ def trace_promoter (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth,
 		          (start_bp+dir_fac*(x_extent*scale), dir_fac*y_extent+y_offset),
 		          (start_bp+dir_fac*x_extent*scale-dir_fac*arrowhead_length*scale, 
 		           dir_fac*y_extent-(arrowhead_height)+y_offset)],
-		          facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14, 
+		          facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 	ax.add_patch(p1)
 	# Shade the promoter area (normally smaller than symbol extent)
  	p2 = Polygon([(start_bp, -highlight_y_extent+y_offset), 
  		          (start_bp, highlight_y_extent+y_offset),
  		          (end_bp, highlight_y_extent+y_offset),
- 		          (end_bp, -highlight_y_extent+y_offset)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14, 
+ 		          (end_bp, -highlight_y_extent+y_offset)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 	ax.add_patch(p2)
 	if opts != None and 'label' in opts.keys():
@@ -1725,6 +1794,7 @@ def trace_rbs (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
 	""" Built-in trace-based ribosome binding site renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0.16,0.68,0.15)
 	y_offset = 0.0
 	y_extent = 3.5
@@ -1732,6 +1802,8 @@ def trace_rbs (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
 	highlight_y_extent = 0.8
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'y_offset' in opts.keys():
@@ -1751,15 +1823,15 @@ def trace_rbs (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
 	if start_bp > end_bp:
 		dir_fac = -1.0
 	# Draw the RBS symbol
-	l1 = Line2D([start_bp,start_bp],[0+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, color=color, zorder=14)
+	l1 = Line2D([start_bp,start_bp],[0+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, color=color, zorder=14+zorder_add)
 	ax.add_line(l1)
-	c1 = Ellipse((start_bp,dir_fac*y_extent+y_offset),width=(x_extent*scale),height=y_extent*0.4,color=color, zorder=14)
+	c1 = Ellipse((start_bp,dir_fac*y_extent+y_offset),width=(x_extent*scale),height=y_extent*0.4,color=color, zorder=14+zorder_add)
 	ax.add_artist(c1)
  	# Shade the promoter area (normally smaller than symbol extent)
  	p2 = Polygon([(start_bp, -highlight_y_extent+y_offset), 
  		          (start_bp, highlight_y_extent+y_offset),
  		          (end_bp, highlight_y_extent+y_offset),
- 		          (end_bp, -highlight_y_extent+y_offset)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14, 
+ 		          (end_bp, -highlight_y_extent+y_offset)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 	ax.add_patch(p2)
 	if opts != None and 'label' in opts.keys():
@@ -1776,12 +1848,15 @@ def trace_user_defined (ax, type, num, start_bp, end_bp, prev_end, scale, linewi
 	""" Built-in trace-based user defined region renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0.7,0.7,0.7)
 	hatch = ''
 	y_offset = 0.0
 	y_extent = 1.5
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'hatch' in opts.keys():
@@ -1804,7 +1879,7 @@ def trace_user_defined (ax, type, num, start_bp, end_bp, prev_end, scale, linewi
 		          (end_bp-dir_fac*scale, -y_extent+y_offset),
 		          (end_bp-dir_fac*scale, y_extent+y_offset)],
 		          edgecolor=(0.0,0.0,0.0), facecolor=color, linewidth=linewidth, 
-		          hatch=hatch, zorder=15, 
+		          hatch=hatch, zorder=15+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 	ax.add_patch(p1)
 	if opts != None and 'label' in opts.keys():
@@ -1821,6 +1896,7 @@ def trace_cds (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
 	""" Built-in trace-based coding sequence renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (0.7,0.7,0.7)
 	hatch = ''
 	y_offset = 0.0
@@ -1829,6 +1905,8 @@ def trace_cds (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
 	arrowhead_length = 30.0
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'hatch' in opts.keys():
@@ -1858,7 +1936,7 @@ def trace_cds (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
 		          (end_bp-dir_fac*arrowhead_length*scale, y_extent+arrowhead_height+y_offset),
 		          (end_bp-dir_fac*arrowhead_length*scale, y_extent+y_offset)],
 		          edgecolor=(0.0,0.0,0.0), facecolor=color, linewidth=linewidth, 
-		          hatch=hatch, zorder=15, 
+		          hatch=hatch, zorder=15+zorder_add, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 	ax.add_patch(p1)
 	if opts != None and 'label' in opts.keys():
@@ -1875,6 +1953,7 @@ def trace_terminator (ax, type, num, start_bp, end_bp, prev_end, scale, linewidt
 	""" Built-in trace-based terminator renderer.
 	"""
 	# Default options
+	zorder_add = 0.0
 	color = (1.0,0.0,0.0)
 	y_offset = 0.0
 	y_extent = 3.5
@@ -1882,6 +1961,8 @@ def trace_terminator (ax, type, num, start_bp, end_bp, prev_end, scale, linewidt
 	highlight_y_extent = 0.8
 	# Reset defaults if provided
 	if opts != None:
+		if 'zorder_add' in opts.keys():
+			zorder_add = opts['zorder_add']
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'y_offset' in opts.keys():
@@ -1901,8 +1982,8 @@ def trace_terminator (ax, type, num, start_bp, end_bp, prev_end, scale, linewidt
 	if start_bp > end_bp:
 		dir_fac = -1.0
 	# Draw the terminator symbol
-	l1 = Line2D([start_bp,start_bp],[0+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, color=color, zorder=8)
-	l2 = Line2D([start_bp-(x_extent*scale),start_bp+(x_extent*scale)],[dir_fac*y_extent+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, color=color, zorder=14)
+	l1 = Line2D([start_bp,start_bp],[0+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, color=color, zorder=8+zorder_add)
+	l2 = Line2D([start_bp-(x_extent*scale),start_bp+(x_extent*scale)],[dir_fac*y_extent+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, color=color, zorder=14+zorder_add)
 	ax.add_line(l1)
 	ax.add_line(l2)
 	# Shade the terminator area (normally smaller than symbol extent)
@@ -2280,6 +2361,21 @@ class DNARenderer:
 				        linewidth=self.linewidth, color=self.linecolor, zorder=10)
 			ax.add_line(l1)
 		return first_start, prev_end
+
+	def annotate (self, ax, part_renderers, part, annotate_zorder=1000):
+		""" Annotate a plot at a user specified location and offset.
+		"""
+		# Annotations show be placed on top of existing design
+		if 'opts' not in part.keys():
+			part['opts'] = {'zorder_add': annotate_zorder}
+		else:
+			part['opts']['zorder_add'] = annotate_zorder
+		# Draw the part
+		part_renderers[part['type']](ax, 
+			part['type'], 1, 
+			part['start'], part['end'], 
+			part['start'], self.scale, 
+			self.linewidth, opts=part['opts'])
 
 ###############################################################################
 # Helper functions to simplify plotting

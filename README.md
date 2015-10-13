@@ -12,6 +12,7 @@ We provide an extensive gallery of use cases for DNAplotlib in the `gallery` dir
 <a href="gallery/all_parts"><img src="gallery/all_parts/all_parts.png" height="160px"/></a>
 <a href="gallery/xnor_truthtable"><img src="gallery/xnor_truthtable/xnor_truthtable.png" height="160px"/></a>
 <a href="gallery/scatter_annotate"><img src="gallery/scatter_annotate/scatter_annotate.png" height="160px"/></a>
+<a href="gallery/offset_features"><img src="gallery/offset_features/offset_features_y_offset.png" height="160px"/></a>
 
 ###New Part Types and Regulation
 <a href="gallery/recombinase_not_gate"><img src="gallery/recombinase_not_gate/recombinase_not_gate.png" height="160px"/></a>

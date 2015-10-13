@@ -3,9 +3,10 @@
     Annotation of standard bar chart with genetic constructs
 """
 
+import dnaplotlib as dpl
 from pylab import *
 import matplotlib.pyplot as plt
-import dnaplotlib as dpl
+
 
 __author__  = 'Bryan Der <bder@mit.edu>, Voigt Lab, MIT\n\
                Thomas Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'

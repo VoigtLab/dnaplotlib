@@ -77,6 +77,7 @@ __version__ = '1.0'
 def write_label (ax, label_text, x_pos, opts=None):
 	""" Renders labels on parts.
 	"""
+	y_offset = 0.0
 	label_style = 'normal'
 	label_size = 7
 	label_y_offset = 0
@@ -84,6 +85,8 @@ def write_label (ax, label_text, x_pos, opts=None):
 	label_color = (0,0,0)
 	label_rotation = 0
 	if opts != None:
+		if 'y_offset' in opts.keys():
+			y_offset = opts['y_offset']
 		if 'label_style' in opts.keys():
 			label_style = opts['label_style']
 		if 'label_size' in opts.keys():
@@ -96,7 +99,7 @@ def write_label (ax, label_text, x_pos, opts=None):
 			label_color = opts['label_color']
 		if 'label_rotation' in opts.keys():
 			label_rotation = opts['label_rotation']
-	ax.text(x_pos+label_x_offset, label_y_offset, label_text, horizontalalignment='center',
+	ax.text(x_pos+label_x_offset, label_y_offset+y_offset, label_text, horizontalalignment='center',
 		    verticalalignment='center', fontsize=label_size, fontstyle=label_style, 
 		    color=label_color, rotation=label_rotation, zorder=30)
 
@@ -504,7 +507,6 @@ def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	else:
 		return prev_end, final_end
 
-
 def sbol_scar (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL scar renderer.
 	"""
@@ -590,7 +592,6 @@ def sbol_empty_space (ax, type, num, start, end, prev_end, scale, linewidth, opt
 		return prev_end, final_start
 	else:
 		return prev_end, final_end
-
 
 def sbol_5_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL 5' overhang renderer.
@@ -1484,171 +1485,6 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
 	else:
 		return prev_end, final_end
 
-
-def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, opts):
-	""" Built-in SBOL recombinase site renderer.
-	"""
-	# Default options
-	color = (0,0,0)
-	start_pad = 0.0
-	end_pad = 0.0
-	x_extent = 6.0
-	y_extent = 6.0
-	linestyle = '-'
-	# Reset defaults if provided
-	if opts != None:
-		if 'color' in opts.keys():
-			color = opts['color']
-		if 'start_pad' in opts.keys():
-			start_pad = opts['start_pad']
-		if 'end_pad' in opts.keys():
-			end_pad = opts['end_pad']
-		if 'x_extent' in opts.keys():
-			x_extent = opts['x_extent']
-		if 'y_extent' in opts.keys():
-			y_extent = opts['y_extent']
-		if 'linestyle' in opts.keys():
-			linestyle = opts['linestyle']
-		if 'linewidth' in opts.keys():
-			linewidth = opts['linewidth']
-		if 'scale' in opts.keys():
-			scale = opts['scale']
-	# Check direction add start padding
-	final_end = end
-	final_start = prev_end
-	
-	y_lower = -1 * y_extent/2
-	y_upper = y_extent/2
-
-	if start > end:
-		start = prev_end+end_pad+x_extent+linewidth
-		end = prev_end+end_pad
-		final_end = start+start_pad
-
-	else:
-		start = prev_end+start_pad+linewidth
-		end = start+x_extent
-		final_end = end+end_pad
-
-	p1 = Polygon([(start, y_lower), 
-		          (start, y_upper),
-		          (end,0)],
-		          edgecolor=(0,0,0), facecolor=color, linewidth=linewidth, zorder=11, 
-		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)		
-
-	ax.add_patch(p1)
-
-	if opts != None and 'label' in opts.keys():
-		if final_start > final_end:
-			write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
-		else:
-			write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
-
-	if final_start > final_end:
-		return prev_end, final_start
-	else:
-		return prev_end, final_end
-
-
-
-def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, opts):
-	""" Built-in SBOL recombinase site renderer ()
-	"""
-	# Default options
-	color = (0,0,0)
-	color2 = (0,0,0)
-	start_pad = 0.0
-	end_pad = 0.0
-	x_extent = 6.0
-	y_extent = 6.0
-	linestyle = '-'
-	# Reset defaults if provided
-	if opts != None:
-		if 'start_pad' in opts.keys():
-			start_pad = opts['start_pad']
-		if 'end_pad' in opts.keys():
-			end_pad = opts['end_pad']
-		if 'x_extent' in opts.keys():
-			x_extent = opts['x_extent']
-		if 'y_extent' in opts.keys():
-			y_extent = opts['y_extent']
-		if 'linestyle' in opts.keys():
-			linestyle = opts['linestyle']
-		if 'linewidth' in opts.keys():
-			linewidth = opts['linewidth']
-		if 'scale' in opts.keys():
-			scale = opts['scale']
-
-		if 'color' in opts.keys():
-			color = opts['color']
-		if 'color2' in opts.keys():
-			color2 = opts['color2']
-		else:
-			if 'color' in opts.keys():
-				r2 = float(color[0]) / 2
-				g2 = float(color[1]) / 2
-				b2 = float(color[2]) / 2
-				color2 = (r2,g2,b2)
-
-	# Check direction add start padding
-	final_end = end
-	final_start = prev_end
-	
-	y_lower = -1 * y_extent/2
-	y_upper = y_extent/2
-
-	if start > end:
-		start = prev_end+end_pad+x_extent+linewidth
-		end = prev_end+end_pad
-		final_end = start+start_pad
-		temp = color
-		color = color2
-		color2 = temp
-
-	else:
-		start = prev_end+start_pad+linewidth
-		end = start+x_extent
-		final_end = end+end_pad
-
-
-	p1 = Polygon([(start, y_lower), 
-		         (start, y_upper),
-		          (end,0)],
-		          edgecolor=(0,0,0), facecolor=color, linewidth=linewidth, zorder=11, 
-		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)		
-
-	midpoint = (end + start) / 2
-		
-	hypotenuse = math.sqrt( (y_extent/2)**2 + (x_extent)**2 )
-	hypotenuse2 = hypotenuse / 2
-	cosineA = (y_extent/2) / hypotenuse
-	f = hypotenuse2 * cosineA
-
-	p2 = Polygon([(midpoint, -1*f), 
-		          (midpoint, f),
-		          (end,0)],
-		          edgecolor=(0,0,0), facecolor=color2, linewidth=linewidth, zorder=12, 
-		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)	
-
-	ax.add_patch(p1)
-	ax.add_patch(p2)	
-
-	
-
-	if opts != None and 'label' in opts.keys():
-		if final_start > final_end:
-			write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
-		else:
-			write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
-
-	if final_start > final_end:
-		return prev_end, final_start
-	else:
-		return prev_end, final_end
-
-
-
-
 # Not used at present
 def temporary_repressor (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	# Default options
@@ -1812,8 +1648,6 @@ def regulation (ax, type, num, from_part, to_part, scale, linewidth, arc_height_
 		patch = patches.PathPatch(path1, facecolor='none', lw=linewidth, edgecolor=color)
 		ax.add_patch(patch)
 		
-
-
 ###############################################################################
 # Trace Icon Renderers (icon width corrisponds to trace data)
 ###############################################################################
@@ -1823,15 +1657,18 @@ def trace_promoter (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth,
 	"""
 	# Default options
 	color = (0.0,0.0,1.0)
-	y_extent = 6
-	x_extent = 30
+	y_offset = 0.0
+	y_extent = 6.0
+	x_extent = 30.0
 	arrowhead_height = 0.5
-	arrowhead_length = 15
+	arrowhead_length = 15.0
 	highlight_y_extent = 0.8
 	# Reset defaults if provided
 	if opts != None:
 		if 'color' in opts.keys():
 			color = opts['color']
+		if 'y_offset' in opts.keys():
+			y_offset = opts['y_offset']
 		if 'y_extent' in opts.keys():
 			y_extent = opts['y_extent']
 		if 'x_extent' in opts.keys():
@@ -1850,27 +1687,28 @@ def trace_promoter (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth,
 	dir_fac = 1.0
 	if start_bp > end_bp:
 		dir_fac = -1.0
+		y_offset = -y_offset
 	# Draw the promoter symbol
-	l1 = Line2D([start_bp,start_bp],[0,dir_fac*y_extent], linewidth=linewidth, 
+	l1 = Line2D([start_bp,start_bp],[0+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, 
 		        color=color, zorder=14)
 	l2 = Line2D([start_bp,start_bp+dir_fac*x_extent*scale-dir_fac*arrowhead_length*0.5*scale],
-                [dir_fac*y_extent,dir_fac*y_extent], linewidth=linewidth, 
+                [dir_fac*y_extent+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, 
                 color=color, zorder=14)
 	ax.add_line(l1)
 	ax.add_line(l2)
 	p1 = Polygon([(start_bp+dir_fac*x_extent*scale-dir_fac*arrowhead_length*scale, 
-		           dir_fac*y_extent+(arrowhead_height)), 
-		          (start_bp+dir_fac*(x_extent*scale), dir_fac*y_extent),
+		           dir_fac*y_extent+(arrowhead_height)+y_offset), 
+		          (start_bp+dir_fac*(x_extent*scale), dir_fac*y_extent+y_offset),
 		          (start_bp+dir_fac*x_extent*scale-dir_fac*arrowhead_length*scale, 
-		           dir_fac*y_extent-(arrowhead_height))],
+		           dir_fac*y_extent-(arrowhead_height)+y_offset)],
 		          facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 	ax.add_patch(p1)
 	# Shade the promoter area (normally smaller than symbol extent)
- 	p2 = Polygon([(start_bp, -highlight_y_extent), 
- 		          (start_bp, highlight_y_extent),
- 		          (end_bp, highlight_y_extent),
- 		          (end_bp, -highlight_y_extent)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14, 
+ 	p2 = Polygon([(start_bp, -highlight_y_extent+y_offset), 
+ 		          (start_bp, highlight_y_extent+y_offset),
+ 		          (end_bp, highlight_y_extent+y_offset),
+ 		          (end_bp, -highlight_y_extent+y_offset)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 	ax.add_patch(p2)
 	if opts != None and 'label' in opts.keys():
@@ -1888,13 +1726,16 @@ def trace_rbs (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
 	"""
 	# Default options
 	color = (0.16,0.68,0.15)
+	y_offset = 0.0
 	y_extent = 3.5
-	x_extent = 10
+	x_extent = 10.0
 	highlight_y_extent = 0.8
 	# Reset defaults if provided
 	if opts != None:
 		if 'color' in opts.keys():
 			color = opts['color']
+		if 'y_offset' in opts.keys():
+			y_offset = opts['y_offset']
 		if 'y_extent' in opts.keys():
 			y_extent = opts['y_extent']
 		if 'x_extent' in opts.keys():
@@ -1910,15 +1751,15 @@ def trace_rbs (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
 	if start_bp > end_bp:
 		dir_fac = -1.0
 	# Draw the RBS symbol
-	l1 = Line2D([start_bp,start_bp],[0,dir_fac*y_extent], linewidth=linewidth, color=color, zorder=14)
+	l1 = Line2D([start_bp,start_bp],[0+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, color=color, zorder=14)
 	ax.add_line(l1)
-	c1 = Ellipse((start_bp,dir_fac*y_extent),width=(x_extent*scale),height=y_extent*0.4,color=color, zorder=14)
+	c1 = Ellipse((start_bp,dir_fac*y_extent+y_offset),width=(x_extent*scale),height=y_extent*0.4,color=color, zorder=14)
 	ax.add_artist(c1)
  	# Shade the promoter area (normally smaller than symbol extent)
- 	p2 = Polygon([(start_bp, -highlight_y_extent), 
- 		          (start_bp, highlight_y_extent),
- 		          (end_bp, highlight_y_extent),
- 		          (end_bp, -highlight_y_extent)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14, 
+ 	p2 = Polygon([(start_bp, -highlight_y_extent+y_offset), 
+ 		          (start_bp, highlight_y_extent+y_offset),
+ 		          (end_bp, highlight_y_extent+y_offset),
+ 		          (end_bp, -highlight_y_extent+y_offset)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 	ax.add_patch(p2)
 	if opts != None and 'label' in opts.keys():
@@ -1932,11 +1773,12 @@ def trace_rbs (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
 		return start_bp, end_bp
 
 def trace_user_defined (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts):
-	""" Built-in trace-based coding sequence renderer.
+	""" Built-in trace-based user defined region renderer.
 	"""
 	# Default options
 	color = (0.7,0.7,0.7)
 	hatch = ''
+	y_offset = 0.0
 	y_extent = 1.5
 	# Reset defaults if provided
 	if opts != None:
@@ -1944,6 +1786,8 @@ def trace_user_defined (ax, type, num, start_bp, end_bp, prev_end, scale, linewi
 			color = opts['color']
 		if 'hatch' in opts.keys():
 			hatch = opts['hatch']
+		if 'y_offset' in opts.keys():
+			y_offset = opts['y_offset']
 		if 'y_extent' in opts.keys():
 			y_extent = opts['y_extent']
 		if 'linewidth' in opts.keys():
@@ -1955,10 +1799,10 @@ def trace_user_defined (ax, type, num, start_bp, end_bp, prev_end, scale, linewi
 	if start_bp > end_bp:
 		dir_fac = -1.0
 	# Draw the CDS symbol
-	p1 = Polygon([(start_bp, y_extent), 
-		          (start_bp, -y_extent),
-		          (end_bp-dir_fac*scale, -y_extent),
-		          (end_bp-dir_fac*scale, y_extent)],
+	p1 = Polygon([(start_bp, y_extent+y_offset), 
+		          (start_bp, -y_extent+y_offset),
+		          (end_bp-dir_fac*scale, -y_extent+y_offset),
+		          (end_bp-dir_fac*scale, y_extent+y_offset)],
 		          edgecolor=(0.0,0.0,0.0), facecolor=color, linewidth=linewidth, 
 		          hatch=hatch, zorder=15, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
@@ -1979,15 +1823,18 @@ def trace_cds (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
 	# Default options
 	color = (0.7,0.7,0.7)
 	hatch = ''
+	y_offset = 0.0
 	y_extent = 1.5
-	arrowhead_height = 1
-	arrowhead_length = 30
+	arrowhead_height = 1.0
+	arrowhead_length = 30.0
 	# Reset defaults if provided
 	if opts != None:
 		if 'color' in opts.keys():
 			color = opts['color']
 		if 'hatch' in opts.keys():
 			hatch = opts['hatch']
+		if 'y_offset' in opts.keys():
+			y_offset = opts['y_offset']
 		if 'y_extent' in opts.keys():
 			y_extent = opts['y_extent']
 		if 'arrowhead_height' in opts.keys():
@@ -2003,13 +1850,13 @@ def trace_cds (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
 	if start_bp > end_bp:
 		dir_fac = -1.0
 	# Draw the CDS symbol
-	p1 = Polygon([(start_bp, y_extent), 
-		          (start_bp, -y_extent),
-		          (end_bp-dir_fac*arrowhead_length*scale, -y_extent),
-		          (end_bp-dir_fac*arrowhead_length*scale, -y_extent-arrowhead_height),
-		          (end_bp, 0),
-		          (end_bp-dir_fac*arrowhead_length*scale, y_extent+arrowhead_height),
-		          (end_bp-dir_fac*arrowhead_length*scale, y_extent)],
+	p1 = Polygon([(start_bp, y_extent+y_offset), 
+		          (start_bp, -y_extent+y_offset),
+		          (end_bp-dir_fac*arrowhead_length*scale, -y_extent+y_offset),
+		          (end_bp-dir_fac*arrowhead_length*scale, -y_extent-arrowhead_height+y_offset),
+		          (end_bp, 0+y_offset),
+		          (end_bp-dir_fac*arrowhead_length*scale, y_extent+arrowhead_height+y_offset),
+		          (end_bp-dir_fac*arrowhead_length*scale, y_extent+y_offset)],
 		          edgecolor=(0.0,0.0,0.0), facecolor=color, linewidth=linewidth, 
 		          hatch=hatch, zorder=15, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
@@ -2029,13 +1876,16 @@ def trace_terminator (ax, type, num, start_bp, end_bp, prev_end, scale, linewidt
 	"""
 	# Default options
 	color = (1.0,0.0,0.0)
+	y_offset = 0.0
 	y_extent = 3.5
-	x_extent = 10
+	x_extent = 10.0
 	highlight_y_extent = 0.8
 	# Reset defaults if provided
 	if opts != None:
 		if 'color' in opts.keys():
 			color = opts['color']
+		if 'y_offset' in opts.keys():
+			y_offset = opts['y_offset']
 		if 'y_extent' in opts.keys():
 			y_extent = opts['y_extent']
 		if 'x_extent' in opts.keys():
@@ -2051,15 +1901,15 @@ def trace_terminator (ax, type, num, start_bp, end_bp, prev_end, scale, linewidt
 	if start_bp > end_bp:
 		dir_fac = -1.0
 	# Draw the terminator symbol
-	l1 = Line2D([start_bp,start_bp],[0,dir_fac*y_extent], linewidth=linewidth, color=color, zorder=8)
-	l2 = Line2D([start_bp-(x_extent*scale),start_bp+(x_extent*scale)],[dir_fac*y_extent,dir_fac*y_extent], linewidth=linewidth, color=color, zorder=14)
+	l1 = Line2D([start_bp,start_bp],[0+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, color=color, zorder=8)
+	l2 = Line2D([start_bp-(x_extent*scale),start_bp+(x_extent*scale)],[dir_fac*y_extent+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, color=color, zorder=14)
 	ax.add_line(l1)
 	ax.add_line(l2)
 	# Shade the terminator area (normally smaller than symbol extent)
- 	p2 = Polygon([(start_bp, -highlight_y_extent), 
- 		          (start_bp, highlight_y_extent),
- 		          (end_bp, highlight_y_extent),
- 		          (end_bp, -highlight_y_extent)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=13, 
+ 	p2 = Polygon([(start_bp, -highlight_y_extent+y_offset), 
+ 		          (start_bp, highlight_y_extent+y_offset),
+ 		          (end_bp, highlight_y_extent+y_offset),
+ 		          (end_bp, -highlight_y_extent+y_offset)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=13, 
 		          path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 	ax.add_patch(p2)
 	if opts != None and 'label' in opts.keys():
@@ -2098,8 +1948,6 @@ class DNARenderer:
 			          '5Overhang',
 			          '3Overhang',
 			          'RestrictionSite',
-			          'RecombinaseSite',
-			          'RecombinaseSite2',
 			          'BluntRestrictionSite',
 			          'PrimerBindingSite',
 			          '5StickyRestrictionSite',
@@ -2158,8 +2006,6 @@ class DNARenderer:
 			'5Overhang'        :sbol_5_overhang,
 			'3Overhang'        :sbol_3_overhang,
 			'RestrictionSite'  :sbol_restriction_site,
-			'RecombinaseSite'  :sbol_recombinase1,
-			'RecombinaseSite2' :sbol_recombinase2,
 			'BluntRestrictionSite'   :sbol_blunt_restriction_site,
 			'PrimerBindingSite'      :sbol_primer_binding_site,
 			'5StickyRestrictionSite' :sbol_5_sticky_restriction_site,
@@ -2185,7 +2031,7 @@ class DNARenderer:
 			'Activation' :induce,
 			'Connection' :connect}
 
-	def renderDNA(self, ax, parts, part_renderers, regs=None, reg_renderers=None):
+	def renderDNA(self, ax, parts, part_renderers, regs=None, reg_renderers=None, plot_backbone=True):
 		""" Render the parts on the DNA and regulation.
 
 		Parameters
@@ -2429,9 +2275,10 @@ class DNARenderer:
 							           self.linewidth, reg['arc_height_index'], opts=reg_opts)
 				reg_num += 1
 		# Plot the backbone (z=1)
-		l1 = Line2D([first_start-self.backbone_pad_left,prev_end+self.backbone_pad_right],[0,0], 
-			        linewidth=self.linewidth, color=self.linecolor, zorder=10)
-		ax.add_line(l1)
+		if plot_backbone == True:
+			l1 = Line2D([first_start-self.backbone_pad_left,prev_end+self.backbone_pad_right],[0,0], 
+				        linewidth=self.linewidth, color=self.linecolor, zorder=10)
+			ax.add_line(l1)
 		return first_start, prev_end
 
 ###############################################################################

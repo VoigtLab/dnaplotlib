@@ -77,7 +77,7 @@ def load_part_information (filename):
 		part_info[part_name] = [part_name, part_type, part_attribs_map]
 	return part_info
 
-def load_dna_designs (filename, part_info):
+def load_dna_designs (filename, part_info, reverse_char='r'):
 	dna_designs = {}
 	design_reader = csv.reader(open(filename, 'rU'), delimiter=',')
 	# Ignore header
@@ -91,7 +91,7 @@ def load_dna_designs (filename, part_info):
 				fwd = True
 				part_name = row[i]
 				if len(part_name) != 0:
-					if part_name[0] == 'r':
+					if part_name[0] == reverse_char:
 						part_name = part_name[1:]
 						fwd = False
 					# Store the design
@@ -274,12 +274,17 @@ def main():
                     type=lambda x: is_valid_file(parser, x))
 	parser.add_argument("-output", dest="output_pdf", required=True,
 					help="output pdf filename")
+	parser.add_argument("-reverse_char", dest="reverse_char", required=False,
+					help="character to denote reverse orientation")
 	args = parser.parse_args()
 
 	# Process arguments
+	cur_reverse_char = 'r'
+	if(args.reverse_char):
+		cur_reverse_char = args.reverse_char
 	plot_params = load_plot_parameters(args.params.name)
 	part_info = load_part_information(args.parts.name)
-	dna_designs = load_dna_designs (args.designs.name, part_info)
+	dna_designs = load_dna_designs (args.designs.name, part_info, reverse_char=cur_reverse_char)
 
 	regs_info = None
 	if(args.regulation):

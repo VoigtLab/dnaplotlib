@@ -14,6 +14,7 @@ We provide an extensive gallery of use cases for DNAplotlib in the `gallery` dir
 <a href="gallery/scatter_annotate"><img src="gallery/scatter_annotate/scatter_annotate.png" height="160px"/></a>
 <a href="gallery/offset_features"><img src="gallery/offset_features/offset_features_y_offset.png" height="80px"/></a>
 <a href="gallery/annotate_design"><img src="gallery/annotate_design/annotate_design.png" height="60px"/></a>
+<a href="gallery/input_gff"><img src="gallery/input_gff/input_gff.png" height="50px"/></a>
 
 ###New Part Types and Regulation
 <a href="gallery/recombinase_not_gate"><img src="gallery/recombinase_not_gate/recombinase_not_gate.png" height="160px"/></a>
@@ -22,6 +23,7 @@ We provide an extensive gallery of use cases for DNAplotlib in the `gallery` dir
 ###Trace-based Rendering
 <a href="gallery/multiple_traces"><img src="gallery/multiple_traces/multiple_traces.png" height="200px"/></a>
 <a href="gallery/rotated_design"><img src="gallery/rotated_design/rotated_design.png" height="200px"/></a>
+<a href="gallery/input_bed"><img src="gallery/input_bed/input_bed.png" height="200px"/></a>
 
 ###Dynamics and Evolution
 <a href="gallery/repressilator_animate"><img src="gallery/repressilator_animate/repressilator_animate.png" height="380px"/></a>

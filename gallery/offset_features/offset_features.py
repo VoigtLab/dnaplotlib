@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-	Use trace-based renderer to plot multiple traces at nucleotide resolution.
+	Offset features.
 """
 
 import csv
@@ -12,13 +12,6 @@ import matplotlib.gridspec as gridspec
 __author__  = 'Thomas Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'
 __license__ = 'OSI OSL 3.0'
 __version__ = '1.0'
-
-# Calculates a lighter color
-def lighten_color (col, fac):
-	r = col[0] + (fac*(1.0-col[0]))
-	g = col[1] + (fac*(1.0-col[1]))
-	b = col[2] + (fac*(1.0-col[2]))
-	return (r,g,b)
 
 # Color maps for formatting
 col_map = {}

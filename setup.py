@@ -1,4 +1,4 @@
-__author__ = 'user'
+__author__ = 'Thomas E. Gorochowski'
 
 """A setuptools based setup module.
 See:
@@ -21,11 +21,6 @@ with open(path.join(here, 'DESCRIPTION.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 print(platform.system())
-print find_packages()
-if platform.system() == 'Windows':
-    data_files=[('./sbol', ['sbol/bin/Win_32/_libsbol.pyd', 'sbol/bin/Win_32/libsbol.py'])]
-elif platform.system() == 'Darwin':
-    data_files=[('./sbol', ['sbol/bin/Mac_OSX/_libsbol.so', 'sbol/bin/Mac_OSX/libsbol.py'])]
 
 setup(
     name='dnaplotlib',
@@ -73,7 +68,5 @@ setup(
 
     packages=find_packages(), # Should find packages dnaplotlib and sbol
 
-    #data_files = data_files,
-
-    zip_safe = False  # Prevents .egg from installing as a .zip. It must be unpacked to import the _libsbol binaries properly
+    zip_safe = True  # Prevents .egg from installing as a .zip. It must be unpacked to import the _libsbol binaries properly
 )

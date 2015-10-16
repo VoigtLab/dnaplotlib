@@ -1,2 +1,5 @@
+"""
+DNAplotlib
+"""
 
 from dnaplotlib import *

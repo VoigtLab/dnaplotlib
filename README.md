@@ -31,7 +31,3 @@ We provide an extensive gallery of use cases for DNAplotlib in the `gallery` dir
 ###Variant Libraries
 <a href="gallery/variants_library"><img src="gallery/variants_library/variants_library.png" height="500px"/></a>
 <a href="gallery/order_orientation_library"><img src="gallery/order_orientation_library/order_orientation_library.png" height="500px"/></a>
-
-
-
-

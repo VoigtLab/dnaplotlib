@@ -2152,7 +2152,7 @@ class DNARenderer:
             'Activation' :induce,
             'Connection' :connect}
 
-    def renderDNA(self, ax, parts, part_renderers, regs=None, reg_renderers=None, plot_backbone=True):
+    def renderDNA (self, ax, parts, part_renderers, regs=None, reg_renderers=None, plot_backbone=True):
         """ Render the parts on the DNA and regulation.
 
         Parameters

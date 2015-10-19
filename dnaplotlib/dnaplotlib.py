@@ -223,8 +223,8 @@ def sbol_cds (ax, type, num, start, end, prev_end, scale, linewidth, opts):
             linewidth = opts['linewidth']
         if 'scale' in opts.keys():
             scale = opts['scale']
-        if 'edgecolor' in opts.keys():
-            edgecolor = opts['edgecolor']
+        if 'edge_color' in opts.keys():
+            edgecolor = opts['edge_color']
 
     # Check direction add start padding
     dir_fac = 1.0
@@ -330,6 +330,7 @@ def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     start_pad = 2.0
     end_pad = 2.0
     x_extent = 10.0
+    edgecolor = (0,0,0)
     # Reset defaults if provided
     if opts != None:
         if 'zorder_add' in opts.keys():
@@ -346,6 +347,8 @@ def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
             linewidth = opts['linewidth']
         if 'scale' in opts.keys():
             scale = opts['scale']
+        if 'edge_color' in opts.keys():
+            edgecolor = opts['edge_color']
     # Check direction add start padding
     dir_fac = 1.0
     final_end = end
@@ -357,7 +360,7 @@ def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
         final_end = start+start_pad
         rbs_center = (end+((start-end)/2.0),0)
         w1 = Wedge(rbs_center, x_extent/2.0, 180, 360, linewidth=linewidth, 
-                   facecolor=color, zorder=8+zorder_add)
+                   facecolor=color, edgecolor=edgecolor, zorder=8+zorder_add)
         ax.add_patch(w1)
     else:
         start = prev_end+start_pad
@@ -365,7 +368,7 @@ def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
         final_end = end+end_pad
         rbs_center = (start+((end-start)/2.0),0)
         w1 = Wedge(rbs_center, x_extent/2.0, 0, 180, linewidth=linewidth, 
-                   facecolor=color, zorder=8+zorder_add)
+                   facecolor=color, edgecolor=edgecolor, zorder=8+zorder_add)
         ax.add_patch(w1)
     if opts != None and 'label' in opts.keys():
         if final_start > final_end:

@@ -1677,6 +1677,8 @@ def regulation (ax, type, num, from_part, to_part, scale, linewidth, arc_height_
     arcHeightStart = 10
     arcHeight = arcHeightConst + arc_height_index*arcHeightSpacing
     arcHeightEnd = arcHeightStart*1.5
+    arc_start_x_offset = 0.0
+    arc_end_x_offset = 0.0
     
     # Reset defaults if provided
     if opts != None:
@@ -1698,13 +1700,17 @@ def regulation (ax, type, num, from_part, to_part, scale, linewidth, arc_height_
             arcHeightStart = opts['arc_height_start']
         if 'arc_height_end' in opts.keys():
             arcHeightEnd = opts['arc_height_end']
+        if 'arc_start_x_offset' in opts.keys():
+            arc_start_x_offset = opts['arc_start_x_offset']
+        if 'arc_end_x_offset' in opts.keys():
+            arc_end_x_offset = opts['arc_end_x_offset']
 
     if opts == None or 'arc_height' not in opts.keys():
         arcHeight = arcHeightConst + arc_height_index*arcHeightSpacing
     startHeight = arcHeightStart
 
-    start = (from_part['start'] + from_part['end']) / 2
-    end   = (to_part['start']   + to_part['end']) / 2
+    start = ((from_part['start'] + from_part['end']) / 2) + arc_start_x_offset
+    end   = ((to_part['start']   + to_part['end']) / 2) + arc_end_x_offset
 
     top = arcHeight;
     base = startHeight;

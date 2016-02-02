@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:so="http://purl.obolibrary.org/obo/" xmlns:s="http://sbols.org/v1#">
+	<s:DnaComponent rdf:about="http://sbolstandard.org/examples/Design">
+		<rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000546"/>
+		<s:displayId>A gene cassette</s:displayId>
+		<s:dnaSequence>
+			<s:DnaSequence rdf:about="http://sbolstandard.org/examples/Design/Seq">
+				<s:nucleotides>gtaatcctatgatcgagcacacggcgcaggtcttgtccgagggaaaaagtcggtggccgcaataaaaaagtaacccttaatcatgatggtaaactcaatttaaccttatcgaactgcgttgcaggcattagccctaattagccggggctgaaaggaagaatcactgtctcagatattgagggtatgtctaacctacaccatatagcaagaagttcggactgaacgtgccttcctcctctctacgtcgttaaaggtatataatcggcctgagttagtcccagcattctaatagcgagatatagctggcctcggcttaagtgctaccggtccctttaggccaccttagacttgttggtacacatgactcgtgagtataagccgcgaagataaccttcccagaaatccctgcccaagatgttcaatacatgccttccacacggcctgagcatacggttggtaaatgcgggtggtgtgtacttgtaaatgatggactggtctcagcacgcttaccaatcaagatcccccatgggtgatggcatggaggagcgaatcgcatagaggatgtttaagtaagacgtcgttcgcacttcgaccctataacaactataatttaccttggtacgaagtagctgaaaaacgataactgacaagagtggttccgcggatattatgatccaacacattaccggaacgagtaaggatgccaacgggttcgataactggcgcagtctggtcttctcgctgtgaagcgccgcactgcgctacataggggatgctgtcatgccttaatgttttagtaagcaccaaatgggacttatgacaggcagagccacagtatacgtgtcctccgtaacgaagtagacacctctttataatcgccacaagatagaatgctgtaataggtatatcagtatccgcggaatggaaaccttatctaaagcagtgcttgccatagacgagtgcacattcctggcagctaaggaggcggtagctcaggagtactgggaagttattgtacttccgtc</s:nucleotides>
+			</s:DnaSequence>
+		</s:dnaSequence>
+		<s:annotation>
+			<s:SequenceAnnotation rdf:about="http://sbolstandard.org/examples/Design/SA_1">
+				<s:precedes rdf:resource="http://sbolstandard.org/examples/Design/SA_2"/>
+				<s:bioStart>1</s:bioStart>
+				<s:bioEnd>44</s:bioEnd>
+				<s:subComponent>
+					<s:DnaComponent rdf:about="http://sbolstandard.org/examples/Design/SA_1/subcomponent_1">
+						<rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000167"/>
+						<s:displayId>Promoter 1</s:displayId>
+						<s:dnaSequence>
+							<s:DnaSequence rdf:about="http://sbolstandard.org/examples/Design/SA_1/subcomponent_1/Seq_1">
+								<s:nucleotides>gtaatcctatgatcgagcacacggcgcaggtcttgtccgaggga</s:nucleotides>
+							</s:DnaSequence>
+						</s:dnaSequence>
+					</s:DnaComponent>
+				</s:subComponent>
+			</s:SequenceAnnotation>
+		</s:annotation>
+		<s:annotation>
+			<s:SequenceAnnotation rdf:about="http://sbolstandard.org/examples/Design/SA_2">
+				<s:precedes rdf:resource="http://sbolstandard.org/examples/Design/SA_3"/>
+				<s:bioStart>45</s:bioStart>
+				<s:bioEnd>61</s:bioEnd>
+				<s:subComponent>
+					<s:DnaComponent rdf:about="http://sbolstandard.org/examples/Design/SA_2/subcomponent_3">
+						<rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000552"/>
+						<s:displayId>RBS 1</s:displayId>
+						<s:dnaSequence>
+							<s:DnaSequence rdf:about="http://sbolstandard.org/examples/Design/SA_2/subcomponent_3/Seq_3">
+								<s:nucleotides>aaaagtcggtggccgca</s:nucleotides>
+							</s:DnaSequence>
+						</s:dnaSequence>
+					</s:DnaComponent>
+				</s:subComponent>
+			</s:SequenceAnnotation>
+		</s:annotation>
+		<s:annotation>
+			<s:SequenceAnnotation rdf:about="http://sbolstandard.org/examples/Design/SA_3">
+				<s:precedes rdf:resource="http://sbolstandard.org/examples/Design/SA_4"/>
+				<s:bioStart>62</s:bioStart>
+				<s:bioEnd>922</s:bioEnd>
+				<s:subComponent>
+					<s:DnaComponent rdf:about="http://sbolstandard.org/examples/Design/SA_3/subcomponent_4">
+						<rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000316"/>
+						<s:displayId>Coding sequence 1</s:displayId>
+						<s:dnaSequence>
+							<s:DnaSequence rdf:about="http://sbolstandard.org/examples/Design/SA_3/subcomponent_4/Seq_4">
+								<s:nucleotides>ataaaaaagtaacccttaatcatgatggtaaactcaatttaaccttatcgaactgcgttgcaggcattagccctaattagccggggctgaaaggaagaatcactgtctcagatattgagggtatgtctaacctacaccatatagcaagaagttcggactgaacgtgccttcctcctctctacgtcgttaaaggtatataatcggcctgagttagtcccagcattctaatagcgagatatagctggcctcggcttaagtgctaccggtccctttaggccaccttagacttgttggtacacatgactcgtgagtataagccgcgaagataaccttcccagaaatccctgcccaagatgttcaatacatgccttccacacggcctgagcatacggttggtaaatgcgggtggtgtgtacttgtaaatgatggactggtctcagcacgcttaccaatcaagatcccccatgggtgatggcatggaggagcgaatcgcatagaggatgtttaagtaagacgtcgttcgcacttcgaccctataacaactataatttaccttggtacgaagtagctgaaaaacgataactgacaagagtggttccgcggatattatgatccaacacattaccggaacgagtaaggatgccaacgggttcgataactggcgcagtctggtcttctcgctgtgaagcgccgcactgcgctacataggggatgctgtcatgccttaatgttttagtaagcaccaaatgggacttatgacaggcagagccacagtatacgtgtcctccgtaacgaagtagacacctctttataatcgccacaagatagaatgctgtaataggtatatcagtatccgcggaa</s:nucleotides>
+							</s:DnaSequence>
+						</s:dnaSequence>
+					</s:DnaComponent>
+				</s:subComponent>
+			</s:SequenceAnnotation>
+		</s:annotation>
+		<s:annotation>
+			<s:SequenceAnnotation rdf:about="http://sbolstandard.org/examples/Design/SA_4">
+				<s:bioStart>923</s:bioStart>
+				<s:bioEnd>1025</s:bioEnd>
+				<s:subComponent>
+					<s:DnaComponent rdf:about="http://sbolstandard.org/examples/Design/SA_4/subcomponent_5">
+						<rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000139"/>
+						<s:displayId>Terminator 1</s:displayId>
+						<s:dnaSequence>
+							<s:DnaSequence rdf:about="http://sbolstandard.org/examples/Design/SA_4/subcomponent_5/Seq_5">
+								<s:nucleotides>tggaaaccttatctaaagcagtgcttgccatagacgagtgcacattcctggcagctaaggaggcggtagctcaggagtactgggaagttattgtacttccgtc</s:nucleotides>
+							</s:DnaSequence>
+						</s:dnaSequence>
+					</s:DnaComponent>
+				</s:subComponent>
+			</s:SequenceAnnotation>
+		</s:annotation>
+	</s:DnaComponent>
+</rdf:RDF>

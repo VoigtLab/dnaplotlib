@@ -40,4 +40,6 @@ ax.axis('off')
 fig.savefig('sbol_visual.pdf', transparent=True)
 fig.savefig('sbol_visual.png', dpi=300)
 
-plt.show()
+# Clear the plotting cache
+plt.close('all')
+#plt.show()

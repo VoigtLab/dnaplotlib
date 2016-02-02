@@ -19,8 +19,9 @@ import matplotlib
 # As this is generally used interactively - update backend
 # http://stackoverflow.com/questions/3285193/how-to-switch-backends-in-matplotlib-python
 # matplotlib.use('TkAgg')
-matplotlib.pyplot.switch_backend('TkAgg')  
+matplotlib.pyplot.switch_backend('TkAgg')
 
+import matplotlib.pyplot as plt
 import dnaplotlib as dpl
 import sbol
 
@@ -165,7 +166,7 @@ class SBOLRenderer(dpl.DNARenderer):
 
         # Connect event handler
         #fig = plt.gcf()
-        # cid1 = fig.canvas.mpl_connect('button_press_event', drill_down)
+        #cid1 = fig.canvas.mpl_connect('button_press_event', drill_down)
         #cid2 = fig.canvas.mpl_connect('motion_notify_event', _onMotion)
 
         # Return type differs from renderDNA

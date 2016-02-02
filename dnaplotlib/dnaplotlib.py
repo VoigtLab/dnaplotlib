@@ -66,9 +66,9 @@ from matplotlib.patheffects import Stroke
 import matplotlib.patches as patches
 
 
-__author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT\n\
-               Bryan Der <bder@mit.edu>, Voigt Lab, MIT\n\
-               Emerson Glassey <eglassey@mit.edu>, Voigt Lab, MIT'
+__author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>\n\
+               Bryan Der <bder@mit.edu>\n\
+               Emerson Glassey <eglassey@mit.edu>'
 __license__ = 'OSI OSL 3.0'
 __version__ = '1.0'
 

@@ -17,12 +17,15 @@ DNAplotlib SBOL Functionality
 
 import matplotlib
 # As this is generally used interactively - update backend
-matplotlib.use('TkAgg')
+# http://stackoverflow.com/questions/3285193/how-to-switch-backends-in-matplotlib-python
+# matplotlib.use('TkAgg')
+matplotlib.pyplot.switch_backend('TkAgg')  
+
 import dnaplotlib
 import sbol
 
 __author__  = 'Bryan Bartley <bartleyba@sbolstandard.org>\n\
-               Thomas E. Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'
+               Thomas E. Gorochowski <tom@chofski.co.uk>'
 __license__ = 'OSI OSL 3.0'
 __version__ = '1.0'
 

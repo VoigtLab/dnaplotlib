@@ -22,6 +22,14 @@ import matplotlib
 matplotlib.pyplot.switch_backend('TkAgg')
 
 import matplotlib.pyplot as plt
+
+from matplotlib.patches import Polygon, Ellipse, Wedge, Circle, PathPatch, Rectangle
+from matplotlib.path import Path
+from matplotlib.lines import Line2D
+from matplotlib.patheffects import Stroke
+import matplotlib.patches as patches
+import math
+
 import dnaplotlib as dpl
 import sbol
 
@@ -106,7 +114,7 @@ class SBOLRenderer(dpl.DNARenderer):
                         width = (part['end'] - part['start'])
                         height = 18
                         # ax.add_patch(Rectangle((event.xdata, -9), width, height, facecolor="grey"))
-                        ax.add_patch(Rectangle(( part['start'], -5), 10, 10, facecolor="grey"))
+                        ax.add_patch(Rectangle(( part['start'], -5), 10, 10, facecolor="grey", zorder=100))
                         fig = plt.gcf()
                         fig.canvas.draw()
                         print part['name']
@@ -159,15 +167,15 @@ class SBOLRenderer(dpl.DNARenderer):
 
         # Display part labels
         # The label configuration specified here should be factored out.  However, the label needs to know the 'start' and 'end' values of each part
-        for part in dpl_design:
-            label_center = (part['start'] + part['end']) / 2
-            label_opts = { 'label_size' : 12, 'label_y_offset': -12 }
-            dpl.write_label(ax, part['name'], label_center, label_opts)
+        #for part in dpl_design:
+        #    label_center = (part['start'] + part['end']) / 2
+        #    label_opts = { 'label_size' : 12, 'label_y_offset': -12 }
+        #    dpl.write_label(ax, part['name'], label_center, label_opts)
 
         # Connect event handler
-        #fig = plt.gcf()
-        #cid1 = fig.canvas.mpl_connect('button_press_event', drill_down)
-        #cid2 = fig.canvas.mpl_connect('motion_notify_event', _onMotion)
+        fig = plt.gcf()
+        cid1 = fig.canvas.mpl_connect('button_press_event', drill_down)
+        cid2 = fig.canvas.mpl_connect('motion_notify_event', _onMotion)
 
         # Return type differs from renderDNA
         #return dpl_design

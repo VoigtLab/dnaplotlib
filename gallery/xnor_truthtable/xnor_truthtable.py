@@ -27,7 +27,9 @@ ax.set_xscale('log')
 ax.tick_params(axis='y', labelsize=8)
 ax.tick_params(axis='x', labelsize=8)
 ax.tick_params(axis='y', which='major', pad=3)
+reu_to_rpu = 1.0/4.2
 val = [2.5, 0.008, 0.012, 2.5]
+val = [x*reu_to_rpu for x in val]
 pos = arange(4)+.5
 barlist=ax.barh(pos,val,0.3, align='center', log=True)
 barlist[0].set_color('black')
@@ -42,10 +44,10 @@ ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 ax.yaxis.tick_left()
 ax.xaxis.tick_bottom()
-ax.set_xlim([0.005,10])
+ax.set_xlim([0.005/4.2,10/4.2])
 ax.set_ylim([-0.1,3.9])
 plt.yticks(pos, ('+/+', '-/+', '+/-', '-/-'))
-plt.xlabel('Output (REU)', fontsize=8, labelpad=0)
+plt.xlabel('Output (RPU)', fontsize=8, labelpad=0)
 plt.ylabel('Input', fontsize=8, labelpad=-1)
 plt.grid(False)
 
@@ -62,16 +64,16 @@ col_map['orange']  = (1.00, 0.75, 0.17)
 lw = 1.0
 
 # Define the parts
-g0_OFF = {'type':'CDS', 'name':'g0_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white'], 'edgecolor':col_map['black'], 'x_extent':24}} #output
-g0_ON  = {'type':'CDS', 'name':'g0_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'edgecolor':col_map['black'], 'x_extent':24, 'label':'Out', 'label_style':'italic', 'label_color':(1,1,1), 'label_x_offset':-3, 'label_y_offset':-1}}
-g1_OFF = {'type':'CDS', 'name':'g1_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white'], 'edgecolor':col_map['red'], 'x_extent':24}}
-g1_ON  = {'type':'CDS', 'name':'g1_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['red'], 'edgecolor':col_map['red'], 'x_extent':24, 'label':'D', 'label_style':'italic', 'label_color':(1,1,1), 'label_x_offset':-3, 'label_y_offset':-1}}
-g2_OFF = {'type':'CDS', 'name':'g2_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white'], 'edgecolor':col_map['blue'], 'x_extent':24}}
-g2_ON  = {'type':'CDS', 'name':'g2_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['blue'], 'edgecolor':col_map['blue'], 'x_extent':24, 'label':'C', 'label_style':'italic', 'label_color':(1,1,1), 'label_x_offset':-3, 'label_y_offset':-1}}
-g3_OFF = {'type':'CDS', 'name':'g3_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white'], 'edgecolor':col_map['green'], 'x_extent':24}}
-g3_ON  = {'type':'CDS', 'name':'g3_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['green'], 'edgecolor':col_map['green'], 'x_extent':24, 'label':'B', 'label_style':'italic', 'label_color':(1,1,1), 'label_x_offset':-3, 'label_y_offset':-1}}
-g4_OFF = {'type':'CDS', 'name':'g4_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white'], 'edgecolor':col_map['orange'], 'x_extent':24}}
-g4_ON  = {'type':'CDS', 'name':'g4_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['orange'], 'edgecolor':col_map['orange'], 'x_extent':24, 'label':'A', 'label_style':'italic', 'label_color':(1,1,1), 'label_x_offset':-3, 'label_y_offset':-1}}
+g0_OFF = {'type':'CDS', 'name':'g0_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white'], 'edge_color':col_map['black'], 'x_extent':24}} #output
+g0_ON  = {'type':'CDS', 'name':'g0_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'edge_color':col_map['black'], 'x_extent':24, 'label':'Out', 'label_style':'italic', 'label_color':(1,1,1), 'label_x_offset':-3, 'label_y_offset':-1}}
+g1_OFF = {'type':'CDS', 'name':'g1_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white'], 'edge_color':col_map['red'], 'x_extent':24}}
+g1_ON  = {'type':'CDS', 'name':'g1_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['red'], 'edge_color':col_map['red'], 'x_extent':24, 'label':'D', 'label_style':'italic', 'label_color':(1,1,1), 'label_x_offset':-3, 'label_y_offset':-1}}
+g2_OFF = {'type':'CDS', 'name':'g2_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white'], 'edge_color':col_map['blue'], 'x_extent':24}}
+g2_ON  = {'type':'CDS', 'name':'g2_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['blue'], 'edge_color':col_map['blue'], 'x_extent':24, 'label':'C', 'label_style':'italic', 'label_color':(1,1,1), 'label_x_offset':-3, 'label_y_offset':-1}}
+g3_OFF = {'type':'CDS', 'name':'g3_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white'], 'edge_color':col_map['green'], 'x_extent':24}}
+g3_ON  = {'type':'CDS', 'name':'g3_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['green'], 'edge_color':col_map['green'], 'x_extent':24, 'label':'B', 'label_style':'italic', 'label_color':(1,1,1), 'label_x_offset':-3, 'label_y_offset':-1}}
+g4_OFF = {'type':'CDS', 'name':'g4_OFF', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['white'], 'edge_color':col_map['orange'], 'x_extent':24}}
+g4_ON  = {'type':'CDS', 'name':'g4_ON',  'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['orange'], 'edge_color':col_map['orange'], 'x_extent':24, 'label':'A', 'label_style':'italic', 'label_color':(1,1,1), 'label_x_offset':-3, 'label_y_offset':-1}}
 
 pA = {'type':'Promoter', 'name':'pA', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'label':'p1', 'label_y_offset':-8}}
 pB = {'type':'Promoter', 'name':'pB', 'fwd':True, 'opts':{'linewidth':lw, 'color':col_map['black'], 'label':'p2', 'label_y_offset':-8}}

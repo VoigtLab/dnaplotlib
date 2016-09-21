@@ -69,7 +69,7 @@ import matplotlib.patches as patches
 __author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>\n\
                Bryan Der <bder@mit.edu>\n\
                Emerson Glassey <eglassey@mit.edu>'
-__license__ = 'OSI OSL 3.0'
+__license__ = 'MIT'
 __version__ = '1.0'
 
 
@@ -1761,7 +1761,7 @@ def regulation (ax, type, num, from_part, to_part, scale, linewidth, arc_height_
 ###############################################################################
 
 
-def trace_promoter (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts):
+def trace_promoter_start (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts):
     """ Built-in trace-based promoter renderer.
     """
     # Default options
@@ -1812,6 +1812,78 @@ def trace_promoter (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth,
                    dir_fac*y_extent+(arrowhead_height)+y_offset), 
                   (start_bp+dir_fac*(x_extent*scale), dir_fac*y_extent+y_offset),
                   (start_bp+dir_fac*x_extent*scale-dir_fac*arrowhead_length*scale, 
+                   dir_fac*y_extent-(arrowhead_height)+y_offset)],
+                  facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14+zorder_add, 
+                  path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
+    ax.add_patch(p1)
+    # Shade the promoter area (normally smaller than symbol extent)
+    p2 = Polygon([(start_bp, -highlight_y_extent+y_offset), 
+                  (start_bp, highlight_y_extent+y_offset),
+                  (end_bp, highlight_y_extent+y_offset),
+                  (end_bp, -highlight_y_extent+y_offset)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14+zorder_add, 
+                  path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
+    ax.add_patch(p2)
+    if opts != None and 'label' in opts.keys():
+        if start_bp > end_bp:
+            write_label(ax, opts['label'], end_bp+((start_bp-end_bp)/2.0), opts=opts)
+        else:
+            write_label(ax, opts['label'], start_bp+((end_bp-start_bp)/2.0), opts=opts)
+    if start_bp > end_bp:
+        return end_bp, start_bp
+    else:
+        return start_bp, end_bp
+
+def trace_promoter (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts):
+    """ Built-in trace-based promoter renderer with arrow at TSS.
+    """
+    # Default options
+    zorder_add = 0.0
+    color = (0.0,0.0,1.0)
+    y_offset = 0.0
+    y_extent = 6.0
+    x_extent = 30.0
+    arrowhead_height = 0.5
+    arrowhead_length = 15.0
+    highlight_y_extent = 0.8
+    # Reset defaults if provided
+    if opts != None:
+        if 'zorder_add' in opts.keys():
+            zorder_add = opts['zorder_add']
+        if 'color' in opts.keys():
+            color = opts['color']
+        if 'y_offset' in opts.keys():
+            y_offset = opts['y_offset']
+        if 'y_extent' in opts.keys():
+            y_extent = opts['y_extent']
+        if 'x_extent' in opts.keys():
+            x_extent = opts['x_extent']
+        if 'arrowhead_height' in opts.keys():
+            arrowhead_height = opts['arrowhead_height']
+        if 'arrowhead_length' in opts.keys():
+            arrowhead_length = opts['arrowhead_length']
+        if 'highlight_y_extent' in opts.keys():
+            highlight_y_extent = opts['highlight_y_extent']
+        if 'linewidth' in opts.keys():
+            linewidth = opts['linewidth']
+        if 'scale' in opts.keys():
+            scale = opts['scale']
+    # Check direction add start padding
+    dir_fac = 1.0
+    if start_bp > end_bp:
+        dir_fac = -1.0
+        y_offset = -y_offset
+    # Draw the promoter symbol
+    l1 = Line2D([end_bp,end_bp],[0+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, 
+                color=color, zorder=14+zorder_add)
+    l2 = Line2D([end_bp,end_bp+dir_fac*x_extent*scale-dir_fac*arrowhead_length*0.5*scale],
+                [dir_fac*y_extent+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth, 
+                color=color, zorder=14+zorder_add)
+    ax.add_line(l1)
+    ax.add_line(l2)
+    p1 = Polygon([(end_bp+dir_fac*x_extent*scale-dir_fac*arrowhead_length*scale, 
+                   dir_fac*y_extent+(arrowhead_height)+y_offset), 
+                  (end_bp+dir_fac*(x_extent*scale), dir_fac*y_extent+y_offset),
+                  (end_bp+dir_fac*x_extent*scale-dir_fac*arrowhead_length*scale, 
                    dir_fac*y_extent-(arrowhead_height)+y_offset)],
                   facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14+zorder_add, 
                   path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
@@ -2049,7 +2121,6 @@ def trace_terminator (ax, type, num, start_bp, end_bp, prev_end, scale, linewidt
         return end_bp, start_bp
     else:
         return start_bp, end_bp
-
 
 ###############################################################################
 # The DNA renderer

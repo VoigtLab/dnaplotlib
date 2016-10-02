@@ -117,7 +117,7 @@ class SBOLRenderer(dpl.DNARenderer):
                         ax.add_patch(Rectangle(( part['start'], -5), 10, 10, facecolor="grey", zorder=100))
                         fig = plt.gcf()
                         fig.canvas.draw()
-                        print part['name']
+                        print(part['name'])
 
 
         def _onMotion(event):
@@ -132,20 +132,20 @@ class SBOLRenderer(dpl.DNARenderer):
                         ax.add_patch(Rectangle(( part['start'], -5), 10, 10, facecolor="grey"))
                         fig = plt.gcf()
                         fig.canvas.draw()
-                        print part['name']
+                        print(part['name'])
 
         dpl_design = []  # The SBOL data will be converted to a list of dictionaries used by DNAPlotLib
         sbol_design = []  # Contains a list of DNA components corresponding to the items in dpl_design
         try:
             current_ann = target_component.annotations[0]
         except:
-            print "Target DNAComponent does not have any SequenceAnnotations.  Cannot render SBOL."
+            print("Target DNAComponent does not have any SequenceAnnotations.  Cannot render SBOL.")
         END_OF_DESIGN = False
         while not END_OF_DESIGN:
             try:
                 subcomponent = current_ann.subcomponent
             except:
-                print "DNAComponent does not have subcomponents.  Cannot render SBOL."
+                print("DNAComponent does not have subcomponents.  Cannot render SBOL.")
 
             # Translate from SBOL data model to DNAPlotLib dictionary specification for designs
             SO_term = subcomponent.type.split('/')[-1]

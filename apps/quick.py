@@ -23,12 +23,6 @@
        black, gray, red, orange, yellow, green, blue, purple, lightred, lightorange, 
        lightyellow, lightgreen, lightblue, lightpurple
 """
-#    Quickly Plot SBOL Designs
-#    Copyright (C) 2014 by
-#    Thomas E. Gorochowski <tom@chofski.co.uk>
-#    Bryan Der <bder@mit.edu>
-#    All rights reserved.
-#    OSI Non-Profit Open Software License ("Non-Profit OSL") 3.0 license.
 
 # Set the backend to use (important for headless servers)
 import matplotlib
@@ -41,7 +35,7 @@ import matplotlib.pyplot as plt
 
 __author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT\n\
                Bryan Der <bder@mit.edu>, Voigt Lab, MIT'
-__license__ = 'OSI Non-Profit OSL 3.0'
+__license__ = 'MIT'
 __version__ = '1.0'
 
 def process_arguments (input):

@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
 __author__  = 'Thomas Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'
-__license__ = 'OSI OSL 3.0'
+__license__ = 'MIT'
 __version__ = '1.0'
 
 # Color maps for formatting

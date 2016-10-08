@@ -24,7 +24,7 @@ import matplotlib.patches as patches
 
 __author__  = 'Bryan Der <bder@mit.edu>, Voigt Lab, MIT\n\
                Thomas Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'
-__license__ = 'OSI OSL 3.0'
+__license__ = 'MIT'
 __version__ = '1.0'
 
 # Test pySBOL interface

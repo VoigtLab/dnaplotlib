@@ -18,7 +18,7 @@ from mpl_toolkits.axes_grid.parasite_axes import SubplotHost, ParasiteAxesAuxTra
 from matplotlib import colors
 
 __author__  = 'Thomas Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'
-__license__ = 'OSI OSL 3.0'
+__license__ = 'MIT'
 __version__ = '1.0'
 
 # Color maps (we use these throughout)

@@ -9,7 +9,7 @@ from matplotlib import gridspec
 import numpy as np
 
 __author__  = 'Thomas Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'
-__license__ = 'OSI OSL 3.0'
+__license__ = 'MIT'
 __version__ = '1.0'
 
 # Load the design from a GFF file

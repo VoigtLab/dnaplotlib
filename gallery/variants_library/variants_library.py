@@ -16,7 +16,7 @@ import matplotlib.gridspec as gridspec
 import numpy as np
 
 __author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'
-__license__ = 'OSI Non-Profit OSL 3.0'
+__license__ = 'MIT'
 __version__ = '1.0'
 
 # Function that converts string to float (if possible)

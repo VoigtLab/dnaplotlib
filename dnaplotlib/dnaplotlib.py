@@ -43,13 +43,6 @@ DNAplotlib
     be used for resizing the axes and figure. For more advanced use cases we 
     advise looking at the gallery distributed with this module.
 """
-#    DNAplotlib
-#    Copyright (C) 2014 by
-#    Thomas E. Gorochowski <tom@chofski.co.uk>
-#    Bryan Der <bder@mit.edu>
-#    Emerson Glassey <eglassey@mit.edu>
-#    All rights reserved.
-#    OSI Open Software License 3.0 (OSL-3.0) license.
 
 
 import math

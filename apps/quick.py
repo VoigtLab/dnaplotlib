@@ -78,11 +78,11 @@ def process_arguments (input):
 				if part_short_type[0] == '-':
 					part_fwd = False
 					part_short_type = part_short_type[1:]
-				if part_short_type in types.keys():
+				if part_short_type in list(types.keys()):
 					part_type = types[part_short_type]
 					part_color = part_parts[1]
 					part_rgb = (0,0,0)
-					if part_color in colors.keys():
+					if part_color in list(colors.keys()):
 						part_rgb = colors[part_color]
 					part_list.append( {'name'  : str(part_idx), 
 						               'type'  : part_type, 

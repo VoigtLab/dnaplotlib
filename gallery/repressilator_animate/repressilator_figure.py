@@ -132,7 +132,7 @@ def movie(ts, ymtet, ymlac, ymgamma, ytet, ylac, ygamma):
 	
 def main():
 	t = np.arange(0, 30.1, 0.1)
-	ymtet, ymlac, ymgamma, ytet, ylac, ygamma = zip(*odeint(repressilator, initial, t))
+	ymtet, ymlac, ymgamma, ytet, ylac, ygamma = list(zip(*odeint(repressilator, initial, t)))
 	plt.close()
 	plt.figure(figsize=(3.5, 6.5))
 	gs = gridspec.GridSpec(8, 1, height_ratios=[1, 2.5, 0.1, 1, 1, 1, 1, 1])

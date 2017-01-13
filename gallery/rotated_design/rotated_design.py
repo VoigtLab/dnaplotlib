@@ -59,9 +59,9 @@ def load_design (filename, opt_map):
 			p_name = row[1]
 			p_seq = row[2]
 			p_opts = {}
-			if p_name in opt_map.keys():
+			if p_name in list(opt_map.keys()):
 				p_opts = opt_map[p_name]
-			elif p_type in opt_map.keys():
+			elif p_type in list(opt_map.keys()):
 				p_opts = opt_map[p_type]
 			new_part = {'type':p_type,
 			            'name':p_name,
@@ -70,7 +70,7 @@ def load_design (filename, opt_map):
 			            'fwd':True,
 			            'opts':p_opts}
 			# Return all the parts by name
-			if p_name not in parts.keys():
+			if p_name not in list(parts.keys()):
 				parts[p_name] = [new_part]
 			else:
 				parts[p_name].append(new_part)
@@ -176,7 +176,7 @@ ax_dna_y_main, ax_dna_y = setup_rot_axes(fig, gs[2])
 
 # Before rendering rotated circuit remove all labels (simplify plot)
 for el in design:
-	if 'label' in el['opts'].keys():
+	if 'label' in list(el['opts'].keys()):
 		el['opts']['label'] = ''
 
 # Render the rotated design normally (rotation done by matplotlib)

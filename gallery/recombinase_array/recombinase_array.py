@@ -31,23 +31,23 @@ def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	linestyle = '-'
 	# Update default parameters if provided
 	if opts != None:
-		if 'start_pad' in opts.keys():
+		if 'start_pad' in list(opts.keys()):
 			start_pad = opts['start_pad']
-		if 'end_pad' in opts.keys():
+		if 'end_pad' in list(opts.keys()):
 			end_pad = opts['end_pad']
-		if 'x_extent' in opts.keys():
+		if 'x_extent' in list(opts.keys()):
 			x_extent = opts['x_extent']
-		if 'y_extent' in opts.keys():
+		if 'y_extent' in list(opts.keys()):
 			y_extent = opts['y_extent']
-		if 'linestyle' in opts.keys():
+		if 'linestyle' in list(opts.keys()):
 			linestyle = opts['linestyle']
-		if 'linewidth' in opts.keys():
+		if 'linewidth' in list(opts.keys()):
 			linewidth = opts['linewidth']
-		if 'scale' in opts.keys():
+		if 'scale' in list(opts.keys()):
 			scale = opts['scale']
-		if 'color' in opts.keys():
+		if 'color' in list(opts.keys()):
 			color = opts['color']
-		if 'color2' in opts.keys():
+		if 'color2' in list(opts.keys()):
 			color2 = opts['color2']
 	# Check direction add start padding
 	final_end = end
@@ -71,7 +71,7 @@ def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, op
 		          path_effects=[Stroke(joinstyle="miter")])		
 	ax.add_patch(p1)
 	# Add a label if needed
-	if opts != None and 'label' in opts.keys():
+	if opts != None and 'label' in list(opts.keys()):
 		if final_start > final_end:
 			write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
 		else:
@@ -95,26 +95,26 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	linestyle = '-'
 	# Update default parameters if provided
 	if opts != None:
-		if 'start_pad' in opts.keys():
+		if 'start_pad' in list(opts.keys()):
 			start_pad = opts['start_pad']
-		if 'end_pad' in opts.keys():
+		if 'end_pad' in list(opts.keys()):
 			end_pad = opts['end_pad']
-		if 'x_extent' in opts.keys():
+		if 'x_extent' in list(opts.keys()):
 			x_extent = opts['x_extent']
-		if 'y_extent' in opts.keys():
+		if 'y_extent' in list(opts.keys()):
 			y_extent = opts['y_extent']
-		if 'linestyle' in opts.keys():
+		if 'linestyle' in list(opts.keys()):
 			linestyle = opts['linestyle']
-		if 'linewidth' in opts.keys():
+		if 'linewidth' in list(opts.keys()):
 			linewidth = opts['linewidth']
-		if 'scale' in opts.keys():
+		if 'scale' in list(opts.keys()):
 			scale = opts['scale']
-		if 'color' in opts.keys():
+		if 'color' in list(opts.keys()):
 			color = opts['color']
-		if 'color2' in opts.keys():
+		if 'color2' in list(opts.keys()):
 			color2 = opts['color2']
 		else:
-			if 'color' in opts.keys():
+			if 'color' in list(opts.keys()):
 				r2 = float(color[0]) / 2
 				g2 = float(color[1]) / 2
 				b2 = float(color[2]) / 2
@@ -154,7 +154,7 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	ax.add_patch(p1)
 	ax.add_patch(p2)	
 	# Add a label if needed
-	if opts != None and 'label' in opts.keys():
+	if opts != None and 'label' in list(opts.keys()):
 		if final_start > final_end:
 			write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
 		else:
@@ -174,13 +174,13 @@ def flip_arrow (ax, type, num, from_part, to_part, scale, linewidth, arc_height_
 	arcHeightEnd = 10
 	# Update default parameters if provided
 	if opts != None:
-		if 'linewidth' in opts.keys():
+		if 'linewidth' in list(opts.keys()):
 			linewidth = opts['linewidth']
-		if 'color' in opts.keys():
+		if 'color' in list(opts.keys()):
 			color = opts['color']
-		if 'arc_height_start' in opts.keys():
+		if 'arc_height_start' in list(opts.keys()):
 			arcHeightStart = opts['arc_height_start']
-		if 'arc_height_end' in opts.keys():
+		if 'arc_height_end' in list(opts.keys()):
 			arcHeightEnd = opts['arc_height_end']
 	start = (from_part['start'] + from_part['end']) / 2
 	end   = (to_part['start']   + to_part['end']) / 2

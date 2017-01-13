@@ -48,7 +48,7 @@ def load_part_information (filename):
 	header_map = {}
 	for i in range(len(header)):
 		header_map[header[i]] = i
-	attrib_keys = [k for k in header_map.keys() if k not in ['part_name', 'type']]
+	attrib_keys = [k for k in list(header_map.keys()) if k not in ['part_name', 'type']]
 	for row in parts_reader:
 		# Make the attributes map
 		part_attribs_map = {}
@@ -71,7 +71,7 @@ def load_perf_information (filename):
 	header_map = {}
 	for i in range(len(header)):
 		header_map[header[i]] = i
-	attrib_keys = [k for k in header_map.keys() if k != 'Variant']
+	attrib_keys = [k for k in list(header_map.keys()) if k != 'Variant']
 	for row in perf_reader:
 		# Make the attributes map
 		perf_attribs_map = {}
@@ -129,7 +129,7 @@ def extract_dict_attribs (d, dict_keys, attrib_key):
 # Function to plot the designs and performance information
 def plot_dna (dna_designs, dna_design_order, out_filename, plot_params, perf_data):
 	# Default parameters for the plotting
-	if 'axis_y' not in plot_params.keys():
+	if 'axis_y' not in list(plot_params.keys()):
 		plot_params['axis_y'] = 35
 	left_pad = 0.0
 	right_pad = 0.0
@@ -138,17 +138,17 @@ def plot_dna (dna_designs, dna_design_order, out_filename, plot_params, perf_dat
 	fig_y = 5.0
 	fig_x = 5.0
 	# Update parameters if needed
-	if 'backbone_pad_left' in plot_params.keys():
+	if 'backbone_pad_left' in list(plot_params.keys()):
 		left_pad = plot_params['backbone_pad_left']
-	if 'backbone_pad_right' in plot_params.keys():
+	if 'backbone_pad_right' in list(plot_params.keys()):
 		right_pad = plot_params['backbone_pad_right']
-	if 'scale' in plot_params.keys():
+	if 'scale' in list(plot_params.keys()):
 		scale = plot_params['scale']
-	if 'linewidth' in plot_params.keys():
+	if 'linewidth' in list(plot_params.keys()):
 		linewidth = plot_params['linewidth']
-	if 'fig_y' in plot_params.keys():
+	if 'fig_y' in list(plot_params.keys()):
 		fig_y = plot_params['fig_y']
-	if 'fig_x' in plot_params.keys():
+	if 'fig_x' in list(plot_params.keys()):
 		fig_x = plot_params['fig_x']
 	dr = dpl.DNARenderer(scale=scale, linewidth=linewidth,
 		                 backbone_pad_left=left_pad, 
@@ -172,7 +172,7 @@ def plot_dna (dna_designs, dna_design_order, out_filename, plot_params, perf_dat
 		# Create axis for the design and plot
 		design =  dna_designs[dna_design_order[i]]
 		ax = plt.subplot(gs[i, 1])
-		if 'show_title' in plot_params.keys() and plot_params['show_title'] == 'Y':
+		if 'show_title' in list(plot_params.keys()) and plot_params['show_title'] == 'Y':
 			ax.set_title(design_list[i], fontsize=8)
 		start, end = dr.renderDNA(ax, design, part_renderers)
 		dna_len = end-start

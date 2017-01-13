@@ -11,8 +11,8 @@ doc.read('gene_cassette.sbol')
 
 # In this case, we know ahead of time the URI of the design.  In some cases, you may have to explore the doc's components to find the design you are looking for
 design = doc.components['http://sbolstandard.org/examples/Design']
-print design.display_id
-print design
+print(design.display_id)
+print(design)
 
 # Create the DNAplotlib renderer
 dr = dpl_sbol.SBOLRenderer()

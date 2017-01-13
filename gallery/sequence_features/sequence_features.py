@@ -45,23 +45,23 @@ def promoter_region (ax, type, num, start, end, prev_end, scale, linewidth, opts
 	y_extent = 4.0
 	# Update default parameters if provided
 	if opts != None:
-		if 'y_extent' in opts.keys():
+		if 'y_extent' in list(opts.keys()):
 			y_extent = opts['y_extent']
-		if 'y_offset' in opts.keys():
+		if 'y_offset' in list(opts.keys()):
 			y_offset = opts['y_offset']
-		if 'linewidth' in opts.keys():
+		if 'linewidth' in list(opts.keys()):
 			linewidth = opts['linewidth']
-		if 'color_35' in opts.keys():
+		if 'color_35' in list(opts.keys()):
 			color_35 = opts['color_35']
-		if 'color_10' in opts.keys():
+		if 'color_10' in list(opts.keys()):
 			color_10 = opts['color_10']
-		if 'color_connector' in opts.keys():
+		if 'color_connector' in list(opts.keys()):
 			color_connector = opts['color_connector']
-		if 'linewidth_connector' in opts.keys():
+		if 'linewidth_connector' in list(opts.keys()):
 			linewidth_connector = opts['linewidth_connector']
-		if 'len_35' in opts.keys():
+		if 'len_35' in list(opts.keys()):
 			len_35 = opts['len_35']
-		if 'len_10' in opts.keys():
+		if 'len_10' in list(opts.keys()):
 			len_10 = opts['len_10']
 	# Check direction (we don't use at moment)
 	fwd = True
@@ -89,7 +89,7 @@ def promoter_region (ax, type, num, start, end, prev_end, scale, linewidth, opts
 	ax.add_line(l1)
 
 	# Add a label if needed
-	if opts != None and 'label' in opts.keys():
+	if opts != None and 'label' in list(opts.keys()):
 		if final_start > final_end:
 			dpl.write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
 		else:

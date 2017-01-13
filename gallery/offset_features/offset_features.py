@@ -102,13 +102,13 @@ def plot_trace_y_offset (designs, output_prefix):
 	# Generate the offsets for each design
 	frame2_offset = 9.0
 	for part in design_frame2:
-		if 'opts' in part.keys():
+		if 'opts' in list(part.keys()):
 			part['opts']['y_offset'] = frame2_offset
 		else:
 			part['opts'] = {'y_offset': frame2_offset}
 	frame3_offset = 16.0
 	for part in design_frame3:
-		if 'opts' in part.keys():
+		if 'opts' in list(part.keys()):
 			part['opts']['y_offset'] = frame3_offset
 		else:
 			part['opts'] = {'y_offset': frame3_offset}

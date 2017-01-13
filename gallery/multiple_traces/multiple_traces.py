@@ -90,14 +90,14 @@ def load_trace (filename_in):
 def plot_trace_2 (ax_trace, data, col, lab='', hightlight=[0,0]):
 	# Plot the traces
 	trace_len = len(data[0])
-	ax_trace.fill_between(range(trace_len),data[0],np.zeros(trace_len), color=lighten_color(col,0.5), edgecolor=lighten_color(col,0.5), linewidth=1, zorder=1)
-	ax_trace.fill_between(range(trace_len),-data[1],np.zeros(trace_len), color=lighten_color(col,0.5), edgecolor=lighten_color(col,0.5), linewidth=1, zorder=1)
+	ax_trace.fill_between(list(range(trace_len)),data[0],np.zeros(trace_len), color=lighten_color(col,0.5), edgecolor=lighten_color(col,0.5), linewidth=1, zorder=1)
+	ax_trace.fill_between(list(range(trace_len)),-data[1],np.zeros(trace_len), color=lighten_color(col,0.5), edgecolor=lighten_color(col,0.5), linewidth=1, zorder=1)
 	# Hightlighted region
 	r = np.arange(hightlight[0], hightlight[1])
 	ax_trace.fill_between(r,data[0][hightlight[0]:hightlight[1]],np.zeros(len(r)), color=col, edgecolor=col, linewidth=1, zorder=1.5)
 	ax_trace.fill_between(r,-data[1][hightlight[0]:hightlight[1]],np.zeros(len(r)), color=col, edgecolor=col, linewidth=1, zorder=1.5)
 	# Adjust formatting
-	ax_trace.plot(range(trace_len), np.zeros(trace_len), color=(0,0,0), linewidth=1, zorder=2)
+	ax_trace.plot(list(range(trace_len)), np.zeros(trace_len), color=(0,0,0), linewidth=1, zorder=2)
 	max_read_depth = max(data[0])
 	max_read_depth_1 = max(data[1])
 	if max_read_depth_1 > max_read_depth:
@@ -118,12 +118,12 @@ def plot_trace_2 (ax_trace, data, col, lab='', hightlight=[0,0]):
 def plot_trace_1 (ax_trace, data, col, scale=None, min_y=0, max_y=None, lab='', hightlight=[0,0]):
 	# Plot the trace
 	trace_len = len(data)
-	ax_trace.fill_between(range(trace_len),data,np.zeros(trace_len), color=lighten_color(col,0.5), edgecolor=lighten_color(col,0.5), linewidth=1, zorder=1)
+	ax_trace.fill_between(list(range(trace_len)),data,np.zeros(trace_len), color=lighten_color(col,0.5), edgecolor=lighten_color(col,0.5), linewidth=1, zorder=1)
 	# Hightlight region
 	r = np.arange(hightlight[0], hightlight[1])
 	ax_trace.fill_between(r,data[hightlight[0]:hightlight[1]],np.zeros(len(r)), color=col, edgecolor=col, linewidth=1, zorder=1.5)
 	# Adjust formatting
-	ax_trace.plot(range(trace_len), np.zeros(trace_len), color=(0,0,0), linewidth=1, zorder=2)
+	ax_trace.plot(list(range(trace_len)), np.zeros(trace_len), color=(0,0,0), linewidth=1, zorder=2)
 	max_read_depth = max(data) * 1.02
 	if max_y == None:
 		ax_trace.set_ylim([min_y,max_read_depth])

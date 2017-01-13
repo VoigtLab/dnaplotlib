@@ -56,7 +56,7 @@ def load_part_information (filename):
 	header_map = {}
 	for i in range(len(header)):
 		header_map[header[i]] = i
-	attrib_keys = [k for k in header_map.keys() if k not in ['part_name', 'type']]
+	attrib_keys = [k for k in list(header_map.keys()) if k not in ['part_name', 'type']]
 	for row in parts_reader:
 		# Make the attributes map
 		part_attribs_map = {}
@@ -114,7 +114,7 @@ def load_regulatory_information (filename, part_info, dna_designs):
 	header_map = {}
 	for i in range(len(header)):
 		header_map[header[i]] = i
-	attrib_keys = [k for k in header_map.keys() if k not in ['from_partname', 'type', 'to_partname']]
+	attrib_keys = [k for k in list(header_map.keys()) if k not in ['from_partname', 'type', 'to_partname']]
 	
 	#reg_reader can only be read once?
 	rows = []
@@ -166,7 +166,7 @@ def load_regulatory_information (filename, part_info, dna_designs):
 
 def plot_dna (dna_designs, out_filename, plot_params, regs_info):
 	# Create the renderer
-	if 'axis_y' not in plot_params.keys():
+	if 'axis_y' not in list(plot_params.keys()):
 		plot_params['axis_y'] = 35
 	left_pad = 0.0
 	right_pad = 0.0
@@ -174,17 +174,17 @@ def plot_dna (dna_designs, out_filename, plot_params, regs_info):
 	linewidth = 1.0
 	fig_y = 5.0
 	fig_x = 5.0
-	if 'backbone_pad_left' in plot_params.keys():
+	if 'backbone_pad_left' in list(plot_params.keys()):
 		left_pad = plot_params['backbone_pad_left']
-	if 'backbone_pad_right' in plot_params.keys():
+	if 'backbone_pad_right' in list(plot_params.keys()):
 		right_pad = plot_params['backbone_pad_right']
-	if 'scale' in plot_params.keys():
+	if 'scale' in list(plot_params.keys()):
 		scale = plot_params['scale']
-	if 'linewidth' in plot_params.keys():
+	if 'linewidth' in list(plot_params.keys()):
 		linewidth = plot_params['linewidth']
-	if 'fig_y' in plot_params.keys():
+	if 'fig_y' in list(plot_params.keys()):
 		fig_y = plot_params['fig_y']
-	if 'fig_x' in plot_params.keys():
+	if 'fig_x' in list(plot_params.keys()):
 		fig_x = plot_params['fig_x']
 	dr = dpl.DNARenderer(scale=scale, linewidth=linewidth,
 		                 backbone_pad_left=left_pad, 
@@ -214,7 +214,7 @@ def plot_dna (dna_designs, out_filename, plot_params, regs_info):
 		design =  dna_designs[design_list[i]]
 
 		ax = fig.add_subplot(num_of_designs,1,i+1)
-		if 'show_title' in plot_params.keys() and plot_params['show_title'] == 'Y':
+		if 'show_title' in list(plot_params.keys()) and plot_params['show_title'] == 'Y':
 			ax.set_title(design_list[i], fontsize=8)
 		start, end = dr.renderDNA(ax, design, part_renderers, regs, reg_renderers)
 

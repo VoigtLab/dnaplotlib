@@ -97,7 +97,7 @@ class SBOLRenderer(dpl.DNARenderer):
             drill down a level in the SBOL hierarchy
             """
             if event.xdata != None and event.ydata != None:
-                print(event.xdata, event.ydata)
+                print((event.xdata, event.ydata))
                 for i_part, part in enumerate(dpl_design):
                     if event.xdata > part['start'] and event.xdata < part['end']:
                         selected_component = sbol_design[i_part]
@@ -117,12 +117,12 @@ class SBOLRenderer(dpl.DNARenderer):
                         ax.add_patch(Rectangle(( part['start'], -5), 10, 10, facecolor="grey", zorder=100))
                         fig = plt.gcf()
                         fig.canvas.draw()
-                        print(part['name'])
+                        print((part['name']))
 
 
         def _onMotion(event):
             if event.xdata != None and event.ydata != None: # mouse is inside the axes
-                print(event.xdata, event.ydata)
+                print((event.xdata, event.ydata))
                 for i_part, part in enumerate(dpl_design):
                     if event.xdata > part['start'] and event.xdata < part['end']:
                         selected_component = sbol_design[i_part]
@@ -132,7 +132,7 @@ class SBOLRenderer(dpl.DNARenderer):
                         ax.add_patch(Rectangle(( part['start'], -5), 10, 10, facecolor="grey"))
                         fig = plt.gcf()
                         fig.canvas.draw()
-                        print(part['name'])
+                        print((part['name']))
 
         dpl_design = []  # The SBOL data will be converted to a list of dictionaries used by DNAPlotLib
         sbol_design = []  # Contains a list of DNA components corresponding to the items in dpl_design
@@ -149,7 +149,7 @@ class SBOLRenderer(dpl.DNARenderer):
 
             # Translate from SBOL data model to DNAPlotLib dictionary specification for designs
             SO_term = subcomponent.type.split('/')[-1]
-            if SO_term in self.SO_terms().keys():
+            if SO_term in list(self.SO_terms().keys()):
                 part = {}
                 part['type'] = self.SO_terms()[SO_term]
                 part['name'] = subcomponent.display_id

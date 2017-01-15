@@ -106,7 +106,7 @@ def plot_construct(ax, t, ymtet, ymlac, ymgamma, ytet, ylac, ygamma):
 	
 def main():
 	t = np.arange(0, 30.1, 0.1)
-	ymtet, ymlac, ymgamma, ytet, ylac, ygamma = zip(*odeint(repressilator, initial, t))
+	ymtet, ymlac, ymgamma, ytet, ylac, ygamma = list(zip(*odeint(repressilator, initial, t)))
 	plt.close()
 	plt.figure(figsize=(3.7, 1.5))
 	gs = gridspec.GridSpec(3, 2, height_ratios=[1, 1, 1], width_ratios=[2.6, 3])

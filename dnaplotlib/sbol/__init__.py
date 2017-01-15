@@ -1,3 +1,3 @@
 
 
-from sbolplotlib import *
+from .sbolplotlib import *

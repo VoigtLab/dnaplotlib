@@ -19,7 +19,7 @@ import warnings
 import zlib
 
 import numpy as np
-from six import unichr
+from six import chr
 from six import BytesIO
 
 from datetime import datetime
@@ -976,7 +976,7 @@ end"""
 
             # Make the 'W' (Widths) array, CidToGidMap and ToUnicode CMap
             # at the same time
-            cid_to_gid_map = ['\u0000'] * 65536
+            cid_to_gid_map = ['\\u0000'] * 65536
             cmap = font.get_charmap()
             widths = []
             max_ccode = 0
@@ -986,7 +986,7 @@ end"""
                 glyph = font.load_char(ccode, flags=LOAD_NO_HINTING)
                 widths.append((ccode, glyph.horiAdvance / 6))
                 if ccode < 65536:
-                    cid_to_gid_map[ccode] = unichr(gind)
+                    cid_to_gid_map[ccode] = chr(gind)
                 max_ccode = max(ccode, max_ccode)
             widths.sort()
             cid_to_gid_map = cid_to_gid_map[:max_ccode + 1]
@@ -1755,7 +1755,7 @@ class RendererPdf(RendererBase):
                     self.file.output(self.file.fontName(fontname), fontsize,
                                      Op.selectfont)
                     prev_font = fontname, fontsize
-                self.file.output(self.encode_string(unichr(num), fonttype),
+                self.file.output(self.encode_string(chr(num), fonttype),
                                  Op.show)
         self.file.output(Op.end_text)
 
@@ -1821,7 +1821,7 @@ class RendererPdf(RendererBase):
             # We need to convert the glyph numbers to bytes, and the easiest
             # way to do this on both Python 2 and 3 is .encode('latin-1')
             seq += [['text', x1, y1,
-                     [six.unichr(glyph).encode('latin-1')], x1+width]]
+                     [six.chr(glyph).encode('latin-1')], x1+width]]
 
         # Find consecutive text strings with constant y coordinate and
         # combine into a sequence of strings and kerns, or just one

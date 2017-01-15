@@ -83,21 +83,21 @@ def write_label (ax, label_text, x_pos, opts=None):
     label_color = (0,0,0)
     label_rotation = 0
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'y_offset' in opts.keys():
+        if 'y_offset' in list(opts.keys()):
             y_offset = opts['y_offset']
-        if 'label_style' in opts.keys():
+        if 'label_style' in list(opts.keys()):
             label_style = opts['label_style']
-        if 'label_size' in opts.keys():
+        if 'label_size' in list(opts.keys()):
             label_size = opts['label_size']
-        if 'label_y_offset' in opts.keys():
+        if 'label_y_offset' in list(opts.keys()):
             label_y_offset = opts['label_y_offset']
-        if 'label_x_offset' in opts.keys():
+        if 'label_x_offset' in list(opts.keys()):
             label_x_offset = opts['label_x_offset']
-        if 'label_color' in opts.keys():
+        if 'label_color' in list(opts.keys()):
             label_color = opts['label_color']
-        if 'label_rotation' in opts.keys():
+        if 'label_rotation' in list(opts.keys()):
             label_rotation = opts['label_rotation']
     ax.text(x_pos+label_x_offset, label_y_offset+y_offset, label_text, horizontalalignment='center',
             verticalalignment='center', fontsize=label_size, fontstyle=label_style, 
@@ -118,25 +118,25 @@ def sbol_promoter (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     arrowhead_length = 4
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'arrowhead_height' in opts.keys():
+        if 'arrowhead_height' in list(opts.keys()):
             arrowhead_height = opts['arrowhead_height']
-        if 'arrowhead_length' in opts.keys():
+        if 'arrowhead_length' in list(opts.keys()):
             arrowhead_length = opts['arrowhead_length']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     dir_fac = 1.0
@@ -167,7 +167,7 @@ def sbol_promoter (ax, type, num, start, end, prev_end, scale, linewidth, opts):
                   facecolor=color, edgecolor=color, linewidth=linewidth,  zorder=1+zorder_add,
                   path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0
     ax.add_patch(p1)
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -194,29 +194,29 @@ def sbol_cds (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     edgecolor = (0,0,0)
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'hatch' in opts.keys():
+        if 'hatch' in list(opts.keys()):
             hatch = opts['hatch']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'arrowhead_height' in opts.keys():
+        if 'arrowhead_height' in list(opts.keys()):
             arrowhead_height = opts['arrowhead_height']
-        if 'arrowhead_length' in opts.keys():
+        if 'arrowhead_length' in list(opts.keys()):
             arrowhead_length = opts['arrowhead_length']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
-        if 'edge_color' in opts.keys():
+        if 'edge_color' in list(opts.keys()):
             edgecolor = opts['edge_color']
 
     # Check direction add start padding
@@ -244,7 +244,7 @@ def sbol_cds (ax, type, num, start, end, prev_end, scale, linewidth, opts):
                   hatch=hatch, zorder=11+zorder_add, 
                   path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0
     ax.add_patch(p1)
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -267,21 +267,21 @@ def sbol_terminator (ax, type, num, start, end, prev_end, scale, linewidth, opts
     x_extent = 8.0
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     dir_fac = 1.0
@@ -303,7 +303,7 @@ def sbol_terminator (ax, type, num, start, end, prev_end, scale, linewidth, opts
                 linewidth=linewidth, color=color, zorder=9+zorder_add)
     ax.add_line(l1)
     ax.add_line(l2)
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -326,21 +326,21 @@ def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     edgecolor = (0,0,0)
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
-        if 'edge_color' in opts.keys():
+        if 'edge_color' in list(opts.keys()):
             edgecolor = opts['edge_color']
     # Check direction add start padding
     dir_fac = 1.0
@@ -363,7 +363,7 @@ def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
         w1 = Wedge(rbs_center, x_extent/2.0, 0, 180, linewidth=linewidth, 
                    facecolor=color, edgecolor=edgecolor, zorder=8+zorder_add)
         ax.add_patch(w1)
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -426,23 +426,23 @@ def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     final_end = end
@@ -523,7 +523,7 @@ def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
             ax.add_line(x2)
             ax.add_line(solidX)
     
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -548,23 +548,23 @@ def sbol_scar (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     linestyle = '-'
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     final_end = end
@@ -590,7 +590,7 @@ def sbol_scar (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     ax.add_line(l_top)
     ax.add_line(l_bottom)
 
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -610,15 +610,15 @@ def sbol_empty_space (ax, type, num, start, end, prev_end, scale, linewidth, opt
     x_extent = 12.0
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
     # Check direction add start padding
     final_start = prev_end
     final_end = final_start+x_extent
 
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -642,23 +642,23 @@ def sbol_5_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
     linestyle = '-'
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     final_end = end
@@ -684,7 +684,7 @@ def sbol_5_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
     ax.add_line(l_top)
     ax.add_line(l_bottom)
 
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -709,23 +709,23 @@ def sbol_3_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
     linestyle = '-'
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     final_end = end
@@ -751,7 +751,7 @@ def sbol_3_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
     ax.add_line(l_top)
     ax.add_line(l_bottom)
 
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -777,25 +777,25 @@ def sbol_blunt_restriction_site (ax, type, num, start, end, prev_end, scale, lin
     linestyle = '-'
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'site_space' in opts.keys():
+        if 'site_space' in list(opts.keys()):
             site_space = opts['site_space']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     
     # Direction is meaningless for this part => start is always < end
@@ -832,7 +832,7 @@ def sbol_blunt_restriction_site (ax, type, num, start, end, prev_end, scale, lin
     ax.add_line(l2_top)
     ax.add_line(l2_bottom)
 
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
 
     return final_start, final_end
@@ -853,27 +853,27 @@ def sbol_primer_binding_site (ax, type, num, start, end, prev_end, scale, linewi
     linestyle = '-'
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'y_offset' in opts.keys():
+        if 'y_offset' in list(opts.keys()):
             y_offset = opts['y_offset']
-        if 'arrowhead_length' in opts.keys():
+        if 'arrowhead_length' in list(opts.keys()):
             arrowhead_length = opts['arrowhead_length']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     
     direction = 'F'
@@ -910,7 +910,7 @@ def sbol_primer_binding_site (ax, type, num, start, end, prev_end, scale, linewi
         patch = PathPatch(path, lw=linewidth, edgecolor=color, facecolor=(1,1,1), zorder=1+zorder_add)
         ax.add_patch(patch)
 
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if start > end:
             write_label(ax, opts['label'], end+((start-end)/2.0), opts=opts)
         else:
@@ -936,25 +936,25 @@ def sbol_5_sticky_restriction_site  (ax, type, num, start, end, prev_end, scale,
     linestyle = '-'
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'end_space' in opts.keys():
+        if 'end_space' in list(opts.keys()):
             end_space = opts['end_space']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     
     # Direction is meaningless for this part => start is always < end
@@ -990,7 +990,7 @@ def sbol_5_sticky_restriction_site  (ax, type, num, start, end, prev_end, scale,
 
     ax.add_patch(p1)
 
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
 
     return final_start, final_end
@@ -1010,25 +1010,25 @@ def sbol_3_sticky_restriction_site  (ax, type, num, start, end, prev_end, scale,
     linestyle = '-'
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'end_space' in opts.keys():
+        if 'end_space' in list(opts.keys()):
             end_space = opts['end_space']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     
     # Direction is meaningless for this part => start is always < end
@@ -1064,7 +1064,7 @@ def sbol_3_sticky_restriction_site  (ax, type, num, start, end, prev_end, scale,
 
     ax.add_patch(p1)
 
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
 
     return final_start, final_end
@@ -1084,25 +1084,25 @@ def sbol_user_defined  (ax, type, num, start, end, prev_end, scale, linewidth, o
     fill_color = (1,1,1)
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'fill_color' in opts.keys():
+        if 'fill_color' in list(opts.keys()):
             fill_color = opts['fill_color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     final_end = end
@@ -1122,7 +1122,7 @@ def sbol_user_defined  (ax, type, num, start, end, prev_end, scale, linewidth, o
 
     ax.add_patch(p1)
     
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -1148,25 +1148,25 @@ def sbol_signature  (ax, type, num, start, end, prev_end, scale, linewidth, opts
     fill_color = (1,1,1)
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'fill_color' in opts.keys():
+        if 'fill_color' in list(opts.keys()):
             fill_color = opts['fill_color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     
     direction = 'F'
@@ -1244,7 +1244,7 @@ def sbol_signature  (ax, type, num, start, end, prev_end, scale, linewidth, opts
                        linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
         ax.add_line(lsign)
 
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -1268,21 +1268,21 @@ def sbol_restriction_site (ax, type, num, start, end, prev_end, scale, linewidth
     linestyle = '-'
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     final_end = end
@@ -1296,7 +1296,7 @@ def sbol_restriction_site (ax, type, num, start, end, prev_end, scale, linewidth
                    linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
     ax.add_line(l1)
 
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -1322,25 +1322,25 @@ def sbol_spacer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     linestyle = '-'
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'edgecolor' in opts.keys():
+        if 'edgecolor' in list(opts.keys()):
             edgecolor = opts['edgecolor']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     final_end = end
@@ -1366,7 +1366,7 @@ def sbol_spacer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     ax.add_line(l1)
     ax.add_line(l2)
 
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -1391,23 +1391,23 @@ def sbol_origin (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     linestyle = '-'
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     final_end = end
@@ -1423,7 +1423,7 @@ def sbol_origin (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     
     ax.add_patch(c1)
     
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -1448,23 +1448,23 @@ def sbol_operator (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     linestyle = '-'
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     final_end = end
@@ -1484,7 +1484,7 @@ def sbol_operator (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 
     ax.add_patch(p1)
     
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -1509,23 +1509,23 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
     linestyle = '-'
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     
     # Check direction add start padding
@@ -1559,7 +1559,7 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
     ax.add_patch(p1)
     ax.add_patch(p2)
     
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
         else:
@@ -1584,25 +1584,25 @@ def temporary_repressor (ax, type, num, start, end, prev_end, scale, linewidth, 
     arrowhead_length = 4
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'start_pad' in opts.keys():
+        if 'start_pad' in list(opts.keys()):
             start_pad = opts['start_pad']
-        if 'end_pad' in opts.keys():
+        if 'end_pad' in list(opts.keys()):
             end_pad = opts['end_pad']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'arrowhead_height' in opts.keys():
+        if 'arrowhead_height' in list(opts.keys()):
             arrowhead_height = opts['arrowhead_height']
-        if 'arrowhead_length' in opts.keys():
+        if 'arrowhead_length' in list(opts.keys()):
             arrowhead_length = opts['arrowhead_length']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     dir_fac = 1.0
@@ -1675,30 +1675,30 @@ def regulation (ax, type, num, from_part, to_part, scale, linewidth, arc_height_
     
     # Reset defaults if provided
     if opts != None:
-        if 'arrowhead_length' in opts.keys():
+        if 'arrowhead_length' in list(opts.keys()):
             arrowhead_length = opts['arrowhead_length']
-        if 'linestyle' in opts.keys():
+        if 'linestyle' in list(opts.keys()):
             linestyle = opts['linestyle']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'arc_height' in opts.keys():
+        if 'arc_height' in list(opts.keys()):
             arcHeight = opts['arc_height']
-        if 'arc_height_const' in opts.keys():
+        if 'arc_height_const' in list(opts.keys()):
             arcHeightConst = opts['arc_height_const']
-        if 'arc_height_spacing' in opts.keys():
+        if 'arc_height_spacing' in list(opts.keys()):
             arcHeightSpacing = opts['arc_height_spacing']
-        if 'arc_height_start' in opts.keys():
+        if 'arc_height_start' in list(opts.keys()):
             arcHeightStart = opts['arc_height_start']
-        if 'arc_height_end' in opts.keys():
+        if 'arc_height_end' in list(opts.keys()):
             arcHeightEnd = opts['arc_height_end']
-        if 'arc_start_x_offset' in opts.keys():
+        if 'arc_start_x_offset' in list(opts.keys()):
             arc_start_x_offset = opts['arc_start_x_offset']
-        if 'arc_end_x_offset' in opts.keys():
+        if 'arc_end_x_offset' in list(opts.keys()):
             arc_end_x_offset = opts['arc_end_x_offset']
 
-    if opts == None or 'arc_height' not in opts.keys():
+    if opts == None or 'arc_height' not in list(opts.keys()):
         arcHeight = arcHeightConst + arc_height_index*arcHeightSpacing
     startHeight = arcHeightStart
 
@@ -1768,25 +1768,25 @@ def trace_promoter_start (ax, type, num, start_bp, end_bp, prev_end, scale, line
     highlight_y_extent = 0.8
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'y_offset' in opts.keys():
+        if 'y_offset' in list(opts.keys()):
             y_offset = opts['y_offset']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'arrowhead_height' in opts.keys():
+        if 'arrowhead_height' in list(opts.keys()):
             arrowhead_height = opts['arrowhead_height']
-        if 'arrowhead_length' in opts.keys():
+        if 'arrowhead_length' in list(opts.keys()):
             arrowhead_length = opts['arrowhead_length']
-        if 'highlight_y_extent' in opts.keys():
+        if 'highlight_y_extent' in list(opts.keys()):
             highlight_y_extent = opts['highlight_y_extent']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     dir_fac = 1.0
@@ -1816,7 +1816,7 @@ def trace_promoter_start (ax, type, num, start_bp, end_bp, prev_end, scale, line
                   (end_bp, -highlight_y_extent+y_offset)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14+zorder_add, 
                   path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
     ax.add_patch(p2)
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if start_bp > end_bp:
             write_label(ax, opts['label'], end_bp+((start_bp-end_bp)/2.0), opts=opts)
         else:
@@ -1840,25 +1840,25 @@ def trace_promoter (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth,
     highlight_y_extent = 0.8
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'y_offset' in opts.keys():
+        if 'y_offset' in list(opts.keys()):
             y_offset = opts['y_offset']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'arrowhead_height' in opts.keys():
+        if 'arrowhead_height' in list(opts.keys()):
             arrowhead_height = opts['arrowhead_height']
-        if 'arrowhead_length' in opts.keys():
+        if 'arrowhead_length' in list(opts.keys()):
             arrowhead_length = opts['arrowhead_length']
-        if 'highlight_y_extent' in opts.keys():
+        if 'highlight_y_extent' in list(opts.keys()):
             highlight_y_extent = opts['highlight_y_extent']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     dir_fac = 1.0
@@ -1888,7 +1888,7 @@ def trace_promoter (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth,
                   (end_bp, -highlight_y_extent+y_offset)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14+zorder_add, 
                   path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
     ax.add_patch(p2)
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if start_bp > end_bp:
             write_label(ax, opts['label'], end_bp+((start_bp-end_bp)/2.0), opts=opts)
         else:
@@ -1911,21 +1911,21 @@ def trace_rbs (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
     highlight_y_extent = 0.8
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'y_offset' in opts.keys():
+        if 'y_offset' in list(opts.keys()):
             y_offset = opts['y_offset']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'highlight_y_extent' in opts.keys():
+        if 'highlight_y_extent' in list(opts.keys()):
             highlight_y_extent = opts['highlight_y_extent']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     dir_fac = 1.0
@@ -1943,7 +1943,7 @@ def trace_rbs (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
                   (end_bp, -highlight_y_extent+y_offset)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=14+zorder_add, 
                   path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
     ax.add_patch(p2)
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if start_bp > end_bp:
             write_label(ax, opts['label'], end_bp+((start_bp-end_bp)/2.0), opts=opts)
         else:
@@ -1965,19 +1965,19 @@ def trace_user_defined (ax, type, num, start_bp, end_bp, prev_end, scale, linewi
     y_extent = 1.5
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'hatch' in opts.keys():
+        if 'hatch' in list(opts.keys()):
             hatch = opts['hatch']
-        if 'y_offset' in opts.keys():
+        if 'y_offset' in list(opts.keys()):
             y_offset = opts['y_offset']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     dir_fac = 1.0
@@ -1992,7 +1992,7 @@ def trace_user_defined (ax, type, num, start_bp, end_bp, prev_end, scale, linewi
                   hatch=hatch, zorder=15+zorder_add, 
                   path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
     ax.add_patch(p1)
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if start_bp > end_bp:
             write_label(ax, opts['label'], end_bp+((start_bp-end_bp)/2.0), opts=opts)
         else:
@@ -2016,23 +2016,23 @@ def trace_cds (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
     arrowhead_length = 30.0
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'hatch' in opts.keys():
+        if 'hatch' in list(opts.keys()):
             hatch = opts['hatch']
-        if 'y_offset' in opts.keys():
+        if 'y_offset' in list(opts.keys()):
             y_offset = opts['y_offset']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'arrowhead_height' in opts.keys():
+        if 'arrowhead_height' in list(opts.keys()):
             arrowhead_height = opts['arrowhead_height']
-        if 'arrowhead_length' in opts.keys():
+        if 'arrowhead_length' in list(opts.keys()):
             arrowhead_length = opts['arrowhead_length']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     dir_fac = 1.0
@@ -2050,7 +2050,7 @@ def trace_cds (ax, type, num, start_bp, end_bp, prev_end, scale, linewidth, opts
                   hatch=hatch, zorder=15+zorder_add, 
                   path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
     ax.add_patch(p1)
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if start_bp > end_bp:
             write_label(ax, opts['label'], end_bp+((start_bp-end_bp)/2.0), opts=opts)
         else:
@@ -2073,21 +2073,21 @@ def trace_terminator (ax, type, num, start_bp, end_bp, prev_end, scale, linewidt
     highlight_y_extent = 0.8
     # Reset defaults if provided
     if opts != None:
-        if 'zorder_add' in opts.keys():
+        if 'zorder_add' in list(opts.keys()):
             zorder_add = opts['zorder_add']
-        if 'color' in opts.keys():
+        if 'color' in list(opts.keys()):
             color = opts['color']
-        if 'y_offset' in opts.keys():
+        if 'y_offset' in list(opts.keys()):
             y_offset = opts['y_offset']
-        if 'y_extent' in opts.keys():
+        if 'y_extent' in list(opts.keys()):
             y_extent = opts['y_extent']
-        if 'x_extent' in opts.keys():
+        if 'x_extent' in list(opts.keys()):
             x_extent = opts['x_extent']
-        if 'highlight_y_extent' in opts.keys():
+        if 'highlight_y_extent' in list(opts.keys()):
             highlight_y_extent = opts['highlight_y_extent']
-        if 'linewidth' in opts.keys():
+        if 'linewidth' in list(opts.keys()):
             linewidth = opts['linewidth']
-        if 'scale' in opts.keys():
+        if 'scale' in list(opts.keys()):
             scale = opts['scale']
     # Check direction add start padding
     dir_fac = 1.0
@@ -2105,7 +2105,7 @@ def trace_terminator (ax, type, num, start_bp, end_bp, prev_end, scale, linewidt
                   (end_bp, -highlight_y_extent+y_offset)], facecolor=color, edgecolor=color, linewidth=linewidth, zorder=13, 
                   path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
     ax.add_patch(p2)
-    if opts != None and 'label' in opts.keys():
+    if opts != None and 'label' in list(opts.keys()):
         if start_bp > end_bp:
             write_label(ax, opts['label'], end_bp+((start_bp-end_bp)/2.0), opts=opts)
         else:
@@ -2281,7 +2281,7 @@ class DNARenderer:
         first_part = True
 
         for part in parts:
-            keys = part.keys()
+            keys = list(part.keys())
 
             # Check the part has minimal details required
             if 'type' in keys:
@@ -2299,10 +2299,10 @@ class DNARenderer:
                         part['end'] = part_num
                 # Extract custom part options (if available)
                 part_opts = None
-                if 'opts' in part.keys():
+                if 'opts' in list(part.keys()):
                     part_opts = part['opts']
                 # Use the correct renderer
-                if 'renderer' in part.keys():
+                if 'renderer' in list(part.keys()):
                     # Use custom renderer
                     prev_start, prev_end = part['renderer'](ax, part['type'], part_num, 
                                      part['start'], part['end'], prev_end,
@@ -2318,7 +2318,7 @@ class DNARenderer:
                         first_part = False
                 else:
                     # Use standard renderer, if one exists
-                    if part['type'] in part_renderers.keys():
+                    if part['type'] in list(part_renderers.keys()):
                         prev_start, prev_end = part_renderers[part['type']](ax, 
                                        part['type'], part_num, 
                                        part['start'], part['end'], 
@@ -2342,17 +2342,17 @@ class DNARenderer:
         if regs != None:
 
             for reg in regs:
-                keys = reg.keys()
+                keys = list(reg.keys())
 
                 # Check the part has minimal details required
                 if 'type' in keys and 'from_part' in keys and 'to_part' in keys:
                     # Extract custom part options (if available)
 
                     reg_opts = None
-                    if 'opts' in reg.keys():
+                    if 'opts' in list(reg.keys()):
                         reg_opts = reg['opts']
                     
-                    if reg['type'] in reg_renderers.keys():
+                    if reg['type'] in list(reg_renderers.keys()):
                         
                         ##############################################################################
                         arcstart = (reg['from_part']['start'] + reg['from_part']['end']) / 2
@@ -2372,17 +2372,17 @@ class DNARenderer:
 
             # second pass to render all the arcs
             for reg in regs:
-                keys = reg.keys()
+                keys = list(reg.keys())
 
                 # Check the part has minimal details required
                 if 'type' in keys and 'from_part' in keys and 'to_part' in keys:
                     # Extract custom part options (if available)
 
                     reg_opts = None
-                    if 'opts' in reg.keys():
+                    if 'opts' in list(reg.keys()):
                         reg_opts = reg['opts']
                     
-                    if reg['type'] in reg_renderers.keys():
+                    if reg['type'] in list(reg_renderers.keys()):
                         
                         ##############################################################################
                         # arc height algorithm: greedy from left-to-right on DNA design
@@ -2479,7 +2479,7 @@ class DNARenderer:
         """ Annotate a plot at a user specified location and offset.
         """
         # Annotations show be placed on top of existing design
-        if 'opts' not in part.keys():
+        if 'opts' not in list(part.keys()):
             part['opts'] = {'zorder_add': annotate_zorder}
         else:
             part['opts']['zorder_add'] = annotate_zorder
@@ -2525,7 +2525,7 @@ def plot_sbol_designs (axes, dna_designs, regulations=None, plot_params={}, plot
         The y-axis range for each axis.
     """
     # Standard plotting parameters
-    if 'axis_y' not in plot_params.keys():
+    if 'axis_y' not in list(plot_params.keys()):
         plot_params['axis_y'] = 35
     left_pad = 0.0
     right_pad = 0.0
@@ -2533,13 +2533,13 @@ def plot_sbol_designs (axes, dna_designs, regulations=None, plot_params={}, plot
     linewidth = 1.0
     fig_y = 5.0
     fig_x = 5.0
-    if 'backbone_pad_left' in plot_params.keys():
+    if 'backbone_pad_left' in list(plot_params.keys()):
         left_pad = plot_params['backbone_pad_left']
-    if 'backbone_pad_right' in plot_params.keys():
+    if 'backbone_pad_right' in list(plot_params.keys()):
         right_pad = plot_params['backbone_pad_right']
-    if 'scale' in plot_params.keys():
+    if 'scale' in list(plot_params.keys()):
         scale = plot_params['scale']
-    if 'linewidth' in plot_params.keys():
+    if 'linewidth' in list(plot_params.keys()):
         linewidth = plot_params['linewidth']
     dr = DNARenderer(scale=scale, linewidth=linewidth,
                          backbone_pad_left=left_pad, 
@@ -2684,7 +2684,7 @@ def load_design_from_gff (filename, chrom, type_map=dpl_default_type_map, region
                         part_name = key_value[1]
                     else:
                         part_attribs[key_value[0]] = convert_attrib(key_value[1])
-            if part_name != None and cur_chrom == chrom and part_type in type_map.keys():
+            if part_name != None and cur_chrom == chrom and part_type in list(type_map.keys()):
                 # Check feature start falls in region
                 if region != None and (start_bp > region[0] and start_bp < region[1]):
                     gff.append([part_name, type_map[part_type], part_dir, start_bp, end_bp, part_attribs])

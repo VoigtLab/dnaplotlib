@@ -142,7 +142,7 @@ def insert_annotation_upstream(parent_component, insert_ann, downstream_ann):
         #print i_ann, ann.uri
         if downstream_ann in ann.precedes:
             upstream_uri = ann.uri  # finds the annotation upstream, because it owns the precedes
-    print 'Upstream uri: %s' %upstream_uri
+    print('Upstream uri: %s' %upstream_uri)
     upstream_ann = parent_component.annotations[upstream_uri]
     insert_annotation_downstream(parent_component, upstream_ann, insert_ann)
 
@@ -160,11 +160,11 @@ def assemble_subcomponents(parent_component):
 
 def print_downstream_Annotations(ann):
     reader_head = ann
-    print reader_head.uri,
+    print(reader_head.uri, end=' ')
     while reader_head.precedes:
         reader_head = reader_head.precedes[0]
-        print '->', reader_head.uri,
-    print
+        print('->', reader_head.uri, end=' ')
+    print()
 
 #def write_to_fasta(seq_name, nucleotides, col_length = 20) :
 def write_to_fasta(entries, col_length = 20) :
@@ -197,7 +197,7 @@ def parse_fasta(fasta_str):
                 nucleotides = nucleotides.replace('\r', '')
                 parsed_entries.append((seq_name, nucleotides))
             except:
-                print('Invalid entry: %s' %entry)
+                print(('Invalid entry: %s' %entry))
         return parsed_entries
 
 def getSequenceAnnotationsAtBaseNo(parent_component, base_no, annotations_found = None):
@@ -313,11 +313,11 @@ def calculate_identity(dna_component) :
     for ann in flatten_subtree(dna_component):
         if is_match(ann.subcomponent):
             region_length = ann.end - ann.start + 1
-            print ann.start, ann.end, region_length
+            print(ann.start, ann.end, region_length)
             matched_regions.append(region_length)
     total_matched = sum(matched_regions)
     identity = float(total_matched)/float(len(reference_seq)) * 100.
-    print "Identity", total_matched, len(reference_seq)
+    print("Identity", total_matched, len(reference_seq))
     return identity
 
 def calculate_error(dna_component) :
@@ -326,12 +326,12 @@ def calculate_error(dna_component) :
     for ann in flatten_subtree(dna_component):
         if is_mutation(ann.subcomponent):
             region_length = ann.end - ann.start + 1
-            print ann.start, ann.end, region_length
+            print(ann.start, ann.end, region_length)
 
             mismatched_regions.append(region_length)
     total_mismatched = sum(mismatched_regions)
     percent_mismatched = float(total_mismatched)/float(len(reference_seq)) * 100.
-    print "Error", total_mismatched, len(reference_seq)
+    print("Error", total_mismatched, len(reference_seq))
     return percent_mismatched
 
 def calculate_ambiguity(dna_component) :
@@ -340,12 +340,12 @@ def calculate_ambiguity(dna_component) :
     for ann in flatten_subtree(dna_component):
         if is_ambiguity(ann.subcomponent):
             region_length = ann.end - ann.start + 1
-            print ann.start, ann.end, region_length
+            print(ann.start, ann.end, region_length)
 
             ambiguous_regions.append(region_length)
     total_ambiguous_region = sum(ambiguous_regions)
     percent_ambiguity = float(total_ambiguous_region)/float(len(reference_seq)) * 100.
-    print "Ambiguity", total_ambiguous_region, len(reference_seq)
+    print("Ambiguity", total_ambiguous_region, len(reference_seq))
     return percent_ambiguity
 
 def calculate_coverage(dna_component) :
@@ -355,12 +355,12 @@ def calculate_coverage(dna_component) :
         if is_match(ann.subcomponent) or is_mutation(ann.subcomponent) or is_ambiguity(ann.subcomponent):
 
             region_length = ann.end - ann.start + 1
-            print ann.start, ann.end, region_length
+            print(ann.start, ann.end, region_length)
 
             covered_regions.append(region_length)
     total_covered_region = sum(covered_regions)
     percent_coverage = float(total_covered_region)/float(len(reference_seq)) * 100.
-    print "Coverage:", total_covered_region, len(reference_seq)
+    print("Coverage:", total_covered_region, len(reference_seq))
     return percent_coverage
 
 
@@ -455,7 +455,7 @@ def qc(design, data=None, infile=None):
         # then determine the covered bases in the annotation.  All, part, or several discontiguous parts of an annotation
         # may be covered
         for i_ann, ann in enumerate(leaf_annotations):
-            covered_coordinates = ref_map.keys()  # List of all base coordinates for this design / reference sequence that are covered
+            covered_coordinates = list(ref_map.keys())  # List of all base coordinates for this design / reference sequence that are covered
             # Now narrow down to find just the bases in this annotation
             covered_coordinates = [ x for x in covered_coordinates if x >= ann.start and x <= ann.end ]
             # Now translate into alignment coordinates
@@ -466,16 +466,16 @@ def qc(design, data=None, infile=None):
                 alignment_end = max(alignment_coordinates)
 
                 # Scan alignment
-                print "Verifying %s from %d to %d" %(ann.subcomponent.display_id, ann.start, ann.end)
-                print ''.join([ nt for nt in reference_seq[alignment_start:alignment_end]])
-                print ''.join([ nt for nt in query_seq[alignment_start:alignment_end]])
+                print("Verifying %s from %d to %d" %(ann.subcomponent.display_id, ann.start, ann.end))
+                print(''.join([ nt for nt in reference_seq[alignment_start:alignment_end]]))
+                print(''.join([ nt for nt in query_seq[alignment_start:alignment_end]]))
 
                 # Classification of alignment
                 base_comparisons = [ verify_base(reference_seq[x], query_seq[x]) for x in alignment_coordinates ]
                 for x in alignment_coordinates:
                     comparison = verify_base(reference_seq[x], query_seq[x])
                     if comparison == None:
-                        print x, reference_seq[x], query_seq[x]
+                        print(x, reference_seq[x], query_seq[x])
                 # Select a contiguous region of interest in alignment coordinates
                 # TODO: replace while with for
                 i_alignment = 0
@@ -529,7 +529,7 @@ def qc(design, data=None, infile=None):
                 # Create SequenceAnnotations for QC'd regions
                 doc = design.doc
                 for i_region, region in enumerate(regions):
-                    print i_region
+                    print(i_region)
                     qc_start, qc_end = region[0]
                     qc_classification = region[1]
                     n_components = len(doc.components)
@@ -549,7 +549,7 @@ def qc(design, data=None, infile=None):
                             annotated_region.subcomponent = sbol.DNAComponent(doc,"%s/AssemblyErrors/SA%d/DC%d" %(design.uri, n_annotations, n_components) )
                             annotated_region.subcomponent.display_id = ""
                             annotated_region.subcomponent.type = qc_classification
-                    print "Adding %s to %s from %d to %d" %(annotated_region.uri, ann.subcomponent.display_id, annotated_region.start, annotated_region.end)
+                    print("Adding %s to %s from %d to %d" %(annotated_region.uri, ann.subcomponent.display_id, annotated_region.start, annotated_region.end))
                     ann.subcomponent.annotations.append(annotated_region)
 
 def align(sequencing_data, outfile = None):
@@ -622,16 +622,16 @@ def scrape_parts(doc, part_files, parts_list, TARGET_DIR = '.'):
     # doc is the Document to which the scraped parts will be added
     # part_files should be a list of file names without .xml extension
     for pf in part_files:
-        print pf
+        print(pf)
         sbol_in = sbol.Document()
         sbol_in.read(TARGET_DIR + '/' + pf + '.xml')
-        print "Components in infile", len(sbol_in.components)
+        print("Components in infile", len(sbol_in.components))
 
         for i_dc, dc in enumerate(sbol_in.components):
             try:
                 if dc.uri in parts_list:
                     dc.move(doc)
             except:
-                print 'error in ', i_dc
+                print('error in ', i_dc)
         libsbol.deleteDocument(sbol_in.ptr)
     return doc

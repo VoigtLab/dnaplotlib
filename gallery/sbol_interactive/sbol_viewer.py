@@ -43,7 +43,7 @@ design = []
 for dc in module:
     SO_term = dc.type.split('/')[-1]
     part = {}
-    if SO_term in dr.SO_terms().keys():
+    if SO_term in list(dr.SO_terms().keys()):
         part['type'] = dr.SO_terms()[SO_term]
     part['name'] = dc.name
     part['fwd'] = True
@@ -81,7 +81,7 @@ for ann in module[0].annotations:
     subcomponents.append(dc)
     SO_term = dc.type.split('/')[-1]
     part = {}
-    if SO_term in dr.SO_terms().keys():
+    if SO_term in list(dr.SO_terms().keys()):
         part['type'] = dr.SO_terms()[SO_term]
     part['name'] = dc.display_id
     part['fwd'] = True

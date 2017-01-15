@@ -2,4 +2,4 @@
 DNAplotlib
 """
 
-from dnaplotlib import *
+from .dnaplotlib import *

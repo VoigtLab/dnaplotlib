@@ -155,7 +155,7 @@ def sbol_promoter (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     l1 = Line2D([start,start],[0,dir_fac*y_extent], linewidth=linewidth, 
                 color=color, zorder=9+zorder_add)
     l2 = Line2D([start,start+dir_fac*x_extent-dir_fac*(arrowhead_length*0.5)],
-                [dir_fac*y_extent,dir_fac*x_extent], linewidth=linewidth, 
+                [dir_fac*y_extent,dir_fac*y_extent], linewidth=linewidth, 
                 color=color, zorder=10+zorder_add)
     ax.add_line(l1)
     ax.add_line(l2)

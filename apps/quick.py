@@ -21,7 +21,7 @@
 
     Allowed colors
        black, gray, red, orange, yellow, green, blue, purple, lightred, lightorange, 
-       lightyellow, lightgreen, lightblue, lightpurple
+       lightyellow, lightgreen, lightblue, lightpurple, white
 """
 
 # Set the backend to use (important for headless servers)
@@ -51,6 +51,7 @@ def process_arguments (input):
 
 	# Colours mapping
 	colors = {}
+	colors['white']  = (1.00,1.00,1.00)
 	colors['black']  = (0.00,0.00,0.00)
 	colors['gray']   = (0.60,0.60,0.60)
 	colors['red']    = (0.89,0.10,0.11)

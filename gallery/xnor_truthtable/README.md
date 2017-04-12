@@ -1,4 +1,4 @@
-#XNOR Truthtable 
+# XNOR Truthtable 
 
 <img src="xnor_truthtable.png" width="400px"/>
 

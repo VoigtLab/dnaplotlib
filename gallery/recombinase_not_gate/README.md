@@ -1,4 +1,4 @@
-#Recombinase NOT-gate
+# Recombinase NOT-gate
 
 <img src="recombinase_not_gate.png" width="400px"/>
 

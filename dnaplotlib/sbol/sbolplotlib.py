@@ -16,11 +16,6 @@ DNAplotlib SBOL Functionality
 #    OSI Open Software License 3.0 (OSL-3.0) license.
 
 import matplotlib
-# As this is generally used interactively - update backend
-# http://stackoverflow.com/questions/3285193/how-to-switch-backends-in-matplotlib-python
-# matplotlib.use('TkAgg')
-matplotlib.pyplot.switch_backend('TkAgg')
-
 import matplotlib.pyplot as plt
 
 from matplotlib.patches import Polygon, Ellipse, Wedge, Circle, PathPatch, Rectangle
@@ -70,7 +65,7 @@ class SBOLRenderer(dpl.DNARenderer):
         'SO_0001978': 'Signature',
         }
 
-    def renderSBOL(self, ax, target_component, part_renderers, opts=None):
+    def renderSBOL(self, ax, target_component, part_renderers, opts=None, plot_backbone=True):
         """
         Render a design from an SBOL DNA Component
 
@@ -83,6 +78,10 @@ class SBOLRenderer(dpl.DNARenderer):
             An sbol.DNAComponent that contains the design to draw. The design must contain a series of subcomponents
             arranged in linear order
 
+        part_renderers : dict(functions)
+            Dict of functions where the key in the part type and the dictionary returns
+            the function to be used to draw that part type.
+
         Returns
         -------
         start : float
@@ -91,49 +90,6 @@ class SBOLRenderer(dpl.DNARenderer):
         end : float
             The x-point in the axis space that drawing ends.
         """
-        def drill_down(event):
-            """
-            drill_down is the event handler for the plot.  If a user clicks, it will
-            drill down a level in the SBOL hierarchy
-            """
-            if event.xdata != None and event.ydata != None:
-                print((event.xdata, event.ydata))
-                for i_part, part in enumerate(dpl_design):
-                    if event.xdata > part['start'] and event.xdata < part['end']:
-                        selected_component = sbol_design[i_part]
-                        # plt.close()
-                        # fig = plt.figure()
-                        # ax = plt.gca()
-                        # start, end = self.renderSBOL(ax, selected_component, part_renderers)
-                        # ax.set_xlim([start, end])
-                        # ax.set_ylim([-18,18])
-                        # ax.set_aspect('equal')
-                        # ax.set_xticks([])
-                        # ax.set_yticks([])
-                        # ax.axis('off')
-                        width = (part['end'] - part['start'])
-                        height = 18
-                        # ax.add_patch(Rectangle((event.xdata, -9), width, height, facecolor="grey"))
-                        ax.add_patch(Rectangle(( part['start'], -5), 10, 10, facecolor="grey", zorder=100))
-                        fig = plt.gcf()
-                        fig.canvas.draw()
-                        print((part['name']))
-
-
-        def _onMotion(event):
-            if event.xdata != None and event.ydata != None: # mouse is inside the axes
-                print((event.xdata, event.ydata))
-                for i_part, part in enumerate(dpl_design):
-                    if event.xdata > part['start'] and event.xdata < part['end']:
-                        selected_component = sbol_design[i_part]
-                        width = (part['end'] - part['start'])
-                        height = 18
-                        # ax.add_patch(Rectangle((event.xdata, -9), width, height, facecolor="grey"))
-                        ax.add_patch(Rectangle(( part['start'], -5), 10, 10, facecolor="grey"))
-                        fig = plt.gcf()
-                        fig.canvas.draw()
-                        print((part['name']))
-
         dpl_design = []  # The SBOL data will be converted to a list of dictionaries used by DNAPlotLib
         sbol_design = []  # Contains a list of DNA components corresponding to the items in dpl_design
         try:
@@ -163,21 +119,6 @@ class SBOLRenderer(dpl.DNARenderer):
                 END_OF_DESIGN = True
             else:
                 current_ann = current_ann.precedes[0]  # Iterate to the next downstream annotation
-        start, end = self.renderDNA(ax, dpl_design, part_renderers)
-
-        # Display part labels
-        # The label configuration specified here should be factored out.  However, the label needs to know the 'start' and 'end' values of each part
-        #for part in dpl_design:
-        #    label_center = (part['start'] + part['end']) / 2
-        #    label_opts = { 'label_size' : 12, 'label_y_offset': -12 }
-        #    dpl.write_label(ax, part['name'], label_center, label_opts)
-
-        # Connect event handler
-        fig = plt.gcf()
-        cid1 = fig.canvas.mpl_connect('button_press_event', drill_down)
-        cid2 = fig.canvas.mpl_connect('motion_notify_event', _onMotion)
-
-        # Return type differs from renderDNA
-        #return dpl_design
+        
+        start, end = self.renderDNA(ax, dpl_design, part_renderers, plot_backbone=plot_backbone)
         return start, end
-

@@ -2325,13 +2325,13 @@ class DNARenderer:
                                        prev_end, self.scale, 
                                        self.linewidth, opts=part_opts)
                         
-                        #update start,end for regulation
-                        #if part['fwd'] == True:
-                        #    part['start'] = prev_start
-                        #    part['end'] = prev_end
-                        #else:
-                        #    part['start'] = prev_end
-                        #    part['end'] = prev_start
+                        #update start,end for regulation [TEG]
+                        if part['fwd'] == True:
+                            part['start'] = prev_start
+                            part['end'] = prev_end
+                        else:
+                            part['start'] = prev_end
+                            part['end'] = prev_start
                         
                         if first_part == True:
                             first_start = prev_start

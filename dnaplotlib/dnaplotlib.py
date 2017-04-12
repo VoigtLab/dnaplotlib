@@ -63,7 +63,7 @@ __author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>\n\
                Bryan Der <bder@mit.edu>\n\
                Emerson Glassey <eglassey@mit.edu>'
 __license__ = 'MIT'
-__version__ = '1.0'
+__version__ = '1.1'
 
 
 ###############################################################################

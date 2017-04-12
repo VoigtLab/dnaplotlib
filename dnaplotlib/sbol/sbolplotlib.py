@@ -31,7 +31,7 @@ import sbol
 __author__  = 'Bryan Bartley <bartleyba@sbolstandard.org>\n\
                Thomas E. Gorochowski <tom@chofski.co.uk>'
 __license__ = 'MIT'
-__version__ = '1.0'
+__version__ = '1.1'
 
 class SBOLRenderer(dpl.DNARenderer):
 

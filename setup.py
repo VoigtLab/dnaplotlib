@@ -1,7 +1,7 @@
 from distutils.core import setup
 setup(
   name = 'dnaplotlib',
-  packages = ['dnaplotlib'],
+  packages = ['dnaplotlib','dnaplotlib.sbol'],
   version = '1.0',
   description = 'Genetic design visualization',
   author = 'Thomas Gorochowski, ',

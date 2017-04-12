@@ -3,7 +3,7 @@ setup(
   name = 'dnaplotlib',
   packages = ['dnaplotlib'],
   version = '1.0',
-  description = 'A random test lib',
+  description = 'Genetic design visualization',
   author = 'Thomas Gorochowski, ',
   author_email = 'tom@chofski.co.uk',
   url = 'https://github.com/VoigtLab/dnaplotlib',

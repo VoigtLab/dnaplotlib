@@ -1,4 +1,4 @@
-#Input BED
+# Input BED
 
 <img src="input_bed.png" width="400px"/>
 

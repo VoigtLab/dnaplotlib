@@ -86,6 +86,12 @@ p4_2 = {'type':'Promoter', 'name':'p6', 'fwd':True, 'opts':{'linewidth':lw, 'col
 # How much to lighten OFF components
 off_fac = 0.7
 
+print('black', lighten_color(col_map['black'],off_fac))
+print('red', lighten_color(col_map['red'],off_fac))
+print('green', lighten_color(col_map['green'],off_fac))
+print('blue', lighten_color(col_map['blue'],off_fac))
+print('orange', lighten_color(col_map['orange'],off_fac))
+
 pA_OFF = {'type':'Promoter', 'name':'pA', 'fwd':True, 'opts':{'linewidth':lw, 'color':lighten_color(col_map['black'],off_fac)}}
 pB_OFF = {'type':'Promoter', 'name':'pB', 'fwd':True, 'opts':{'linewidth':lw, 'color':lighten_color(col_map['black'],off_fac)}}
 p1_OFF = {'type':'Promoter', 'name':'p3', 'fwd':True, 'opts':{'linewidth':lw, 'color':lighten_color(col_map['red'],off_fac)}}

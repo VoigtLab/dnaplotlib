@@ -1,4 +1,4 @@
-#SBOL Visual Parts & Customization
+# SBOL Visual Parts & Customization
 
 <img src="all_parts.png" width="600px"/>
 

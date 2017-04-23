@@ -1,4 +1,4 @@
-#Input GFF
+# Input GFF
 
 <img src="input_gff.png" width="400px"/>
 

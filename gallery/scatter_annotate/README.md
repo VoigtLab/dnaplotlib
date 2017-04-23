@@ -1,4 +1,4 @@
-#Annotated Scatter
+# Annotated Scatter
 
 <img src="scatter_annotate.png" width="400px"/>
 

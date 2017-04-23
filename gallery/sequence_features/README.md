@@ -1,4 +1,4 @@
-#Sequence Features
+# Sequence Features
 
 <img src="sequence_features.png" width="400px"/>
 

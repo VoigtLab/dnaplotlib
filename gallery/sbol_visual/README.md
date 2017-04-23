@@ -1,4 +1,4 @@
-#SBOL Visual
+# SBOL Visual
 
 <img src="sbol_visual.png" width="400px"/>
 

@@ -1719,13 +1719,7 @@ def regulation (ax, type, num, from_part, to_part, scale, linewidth, arc_height_
                 linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
     line_across = Line2D([start,end],[top,top], 
                 linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
-    
-    # To ensure no artifacts in the arrow
-    bit_to_add = linewidth
-    if to_part['fwd'] == False:
-        bit_to_add = -linewidth
-
-    line_toward = Line2D([end,end],[top,arcHeightEnd+bit_to_add], 
+    line_toward = Line2D([end,end],[top,arcHeightEnd], 
                 linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
     line_rep    = Line2D([end-arrowhead_length,end+arrowhead_length],[arcHeightEnd,arcHeightEnd], 
                 linewidth=linewidth, color=color, zorder=12, linestyle='-')
@@ -2331,7 +2325,7 @@ class DNARenderer:
                                        prev_end, self.scale, 
                                        self.linewidth, opts=part_opts)
                         
-                        #update start,end for regulation (THIS CAUSES ISSUES WITH DIRECTION)
+                        #update start,end for regulation [TEG]
                         if part['fwd'] == True:
                             part['start'] = prev_start
                             part['end'] = prev_end

@@ -4,7 +4,7 @@ DNAplotlib is a library that enables highly customizable visualization of indivi
 
 If you make use of DNAplotlib in any publications, we kindly ask that the following paper is cited:
 
-<a href="http://pubs.acs.org/doi/abs/10.1021/acssynbio.6b00252">Der B.S., Glassey E., Bartley B.A., Enghuus C., Goodman D.B., Gordon D.B., Voigt C.A., Gorochowski T.E., "DNAplotlib: programmable visualization of genetic designs and associated data", _ACS Synthetic Biology_, 2016.</a>
+<a href="http://pubs.acs.org/doi/abs/10.1021/acssynbio.6b00252">Der B.S., Glassey E., Bartley B.A., Enghuus C., Goodman D.B., Gordon D.B., Voigt C.A., Gorochowski T.E., "DNAplotlib: programmable visualization of genetic designs and associated data", _ACS Synthetic Biology_, 2016. (DOI: 10.1021/acssynbio.6b00252)</a>
 
 ## Installation
 The DNAplotlib library is contained within the `dnaplotlib.py` file in the `lib` directory and requires Python 2.6 and matplotlib 1.2 or newer. To install add the location of this file to your `PYTHONPATH` and you are good to: `import dnaplotlib`

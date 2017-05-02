@@ -1,0 +1,21 @@
+language: python
+
+sudo: false
+
+install:
+  # Upgrade pip and setuptools. Mock has issues with the default version of
+  # setuptools
+  - |
+    # Setup environment
+    ccache -s
+    git describe
+    # Upgrade pip and setuptools and wheel to get as clean an install as possible
+    pip install --upgrade pip
+    pip install --upgrade wheel
+    pip install --upgrade setuptools
+  - |
+    # Install dependencies from pypi
+    pip install $PRE python-dateutil $NUMPY pyparsing!=2.1.6 $PANDAS cycler codecov coverage $MOCK $NOSE
+    pip install $PRE -r doc-requirements.txt
+    # pytest-cov>=2.3.1 due to https://github.com/pytest-dev/pytest-cov/issues/124
+    pip install $PRE pytest 'pytest-cov>=2.3.1' pytest-faulthandler pytest-rerunfailures pytest-timeout pytest-w

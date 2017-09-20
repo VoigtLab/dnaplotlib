@@ -1663,7 +1663,7 @@ def regulation (ax, type, num, from_part, to_part, scale, linewidth, arc_height_
     """
 
     color = (0.0,0.0,0.0)
-    arrowhead_length = 4
+    arrowhead_length = 3
     linestyle = '-'
     arcHeightConst = 15
     arcHeightSpacing = 5
@@ -1708,18 +1708,21 @@ def regulation (ax, type, num, from_part, to_part, scale, linewidth, arc_height_
     top = arcHeight;
     base = startHeight;
     indHeight = arrowhead_length
-    
+    corr = linewidth
+
     if to_part['fwd'] == False:
         base = -1*startHeight
         arcHeightEnd = -arcHeightEnd
         top  = -1*arcHeight
         indHeight = -1*arrowhead_length
+        corr *= -1
+
 
     line_away   = Line2D([start,start],[base,top], 
                 linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
     line_across = Line2D([start,end],[top,top], 
                 linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
-    line_toward = Line2D([end,end],[top,arcHeightEnd], 
+    line_toward = Line2D([end,end],[top,arcHeightEnd+corr], 
                 linewidth=linewidth, color=color, zorder=12, linestyle=linestyle)
     line_rep    = Line2D([end-arrowhead_length,end+arrowhead_length],[arcHeightEnd,arcHeightEnd], 
                 linewidth=linewidth, color=color, zorder=12, linestyle='-')

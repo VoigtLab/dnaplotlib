@@ -1,0 +1,708 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:s="http://sbols.org/v1#">
+ <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_T9002">
+  <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000804"/>
+  <rdf:type rdf:resource="http://purl.obolibrary.org/obo/signalling"/>
+  <s:displayId>BBa_T9002</s:displayId>
+  <s:name>T9002</s:name>
+  <s:description>GFP Producer Controlled by 3OC6HSL Receiver Device</s:description>
+  <s:dnaSequence>
+   <s:DnaSequence rdf:about="http://partsregistry.org/seq/partseq_5591">
+    <s:nucleotides>tccctatcagtgatagagattgacatccctatcagtgatagagatactgagcactactagagaaagaggagaaatactagatgaaaaacataaatgccgacgacacatacagaataattaataaaattaaagcttgtagaagcaataatgatattaatcaatgcttatctgatatgactaaaatggtacattgtgaatattatttactcgcgatcatttatcctcattctatggttaaatctgatatttcaatcctagataattaccctaaaaaatggaggcaatattatgatgacgctaatttaataaaatatgatcctatagtagattattctaactccaatcattcaccaattaattggaatatatttgaaaacaatgctgtaaataaaaaatctccaaatgtaattaaagaagcgaaaacatcaggtcttatcactgggtttagtttccctattcatacggctaacaatggcttcggaatgcttagttttgcacattcagaaaaagacaactatatagatagtttatttttacatgcgtgtatgaacataccattaattgttccttctctagttgataattatcgaaaaataaatatagcaaataataaatcaaacaacgatttaaccaaaagagaaaaagaatgtttagcgtgggcatgcgaaggaaaaagctcttgggatatttcaaaaatattaggttgcagtgagcgtactgtcactttccatttaaccaatgcgcaaatgaaactcaatacaacaaaccgctgccaaagtatttctaaagcaattttaacaggagcaattgattgcccatactttaaaaattaataacactgatagtgctagtgtagatcactactagagccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctctactagagtcacactggctcaccttcgggtgggcctttctgcgtttatatactagagacctgtaggatcgtacaggtttacgcaagaaaatggtttgttatagtcgaataaatactagagtcacacaggaaagtactagatgcgtaaaggagaagaacttttcactggagttgtcccaattcttgttgaattagatggtgatgttaatgggcacaaattttctgtcagtggagagggtgaaggtgatgcaacatacggaaaacttacccttaaatttatttgcactactggaaaactacctgttccatggccaacacttgtcactactttcggttatggtgttcaatgctttgcgagatacccagatcatatgaaacagcatgactttttcaagagtgccatgcccgaaggttatgtacaggaaagaactatatttttcaaagatgacgggaactacaagacacgtgctgaagtcaagtttgaaggtgatacccttgttaatagaatcgagttaaaaggtattgattttaaagaagatggaaacattcttggacacaaattggaatacaactataactcacacaatgtatacatcatggcagacaaacaaaagaatggaatcaaagttaacttcaaaattagacacaacattgaagatggaagcgttcaactagcagaccattatcaacaaaatactccaattggcgatggccctgtccttttaccagacaaccattacctgtccacacaatctgccctttcgaaagatcccaacgaaaagagagaccacatggtccttcttgagtttgtaacagctgctgggattacacatggcatggatgaactatacaaataataatactagagccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctctactagagtcacactggctcaccttcgggtgggcctttctgcgtttata</s:nucleotides>
+   </s:DnaSequence>
+  </s:dnaSequence>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_187_1">
+    <s:precedes rdf:resource="http://partsregistry.org/anot/an_5591_151_2"/>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_R0040">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0005836"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/regulatory"/>
+      <s:displayId>BBa_R0040</s:displayId>
+      <s:name>p(tetR)</s:name>
+      <s:description>TetR repressible promoter</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_151_2">
+    <s:precedes rdf:resource="http://partsregistry.org/anot/an_5591_161_3"/>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_B0034">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000552"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/rbs"/>
+      <s:displayId>BBa_B0034</s:displayId>
+      <s:description>RBS (Elowitz 1999) -- defines RBS efficiency</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_161_3">
+    <s:precedes rdf:resource="http://partsregistry.org/anot/an_5591_603_4"/>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_C0062">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000316"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/coding"/>
+      <s:displayId>BBa_C0062</s:displayId>
+      <s:name>luxr</s:name>
+      <s:description>luxR repressor/activator, (no LVA?)</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_603_4">
+    <s:precedes rdf:resource="http://partsregistry.org/anot/an_5591_145_5"/>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_B0010">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000141"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/terminator"/>
+      <s:displayId>BBa_B0010</s:displayId>
+      <s:description>T1 from E. coli rrnB</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_145_5">
+    <s:precedes rdf:resource="http://partsregistry.org/anot/an_5591_192_6"/>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_B0012">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000141"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/terminator"/>
+      <s:displayId>BBa_B0012</s:displayId>
+      <s:description>TE from coliphageT7</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_192_6">
+    <s:precedes rdf:resource="http://partsregistry.org/anot/an_5591_149_7"/>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_R0062">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0005836"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/regulatory"/>
+      <s:displayId>BBa_R0062</s:displayId>
+      <s:name>lux pR</s:name>
+      <s:description>Promoter (luxR &amp; HSL regulated -- lux pR)</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_149_7">
+    <s:precedes rdf:resource="http://partsregistry.org/anot/an_5591_5309_8"/>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_B0032">
+     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/rbs"/>
+     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000552"/>
+     <s:displayId>BBa_B0032</s:displayId>
+     <s:description>RBS.3 (medium) -- derivative of BBa_0030</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_5309_8">
+    <s:precedes rdf:resource="http://partsregistry.org/anot/an_5591_603_9"/>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_E0040">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000316"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/coding"/>
+      <s:displayId>BBa_E0040</s:displayId>
+      <s:name>GFP</s:name>
+      <s:description>green fluorescent protein derived from jellyfish Aequeora victoria wild-type GFP (SwissProt: P42212</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_603_9">
+    <s:precedes rdf:resource="http://partsregistry.org/anot/an_5591_145_10"/>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_B0010">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000141"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/terminator"/>
+      <s:displayId>BBa_B0010</s:displayId>
+      <s:description>T1 from E. coli rrnB</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_145_10">
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_B0012">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000141"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/terminator"/>
+      <s:displayId>BBa_B0012</s:displayId>
+      <s:description>TE from coliphageT7</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_5114_1">
+    <s:precedes rdf:resource="http://partsregistry.org/anot/an_5591_5339_2"/>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_F2620">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000804"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/signalling"/>
+      <s:displayId>BBa_F2620</s:displayId>
+      <s:description>3OC&lt;sub&gt;6&lt;/sub&gt;HSL -&gt; PoPS Receiver</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_5339_2">
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_E0240">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000804"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/reporter"/>
+      <s:displayId>BBa_E0240</s:displayId>
+      <s:name>GFP report</s:name>
+      <s:description>GFP generator</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_5114_1">
+    <s:precedes rdf:resource="http://partsregistry.org/anot/an_5591_5339_2"/>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_F2620">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000804"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/signalling"/>
+      <s:displayId>BBa_F2620</s:displayId>
+      <s:description>3OC&lt;sub&gt;6&lt;/sub&gt;HSL -&gt; PoPS Receiver</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/an_5591_5339_2">
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_E0240">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000804"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/reporter"/>
+      <s:displayId>BBa_E0240</s:displayId>
+      <s:name>GFP report</s:name>
+      <s:description>GFP generator</s:description>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/sc_5591_1_1">
+    <s:precedes rdf:resource="http://partsregistry.org/anot/an_5591_5339_2"/>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/RFC_10">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000804"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/scar"/>
+      <s:displayId>RFC_10</s:displayId>
+      <s:name>[10]</s:name>
+      <s:dnaSequence>
+       <s:DnaSequence rdf:about="http://partsregistry.org/seq/scarseq_1">
+        <s:nucleotides>tactagag</s:nucleotides>
+       </s:DnaSequence>
+      </s:dnaSequence>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565164">
+    <s:bioStart>1</s:bioStart>
+    <s:bioEnd>19</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565164">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000409"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/binding"/>
+      <s:displayId>f_1565164</s:displayId>
+      <s:name>TetR 1</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565165">
+    <s:bioStart>1</s:bioStart>
+    <s:bioEnd>54</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_R0040">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/biobrick"/>
+      <s:displayId>BBa_R0040</s:displayId>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565166">
+    <s:bioStart>20</s:bioStart>
+    <s:bioEnd>25</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565166">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000167"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/promoter"/>
+      <s:displayId>f_1565166</s:displayId>
+      <s:name>-35</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565167">
+    <s:bioStart>26</s:bioStart>
+    <s:bioEnd>44</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565167">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000409"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/binding"/>
+      <s:displayId>f_1565167</s:displayId>
+      <s:name>TetR 2</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565168">
+    <s:bioStart>43</s:bioStart>
+    <s:bioEnd>48</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565168">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000167"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/promoter"/>
+      <s:displayId>f_1565168</s:displayId>
+      <s:name>-10</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565173">
+    <s:bioStart>63</s:bioStart>
+    <s:bioEnd>74</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_B0034">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/biobrick"/>
+      <s:displayId>BBa_B0034</s:displayId>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565172">
+    <s:bioStart>67</s:bioStart>
+    <s:bioEnd>70</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565172">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000856"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/conserved"/>
+      <s:displayId>f_1565172</s:displayId>
+      <s:name>conserved</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565188">
+    <s:bioStart>81</s:bioStart>
+    <s:bioEnd>836</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_C0062">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/biobrick"/>
+      <s:displayId>BBa_C0062</s:displayId>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565187">
+    <s:bioStart>81</s:bioStart>
+    <s:bioEnd>830</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565187">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000316"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/cds"/>
+      <s:displayId>f_1565187</s:displayId>
+      <s:name>luxR</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565186">
+    <s:bioStart>81</s:bioStart>
+    <s:bioEnd>82</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565186">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000804"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/biobrick"/>
+      <s:displayId>f_1565186</s:displayId>
+      <s:name>prefix</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565189">
+    <s:bioStart>254</s:bioStart>
+    <s:bioEnd>254</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565189">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0001017"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/s_mutation"/>
+      <s:displayId>f_1565189</s:displayId>
+      <s:name>T</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565190">
+    <s:bioStart>572</s:bioStart>
+    <s:bioEnd>572</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565190">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0001017"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/s_mutation"/>
+      <s:displayId>f_1565190</s:displayId>
+      <s:name>A</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565191">
+    <s:bioStart>837</s:bioStart>
+    <s:bioEnd>861</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565191">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000804"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/barcode"/>
+      <s:displayId>f_1565191</s:displayId>
+      <s:name>barcode</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565196">
+    <s:bioStart>870</s:bioStart>
+    <s:bioEnd>949</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_B0010">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/biobrick"/>
+      <s:displayId>BBa_B0010</s:displayId>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565197">
+    <s:bioStart>881</s:bioStart>
+    <s:bioEnd>924</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565197">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000313"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/stem_loop"/>
+      <s:displayId>f_1565197</s:displayId>
+      <s:name>stem_loop</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565206">
+    <s:bioStart>958</s:bioStart>
+    <s:bioEnd>998</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_B0012">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/biobrick"/>
+      <s:displayId>BBa_B0012</s:displayId>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565207">
+    <s:bioStart>965</s:bioStart>
+    <s:bioEnd>984</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565207">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000313"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/stem_loop"/>
+      <s:displayId>f_1565207</s:displayId>
+      <s:name>T7 TE</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565208">
+    <s:bioStart>985</s:bioStart>
+    <s:bioEnd>998</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565208">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000553"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/polya"/>
+      <s:displayId>f_1565208</s:displayId>
+      <s:name>polya</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565209">
+    <s:bioStart>991</s:bioStart>
+    <s:bioEnd>991</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565209">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000327"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/stop"/>
+      <s:displayId>f_1565209</s:displayId>
+      <s:name>stop</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565220">
+    <s:bioStart>1007</s:bioStart>
+    <s:bioEnd>1026</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565220">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000409"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/binding"/>
+      <s:displayId>f_1565220</s:displayId>
+      <s:name>LuxR/HSL</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565221">
+    <s:bioStart>1007</s:bioStart>
+    <s:bioEnd>1061</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_R0062">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/biobrick"/>
+      <s:displayId>BBa_R0062</s:displayId>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565222">
+    <s:bioStart>1026</s:bioStart>
+    <s:bioEnd>1031</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565222">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000167"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/promoter"/>
+      <s:displayId>f_1565222</s:displayId>
+      <s:name>-35</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565223">
+    <s:bioStart>1048</s:bioStart>
+    <s:bioEnd>1053</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565223">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000167"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/promoter"/>
+      <s:displayId>f_1565223</s:displayId>
+      <s:name>-10</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565224">
+    <s:bioStart>1059</s:bioStart>
+    <s:bioEnd>1059</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565224">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000323"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/start"/>
+      <s:displayId>f_1565224</s:displayId>
+      <s:name>start</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565231">
+    <s:bioStart>1070</s:bioStart>
+    <s:bioEnd>1082</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565231">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000552"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/rbs"/>
+      <s:displayId>f_1565231</s:displayId>
+      <s:name>RBS-3\Weak</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565232">
+    <s:bioStart>1070</s:bioStart>
+    <s:bioEnd>1082</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_B0032">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/biobrick"/>
+      <s:displayId>BBa_B0032</s:displayId>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565233">
+    <s:bioStart>1076</s:bioStart>
+    <s:bioEnd>1079</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565233">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000552"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/rbs"/>
+      <s:displayId>f_1565233</s:displayId>
+      <s:name>RBS</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565235">
+    <s:bioStart>1089</s:bioStart>
+    <s:bioEnd>1808</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_E0040">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/biobrick"/>
+      <s:displayId>BBa_E0040</s:displayId>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565240">
+    <s:bioStart>1817</s:bioStart>
+    <s:bioEnd>1896</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_B0010">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/biobrick"/>
+      <s:displayId>BBa_B0010</s:displayId>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565241">
+    <s:bioStart>1828</s:bioStart>
+    <s:bioEnd>1871</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565241">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000313"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/stem_loop"/>
+      <s:displayId>f_1565241</s:displayId>
+      <s:name>stem_loop</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565250">
+    <s:bioStart>1905</s:bioStart>
+    <s:bioEnd>1945</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/part/BBa_B0012">
+      <rdf:type rdf:resource="http://partsregistry.org/type/biobrick"/>
+      <s:displayId>BBa_B0012</s:displayId>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565251">
+    <s:bioStart>1912</s:bioStart>
+    <s:bioEnd>1931</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565251">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000313"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/stem_loop"/>
+      <s:displayId>f_1565251</s:displayId>
+      <s:name>T7 TE</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565252">
+    <s:bioStart>1932</s:bioStart>
+    <s:bioEnd>1945</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565252">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000553"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/polya"/>
+      <s:displayId>f_1565252</s:displayId>
+      <s:name>polya</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+  <s:annotation>
+   <s:SequenceAnnotation rdf:about="http://partsregistry.org/anot/f_1565253">
+    <s:bioStart>1938</s:bioStart>
+    <s:bioEnd>1938</s:bioEnd>
+    <s:strand>+</s:strand>
+    <s:subComponent>
+     <s:DnaComponent rdf:about="http://partsregistry.org/feat/f_1565253">
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/SO_0000327"/>
+      <rdf:type rdf:resource="http://purl.obolibrary.org/obo/stop"/>
+      <s:displayId>f_1565253</s:displayId>
+      <s:name>stop</s:name>
+     </s:DnaComponent>
+    </s:subComponent>
+   </s:SequenceAnnotation>
+  </s:annotation>
+ </s:DnaComponent>
+</rdf:RDF>

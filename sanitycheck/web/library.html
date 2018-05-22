@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/download.js"></script>
+    <script type="text/javascript" src="js/jquery.csv-0.71.js"></script>
+    <script src="js/papaparse.min.js"></script>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="shortcut icon" href="images/cds_icon.jpg">
+
+    <title>dnaplotapp</title>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="index.html">DNAplotlib</a>
+            <ul class="nav">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="single.html">Single design</a></li>
+                <li class="active"><a href="library.html">Library design</a></li>
+                <li><a href="examples.html">Examples</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="margin-top:50px; height: 400px">
+
+    <br>
+    <p style="width: 500px">
+        <b>Generate advanced visualizations of libraries of genetic designs.</b> <br>
+        Information related to parts and designs is required and optionally general
+        plotting attributes and regulation between parts can be included. Examples of
+        each input file containing all the available attributes can be downloaded using
+        the links in each section. Once all files are uploaded, pressing `Submit' will
+        generate the visualization.
+    </p>
+
+    <br>
+
+    <div>
+        <table id="fileinputs">
+            <tr>
+                <td><b>Required</b></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><p>parts</p></td>
+                <td><input type="file" id="parts"   onchange="processPartsFile(this)"></td>
+                <td><a id="dl_parts">example csv</a></td>
+            </tr>
+            <tr>
+                <td><p>designs</p></td>
+                <td><input type="file" id="designs" onchange="processDesignsFile(this)"></td>
+                <td><a id="dl_designs">example csv</a></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b>Optional</b></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><p>params</p></td>
+                <td><input type="file" id="params"  onchange="processParamsFile(this)"></td>
+                <td><a id="dl_params">example csv</a></td>
+            </tr>
+            <tr>
+                <td><p style="margin-right: 50px">regulation</p></td>
+                <td><input type="file" id="reg"     onchange="processRegFile(this)"></td>
+                <td><a id="dl_regs">example csv</a></td>
+            </tr>
+        </table>
+    </div>
+
+
+    <br>
+
+</div>
+
+<div class="container">
+    <form id="formSubmit" action="JavaScript:plotDNA()" method="post">
+        <div>
+            <button class="btn btn-large btn-success" type="submit" id="submit">submit</button>
+            <a id="download_pdf" style="display: block" download="">download PDF</a>
+        </div>
+    </form>
+
+    <div>
+        <h4 id="wait-message" style="display: none">job is running</h4>
+        <img id="img_jpg" src="">
+    </div>
+</div>
+
+</body>
+</html>
+
+
+
+<script>
+
+    var out_pdf = null;
+
+    var params_text = "";
+    var parts_text = "";
+    var designs_text = "";
+    var reg_text = "";
+
+    var params_arrays  = null;
+    var parts_arrays   = null;
+    var designs_arrays = null;
+    var reg_arrays = null;
+
+
+    function processParamsFile(that)
+    {
+        if(that.files && that.files[0])
+        {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                Papa.parse(e.target.result, {
+                    download: false,
+                    header: false,
+                    complete: function(results) {
+                        for(var i=0; i<results.data.length; ++i) {
+                            for(var j=0; j<results.data[i].length; ++j) {
+                                params_text += results.data[i][j] + ",";
+                            }
+                            params_text += '\n';
+                        }
+                        console.log(params_text);
+                    }
+                });
+            }
+            reader.readAsText(that.files[0]);
+        }
+    }
+    function processPartsFile(that)
+    {
+        if(that.files && that.files[0])
+        {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                Papa.parse(e.target.result, {
+                    download: false,
+                    header: false,
+                    complete: function(results) {
+                        for(var i=0; i<results.data.length; ++i) {
+                            for(var j=0; j<results.data[i].length; ++j) {
+                                parts_text += results.data[i][j] + ",";
+                            }
+                            parts_text += '\n';
+                        }
+                        var temp = parts_text.replace(/;/g, "semicolon");
+                        parts_text = temp;
+                    }
+                });
+
+            }
+            reader.readAsText(that.files[0]);
+        }
+    }
+    function processDesignsFile(that)
+    {
+        if(that.files && that.files[0])
+        {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                Papa.parse(e.target.result, {
+                    download: false,
+                    header: false,
+                    complete: function(results) {
+                        for(var i=0; i<results.data.length; ++i) {
+                            for(var j=0; j<results.data[i].length; ++j) {
+                                designs_text += results.data[i][j] + ",";
+                            }
+                            designs_text += '\n';
+                        }
+                        console.log(designs_text);
+                    }
+                });
+            }
+            reader.readAsText(that.files[0]);
+        }
+    }
+    function processRegFile(that)
+    {
+        if(that.files && that.files[0])
+        {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                Papa.parse(e.target.result, {
+                    download: false,
+                    header: false,
+                    complete: function(results) {
+                        for(var i=0; i<results.data.length; ++i) {
+                            for(var j=0; j<results.data[i].length; ++j) {
+                                reg_text += results.data[i][j] + ",";
+                            }
+                            reg_text += '\n';
+                        }
+                        console.log(reg_text);
+                    }
+                });
+                var temp = reg_text.replace(/;/g, "semicolon");
+                reg_text = temp;
+            }
+            reader.readAsText(that.files[0]);
+        }
+    }
+
+    function plotDNA() {
+        jobID = new Date() / 1000;
+        jobID *= 1000;//milliseconds since epoch
+
+        out_pdf = jobID + "_out.pdf";
+        var out_jpg = jobID + "_out.jpg";
+
+        $('#wait-message').show();
+
+        $.ajax({
+            url: "/dnaplotapp/cgi-bin/run_upload.pl",
+            type: "POST",
+            data: 'out_pdf='+out_pdf + '&params='+params_text + '&parts='+parts_text + '&designs='+designs_text + '&reg='+reg_text + '&id='+jobID,
+            success: function() {
+                $('#wait-message').hide();
+                $('#img_jpg').attr('src', "/dnaplotapp/results/"+out_jpg);
+                $('#img_jpg').css('border', '1px solid black');
+                $('#download_pdf').attr('href', '/dnaplotapp/results/'+out_pdf);
+            }
+        });
+    }
+
+    $('a#dl_parts').attr(  {target:'_blank', href:'/dnaplotapp/examples/parts_and_customizations/part_information.csv'});
+    $('a#dl_designs').attr({target:'_blank', href:'/dnaplotapp/examples/parts_and_customizations/dna_designs.csv'});
+    $('a#dl_params').attr( {target:'_blank', href:'/dnaplotapp/examples/parts_and_customizations/plot_parameters.csv'});
+    $('a#dl_regs').attr(   {target:'_blank', href:'/dnaplotapp/examples/parts_and_customizations/reg_information.csv'});
+
+
+</script>
+
+<style>
+
+    input[type="file"] {
+        line-height: 10px;
+    }
+
+</style>

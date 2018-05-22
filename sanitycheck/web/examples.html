@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+    <script src="js/download.js"></script>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="shortcut icon" href="images/cds_icon.jpg">
+
+    <title>dnaplotapp</title>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="index.html">DNAplotlib</a>
+            <ul class="nav">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="single.html">Single design</a></li>
+                <li><a href="library.html">Library design</a></li>
+                <li class="active"><a href="examples.html">Examples</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top:50px; width: 500px" id="examples">
+
+    <a id="all_elements_dl">download</a>
+    <img src="examples/all_elements/all_elements.jpg">
+
+    <a id="parts_custom_dl">download</a>
+    <img src="examples/customizations/customizations.jpg">
+
+
+
+
+    <a id="cello_eugene_dl">download</a>
+    <img src="examples/cello_eugene/cello_eugene_preview.jpg">
+
+    <br><br><br>
+</div>
+
+</body>
+<script>
+
+    $('a#all_elements_dl').attr({target: '_blank',
+        href  : '/dnaplotapp/examples/all_elements.zip'});
+    $('a#parts_custom_dl').attr({target: '_blank',
+        href  : '/dnaplotapp/examples/customizations.zip'});
+    $('a#stata_library_dl').attr({target: '_blank',
+        href  : '/dnaplotapp/examples/stata_library.zip'});
+
+</script>
+</html>
+
+
+<style>
+    img {
+        margin-left: 50px;
+        width: 500px;
+        border: 3px solid gray;
+    }
+
+    #examples a {
+        margin-left: 50px;
+    }
+
+</style>

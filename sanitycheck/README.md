@@ -1,4 +1,6 @@
 # sanitycheck
 
-This directory contains various tools that checks the functionality and robustness of dnaplotlib. 
+This directory contains script that test robustness of dnaplotlib. 
 
+## ComponentDefinition
+- promter: create target_promoter

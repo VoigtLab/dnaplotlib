@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:prov="http://www.w3.org/ns/prov#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:sbol="http://sbols.org/v2#"
+   xmlns:sys-bio="http://sys-bio.org#">
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/Scar/1.0.0">
+    <sbol:displayId>Scar</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/Scar"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001953"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/b0032/1.0.0">
+    <sbol:displayId>b0032</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/b0032"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/bluntRSsite/1.0.0">
+    <sbol:displayId>bluntRSsite</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/bluntRSsite"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000299"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/e0040/1.0.0">
+    <sbol:displayId>e0040</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/e0040"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000552"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#RnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/fiveOverhang/1.0.0">
+    <sbol:displayId>fiveOverhang</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/fiveOverhang"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001932"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#Protein"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/fiveStickyRSSite/1.0.0">
+    <sbol:displayId>fiveStickyRSSite</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/fiveStickyRSSite"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001694"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/origin/1.0.0">
+    <sbol:displayId>origin</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/origin"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000296"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/primerBindingSite/1.0.0">
+    <sbol:displayId>primerBindingSite</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/primerBindingSite"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0005850"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/promoter/1.0.0">
+    <sbol:displayId>promoter</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/promoter"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/protease/1.0.0">
+    <sbol:displayId>protease</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/protease"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001956"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#Protein"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/protein_stability/1.0.0">
+    <sbol:displayId>protein_stability</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/protein_stability"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001955"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#Protein"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/recombination_site/1.0.0">
+    <sbol:displayId>recombination_site</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/recombination_site"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000299"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/restriction_site/1.0.0">
+    <sbol:displayId>restriction_site</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/restriction_site"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001687"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/ribonuclease/1.0.0">
+    <sbol:displayId>ribonuclease</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/ribonuclease"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001977"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#Protein"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/ribozyme/1.0.0">
+    <sbol:displayId>ribozyme</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/ribozyme"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:000037"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#RnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/signature/1.0.0">
+    <sbol:displayId>signature</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/signature"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001978"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/terminator/1.0.0">
+    <sbol:displayId>terminator</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/terminator"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000141"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/threeOverhang/1.0.0">
+    <sbol:displayId>threeOverhang</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/threeOverhang"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001933"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#Protein"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/threeStickyRSSite/1.0.0">
+    <sbol:displayId>threeStickyRSSite</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/threeStickyRSSite"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001690"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+</rdf:RDF>

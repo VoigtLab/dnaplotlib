@@ -136,4 +136,11 @@
     <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
     <sbol:version>1.0.0</sbol:version>
   </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sbols.org/sanitcheck_allComponentDefinitions/userDefined/1.0.0">
+    <sbol:displayId>userDefined</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sbols.org/sanitcheck_allComponentDefinitions/userDefined"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000001"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
 </rdf:RDF>

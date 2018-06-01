@@ -7,7 +7,7 @@
   <sbol:ComponentDefinition rdf:about="http://sbols.org/protein_example/target_protein/1.0.0">
     <sbol:displayId>target_protein</sbol:displayId>
     <sbol:persistentIdentity rdf:resource="http://sbols.org/protein_example/target_protein"/>
-    <sbol:type rdf:resource="http://www.biopax.org/release/biopax- level3.owl#Protein"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
     <sbol:version>1.0.0</sbol:version>
   </sbol:ComponentDefinition>
 </rdf:RDF>

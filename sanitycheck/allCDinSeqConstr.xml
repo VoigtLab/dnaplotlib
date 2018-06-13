@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:prov="http://www.w3.org/ns/prov#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:sbol="http://sbols.org/v2#"
+   xmlns:sys-bio="http://sys-bio.org#">
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/Scar/1.0.0">
+    <sbol:displayId>Scar</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/Scar"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001953"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/b0032/1.0.0">
+    <sbol:displayId>b0032</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/b0032"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/bluntRSsite/1.0.0">
+    <sbol:displayId>bluntRSsite</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/bluntRSsite"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000299"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/e0040/1.0.0">
+    <sbol:displayId>e0040</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/e0040"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000552"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#RnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/fiveOverhang/1.0.0">
+    <sbol:displayId>fiveOverhang</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/fiveOverhang"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001932"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/fiveStickyRSSite/1.0.0">
+    <sbol:displayId>fiveStickyRSSite</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/fiveStickyRSSite"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001694"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/origin/1.0.0">
+    <sbol:displayId>origin</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/origin"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000296"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/primerBindingSite/1.0.0">
+    <sbol:displayId>primerBindingSite</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/primerBindingSite"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0005850"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/promoter/1.0.0">
+    <sbol:displayId>promoter</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/promoter"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/protease/1.0.0">
+    <sbol:displayId>protease</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/protease"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001956"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/protein_stability/1.0.0">
+    <sbol:displayId>protein_stability</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/protein_stability"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001955"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/recombination_site/1.0.0">
+    <sbol:displayId>recombination_site</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/recombination_site"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000299"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/restriction_site/1.0.0">
+    <sbol:displayId>restriction_site</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/restriction_site"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001687"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/ribonuclease/1.0.0">
+    <sbol:displayId>ribonuclease</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/ribonuclease"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001977"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/ribozyme/1.0.0">
+    <sbol:displayId>ribozyme</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/ribozyme"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:000037"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#RnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/root/1.0.0">
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/Scar_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/Scar/1.0.0"/>
+        <sbol:displayId>Scar_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/Scar_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/b0032_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/b0032/1.0.0"/>
+        <sbol:displayId>b0032_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/b0032_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/bluntRSsite_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/bluntRSsite/1.0.0"/>
+        <sbol:displayId>bluntRSsite_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/bluntRSsite_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/e0040_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/e0040/1.0.0"/>
+        <sbol:displayId>e0040_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/e0040_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/fiveOverhang_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/fiveOverhang/1.0.0"/>
+        <sbol:displayId>fiveOverhang_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/fiveOverhang_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/fiveStickyRSSite_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/fiveStickyRSSite/1.0.0"/>
+        <sbol:displayId>fiveStickyRSSite_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/fiveStickyRSSite_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/origin_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/origin/1.0.0"/>
+        <sbol:displayId>origin_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/origin_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/primerBindingSite_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/primerBindingSite/1.0.0"/>
+        <sbol:displayId>primerBindingSite_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/primerBindingSite_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/promoter_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/promoter/1.0.0"/>
+        <sbol:displayId>promoter_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/promoter_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/protease_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/protease/1.0.0"/>
+        <sbol:displayId>protease_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/protease_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/protein_stability_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/protein_stability/1.0.0"/>
+        <sbol:displayId>protein_stability_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/protein_stability_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/recombination_site_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/recombination_site/1.0.0"/>
+        <sbol:displayId>recombination_site_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/recombination_site_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/restriction_site_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/restriction_site/1.0.0"/>
+        <sbol:displayId>restriction_site_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/restriction_site_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/ribonuclease_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/ribonuclease/1.0.0"/>
+        <sbol:displayId>ribonuclease_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/ribonuclease_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/ribozyme_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/ribozyme/1.0.0"/>
+        <sbol:displayId>ribozyme_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/ribozyme_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/signature_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/signature/1.0.0"/>
+        <sbol:displayId>signature_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/signature_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/terminator_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/terminator/1.0.0"/>
+        <sbol:displayId>terminator_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/terminator_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/threeOverhang_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/threeOverhang/1.0.0"/>
+        <sbol:displayId>threeOverhang_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/threeOverhang_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/threeStickyRSSite_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/threeStickyRSSite/1.0.0"/>
+        <sbol:displayId>threeStickyRSSite_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/threeStickyRSSite_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://examples.org/ComponentDefinition/root/userDefined_0/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/userDefined/1.0.0"/>
+        <sbol:displayId>userDefined_0</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/userDefined_0"/>
+        <sbol:roleIntegration rdf:resource="http://sbols.org/v2#mergeRoles"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:displayId>root</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root"/>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint1/1.0.0">
+        <sbol:displayId>constraint1</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/userDefined_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint1"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/signature_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint10/1.0.0">
+        <sbol:displayId>constraint10</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/origin_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint10"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/fiveOverhang_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint11/1.0.0">
+        <sbol:displayId>constraint11</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/protease_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint11"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/origin_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint12/1.0.0">
+        <sbol:displayId>constraint12</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/protein_stability_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint12"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/protease_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint13/1.0.0">
+        <sbol:displayId>constraint13</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/ribonuclease_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint13"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/protein_stability_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint14/1.0.0">
+        <sbol:displayId>constraint14</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/ribozyme_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint14"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/ribonuclease_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint15/1.0.0">
+        <sbol:displayId>constraint15</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/Scar_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint15"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/ribozyme_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint16/1.0.0">
+        <sbol:displayId>constraint16</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/e0040_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint16"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/Scar_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint17/1.0.0">
+        <sbol:displayId>constraint17</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/terminator_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint17"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/e0040_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint18/1.0.0">
+        <sbol:displayId>constraint18</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/b0032_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint18"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/terminator_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint19/1.0.0">
+        <sbol:displayId>constraint19</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/promoter_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint19"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/b0032_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint2/1.0.0">
+        <sbol:displayId>constraint2</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/threeStickyRSSite_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint2"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/userDefined_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint3/1.0.0">
+        <sbol:displayId>constraint3</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/fiveStickyRSSite_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint3"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/threeStickyRSSite_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint4/1.0.0">
+        <sbol:displayId>constraint4</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/primerBindingSite_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint4"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/fiveStickyRSSite_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint5/1.0.0">
+        <sbol:displayId>constraint5</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/bluntRSsite_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint5"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/primerBindingSite_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint6/1.0.0">
+        <sbol:displayId>constraint6</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/recombination_site_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint6"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/bluntRSsite_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint7/1.0.0">
+        <sbol:displayId>constraint7</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/restriction_site_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint7"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/recombination_site_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint8/1.0.0">
+        <sbol:displayId>constraint8</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/threeOverhang_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint8"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/restriction_site_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://examples.org/ComponentDefinition/root/constraint9/1.0.0">
+        <sbol:displayId>constraint9</sbol:displayId>
+        <sbol:object rdf:resource="http://examples.org/ComponentDefinition/root/fiveOverhang_0/1.0.0"/>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/root/constraint9"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://examples.org/ComponentDefinition/root/threeOverhang_0/1.0.0"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/signature/1.0.0">
+    <sbol:displayId>signature</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/signature"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001978"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/terminator/1.0.0">
+    <sbol:displayId>terminator</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/terminator"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000141"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/threeOverhang/1.0.0">
+    <sbol:displayId>threeOverhang</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/threeOverhang"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001933"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/threeStickyRSSite/1.0.0">
+    <sbol:displayId>threeStickyRSSite</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/threeStickyRSSite"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001690"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/userDefined/1.0.0">
+    <sbol:displayId>userDefined</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/userDefined"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000001"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+</rdf:RDF>

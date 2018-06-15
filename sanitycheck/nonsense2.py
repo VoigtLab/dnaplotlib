@@ -12,10 +12,6 @@ def createPromoter(d):
 	promoter = sbol.ComponentDefinition('promoter', sbol.BIOPAX_DNA)
 	promoter.roles = ROLE_IDENTIFIER + "0000167"
 	d.addComponentDefinition(promoter)
-	
-	# create component
-	promoter_0 = sbol.Component('promotor_0')
-	promoter_0.definition = promoter
 	return promoter
 
 	
@@ -25,9 +21,6 @@ def createCDS(d):
 	# referenced from: https://github.com/SynBioDex/pySBOL/blob/master/docs/repositories.rst
 	cds = sbol.ComponentDefinition('b0032', sbol.BIOPAX_DNA)
 	d.addComponentDefinition(cds)
-	
-	cds_0 = sbol.Component('cds_0')
-	cds_0.definition = cds 
 	return cds
 
 def createTerminator(d):

@@ -12,11 +12,12 @@ __version__ = '2.0'
 ###############################################################################
 
 class Part:
-    def __init__ (self, parent_node, name, type, orientation='+', 
+    def __init__(self, parent_node, name, type, orientation='+', 
                   start_position=None, end_position=None):
         self.parent_node = parent_node
         self.name = name
         self.type = type
+        # Orientation of the part, either '+' or '-' (for reverse)
         self.orientation = orientation
         # Relative positions within the module
         self.start_position = start_position
@@ -25,7 +26,7 @@ class Part:
         self.options = {}
 
 class PartList:
-    def __init__ (self, type='DNA'):
+    def __init__(self, type='DNA'):
         # Type of backbone (DNA or RNA)
         self.type = type
         # List of parts making up the segment
@@ -54,7 +55,7 @@ class Module:
 
     def add_part(self, part):
         if len(self.children) > 0:
-            print('Warning: Node already has children, part_list is ignored', self.name)
+            print('Warning: Module already has children, part list is ignored:', self.name)
         self.part_list.add_part(part)
 
 class Design:
@@ -71,14 +72,14 @@ class Design:
         names = []
         for part in part_list.parts:
             names.append(part.name)
-        print(indent+'  Parts: ' + ','.join(names))
+        print(indent + '  Parts: ' + ','.join(names))
 
     def __print_module_tree__(self, starting_module, indent=''):
         # Recursive method to print tree details
         print(indent + 'Module:', starting_module.name)
         if len(starting_module.children) > 0:
             for node in starting_module.children:
-                self.__print_module_tree__(node, indent+'  ')
+                self.__print_module_tree__(node, indent + '  ')
         else:
             self.__print_part_list__(starting_module.part_list, indent)
 

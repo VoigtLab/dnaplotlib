@@ -4,6 +4,7 @@ New DNAplotlib renderer that can handle new data type
 """
 
 from datatype import *
+import xml.etree.ElementTree as ET
 
 __author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>'
 __license__ = 'MIT'
@@ -17,20 +18,20 @@ class PartRenderer:
     """ Class defining the part renders.
     """
 
-    def __init__(self, part_library_filename):
+    def __init__(self, paths, parameters):
         self.part_library_filename = part_library_filename
         # Load strings of the parametric SVG part definitions
 
     def render_svg(self, ax, svg_str, position):
         return 0
 
-    def render_part(self, ax, part, position):
+    def render_part(self, ax, part, start_position):
         return 0
 
 
 # https://github.com/yongyehuang/svg_parser
 # https://docs.python.org/2/library/xml.etree.elementtree.html#module-xml.etree.ElementTree
-
+# https://matplotlib.org/gallery/showcase/firefox.html#sphx-glr-gallery-showcase-firefox-py
 
 class DesignRenderer:
     """ Class defining the rendering funtionality.
@@ -91,309 +92,109 @@ class DesignRenderer:
         self.backbone_pad_right = backbone_pad_right
         self.reg_height = 15
 
-    def SBOL_part_renderers (self):
-        """ Return dictionary of all standard built-in SBOL part renderers.
-        """
-        return {
-            'Promoter'         :sbol_promoter, 
-            'CDS'              :sbol_cds, 
-            'Terminator'       :sbol_terminator,
-            'RBS'              :sbol_rbs,
-            'Scar'             :sbol_scar,
-            'Spacer'           :sbol_spacer,
-            'EmptySpace'       :sbol_empty_space,
-            'Ribozyme'         :sbol_ribozyme,
-            'Ribonuclease'     :sbol_ribonuclease,
-            'ProteinStability' :sbol_protein_stability,
-            'Protease'         :sbol_protease,
-            'Operator'         :sbol_operator,
-            'Origin'           :sbol_origin,
-            'Insulator'        :sbol_insulator,
-            '5Overhang'        :sbol_5_overhang,
-            '3Overhang'        :sbol_3_overhang,
-            'RestrictionSite'  :sbol_restriction_site,
-            'BluntRestrictionSite'   :sbol_blunt_restriction_site,
-            'PrimerBindingSite'      :sbol_primer_binding_site,
-            '5StickyRestrictionSite' :sbol_5_sticky_restriction_site,
-            '3StickyRestrictionSite' :sbol_3_sticky_restriction_site,
-            'UserDefined'      :sbol_user_defined,
-            'Signature'        :sbol_signature}
-
-    def trace_part_renderers (self):
-        """ Return dictionary of all standard built-in trace part renderers.
-        """
-        return {
-            'Promoter'         :trace_promoter, 
-            'CDS'              :trace_cds, 
-            'Terminator'       :trace_terminator,
-            'RBS'              :trace_rbs,
-            'UserDefined'      :trace_user_defined} 
-
-    def std_reg_renderers (self):
-        """ Return dictionary of all standard built-in regulation renderers.
-        """
-        return {
-            'Repression' :repress, 
-            'Activation' :induce,
-            'Connection' :connect}
-
-    def renderDNA (self, ax, parts, part_renderers, regs=None, reg_renderers=None, plot_backbone=True):
-        """ Render the parts on the DNA and regulation.
-
-        Parameters
-        ----------
-        ax : matplotlib.axes
-            Axes to draw the design to.
-
-        parts : list(dict)
-            The design to draw. This is a list of dicts, where each dict relates to
-            a part and must contain the following keys:
-            - name (string)
-            - type (string)  
-            - fwd (bool)
-            - start (float, optional)
-            - end (float, optional)
-            These will then be drawn in accordance with the renders selected
-
-        part_renderers : dict(functions)
-            Dict of functions where the key in the part type and the dictionary returns
-            the function to be used to draw that part type.
-
-        regs : list(dict) (default=None)
-            Regulation present in the design. This is a list of dicts, where each dict
-            relates to a single regulation arc and must contain the following keys:
-            - type (string)
-            - from_part (part object dict)  
-            - to_part (part object dict)
-            These will then be drawn in accordance with the renders selected.
-
-        reg_renderers : dict(functions) (default=None)
-            Dict of functions where the key in the regulation type and the dictionary 
-            returns the function to be used to draw that regulation type.
-
-        Returns
-        -------
-        start : float
-            The x-point in the axis space that drawing begins.
-
-        end : float
-            The x-point in the axis space that drawing ends.
-        """
-        # Update the matplotlib rendering default for drawing the parts (we want mitered edges)
-        matplotlib.rcParams['lines.dash_joinstyle']  = 'miter'
-        matplotlib.rcParams['lines.dash_capstyle']   = 'butt'
-        matplotlib.rcParams['lines.solid_joinstyle'] = 'miter'
-        matplotlib.rcParams['lines.solid_capstyle']  = 'projecting'
-        # Make text editable in Adobe Illustrator
-        matplotlib.rcParams['pdf.fonttype']          = 42 
-        # Plot the parts to the axis
-        part_num = 0
-        prev_end = 0
-        first_start = 0
-        first_part = True
-
-        for part in parts:
-            keys = list(part.keys())
-
-            # Check the part has minimal details required
-            if 'type' in keys:
-                if 'fwd' not in keys:
-                    part['fwd'] = True
-                if 'start' not in keys:
-                    if part['fwd'] == True:
-                        part['start'] = part_num
-                    else:
-                        part['start'] = part_num+1
-                if 'end' not in keys:
-                    if part['fwd'] == True:
-                        part['end'] = part_num+1
-                    else:
-                        part['end'] = part_num
-                # Extract custom part options (if available)
-                part_opts = None
-                if 'opts' in list(part.keys()):
-                    part_opts = part['opts']
-                # Use the correct renderer
-                if 'renderer' in list(part.keys()):
-                    # Use custom renderer
-                    prev_start, prev_end = part['renderer'](ax, part['type'], part_num, 
-                                     part['start'], part['end'], prev_end,
-                                     self.scale, self.linewidth, 
-                                     opts=part_opts)
-
-                    #update start,end for regulation
-                    #part['start'] = prev_start
-                    #part['end'] = prev_end
-
-                    if first_part == True:
-                        first_start = prev_start
-                        first_part = False
-                else:
-                    # Use standard renderer, if one exists
-                    if part['type'] in list(part_renderers.keys()):
-                        prev_start, prev_end = part_renderers[part['type']](ax, 
-                                       part['type'], part_num, 
-                                       part['start'], part['end'], 
-                                       prev_end, self.scale, 
-                                       self.linewidth, opts=part_opts)
-                        
-                        #update start,end for regulation [TEG]
-                        if part['fwd'] == True:
-                            part['start'] = prev_start
-                            part['end'] = prev_end
-                        else:
-                            part['start'] = prev_end
-                            part['end'] = prev_start
-                        
-                        if first_part == True:
-                            first_start = prev_start
-                            first_part = False
-            part_num += 1
-        
-        # first pass to get all of the arcranges
-        if regs != None:
-
-            for reg in regs:
-                keys = list(reg.keys())
-
-                # Check the part has minimal details required
-                if 'type' in keys and 'from_part' in keys and 'to_part' in keys:
-                    # Extract custom part options (if available)
-
-                    reg_opts = None
-                    if 'opts' in list(reg.keys()):
-                        reg_opts = reg['opts']
-                    
-                    if reg['type'] in list(reg_renderers.keys()):
-                        
-                        ##############################################################################
-                        arcstart = (reg['from_part']['start'] + reg['from_part']['end']) / 2
-                        arcend   = (reg['to_part']['start']   + reg['to_part']['end']) / 2
-                        arcrange = [arcstart,arcend]
-                        reg['arclength'] = math.fabs(arcstart-arcend)
-                        reg['arc_height_index'] = 1
-                        ##############################################################################
-
-            #sort regs by arc ranges from shortest to longest
-            regs.sort(key=lambda x: x['arclength'], reverse=False)
-
-            reg_num = 0
-            pos_arc_ranges = [] # arc above DNA backbone if to_part is fwd
-            neg_arc_ranges = [] # arc below DNA backbone if to_part is reverse
-            current_max = 1
-
-            # second pass to render all the arcs
-            for reg in regs:
-                keys = list(reg.keys())
-
-                # Check the part has minimal details required
-                if 'type' in keys and 'from_part' in keys and 'to_part' in keys:
-                    # Extract custom part options (if available)
-
-                    reg_opts = None
-                    if 'opts' in list(reg.keys()):
-                        reg_opts = reg['opts']
-                    
-                    if reg['type'] in list(reg_renderers.keys()):
-                        
-                        ##############################################################################
-                        # arc height algorithm: greedy from left-to-right on DNA design
-                        
-                        arcstart = (reg['from_part']['start'] + reg['from_part']['end']) / 2
-                        arcend   = (reg['to_part']['start']   + reg['to_part']['end']) / 2
-                        
-                        arcmin = min(arcstart,arcend)
-                        arcmax = max(arcstart,arcend)
-                        arcrange = [arcmin,arcmax,reg['arc_height_index']]
-                        arc_height_index = 1
-                        
-                        # arc above if to_part is fwd
-                        if(reg['to_part']['fwd'] == True):
-                            # find max arc height index of ONLY the prior arcs that clash with the current arc
-                            current_max = 1
-                            for r in pos_arc_ranges:
-                                if  (arcrange[0] > r[0] and arcrange[0] < r[1]):
-                                    if(r[2] > current_max):
-                                        current_max = r[2]
-                                elif(arcrange[0] > r[1] and arcrange[0] < r[0]):
-                                    if(r[2] > current_max):
-                                        current_max = r[2]
-                                elif(arcrange[1] > r[0] and arcrange[0] < r[1]):
-                                    if(r[2] > current_max):
-                                        current_max = r[2]
-                                elif(arcrange[1] > r[1] and arcrange[0] < r[0]):
-                                    if(r[2] > current_max):
-                                        current_max = r[2]
-                                    
-                            # if arcs cross over, increment the arc height index
-                            for r in pos_arc_ranges:
-                                if  (arcrange[0] > r[0] and arcrange[0] < r[1]):
-                                    reg['arc_height_index'] = current_max + 1
-                                    arcrange[2] = reg['arc_height_index']
-                                elif(arcrange[0] > r[1] and arcrange[0] < r[0]):
-                                    reg['arc_height_index'] = current_max + 1
-                                    arcrange[2] = reg['arc_height_index']
-                                elif(arcrange[1] > r[0] and arcrange[0] < r[1]):
-                                    reg['arc_height_index'] = current_max + 1
-                                    arcrange[2] = reg['arc_height_index']
-                                elif(arcrange[1] > r[1] and arcrange[0] < r[0]):
-                                    reg['arc_height_index'] = current_max + 1
-                                    arcrange[2] = reg['arc_height_index']
-                            pos_arc_ranges.append(arcrange)
-                        
-                        # arc below if to_part is reverse
-                        else:
-                            # find max arc height index
-                            current_max = 1
-                            for r in neg_arc_ranges:
-                                if  (arcrange[0] > r[0] and arcrange[0] < r[1]):
-                                    if(r[2] > current_max):
-                                        current_max = r[2]
-                                elif(arcrange[0] > r[1] and arcrange[0] < r[0]):
-                                    if(r[2] > current_max):
-                                        current_max = r[2]
-                                elif(arcrange[1] > r[0] and arcrange[0] < r[1]):
-                                    if(r[2] > current_max):
-                                        current_max = r[2]
-                                elif(arcrange[1] > r[1] and arcrange[0] < r[0]):
-                                    if(r[2] > current_max):
-                                        current_max = r[2]
-                            
-                            # if arcs cross over, increment the arc height index
-                            for r in neg_arc_ranges:
-                                if  (arcrange[0] > r[0] and arcrange[0] < r[1]):
-                                    reg['arc_height_index'] = current_max + 1
-                                    arcrange[2] = reg['arc_height_index']
-                                elif(arcrange[0] > r[1] and arcrange[0] < r[0]):
-                                    reg['arc_height_index'] = current_max + 1
-                                    arcrange[2] = reg['arc_height_index']
-                                elif(arcrange[1] > r[0] and arcrange[0] < r[1]):
-                                    reg['arc_height_index'] = current_max + 1
-                                    arcrange[2] = reg['arc_height_index']
-                                elif(arcrange[1] > r[1] and arcrange[0] < r[0]):
-                                    reg['arc_height_index'] = current_max + 1
-                                    arcrange[2] = reg['arc_height_index']
-                            neg_arc_ranges.append(arcrange)
-                        ##############################################################################
-                        reg_renderers[reg['type']](ax, reg['type'], 
-                                       reg_num, reg['from_part'], 
-                                       reg['to_part'], self.scale, 
-                                       self.linewidth, reg['arc_height_index'], opts=reg_opts)
-                reg_num += 1
-        # Plot the backbone (z=1)
-        if plot_backbone == True:
-            l1 = Line2D([first_start-self.backbone_pad_left,prev_end+self.backbone_pad_right],[0,0], 
-                        linewidth=self.linewidth, color=self.linecolor, zorder=10)
-            ax.add_line(l1)
-        return first_start, prev_end
-
-
-
-
-
 ###############################################################################
 # Testing
 ###############################################################################
+
+
+
+
+
+
+
+def load_glyphs(filename):
+    tree = ET.parse(filename)
+    root = tree.getroot()
+    
+    return root
+
+root = load_glyphs('sbolv_glyphs.xml')
+print(root)
+for child in root:
+    print(child.tag, child.attrib,  child.text)
+    for child2 in child:
+        for child3 in child2:
+            print(child3.tag, '----', child3.attrib['d'])
+
+
+
+namespace = dict(foo=5, bar=6)
+print(eval('foo* bar', namespace))
+
+import re
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.path import Path
+import matplotlib.patches as patches
+
+# From: http://raphaeljs.com/icons/#firefox
+#firefox = "M28.4,22.469c0.479-0.964,0.851-1.991,1.095-3.066c0.953-3.661,0.666-6.854,0.666-6.854l-0.327,2.104c0,0-0.469-3.896-1.044-5.353c-0.881-2.231-1.273-2.214-1.274-2.21c0.542,1.379,0.494,2.169,0.483,2.288c-0.01-0.016-0.019-0.032-0.027-0.047c-0.131-0.324-0.797-1.819-2.225-2.878c-2.502-2.481-5.943-4.014-9.745-4.015c-4.056,0-7.705,1.745-10.238,4.525C5.444,6.5,5.183,5.938,5.159,5.317c0,0-0.002,0.002-0.006,0.005c0-0.011-0.003-0.021-0.003-0.031c0,0-1.61,1.247-1.436,4.612c-0.299,0.574-0.56,1.172-0.777,1.791c-0.375,0.817-0.75,2.004-1.059,3.746c0,0,0.133-0.422,0.399-0.988c-0.064,0.482-0.103,0.971-0.116,1.467c-0.09,0.845-0.118,1.865-0.039,3.088c0,0,0.032-0.406,0.136-1.021c0.834,6.854,6.667,12.165,13.743,12.165l0,0c1.86,0,3.636-0.37,5.256-1.036C24.938,27.771,27.116,25.196,28.4,22.469zM16.002,3.356c2.446,0,4.73,0.68,6.68,1.86c-2.274-0.528-3.433-0.261-3.423-0.248c0.013,0.015,3.384,0.589,3.981,1.411c0,0-1.431,0-2.856,0.41c-0.065,0.019,5.242,0.663,6.327,5.966c0,0-0.582-1.213-1.301-1.42c0.473,1.439,0.351,4.17-0.1,5.528c-0.058,0.174-0.118-0.755-1.004-1.155c0.284,2.037-0.018,5.268-1.432,6.158c-0.109,0.07,0.887-3.189,0.201-1.93c-4.093,6.276-8.959,2.539-10.934,1.208c1.585,0.388,3.267,0.108,4.242-0.559c0.982-0.672,1.564-1.162,2.087-1.047c0.522,0.117,0.87-0.407,0.464-0.872c-0.405-0.466-1.392-1.105-2.725-0.757c-0.94,0.247-2.107,1.287-3.886,0.233c-1.518-0.899-1.507-1.63-1.507-2.095c0-0.366,0.257-0.88,0.734-1.028c0.58,0.062,1.044,0.214,1.537,0.466c0.005-0.135,0.006-0.315-0.001-0.519c0.039-0.077,0.015-0.311-0.047-0.596c-0.036-0.287-0.097-0.582-0.19-0.851c0.01-0.002,0.017-0.007,0.021-0.021c0.076-0.344,2.147-1.544,2.299-1.659c0.153-0.114,0.55-0.378,0.506-1.183c-0.015-0.265-0.058-0.294-2.232-0.286c-0.917,0.003-1.425-0.894-1.589-1.245c0.222-1.231,0.863-2.11,1.919-2.704c0.02-0.011,0.015-0.021-0.008-0.027c0.219-0.127-2.524-0.006-3.76,1.604C9.674,8.045,9.219,7.95,8.71,7.95c-0.638,0-1.139,0.07-1.603,0.187c-0.05,0.013-0.122,0.011-0.208-0.001C6.769,8.04,6.575,7.88,6.365,7.672c0.161-0.18,0.324-0.356,0.495-0.526C9.201,4.804,12.43,3.357,16.002,3.356z"
+firefox = "M12.644,5.139L23.49,5.139L23.49,14.667L18.037,18.682L12.644,14.487L12.644,5.139Z"
+
+def svg_parse(path):
+    commands = {'M': (Path.MOVETO,),
+                'L': (Path.LINETO,),
+                'Q': (Path.CURVE3,)*2,
+                'C': (Path.CURVE4,)*3,
+                'Z': (Path.CLOSEPOLY,)}
+    path_re = re.compile(r'([MLHVCSQTAZ])([^MLHVCSQTAZ]+)', re.IGNORECASE)
+    float_re = re.compile(r'(?:[\s,]*)([+-]?\d+(?:\.\d+)?)')
+    vertices = []
+    codes = []
+    last = (0, 0)
+    for cmd, values in path_re.findall(path):
+        points = [float(v) for v in float_re.findall(values)]
+        points = np.array(points).reshape((len(points)//2, 2))
+        if cmd.islower():
+            points += last
+        cmd = cmd.capitalize()
+        last = points[-1]
+        codes.extend(commands[cmd])
+        vertices.extend(points.tolist())
+    return codes, vertices
+
+# SVG to matplotlib
+codes, verts = svg_parse(firefox)
+verts = np.array(verts)
+path = Path(verts, codes)
+
+
+"""
+####################
+
+# Make upside down
+verts[:, 1] *= -1
+xmin, xmax = verts[:, 0].min()-1, verts[:, 0].max()+1
+ymin, ymax = verts[:, 1].min()-1, verts[:, 1].max()+1
+
+fig = plt.figure(figsize=(5, 5))
+ax = fig.add_axes([0.0, 0.0, 1.0, 1.0], frameon=False, aspect=1)
+
+# White outline (width = 6)
+patch = patches.PathPatch(path, facecolor='None', edgecolor='w', lw=6)
+ax.add_patch(patch)
+
+# Actual shape with black outline
+patch = patches.PathPatch(path, facecolor='orange', edgecolor='k', lw=2)
+ax.add_patch(patch)
+
+# Centering
+ax.set_xlim(xmin, xmax)
+ax.set_ylim(ymin, ymax)
+
+# No ticks
+ax.set_xticks([])
+ax.set_yticks([])
+
+# Display
+plt.show()
+
+####################
+"""
+
+
+
+
 
 def create_test_design ():
     design = Design('design1')

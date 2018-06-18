@@ -14,8 +14,6 @@ def createPromoter(d):
 	d.addComponentDefinition(promoter)
 	return promoter
 
-	
-
 def createCDS(d):
 	# create coding sequence
 	# referenced from: https://github.com/SynBioDex/pySBOL/blob/master/docs/repositories.rst

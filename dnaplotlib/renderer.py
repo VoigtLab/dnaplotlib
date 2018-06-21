@@ -6,6 +6,8 @@ New DNAplotlib renderer that can handle new data type
 from datatype import *
 import svgpath2mpl as svg2mpl
 
+import os
+import glob
 import xml.etree.ElementTree as ET
 import re
 import numpy as np
@@ -41,63 +43,11 @@ class PartRenderer:
 # https://matplotlib.org/gallery/showcase/firefox.html#sphx-glr-gallery-showcase-firefox-py
 
 class DesignRenderer:
-    """ Class defining the rendering funtionality.
+    """ Class defining the rendering funtionality (assumes layout already generated).
     """
 
-    # Standard part types
-    STD_PART_TYPES = ['Promoter', 
-                      'CDS', 
-                      'Terminator',
-                      'RBS',
-                      'Scar',
-                      'Spacer',
-                      'EmptySpace',
-                      'Ribozyme',
-                      'Ribonuclease',
-                      'ProteinStability',
-                      'Protease',
-                      'Operator',
-                      'Origin',
-                      'Insulator',
-                      '5Overhang',
-                      '3Overhang',
-                      'RestrictionSite',
-                      'BluntRestrictionSite',
-                      'PrimerBindingSite',
-                      '5StickyRestrictionSite',
-                      '3StickyRestrictionSite',
-                      'UserDefined',
-                      'Signature']
-
-    # Standard regulatory types
-    STD_REG_TYPES = ['Repression',
-                     'Activation',
-                     'Connection']
-
-    def __init__(self, scale=1.0, linewidth=1.0, linecolor=(0,0,0), 
-                 backbone_pad_left=0.0, backbone_pad_right=0.0):
-        """ Constructor to generate an empty DNARenderer.
-
-        Parameters
-        ----------
-        scale : float (default=1.0)
-            A scaling factor for the plot. Only used if rendering traces.
-
-        linewidth : float (default=1.0)
-            The default linewidth for all part drawing.
-
-        backbone_pad_left : float (default=0.0)
-            Padding to add to the left side of the backbone.
-
-        backbone_pad_right : float (default=0.0)
-            Padding to add to the left side of the backbone.
-        """
-        self.scale = scale
-        self.linewidth = linewidth
-        self.linecolor = linecolor
-        self.backbone_pad_left = backbone_pad_left
-        self.backbone_pad_right = backbone_pad_right
-        self.reg_height = 15
+    def __init__(self, ):
+        
 
 ###############################################################################
 # Testing
@@ -141,7 +91,15 @@ def load_glyph(filename):
         # Cycle through and find all paths
         if child.tag.endswith('path'):
             glyph_data['paths'].append(extract_tag_details(child.attrib))
-    return glyph_data
+    return glyph_type, glyph_data
+
+
+def load_glyphs_from_path(path):
+    glyphs_library = {}
+    for infile in glob.glob( os.path.join(path, '*.svg') ):
+        glyph_type, glyph_data = load_glyph(infile)
+        glyphs_library[glyph_type] = glyph_data
+    return glyphs_library
 
 
 glyph_data = load_glyph('example.svg')
@@ -178,9 +136,6 @@ plt.show()
 ####################
 
 
-
-
-
 """
 def create_test_design ():
     design = Design('design1')
@@ -199,17 +154,7 @@ def create_test_design ():
     design.add_module(module1)
     design.add_module(module2)
     return design
-
 # Let's try it out!
 design = create_test_design()
 design.print_design()
-
-
-
-
-
-
-
 """
-
-

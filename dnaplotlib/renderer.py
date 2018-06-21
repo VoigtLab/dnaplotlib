@@ -37,16 +37,12 @@ class PartRenderer:
     def render_part(self, ax, part, start_position):
         return 0
 
-
-# https://github.com/yongyehuang/svg_parser
-# https://docs.python.org/2/library/xml.etree.elementtree.html#module-xml.etree.ElementTree
-# https://matplotlib.org/gallery/showcase/firefox.html#sphx-glr-gallery-showcase-firefox-py
-
 class DesignRenderer:
     """ Class defining the rendering funtionality (assumes layout already generated).
     """
 
     def __init__(self, ):
+        return None
         
 
 ###############################################################################
@@ -56,11 +52,17 @@ class DesignRenderer:
 
 def extract_tag_details(tag_attributes):
     tag_details = {}
+    tag_details['glyphtype'] = None
+    tag_details['soterms'] = []
     tag_details['type'] = None
     tag_details['defaults'] = None
     tag_details['d'] = None
     # Pull out the relevant details
     for key in tag_attributes.keys():
+        if key == 'glyphtype':
+            tag_details['glyphtype'] = tag_attributes[key]
+        if key == 'soterms':
+            tag_details['soterms'] = tag_attributes[key].split(';')
         if key == 'class':
             tag_details['type'] = tag_attributes[key]
         if 'parametric' in key and key.endswith('}d'):
@@ -84,23 +86,36 @@ def eval_svg_data (svg_text, parameters):
 def load_glyph(filename):
     tree = ET.parse(filename)
     root = tree.getroot()
+    root_attributes = extract_tag_details(root.attrib)
+    glyph_type = root_attributes['glyphtype']
+    glyph_soterms = root_attributes['soterms']
     glyph_data = {}
     glyph_data['paths'] = []
-    glyph_data['defaults'] = extract_tag_details(root.attrib)['defaults']
+    glyph_data['defaults'] = root_attributes['defaults']
     for child in root:
         # Cycle through and find all paths
         if child.tag.endswith('path'):
             glyph_data['paths'].append(extract_tag_details(child.attrib))
-    return glyph_type, glyph_data
+    return glyph_type, glyph_soterms, glyph_data
 
 
 def load_glyphs_from_path(path):
     glyphs_library = {}
+    glyph_soterm_map = {}
     for infile in glob.glob( os.path.join(path, '*.svg') ):
-        glyph_type, glyph_data = load_glyph(infile)
+        glyph_type, glyph_soterms, glyph_data = load_glyph(infile)
         glyphs_library[glyph_type] = glyph_data
-    return glyphs_library
+        for soterm in glyph_soterms:
+            glyph_soterm_map[soterm] = glyph_type
+    return glyphs_library, glyph_soterm_map
 
+
+glyphs_library, glyph_soterm_map = load_glyphs_from_path('./glyphs/')
+
+print(glyphs_library)
+print('------------')
+print(glyph_soterm_map)
+"""
 
 glyph_data = load_glyph('example.svg')
 paths_to_draw = []
@@ -109,6 +124,8 @@ for path in glyph_data['paths']:
         svg_text = eval_svg_data(path['d'], glyph_data['defaults'])
         paths_to_draw.append(svg2mpl.parse_path(svg_text))
  
+
+
 
 ####################
 # Make upside down
@@ -136,7 +153,7 @@ plt.show()
 ####################
 
 
-"""
+
 def create_test_design ():
     design = Design('design1')
     # Create DNA module 1 (containing sub-modules)

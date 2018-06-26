@@ -53,6 +53,7 @@ class SBOLRenderer(dpl.DNARenderer):
         'SO_0000057': 'Operator',
         # SO term insulator does not have same semantics : 'Insulator',
         'SO_0000296': 'Origin',
+        
         'SO_0001932': '5Overhang',
         'SO_0001933': '3Overhang',
         'SO_0001687': 'RestrictionSite',
@@ -93,27 +94,27 @@ class SBOLRenderer(dpl.DNARenderer):
         dpl_design = []  # The SBOL data will be converted to a list of dictionaries used by DNAPlotLib
         sbol_design = []  # Contains a list of DNA components corresponding to the items in dpl_design
         try:
-            current_ann = target_component.annotations[0]
+            current_ann = target_component.sequenceAnnotations[0]
         except:
             print("Target DNAComponent does not have any SequenceAnnotations.  Cannot render SBOL.")
         END_OF_DESIGN = False
         while not END_OF_DESIGN:
             try:
-                subcomponent = current_ann.subcomponent
+                component = current_ann.component
             except:
                 print("DNAComponent does not have subcomponents.  Cannot render SBOL.")
 
             # Translate from SBOL data model to DNAPlotLib dictionary specification for designs
-            SO_term = subcomponent.type.split('/')[-1]
+            SO_term = component.type.split('/')[-1]
             if SO_term in list(self.SO_terms().keys()):
                 part = {}
                 part['type'] = self.SO_terms()[SO_term]
-                part['name'] = subcomponent.display_id
+                part['name'] = component.displayId
                 part['fwd'] = True
                 if opts:
                     part['opts'] = opts
                 dpl_design.append(part)
-                sbol_design.append(subcomponent)
+                sbol_design.append(component)
             # TODO else if SO term of DNAComponent is not recognized, default to a USER_DEFINED sbol symbol
             if len(current_ann.precedes) == 0:
                 END_OF_DESIGN = True

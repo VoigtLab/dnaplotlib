@@ -71,6 +71,7 @@ def renderDNA():
 
 	fig = plt.figure()
 	ax = fig.add_subplot(111)
+	print(path)
 	patch = patches.PathPatch(path, facecolor='none', lw=2)
 	ax.add_patch(patch)
 	ax.annotate('ex: b0032', xy=(0., -2), ha='center') # random dna name for now

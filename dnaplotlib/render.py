@@ -232,7 +232,7 @@ fig = plt.figure(figsize=(10,10))
 ax = fig.add_subplot(111)
 
 #for glyph_type in renderer.glyphs_library.keys():
-renderer.draw_glyph(ax, 'Insulator', (0.0, 0.0), 10)
+renderer.draw_glyph(ax, 'Promoter', (0.0, 0.0), 30)
 ax.annotate('(0.0, 0.0)', xy=[0.0, 0.0], ha='center')
 ax.set_xlim(-100.0, 100.0)
 ax.set_ylim(-100.0, 100.0)

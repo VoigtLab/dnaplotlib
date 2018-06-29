@@ -2,9 +2,13 @@
 
 <path class="baseline" style="opacity:1; fill:#cccccc; fill-opacity:1; stroke:#b3b3b3; stroke-width:0.49999994; stroke-dasharray:0.99999988, 0.49999994; stroke-dashoffset:0; stroke-opacity:1" d="m -0.10593219,39.025419 45.23304619,0" id="path4741" parametric:d="m {height},0"></path>
 
-<path class="interior-path" d="m 7.4999973,37.499997 29.9999997,0 0,-29.9999998 -29.9999997,0 0,29.9999998 z" id="path10" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round" parametric:d="m {offset},{offset+rectSize} l {rectSize},0 l 0,-{rectSize} l -{rectSize},0 l 0,{rectSize} z"></path>
+<path class="arrow-up" d="M40.56,10.94l-9-7c-1.51-1.17-3.64.94-2.12,2.12l9,7c1.51,1.17,3.64-.94,2.12-2.12Z" id="path10" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round" parametric:d="m {offset},{offset+rectSize} l {rectSize},0 l 0,-{rectSize} l -{rectSize},0 l 0,{rectSize} z"></path>
 
-<path class="exterior-path" d="m 14.499997,30.499997 16,0 0,-16 -16,0 0,16 z" id="path8" style="fill:#b3b3b3; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; " parametric:d="m {2*offset},{rectSize} l {othersize},0 l 0,-{othersize} l -{othersize},0 l 0,{othersize} z"></path>
+<path class="arrow-down" d="M38.44,11.44l-8,8a1.5,1.5,0,0,0,2.12,2.12l8-8a1.5,1.5,0,0,0-2.12-2.12Z" id="path11" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round" parametric:d="m {offset},{offset+rectSize} l {rectSize},0 l 0,-{rectSize} l -{rectSize},0 l 0,{rectSize} z"></path>
+
+<path class="horizontal-body" d="M9.25,13.5h28a1.5,1.5,0,0,0,0-3h-28a1.5,1.5,0,0,0,0,3Z" id="path12" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round" parametric:d="m {offset},{offset+rectSize} l {rectSize},0 l 0,-{rectSize} l -{rectSize},0 l 0,{rectSize} z"></path>
+
+<path class="vertical-body" d="M10.75,40V12a1.5,1.5,0,0,0-3,0V40a1.5,1.5,0,0,0,3,0Z" id="path13" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round"></path>
 
 <rect class="bounding-box" style="opacity:0.5;fill:none;fill-opacity:1;stroke:#999999;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:1, 0.50000000000000000;stroke-dashoffset:0;stroke-opacity:1" id="bounding_box" width="33" height="33" x="5.7203383" y="5.8050842" parametric:width="{box_size}" parametric:height="{box_size}"></rect>
 

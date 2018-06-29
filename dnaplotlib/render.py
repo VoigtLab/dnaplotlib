@@ -14,6 +14,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 import matplotlib.patches as patches
+from collections import namedtuple
 
 __author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>'
 __license__ = 'MIT'
@@ -30,6 +31,9 @@ LINE = 2
 class GlyphRenderer:
     """ Class defining the part renders.
     """
+
+    # define named tuple called frame for containing glyph (struct)
+    GlyphFrame = namedtuple("GlyphFrame", "width height origin")
 
     def __init__(self, glyph_path='glyphs/', global_defaults=None):
         self.glyphs_library, self.glyph_soterm_map = self.load_glyphs_from_path(glyph_path)
@@ -95,7 +99,7 @@ class GlyphRenderer:
     def updateFrameParam(self, frameparam, prevVertice, nextVertice):
         dx = prevVertice[0] - nextVertice[0]
         dy = prevVertice[1] - nextVertice[1]
-        length = np.sqrt(dx**2 + dy**2)
+        length = np.sqrt(dx ** 2 + dy ** 2)
         if length > frameparam:
             return length
         return frameparam 
@@ -110,7 +114,7 @@ class GlyphRenderer:
                 # check and update origin
                 if origin[0] == origin[1] and origin[0] == 0.0:
                     origin = (float(vertice[0]), float(vertice[1]))
-                if vertice[0] < origin[0] or vertice[1] < origin[1]:
+                if vertice[0] < origin[0] and vertice[1] < origin[1]:
                     origin = (float(vertice[0]), float(vertice[1]))
 
                 # check and update width / height 
@@ -120,16 +124,15 @@ class GlyphRenderer:
                     else:
                         height = self.updateFrameParam(height, prev, vertice)
                 prev = vertice
-        
-        #return (width, height, origin) // simplified 
-        return origin 
+
+        return self.GlyphFrame(width, height, origin)
 
     # helper function for draw_glyph
     # get rectangular frame that fit raw svg extract
-    def shiftToPosition(self, pathsToDraw, orig, pos):
+    def shiftToPosition(self, pathsToDraw, origFrame, pos):
         newPath = []
-        deltaX = pos[0] - orig[0]
-        deltaY = pos[1] - orig[1]
+        deltaX = pos[0] - origFrame.origin[0]
+        deltaY = pos[1] - origFrame.origin[1]
         for path in pathsToDraw:
             verts, codes = ([] for i in range(2))
             for oldVert, code in path.iter_segments():
@@ -141,7 +144,44 @@ class GlyphRenderer:
 
         return newPath
 
-    def draw_glyph(self, ax, glyph_type, position, user_parameters=None):
+    # helper function to resizeToFrame
+    # shift old vertice by scalefactor in reference to refpoint
+    def shiftVert(self, ref, old, sfactor): 
+        xdis = ref[0] - old[0] 
+        ydis = ref[1] - old[1]
+        newXdis = sfactor * xdis
+        newYdis = sfactor * ydis 
+        return [float(ref[0] - newXdis), float(ref[1] - newYdis)]
+        
+    # helper function for draw_glyph 
+    # resize the path into scalefactor
+    def resizeToFrame(self, pathsToD, oldFrame, newFrame):
+        newPath = []
+        scalefactor = newFrame.width / oldFrame.width
+
+        refpoint = (0., 0.)
+        isReferenceInitialized = False
+        for path in pathsToD:
+            verts, codes = ([] for i in range(2))
+            for oldVert, code in path.iter_segments():
+                print(code)
+                if code == MOVETO and not isReferenceInitialized:
+                    refpoint = oldVert
+                    isReferenceInitialized = True
+                    verts.append(refpoint)
+                else:
+                    print(refpoint)
+                    newVert = self.shiftVert(refpoint, oldVert, scalefactor)
+                    print(newVert)
+                    verts.append(newVert)
+                codes.append(code)
+            path = Path(verts, codes)
+            newPath.append(path)
+
+        return newPath
+
+
+    def draw_glyph(self, ax, glyph_type, position, size, user_parameters=None):
         # convert svg path into matplotlib path 
         glyph = self.glyphs_library[glyph_type]
         merged_parameters = glyph['defaults'].copy()
@@ -154,10 +194,14 @@ class GlyphRenderer:
             if path['type'] not in ['baseline', 'bounding-box']:
                 svg_text = self.eval_svg_data(path['d'], merged_parameters)
                 paths_to_draw.append(svg2mpl.parse_path(svg_text))
+            # experiment on coloring baseline
+
         
         # Draw glyph to the axis at position 
-        initialOrigin = self.getframe(paths_to_draw) 
-        paths_to_draw = self.shiftToPosition(paths_to_draw, initialOrigin, position)
+        initialFrame = self.getframe(paths_to_draw) 
+        arbitraryFrame = self.GlyphFrame(width=size, height=size, origin=position)
+        paths_to_draw = self.shiftToPosition(paths_to_draw, initialFrame, position)
+        paths_to_draw = self.resizeToFrame(paths_to_draw, initialFrame, arbitraryFrame)
 
         for path in paths_to_draw:
             patch = patches.PathPatch(path, facecolor='white', edgecolor='black', lw=2)
@@ -188,9 +232,8 @@ fig = plt.figure(figsize=(10,10))
 ax = fig.add_subplot(111)
 
 #for glyph_type in renderer.glyphs_library.keys():
-renderer.draw_glyph(ax, 'Insulator', (-50.0, 0.0))
-renderer.draw_glyph(ax, 'Insulator', (0.0, 0.0))
-renderer.draw_glyph(ax, 'Insulator', (30.0, 0.0))
+renderer.draw_glyph(ax, 'Insulator', (0.0, 0.0), 10)
+ax.annotate('(0.0, 0.0)', xy=[0.0, 0.0], ha='center')
 ax.set_xlim(-100.0, 100.0)
 ax.set_ylim(-100.0, 100.0)
 ax.set_axis_off()

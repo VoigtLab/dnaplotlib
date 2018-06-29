@@ -67,7 +67,9 @@ class GlyphRenderer:
     def eval_svg_data(self, svg_text, parameters):
         # Use regular expression to extract and then replace with evaluated version
         # https://stackoverflow.com/questions/38734335/python-regex-replace-bracketed-text-with-contents-of-brackets
-        return re.sub(r"{([^{}]+)}", lambda m: str(eval(m.group()[1:-1], parameters)), svg_text)
+        whatever = re.sub(r"{([^{}]+)}", lambda m: str(eval(m.group()[1:-1], parameters)), svg_text)
+        print(whatever)
+        return whatever
 
     def load_glyph(self, filename):
         tree = ET.parse(filename)
@@ -164,15 +166,12 @@ class GlyphRenderer:
         for path in pathsToD:
             verts, codes = ([] for i in range(2))
             for oldVert, code in path.iter_segments():
-                print(code)
                 if code == MOVETO and not isReferenceInitialized:
                     refpoint = oldVert
                     isReferenceInitialized = True
                     verts.append(refpoint)
                 else:
-                    print(refpoint)
                     newVert = self.shiftVert(refpoint, oldVert, scalefactor)
-                    print(newVert)
                     verts.append(newVert)
                 codes.append(code)
             path = Path(verts, codes)
@@ -191,7 +190,8 @@ class GlyphRenderer:
                 merged_parameters[key] = user_parameters[key]
         paths_to_draw = []
         for path in glyph['paths']:
-            if path['type'] not in ['baseline', 'bounding-box']:
+            if path['type'] not in ['baseline']:
+            #if path['type'] not in ['baseline', 'bounding-box']:
                 svg_text = self.eval_svg_data(path['d'], merged_parameters)
                 paths_to_draw.append(svg2mpl.parse_path(svg_text))
             # experiment on coloring baseline
@@ -228,14 +228,17 @@ renderer = GlyphRenderer()
 #print(renderer.glyph_soterm_map)
 
 
-fig = plt.figure(figsize=(10,10))
+fig = plt.figure(figsize=(5,5))
 ax = fig.add_subplot(111)
 
 #for glyph_type in renderer.glyphs_library.keys():
-renderer.draw_glyph(ax, 'Promoter', (0.0, 0.0), 30)
+#print('insulator')
+#renderer.draw_glyph(ax, 'Insulator', (0.0, 0.0), 30)
+#print('promoter')
+renderer.draw_glyph(ax, 'Promoter', (0.0, 0.0), 20)
 ax.annotate('(0.0, 0.0)', xy=[0.0, 0.0], ha='center')
-ax.set_xlim(-100.0, 100.0)
-ax.set_ylim(-100.0, 100.0)
+ax.set_xlim(-50.0, 50.0)
+ax.set_ylim(-50.0, 50.0)
 ax.set_axis_off()
 plt.show()
 

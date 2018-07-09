@@ -6,15 +6,10 @@ New DNAplotlib renderer that can handle new data type
 from datatype import *
 import svgpath2mpl as svg2mpl
 
-import os
-import glob
+import os, glob, re, numpy as np
 import xml.etree.ElementTree as ET
-import re
-import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt, matplotlib.patches as patches, matplotlib.lines as lines
 from matplotlib.path import Path
-import matplotlib.patches as patches
-import matplotlib.lines as lines
 from collections import namedtuple
 
 __author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>'
@@ -177,8 +172,27 @@ class GlyphRenderer:
 
         return newPath
 
+    # rotate paths at the counterclockwise dir of angle (in rad [-pi, pi])
+    # return rotated path and updated paths
+    def rotateAtPos(self, pathsToRotate, pos, ang):
+        newPath = []
+        for path in pathsToRotate:
+            verts, codes = ([] for i in range(2))
+            for oldVert, code in path.iter_segments():
+                x = oldVert[0] * np.cos(ang) - oldVert[1] * np.sin(ang)
+                y = oldVert[0] * np.sin(ang) + oldVert[1] * np.cos(ang)
+                verts.append([x, y])
+                codes.append(code)
+            path = Path(verts, codes)
+            newPath.append(path)
 
-    def draw_glyph(self, ax, glyph_type, position, size, user_parameters=None):
+        rawFrame = self.getframe(newPath)
+        newPath = self.shiftToPosition(newPath, rawFrame, pos)
+
+        return newPath, self.getframe(newPath)  
+
+
+    def draw_glyph(self, ax, glyph_type, position, size, angle, user_parameters=None):
         # convert svg path into matplotlib path 
         glyph = self.glyphs_library[glyph_type]
         merged_parameters = glyph['defaults'].copy()
@@ -199,6 +213,7 @@ class GlyphRenderer:
         newFrame = Frame(width=size, height=size, origin=position)
         paths_to_draw = self.shiftToPosition(paths_to_draw, initialFrame, position)
         paths_to_draw = self.resizeToFrame(paths_to_draw, position, initialFrame, newFrame)
+        paths_to_draw, newFrame = self.rotateAtPos(paths_to_draw, position, angle)
 
         for path in paths_to_draw:
             patch = patches.PathPatch(path, facecolor='white', edgecolor='black', lw=2)
@@ -275,19 +290,19 @@ renderer = GlyphRenderer()
 
 fig = plt.figure(figsize=(5,5))
 ax = fig.add_subplot(111)
+# need to set axis first 
 ax.set_xlim(-50.0, 50.0)
 ax.set_ylim(-50.0, 50.0)
 
 #for glyph_type in renderer.glyphs_library.keys():
-insulator = renderer.draw_glyph(ax, 'Insulator', (0.0, 0.0), 20)
-promoter = renderer.draw_glyph(ax, 'Promoter', (-30.0, 0.0), 20.)
+promoter = renderer.draw_glyph(ax, 'Promoter', (-30.0, 0.0), 10., 0)
+promoter = renderer.draw_glyph(ax, 'Promoter', (0.0, 0.0), 10., np.pi/2.)
+promoter = renderer.draw_glyph(ax, 'Promoter', (30.0, 0.0), 10., np.pi)
 
-strand.addGlyphs([insulator, promoter]) #primary sequence 
-strand.drawBackboneStrand(ax)
-
+#annotation
 ax.annotate('(-30.0, 0.0)', xy=[-30.0, 0.0], ha='center')
-ax.annotate('(20.0, 0.0)', xy=[20.0, 0.0], ha='center')
-
+ax.annotate('(0.0, 0.0)', xy=[0.0, 0.0], ha='center')
+ax.annotate('(30.0, 0.0)', xy=[30.0, 0.0], ha='center')
 ax.set_axis_off()
 plt.show()
 

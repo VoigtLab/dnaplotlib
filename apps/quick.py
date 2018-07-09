@@ -73,6 +73,7 @@ def process_arguments (input):
 	for el in input.split(' '):
 		if el != '':
 			part_parts = el.split('.')
+			# Only type and colour provided
 			if len(part_parts) == 2:
 				part_short_type = part_parts[0]
 				part_fwd = True
@@ -89,6 +90,27 @@ def process_arguments (input):
 						               'type'  : part_type, 
 						               'fwd'   : part_fwd, 
 						               'opts'  : {'color': part_rgb}} )
+			# Type, label and colour provided
+			if len(part_parts) == 3:
+				part_short_type = part_parts[0]
+				part_fwd = True
+				if part_short_type[0] == '-':
+					part_fwd = False
+					part_short_type = part_short_type[1:]
+				if part_short_type in list(types.keys()):
+					part_type = types[part_short_type]
+					part_label = part_parts[1]
+					part_color = part_parts[2]
+					part_rgb = (0,0,0)
+					if part_color in list(colors.keys()):
+						part_rgb = colors[part_color]
+					part_list.append( {'name'  : str(part_idx), 
+						               'type'  : part_type, 
+						               'fwd'   : part_fwd, 
+						               'opts'  : {'color': part_rgb, 
+						                          'label': part_label,
+						                          'label_size': 8,
+						                          'label_y_offset': -17}} )
 	return part_list
 
 

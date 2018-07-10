@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 New DNAplotlib data type for designs (extendable for hierachy)
 """

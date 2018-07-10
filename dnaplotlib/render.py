@@ -20,10 +20,6 @@ __version__ = '2.0'
 # New Renderer
 ###############################################################################
 
-# global constants 
-MOVETO = 1
-LINE = 2
-
 # define named tuple called frame for containing glyph (struct)
 Frame = namedtuple("Frame", "width height origin")
 
@@ -34,13 +30,34 @@ class GlyphRenderer:
     def __init__(self, glyph_path='glyphs/', global_defaults=None):
         self.glyphs_library, self.glyph_soterm_map = self.load_glyphs_from_path(glyph_path)
     
+    # extract tag details for circle 
+    def extract_tag_details_circle(self, tag_attributes):
+        tag_details = {}
+        tag_details['type'] = None
+        tag_details['cx'] = None # x coord
+        tag_details['cy'] = None # y coord
+        tag_details['r'] = None # radius
+
+        # Pull out the relevant details
+        for key in tag_attributes.keys():
+            if key == 'class':
+                tag_details['type'] = tag_attributes[key]
+            if 'parametric' in key and key.endswith('}cx'):
+                tag_details['cx'] = float(tag_attributes[key])
+            if 'parametric' in key and key.endswith('}cy'):
+                tag_details['cy'] = float(tag_attributes[key])
+            if 'parametric' in key and key.endswith('}r'):
+                tag_details['r'] = float(tag_attributes[key])
+
+        return tag_details
+
     def extract_tag_details(self, tag_attributes):
         tag_details = {}
         tag_details['glyphtype'] = None
         tag_details['soterms'] = []
         tag_details['type'] = None
         tag_details['defaults'] = None
-        tag_details['d'] = None
+        tag_details['d'] = None 
         # Pull out the relevant details
         for key in tag_attributes.keys():
             if key == 'glyphtype':
@@ -58,13 +75,13 @@ class GlyphRenderer:
                     key_value = element.split(':')
                     defaults[key_value[0].strip()] = float(key_value[1].strip())
                 tag_details['defaults'] = defaults
+        
         return tag_details
 
     def eval_svg_data(self, svg_text, parameters):
         # Use regular expression to extract and then replace with evaluated version
         # https://stackoverflow.com/questions/38734335/python-regex-replace-bracketed-text-with-contents-of-brackets
         svgpaths = re.sub(r"{([^{}]+)}", lambda m: str(eval(m.group()[1:-1], parameters)), svg_text)
-        #print(svgpaths)
         return svgpaths
 
     def load_glyph(self, filename):
@@ -74,12 +91,14 @@ class GlyphRenderer:
         glyph_type = root_attributes['glyphtype']
         glyph_soterms = root_attributes['soterms']
         glyph_data = {}
-        glyph_data['paths'] = []
+        glyph_data['paths'] , glyph_data['circles'] = ([] for i in range(2))
         glyph_data['defaults'] = root_attributes['defaults']
         for child in root:
-            # Cycle through and find all paths
+            # Cycle through and find all paths and circles
             if child.tag.endswith('path'):
                 glyph_data['paths'].append(self.extract_tag_details(child.attrib))
+            elif child.tag.endswith('circle'):
+                glyph_data['circles'].append(self.extract_tag_details_circle(child.attrib))
         return glyph_type, glyph_soterms, glyph_data
 
     def load_glyphs_from_path(self, path):
@@ -128,6 +147,28 @@ class GlyphRenderer:
  
         return Frame(width, height, origin)
 
+    # turn list of vertices into coordinates
+    def processIntoCoord(self, vlist):
+        x, y = (0. for i in range(2))
+        verts = []
+        for i in range(len(vlist)):
+            if i%2 == 0:
+                x = vlist[i]
+            else: 
+                y = vlist[i]
+                verts.append([x, y])
+        return verts
+
+    # function that return updated set of vertices and codes
+    def updateVC(self, verts, code, dX, dY):
+        newVerts, newCodes = ([] for i in range(2))
+        verts = self.processIntoCoord(verts)
+        for vert in verts:
+            newVert = (float(vert[0]) + dX, float(vert[1]) + dY)
+            newVerts.append(newVert)
+            newCodes.append(code)
+        return newVerts, newCodes
+
     # helper function for draw_glyph
     # get rectangular frame that fit raw svg extract
     def shiftToPosition(self, pathsToDraw, origFrame, pos):
@@ -137,10 +178,10 @@ class GlyphRenderer:
         deltaY = pos[1] - origFrame.origin[1]
         for path in pathsToDraw:
             verts, codes = ([] for i in range(2))
-            for oldVert, code in path.iter_segments():
-                newVert = (oldVert[0] + deltaX, oldVert[1] + deltaY)
-                verts.append(newVert)
-                codes.append(code)
+            for oldVerts, code in path.iter_segments():
+                newVerts, newCodes = self.updateVC(oldVerts, code, deltaX, deltaY)
+                verts += newVerts
+                codes += newCodes
             path = Path(verts, codes)
             newPath.append(path)
 
@@ -148,12 +189,17 @@ class GlyphRenderer:
 
     # helper function to resizeToFrame
     # shift old vertice by scalefactor in reference to refpoint
-    def shiftVert(self, ref, old, sfactor): 
-        xdis = ref[0] - old[0] 
-        ydis = ref[1] - old[1]
-        newXdis = sfactor * xdis
-        newYdis = sfactor * ydis 
-        return [float(ref[0] - newXdis), float(ref[1] - newYdis)]
+    def shiftVerts(self, ref, oldVs, sfactor, codeType): 
+        nVerts, nCodes = ([] for i in range(2))
+        oldVs = self.processIntoCoord(oldVs)
+        for old in oldVs:
+            xdis = ref[0] - old[0] 
+            ydis = ref[1] - old[1]
+            newXdis = sfactor * xdis
+            newYdis = sfactor * ydis 
+            nVerts.append((float(ref[0] - newXdis), float(ref[1] - newYdis)))
+            nCodes.append(codeType)       
+        return nVerts, nCodes
         
     # helper function for draw_glyph 
     # resize the path into scalefactor
@@ -163,14 +209,25 @@ class GlyphRenderer:
 
         for path in pathsToD:
             verts, codes = ([] for i in range(2))
-            for oldVert, code in path.iter_segments():
-                newVert = self.shiftVert(refpoint, oldVert, scalefactor)
-                verts.append(newVert)
-                codes.append(code)
+            for oldVerts, code in path.iter_segments():
+                newVerts, newCodes = self.shiftVerts(refpoint, oldVerts, scalefactor, code)
+                verts += newVerts
+                codes += newCodes
             path = Path(verts, codes)
             newPath.append(path)
 
         return newPath
+
+    # rotate each vertices by degree angle
+    def rotateVerts(self, oldVs, dAng, codeType):
+        newV, newC = ([] for i in range(2))
+        oldVs = self.processIntoCoord(oldVs)
+        for oldVert in oldVs:
+            x = oldVert[0] * np.cos(dAng) - oldVert[1] * np.sin(dAng)
+            y = oldVert[0] * np.sin(dAng) + oldVert[1] * np.cos(dAng)
+            newV.append((x, y))
+            newC.append(codeType)
+        return newV, newC
 
     # rotate paths at the counterclockwise dir of angle (in rad [-pi, pi])
     # return rotated path and updated paths
@@ -178,11 +235,10 @@ class GlyphRenderer:
         newPath = []
         for path in pathsToRotate:
             verts, codes = ([] for i in range(2))
-            for oldVert, code in path.iter_segments():
-                x = oldVert[0] * np.cos(ang) - oldVert[1] * np.sin(ang)
-                y = oldVert[0] * np.sin(ang) + oldVert[1] * np.cos(ang)
-                verts.append([x, y])
-                codes.append(code)
+            for oldVerts, code in path.iter_segments():
+                newVerts, newCodes = self.rotateVerts(oldVerts, ang, code)
+                verts += newVerts
+                codes += newCodes
             path = Path(verts, codes)
             newPath.append(path)
 
@@ -191,6 +247,45 @@ class GlyphRenderer:
 
         return newPath, self.getframe(newPath)  
 
+    # function that turn cx, cy, r into circle path 
+    def getCirclePath(self, circle):
+        verts = [
+            (circle['cx'] - circle['r'], circle['cy']),
+            (circle['cx'] - circle['r'], circle['cy'] + circle['r']),
+            (circle['cx'], circle['cy'] + circle['r']),
+            (circle['cx'] + circle['r'], circle['cy'] + circle['r']),
+            (circle['cx'] + circle['r'], circle['cy']),
+            (circle['cx'] + circle['r'], circle['cy'] - circle['r']),
+            (circle['cx'], circle['cy'] - circle['r']),
+            (circle['cx'] - circle['r'], circle['cy'] - circle['r']),
+            (circle['cx'] - circle['r'], circle['cy'])
+        ]
+
+        codes = [
+            Path.MOVETO, 
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.CURVE3
+        ]
+
+        return Path(verts, codes)
+
+    # extract paths / circ from glyph the return raw paths to draw
+    def getRawPathsToDraw(self, glyph, merged_params):
+        pathsToDraw = []
+        for path in glyph['paths']:
+            if path['type'] not in ['baseline']:
+                svg_text = self.eval_svg_data(path['d'], merged_params)
+                pathsToDraw.append(svg2mpl.parse_path(svg_text))
+        for circle in glyph['circles']:
+            pathsToDraw.append(self.getCirclePath(circle))
+
+        return pathsToDraw 
 
     def draw_glyph(self, ax, glyph_type, position, size, angle, user_parameters=None):
         # convert svg path into matplotlib path 
@@ -200,22 +295,21 @@ class GlyphRenderer:
             # Collate parameters (user parameters take priority) 
             for key in user_parameters.keys():
                 merged_parameters[key] = user_parameters[key]
-        paths_to_draw = []
-        for path in glyph['paths']:
-            #if path['type'] not in ['bounding-box']:
-            if path['type'] not in ['baseline', 'bounding-box']:
-	            svg_text = self.eval_svg_data(path['d'], merged_parameters)
-	            paths_to_draw.append(svg2mpl.parse_path(svg_text))
-
+        paths_to_draw = self.getRawPathsToDraw(glyph, merged_parameters)
         
-        # Draw glyph to the axis at position 
+        # get & set frames
         initialFrame = self.getframe(paths_to_draw) 
         newFrame = Frame(width=size, height=size, origin=position)
+
+        # update path positions 
         paths_to_draw = self.shiftToPosition(paths_to_draw, initialFrame, position)
         paths_to_draw = self.resizeToFrame(paths_to_draw, position, initialFrame, newFrame)
         paths_to_draw, newFrame = self.rotateAtPos(paths_to_draw, position, angle)
+        paths_to_draw = self.shiftToPosition(paths_to_draw, newFrame, position)
 
+        # add paths 
         for path in paths_to_draw:
+            print(path)
             patch = patches.PathPatch(path, facecolor='white', edgecolor='black', lw=2)
             ax.add_patch(patch)
 
@@ -281,12 +375,12 @@ class StrandRenderer:
 # Testing
 ###############################################################################
 
+# default setting
 strand = StrandRenderer()
 renderer = GlyphRenderer()
-#print(renderer.glyphs_library['Promoter'])
+#print(renderer.glyphs_library['ORI'])
 #print('------------')
 #print(renderer.glyph_soterm_map)
-
 
 fig = plt.figure(figsize=(5,5))
 ax = fig.add_subplot(111)
@@ -294,19 +388,17 @@ ax = fig.add_subplot(111)
 ax.set_xlim(-50.0, 50.0)
 ax.set_ylim(-50.0, 50.0)
 
-#for glyph_type in renderer.glyphs_library.keys():
-promoter = renderer.draw_glyph(ax, 'Promoter', (-30.0, 0.0), 10., 0)
-promoter = renderer.draw_glyph(ax, 'Promoter', (0.0, 0.0), 10., np.pi/2.)
-promoter = renderer.draw_glyph(ax, 'Promoter', (30.0, 0.0), 10., np.pi)
-
-#annotation
+#insulator = renderer.draw_glyph(ax, 'Insulator', (0.0, 0.0), 33., 0)
+ori1 = renderer.draw_glyph(ax, 'ORI', (-30.0, 0.0), 5., 0)
+ori2 = renderer.draw_glyph(ax, 'ORI', (-10.0, 20.0), 22., np.pi)
+ori3 = renderer.draw_glyph(ax, 'ORI', (10.0, 0.0), 8., np.pi/3.)
 ax.annotate('(-30.0, 0.0)', xy=[-30.0, 0.0], ha='center')
-ax.annotate('(0.0, 0.0)', xy=[0.0, 0.0], ha='center')
-ax.annotate('(30.0, 0.0)', xy=[30.0, 0.0], ha='center')
+ax.annotate('(-10.0, 20.0)', xy=[-10.0, 20.0], ha='center')
+ax.annotate('(10.0, 0.0)', xy=[10.0, 0.0], ha='center')
+
+
 ax.set_axis_off()
 plt.show()
-
-
 
 """
 ####################

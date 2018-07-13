@@ -23,6 +23,10 @@ __version__ = '2.0'
 # define named tuple called frame for containing glyph (struct)
 Frame = namedtuple("Frame", "width height origin")
 
+# Global const
+STRANDZSCORE = 1.0 # low to send strand back
+GLYPHZSCORE = 10.0 # high to send glyph front 
+
 class GlyphRenderer:
     """ Class defining the part renders.
     """
@@ -319,20 +323,12 @@ class GlyphRenderer:
 
         # add paths 
         for path in paths_to_draw:
-            print(path)
-            patch = patches.PathPatch(path, facecolor='white', edgecolor='black', lw=2)
+            patch = patches.PathPatch(path, facecolor='white', edgecolor='black', lw=2, zorder=GLYPHZSCORE)
             ax.add_patch(patch)
 
         # return type to be pieced together in StrandRenderer
-        return {'identity': glyph_type, 'frame': new_frame}
-
-
-class DesignRenderer:
-    """ Class defining the rendering funtionality (assumes layout already generated).
-    """
-
-    def __init__(self):
-        return None
+        #return {'identity': glyph_type, 'frame': new_frame}
+        return {'identity': glyph_type, 'frame': self.getframe(paths_to_draw)}
 
 # piece glyphs together 
 class StrandRenderer:
@@ -345,6 +341,7 @@ class StrandRenderer:
 	def add_glyphs(self, glyph_n_frame):
 		self.glyphs_contained += glyph_n_frame
 
+	# private
 	# helper function for adjusting backbone axis
 	def _convertXaxis(self, stX, eX, axis, ofset):
 		xmin, xmax = axis 
@@ -354,27 +351,74 @@ class StrandRenderer:
 		return start, end 
 
 	# draw horizontal backbone strand line (drawn blue)
-	def draw_backbone_strand(self, ax, offset=3, user_parameters=None):
+	def draw_backbone_strand(self, ax, y_loc, offset=3, user_parameters=None):
 		start_x, end_x, height = (0. for i in range(3))
 		for i in range(len(self.glyphs_contained)):
 			glyph_frame = self.glyphs_contained[i]['frame']
 			if i == 0:
 				start_x = glyph_frame.origin[0]
 				end_x = glyph_frame.origin[0] + glyph_frame.width
-				Y = glyph_frame.origin[1]
 			else:
 				# update x axis 
 				if glyph_frame.origin[0] < start_x:
 					start_x = glyph_frame.origin[0]
 				elif glyph_frame.origin[0] + glyph_frame.width > end_x:
 					end_x = glyph_frame.origin[0] + glyph_frame.width
-				# update y axis (defined by midpoint between glyph origin)
-				if glyph_frame.origin[1] != Y:
-					Y = (Y + glyph_frame.origin[1]) / 2.0
 			
-		start, end = self._convertXaxis(startX, endX, ax.get_xlim(), offset)	
-		ax.axhline(y=Y, xmin=start, xmax=end)
+		start, end = self._convertXaxis(start_x, end_x, ax.get_xlim(), offset)	
+		ax.axhline(y=y_loc, xmin=start, xmax=end, zorder=STRANDZSCORE)
+		strand_frame = Frame(width=(end_x - start_x + 2*offset), 
+		height=0., # height updated to strokewidth later
+		origin=(start_x - offset, y_loc)) 
 
+		return {'identity': 'backbone-strand', 'frame': strand_frame}
+
+
+# visualize module for hierarchical rendering
+class ModuleRenderer:
+	""" Class defining the strand for part renders.
+    """
+   
+
+	def __init__(self):
+		self.parts_contained = [] # glyphs + interaction
+
+	def add_parts(self, glyph_n_frame):
+		self.parts_contained += glyph_n_frame
+
+	# draw horizontal backbone strand line (drawn blue)
+	def draw_module_box(self, ax, x_offset=None, y_offset=None, user_parameters=None):
+		max_x, max_y = (np.finfo(np.float128).min for i in range(2)) # initialize to minimum 
+		min_x, min_y = (np.finfo(np.float128).max for i in range(2))
+
+		if x_offset is None:
+			x_offset = 1.5 # default x offset
+		if y_offset is None:
+			y_offset = 3 # default y offset
+
+		for i in range(len(self.parts_contained)):
+			part_frame = self.parts_contained[i]['frame']
+			print(part_frame)
+			# extract min/max x, min/max y 
+			if min_x > part_frame.origin[0]:
+				min_x = part_frame.origin[0]
+			if min_y > part_frame.origin[1]:
+				min_y = part_frame.origin[1]
+			if max_x < part_frame.origin[0] + part_frame.width:
+				max_x = part_frame.origin[0] + part_frame.width
+			if max_y < part_frame.origin[1] + part_frame.height:
+				max_y = part_frame.origin[1] + part_frame.height
+		print('min_x: %f, min_y: %f, max_x: %f, max_y: %f', min_x, min_y, max_x, max_y)
+
+		p = patches.Rectangle((min_x - x_offset, min_y - y_offset), 
+			(max_x - min_x + 2*x_offset), # width
+			(max_y - min_y + 2*y_offset), # height
+			fill=False)
+		ax.add_patch(p)
+
+		return Frame(width=(max_x - min_x + 2*x_offset), 
+			height=(max_y - min_y + 2*y_offset),
+			origin=(min_x - x_offset, min_y - y_offset))
 
 
 ###############################################################################
@@ -382,9 +426,11 @@ class StrandRenderer:
 ###############################################################################
 
 # default setting
-#strand = StrandRenderer()
+strand = StrandRenderer()
 renderer = GlyphRenderer()
-print(renderer.glyphs_library)
+module = ModuleRenderer()
+
+#print(renderer.glyphs_library)
 #print('------------')
 #print(renderer.glyph_soterm_map)
 
@@ -394,16 +440,14 @@ ax = fig.add_subplot(111)
 ax.set_xlim(-50.0, 50.0)
 ax.set_ylim(-50.0, 50.0)
 
-ori1 = renderer.draw_glyph(ax, 'Promoter', (-30.0, 0.0), 5., 0)
-ori2 = renderer.draw_glyph(ax, 'ORI', (-10.0, 20.0), 22., np.pi)
-ori3 = renderer.draw_glyph(ax, 'Insulator', (10.0, 0.0), 8., np.pi/3.)
-ax.annotate('(-30.0, 0.0)', xy=[-30.0, 0.0], ha='center')
-ax.annotate('(-10.0, 20.0)', xy=[-10.0, 20.0], ha='center')
-ax.annotate('(10.0, 0.0)', xy=[10.0, 0.0], ha='center')
-ax.plot(-30., 0., marker='o', c='r')
-ax.plot(-10., 20., marker='o', c='r')
-ax.plot(10., 0., marker='o', c='r')
-
+p1 = renderer.draw_glyph(ax, 'Promoter', (-20.0, 0.0), 10., 0)
+ori2 = renderer.draw_glyph(ax, 'ORI', (0.0, -5.), 10., 0)
+i3 = renderer.draw_glyph(ax, 'Insulator', (20.0, -5.), 10., 0.)
+strand.add_glyphs([p1, ori2, i3])
+bb = strand.draw_backbone_strand(ax, 0.)
+module.add_parts([p1, ori2, i3, bb])
+module_frame = module.draw_module_box(ax)
+print(module_frame)
 
 ax.set_axis_off()
 plt.show()

@@ -1,3 +1,6 @@
+'''rough script for rendering three ORI
+'''
+
 fig = plt.figure(figsize=(5,5))
 ax = fig.add_subplot(111)
 # need to set axis first 

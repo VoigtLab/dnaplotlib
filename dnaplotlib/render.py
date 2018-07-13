@@ -30,10 +30,48 @@ class GlyphRenderer:
     def __init__(self, glyph_path='glyphs/', global_defaults=None):
         self.glyphs_library, self.glyph_soterm_map = self.load_glyphs_from_path(glyph_path)
     
+    # extract tag details for so term 
+    def extract_tag_details(self, tag_attributes):
+        tag_details = {}
+        tag_details['glyphtype'] = None
+        tag_details['soterms'] = []
+        tag_details['defaults'] = None
+        # Pull out the relevant details
+        for key in tag_attributes.keys():
+            if key == 'glyphtype':
+                tag_details['glyphtype'] = tag_attributes[key]
+            if key == 'soterms':
+                tag_details['soterms'] = tag_attributes[key].split(';')
+            if 'parametric' in key and key.endswith('}defaults'):
+                split_defaults_text = tag_attributes[key].split(';')
+                defaults = {}
+                for element in split_defaults_text:
+                    key_value = element.split(':')
+                    defaults[key_value[0].strip()] = float(key_value[1].strip())
+                tag_details['defaults'] = defaults
+        
+        return tag_details
+
+    # extract tag details for path 
+    def extract_tag_details_path(self, tag_attributes):
+        tag_details = {}
+        tag_details['type'] = None #svg name
+        tag_details['d'] = None # path specification
+
+        # Pull out the relevant details
+        for key in tag_attributes.keys():
+            if key == 'class':
+                tag_details['type'] = tag_attributes[key]
+            if 'parametric' in key and key.endswith('}d'):
+                tag_details['d'] = tag_attributes[key]
+            
+        return tag_details
+
+
     # extract tag details for circle 
     def extract_tag_details_circle(self, tag_attributes):
         tag_details = {}
-        tag_details['type'] = None
+        tag_details['type'] = None # svg name
         tag_details['cx'] = None # x coord
         tag_details['cy'] = None # y coord
         tag_details['r'] = None # radius
@@ -49,33 +87,6 @@ class GlyphRenderer:
             if 'parametric' in key and key.endswith('}r'):
                 tag_details['r'] = float(tag_attributes[key])
 
-        return tag_details
-
-    def extract_tag_details(self, tag_attributes):
-        tag_details = {}
-        tag_details['glyphtype'] = None
-        tag_details['soterms'] = []
-        tag_details['type'] = None
-        tag_details['defaults'] = None
-        tag_details['d'] = None 
-        # Pull out the relevant details
-        for key in tag_attributes.keys():
-            if key == 'glyphtype':
-                tag_details['glyphtype'] = tag_attributes[key]
-            if key == 'soterms':
-                tag_details['soterms'] = tag_attributes[key].split(';')
-            if key == 'class':
-                tag_details['type'] = tag_attributes[key]
-            if 'parametric' in key and key.endswith('}d'):
-                tag_details['d'] = tag_attributes[key]
-            if 'parametric' in key and key.endswith('}defaults'):
-                split_defaults_text = tag_attributes[key].split(';')
-                defaults = {}
-                for element in split_defaults_text:
-                    key_value = element.split(':')
-                    defaults[key_value[0].strip()] = float(key_value[1].strip())
-                tag_details['defaults'] = defaults
-        
         return tag_details
 
     def eval_svg_data(self, svg_text, parameters):
@@ -96,7 +107,7 @@ class GlyphRenderer:
         for child in root:
             # Cycle through and find all paths and circles
             if child.tag.endswith('path'):
-                glyph_data['paths'].append(self.extract_tag_details(child.attrib))
+                glyph_data['paths'].append(self.extract_tag_details_path(child.attrib))
             elif child.tag.endswith('circle'):
                 glyph_data['circles'].append(self.extract_tag_details_circle(child.attrib))
         return glyph_type, glyph_soterms, glyph_data
@@ -111,44 +122,8 @@ class GlyphRenderer:
                 glyph_soterm_map[soterm] = glyph_type
         return glyphs_library, glyph_soterm_map
 
-    # helper function for getframe
-    # get rectangular frame that fit raw svg extract
-    def updateFrameParam(self, index, currParam, currParamPoint, newVertice):
-        if newVertice[index] < currParamPoint[index]:
-        	dis = currParamPoint[index] - newVertice[index]
-        	currParam += dis
-        	currParamPoint = newVertice
-        else:
-        	dis = newVertice[index] - currParamPoint[index]
-        	if dis > currParam:
-        		currParam = dis 
-        return currParam, currParamPoint
-
-    # helper function for draw_glyph
-    # get rectangular frame that fit raw svg extract 
-    def getframe(self, raw_paths):
-        widthPoint, heightPoint, origin = ((0.0, 0.0) for i in range(3)) 
-        width, height = (0.0 for i in range(2))
-        for path in raw_paths:
-            for vertice, code in path.iter_segments():
-                # check and update origin
-                if origin[0] == origin[1] and origin[0] == 0.0:
-                    origin = (float(vertice[0]), float(vertice[1]))
-                    widthPoint = origin
-                    heightPoint = origin
-                if vertice[0] < origin[0]:
-                    origin = (float(vertice[0]), origin[1])
-                elif vertice[1] < origin[1]:
-                	origin = (origin[0], float(vertice[1])) 
-
-                # check and update width (index 0) / height (index 1)
-                width, widthPoint = self.updateFrameParam(0, width, widthPoint, vertice)
-                height, heightPoint = self.updateFrameParam(1, width, heightPoint, vertice)
- 
-        return Frame(width, height, origin)
-
     # turn list of vertices into coordinates
-    def processIntoCoord(self, vlist):
+    def list_into_coord(self, vlist):
         x, y = (0. for i in range(2))
         verts = []
         for i in range(len(vlist)):
@@ -159,96 +134,131 @@ class GlyphRenderer:
                 verts.append([x, y])
         return verts
 
-    # function that return updated set of vertices and codes
-    def updateVC(self, verts, code, dX, dY):
-        newVerts, newCodes = ([] for i in range(2))
-        verts = self.processIntoCoord(verts)
-        for vert in verts:
-            newVert = (float(vert[0]) + dX, float(vert[1]) + dY)
-            newVerts.append(newVert)
-            newCodes.append(code)
-        return newVerts, newCodes
+    # helper function for getframe (width, height, origin)
+    # get rectangular frame that fit raw svg extract
+    def update_frame_param(self, index, curr_param, curr_param_point, new_vertice):
+        if new_vertice[index] < curr_param_point[index]:
+        	distance = curr_param_point[index] - new_vertice[index]
+        	curr_param += distance
+        	curr_param_point = new_vertice
+        else:
+        	distance = new_vertice[index] - curr_param_point[index]
+        	if distance > curr_param:
+        		curr_param = distance
+        return curr_param, curr_param_point
 
     # helper function for draw_glyph
-    # get rectangular frame that fit raw svg extract
-    def shiftToPosition(self, pathsToDraw, origFrame, pos):
+    # get rectangular frame that fit raw svg extract 
+    def getframe(self, raw_paths):
+        width_point, height_point, origin = ((0.0, 0.0) for i in range(3)) 
+        width, height = (0.0 for i in range(2))
+        for path in raw_paths:
+            for vertices, code in path.iter_segments():
+                # check and update origin
+                verts = self.list_into_coord(vertices)
+                for vert in verts:
+                    if origin[0] == origin[1] and origin[0] == 0.0:
+                        origin = (float(vert[0]), float(vert[1]))
+                        width_point = origin
+                        height_point = origin
+                    if vert[0] < origin[0]:
+                        origin = (float(vert[0]), origin[1])
+                    if vert[1] < origin[1]:
+                        origin = (origin[0], float(vert[1])) 
+                    # check and update width (index 0) / height (index 1)
+                    width, width_point = self.update_frame_param(0, width, width_point, vert)
+                    height, height_point = self.update_frame_param(1, width, height_point, vert)
+ 
+        return Frame(width, height, origin)
+
+    # helper function for shift_to_position
+    # function that return translated set of vertices and codes
+    def update_vertices(self, verts, code, dx, dy):
+        new_verts, new_codes = ([] for i in range(2))
+        verts = self.list_into_coord(verts)
+        for vert in verts:
+            new_vert = (float(vert[0]) + dx, float(vert[1]) + dy)
+            new_verts.append(new_vert)
+            new_codes.append(code)
+        return new_verts, new_codes
+
+    # helper function for draw_glyph
+    def shift_to_position(self, paths_draw, orig_frame, pos):
         # shift paths
-        newPath = []
-        deltaX = pos[0] - origFrame.origin[0]
-        deltaY = pos[1] - origFrame.origin[1]
-        for path in pathsToDraw:
+        new_path = []
+        deltaX = pos[0] - orig_frame.origin[0]
+        deltaY = pos[1] - orig_frame.origin[1]
+        for path in paths_draw:
             verts, codes = ([] for i in range(2))
-            for oldVerts, code in path.iter_segments():
-                newVerts, newCodes = self.updateVC(oldVerts, code, deltaX, deltaY)
-                verts += newVerts
-                codes += newCodes
+            for old_verts, code in path.iter_segments():
+                new_vertices, new_codes = self.update_vertices(old_verts, code, deltaX, deltaY)
+                verts += new_vertices
+                codes += new_codes
             path = Path(verts, codes)
-            newPath.append(path)
+            new_path.append(path)
 
-        return newPath
+        return new_path
 
-    # helper function to resizeToFrame
+    # helper function to resize_to_frame
     # shift old vertice by scalefactor in reference to refpoint
-    def shiftVerts(self, ref, oldVs, sfactor, codeType): 
-        nVerts, nCodes = ([] for i in range(2))
-        oldVs = self.processIntoCoord(oldVs)
-        for old in oldVs:
+    def shift_verts(self, ref, old_verts, sfactor, code_type): 
+        new_verts, new_codes = ([] for i in range(2))
+        old_vs = self.list_into_coord(old_verts)
+        for old in old_vs:
             xdis = ref[0] - old[0] 
             ydis = ref[1] - old[1]
             newXdis = sfactor * xdis
             newYdis = sfactor * ydis 
-            nVerts.append((float(ref[0] - newXdis), float(ref[1] - newYdis)))
-            nCodes.append(codeType)       
-        return nVerts, nCodes
+            new_verts.append((float(ref[0] - newXdis), float(ref[1] - newYdis)))
+            new_codes.append(code_type)       
+        return new_verts, new_codes
         
     # helper function for draw_glyph 
     # resize the path into scalefactor
-    def resizeToFrame(self, pathsToD, refpoint, oldFrame, newFrame):
-        newPath = []
-        scalefactor = newFrame.width / oldFrame.width
+    def resize_to_frame(self, paths_to_d, refpoint, old_frame, new_frame):
+        new_path = []
+        scalefactor = new_frame.width / old_frame.width
 
-        for path in pathsToD:
+        for path in paths_to_d:
             verts, codes = ([] for i in range(2))
-            for oldVerts, code in path.iter_segments():
-                newVerts, newCodes = self.shiftVerts(refpoint, oldVerts, scalefactor, code)
-                verts += newVerts
-                codes += newCodes
+            for old_verts, code in path.iter_segments():
+                new_verts, new_codes = self.shift_verts(refpoint, old_verts, scalefactor, code)
+                verts += new_verts
+                codes += new_codes
             path = Path(verts, codes)
-            newPath.append(path)
+            new_path.append(path)
 
-        return newPath
+        return new_path
 
+    # helper function for rotate_at_position
     # rotate each vertices by degree angle
-    def rotateVerts(self, oldVs, dAng, codeType):
-        newV, newC = ([] for i in range(2))
-        oldVs = self.processIntoCoord(oldVs)
-        for oldVert in oldVs:
-            x = oldVert[0] * np.cos(dAng) - oldVert[1] * np.sin(dAng)
-            y = oldVert[0] * np.sin(dAng) + oldVert[1] * np.cos(dAng)
-            newV.append((x, y))
-            newC.append(codeType)
-        return newV, newC
+    def rotate_verts(self, old_verts, d_angle, code_type):
+        new_v, new_c = ([] for i in range(2))
+        old_verts = self.list_into_coord(old_verts)
+        for old_vert in old_verts:
+            x = old_vert[0] * np.cos(d_angle) - old_vert[1] * np.sin(d_angle)
+            y = old_vert[0] * np.sin(d_angle) + old_vert[1] * np.cos(d_angle)
+            new_v.append((x, y))
+            new_c.append(code_type)
+        return new_v, new_c
 
     # rotate paths at the counterclockwise dir of angle (in rad [-pi, pi])
     # return rotated path and updated paths
-    def rotateAtPos(self, pathsToRotate, pos, ang):
-        newPath = []
-        for path in pathsToRotate:
+    def rotate_at_position(self, paths_to_rotate, pos, ang):
+        new_path = []
+        for path in paths_to_rotate:
             verts, codes = ([] for i in range(2))
-            for oldVerts, code in path.iter_segments():
-                newVerts, newCodes = self.rotateVerts(oldVerts, ang, code)
-                verts += newVerts
-                codes += newCodes
+            for old_verts, code in path.iter_segments():
+                new_verts, new_codes = self.rotate_verts(old_verts, ang, code)
+                verts += new_verts
+                codes += new_codes
             path = Path(verts, codes)
-            newPath.append(path)
+            new_path.append(path)
 
-        rawFrame = self.getframe(newPath)
-        newPath = self.shiftToPosition(newPath, rawFrame, pos)
-
-        return newPath, self.getframe(newPath)  
+        return new_path
 
     # function that turn cx, cy, r into circle path 
-    def getCirclePath(self, circle):
+    def get_circle_path(self, circle):
         verts = [
             (circle['cx'] - circle['r'], circle['cy']),
             (circle['cx'] - circle['r'], circle['cy'] + circle['r']),
@@ -276,16 +286,16 @@ class GlyphRenderer:
         return Path(verts, codes)
 
     # extract paths / circ from glyph the return raw paths to draw
-    def getRawPathsToDraw(self, glyph, merged_params):
-        pathsToDraw = []
+    def get_rawpaths_to_draw(self, glyph, merged_params):
+        new_paths_to_draw = []
         for path in glyph['paths']:
             if path['type'] not in ['baseline']:
                 svg_text = self.eval_svg_data(path['d'], merged_params)
-                pathsToDraw.append(svg2mpl.parse_path(svg_text))
+                new_paths_to_draw.append(svg2mpl.parse_path(svg_text))
         for circle in glyph['circles']:
-            pathsToDraw.append(self.getCirclePath(circle))
+            new_paths_to_draw.append(self.get_circle_path(circle))
 
-        return pathsToDraw 
+        return new_paths_to_draw
 
     def draw_glyph(self, ax, glyph_type, position, size, angle, user_parameters=None):
         # convert svg path into matplotlib path 
@@ -295,17 +305,17 @@ class GlyphRenderer:
             # Collate parameters (user parameters take priority) 
             for key in user_parameters.keys():
                 merged_parameters[key] = user_parameters[key]
-        paths_to_draw = self.getRawPathsToDraw(glyph, merged_parameters)
+        paths_to_draw = self.get_rawpaths_to_draw(glyph, merged_parameters)
         
         # get & set frames
-        initialFrame = self.getframe(paths_to_draw) 
-        newFrame = Frame(width=size, height=size, origin=position)
+        initial_frame = self.getframe(paths_to_draw) 
+        new_frame = Frame(width=size, height=size, origin=position)
 
         # update path positions 
-        paths_to_draw = self.shiftToPosition(paths_to_draw, initialFrame, position)
-        paths_to_draw = self.resizeToFrame(paths_to_draw, position, initialFrame, newFrame)
-        paths_to_draw, newFrame = self.rotateAtPos(paths_to_draw, position, angle)
-        paths_to_draw = self.shiftToPosition(paths_to_draw, newFrame, position)
+        paths_to_draw = self.shift_to_position(paths_to_draw, initial_frame, position)
+        paths_to_draw = self.resize_to_frame(paths_to_draw, position, initial_frame, new_frame)
+        paths_to_draw = self.rotate_at_position(paths_to_draw, position, angle)
+        paths_to_draw = self.shift_to_position(paths_to_draw, self.getframe(paths_to_draw), position)
 
         # add paths 
         for path in paths_to_draw:
@@ -314,7 +324,7 @@ class GlyphRenderer:
             ax.add_patch(patch)
 
         # return type to be pieced together in StrandRenderer
-        return {'identity': glyph_type, 'frame': newFrame}
+        return {'identity': glyph_type, 'frame': new_frame}
 
 
 class DesignRenderer:
@@ -332,8 +342,8 @@ class StrandRenderer:
 	def __init__(self):
 		self.glyphs_contained = [] #primary sequence
 
-	def addGlyphs(self, glyphAndFrame):
-		self.glyphs_contained += glyphAndFrame
+	def add_glyphs(self, glyph_n_frame):
+		self.glyphs_contained += glyph_n_frame
 
 	# helper function for adjusting backbone axis
 	def _convertXaxis(self, stX, eX, axis, ofset):
@@ -344,27 +354,23 @@ class StrandRenderer:
 		return start, end 
 
 	# draw horizontal backbone strand line (drawn blue)
-	def drawBackboneStrand(self, ax, offset=3, user_parameters=None):
-		# need at least one glyph 
-		#if len(self.glyphs_contained) == 0: return 
-
-		startX, endX, height = (0. for i in range(3))
-	
+	def draw_backbone_strand(self, ax, offset=3, user_parameters=None):
+		start_x, end_x, height = (0. for i in range(3))
 		for i in range(len(self.glyphs_contained)):
-			glyphFrame = self.glyphs_contained[i]['frame']
+			glyph_frame = self.glyphs_contained[i]['frame']
 			if i == 0:
-				startX = glyphFrame.origin[0]
-				endX = glyphFrame.origin[0] + glyphFrame.width
-				Y = glyphFrame.origin[1]
+				start_x = glyph_frame.origin[0]
+				end_x = glyph_frame.origin[0] + glyph_frame.width
+				Y = glyph_frame.origin[1]
 			else:
 				# update x axis 
-				if glyphFrame.origin[0] < startX:
-					startX = glyphFrame.origin[0]
-				elif glyphFrame.origin[0] + glyphFrame.width > endX:
-					endX = glyphFrame.origin[0] + glyphFrame.width
+				if glyph_frame.origin[0] < start_x:
+					start_x = glyph_frame.origin[0]
+				elif glyph_frame.origin[0] + glyph_frame.width > end_x:
+					end_x = glyph_frame.origin[0] + glyph_frame.width
 				# update y axis (defined by midpoint between glyph origin)
-				if glyphFrame.origin[1] != Y:
-					Y = (Y + glyphFrame.origin[1]) / 2.0
+				if glyph_frame.origin[1] != Y:
+					Y = (Y + glyph_frame.origin[1]) / 2.0
 			
 		start, end = self._convertXaxis(startX, endX, ax.get_xlim(), offset)	
 		ax.axhline(y=Y, xmin=start, xmax=end)
@@ -376,9 +382,9 @@ class StrandRenderer:
 ###############################################################################
 
 # default setting
-strand = StrandRenderer()
+#strand = StrandRenderer()
 renderer = GlyphRenderer()
-#print(renderer.glyphs_library['ORI'])
+print(renderer.glyphs_library)
 #print('------------')
 #print(renderer.glyph_soterm_map)
 
@@ -388,13 +394,15 @@ ax = fig.add_subplot(111)
 ax.set_xlim(-50.0, 50.0)
 ax.set_ylim(-50.0, 50.0)
 
-#insulator = renderer.draw_glyph(ax, 'Insulator', (0.0, 0.0), 33., 0)
-ori1 = renderer.draw_glyph(ax, 'ORI', (-30.0, 0.0), 5., 0)
+ori1 = renderer.draw_glyph(ax, 'Promoter', (-30.0, 0.0), 5., 0)
 ori2 = renderer.draw_glyph(ax, 'ORI', (-10.0, 20.0), 22., np.pi)
-ori3 = renderer.draw_glyph(ax, 'ORI', (10.0, 0.0), 8., np.pi/3.)
+ori3 = renderer.draw_glyph(ax, 'Insulator', (10.0, 0.0), 8., np.pi/3.)
 ax.annotate('(-30.0, 0.0)', xy=[-30.0, 0.0], ha='center')
 ax.annotate('(-10.0, 20.0)', xy=[-10.0, 20.0], ha='center')
 ax.annotate('(10.0, 0.0)', xy=[10.0, 0.0], ha='center')
+ax.plot(-30., 0., marker='o', c='r')
+ax.plot(-10., 20., marker='o', c='r')
+ax.plot(10., 0., marker='o', c='r')
 
 
 ax.set_axis_off()

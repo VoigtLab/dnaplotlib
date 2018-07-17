@@ -6,13 +6,6 @@ __version__ = '2.0'
 
 
 class Part:
-<<<<<<< HEAD
-    def __init__(self, parent_module, name, type, orientation='+', 
-                  start_position=None, end_position=None):
-=======
-    """ Part object used to represent a genetic element or molecule in a design.
-    """
-
     def __init__(self, parent_module, name, type, orientation='+', position=None):
         """ Constructor to generate a new Part.
 
@@ -34,7 +27,6 @@ class Part:
             [x, y] position of the baseline start for the part. This is often updated
             during the rendering process.
         """
->>>>>>> 5d9689dc139b0eb715ec26e29654490918d9db71
         self.parent_module = parent_module
         self.name = name
         self.type = type
@@ -80,16 +72,6 @@ class PartList:
         """
         self.parts.append(part)
 
-<<<<<<< HEAD
-class Interaction:
-    def __init__(self, type, start_part, end_part):
-        self.type = type
-        self.start_part = start_part
-        self.end_part = end_part
-        # Options to tailor the rendering process
-        self.options = {}
-
-=======
 
 class Interaction:
     def __init__(self, part_start, part_end, type, path=None):
@@ -101,19 +83,15 @@ class Interaction:
         self.options = {}
 
 
->>>>>>> 5d9689dc139b0eb715ec26e29654490918d9db71
 class Module:
     def __init__(self, design, name, parent=None):
         self.design = design
         self.parent = parent
         self.name = name
         self.children = []
-<<<<<<< HEAD
         self.part_list = None
-=======
-        self.part_list = PartList()
         self.other_parts = []
->>>>>>> 5d9689dc139b0eb715ec26e29654490918d9db71
+
 
     def add_module(self, name):
         child = Module(self.design, name, parent=self)
@@ -122,13 +100,8 @@ class Module:
 
     def add_part(self, part):
         if len(self.children) > 0:
-<<<<<<< HEAD
-            print('Warning: Module already has children, part list is ignored:', self.name)
         if self.part_list == None:
             self.part_list = PartList()
-=======
-            print('Warning: Module already has children, part_list is ignored:', self.name)
->>>>>>> 5d9689dc139b0eb715ec26e29654490918d9db71
         self.part_list.add_part(part)
 
     def add_other_part(self, part):
@@ -139,12 +112,7 @@ class Design:
     def __init__(self, name):
         self.name = name
         self.modules = []
-<<<<<<< HEAD
-        self.interactions = [] # not used yet
-        self.other_parts = []  # not used yet
-=======
         self.interactions = []
->>>>>>> 5d9689dc139b0eb715ec26e29654490918d9db71
 
     def add_module(self, module):
         self.modules.append(module)
@@ -197,14 +165,8 @@ class Design:
 def create_test_design ():
     # You first create a design and need to give it a name   
     design = Design('design1')
-<<<<<<< HEAD
-
-    # Once a design is created
-    module1 = Module(design, None, 'module1')
-=======
     # Create DNA module 1 (containing sub-modules)
     module1 = Module(design, 'module1')
->>>>>>> 5d9689dc139b0eb715ec26e29654490918d9db71
     module1a = module1.add_module('module1a')
     part_1aCDS = Part(module1a, '1a','Promoter')
     module1a.add_part( part_1aCDS )
@@ -215,16 +177,9 @@ def create_test_design ():
     part_1cCDS = Part(module1a, '1c','Promoter')
     module1c.add_part( part_1cCDS )
     # Create DNA module 2
-<<<<<<< HEAD
-    module2 = Module(design, None, 'module2')
-    module2.add_part( Part(module2, '2a','CDS') )
-    module2.add_part( Part(module2, '2b','CDS') )
-    module2.add_part( Part(module2, '2c','CDS') )
-=======
     module2 = Module(design, 'module2')
     part_2CDS = Part(module2, '2','Promoter')
     module2.add_part( part_2CDS )
->>>>>>> 5d9689dc139b0eb715ec26e29654490918d9db71
     # Attach the different DNA segments to design
     design.add_module(module1)
     design.add_module(module2)

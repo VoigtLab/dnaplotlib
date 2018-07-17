@@ -92,7 +92,6 @@ class Module:
         self.part_list = None
         self.other_parts = []
 
-
     def add_module(self, name):
         child = Module(self.design, name, parent=self)
         self.children.append(child)
@@ -148,7 +147,6 @@ class Design:
 # Testing
 ###############################################################################
 
-
 # The basic data type at the moment works by having a Design object that holds 
 # lists of the modules, interactions, and other parts making up the design. At
 # the moment only the modules list is used. The other aspects will be added 
@@ -157,9 +155,6 @@ class Design:
 # print_design method uses to print out the tree making up the design, drilling
 # down into each module. An example of how to generate a design is shown below.
 # The key detail in the datatype is that Modules can have Modules added to them 
-
-
-
 
 def create_test_design ():
     # You first create a design and need to give it a name   

@@ -1,0 +1,9 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="CDS" soterms="SO:0000316" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
+
+<rect class="bounding-box" id="bounding-box"  x="2.881" y="7.695" width="30.085" height="20.593" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-linecap:butt;stroke-dasharray:1,0.5;"/>
+
+<path class="baseline" id="baseline" d="M0,18L36.186,18" style="fill:none;stroke:rgb(179,179,179);stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
+
+<path class="filled-path" id="cds" d="M4.205,27.12L23.094,27.12L31.795,18L23.094,8.88L4.205,8.88L4.205,27.12Z" parametric:d="M4.205,27.12L23.094,27.12L31.795,18L23.094,8.88L4.205,8.88L4.205,27.12Z" style="fill:rgb(230,230,230);fill-rule:nonzero;stroke:black;stroke-width:2.4px;stroke-linejoin:round;"/>    
+
+</svg>

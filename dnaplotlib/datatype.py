@@ -12,9 +12,9 @@ __version__ = '2.0'
 ###############################################################################
 
 class Part:
-    def __init__(self, parent_node, name, type, orientation='+', 
+    def __init__(self, parent_module, name, type, orientation='+', 
                   start_position=None, end_position=None):
-        self.parent_node = parent_node
+        self.parent_module = parent_module
         self.name = name
         self.type = type
         # Orientation of the part, either '+' or '-' (for reverse)
@@ -40,13 +40,21 @@ class PartList:
     def add_part(self, part):
         self.parts.append(part)
 
+class Interaction:
+    def __init__(self, type, start_part, end_part):
+        self.type = type
+        self.start_part = start_part
+        self.end_part = end_part
+        # Options to tailor the rendering process
+        self.options = {}
+
 class Module:
     def __init__(self, design, parent, name):
         self.design = design
         self.parent = parent
         self.name = name
         self.children = []
-        self.part_list = PartList()
+        self.part_list = None
 
     def add_module(self, name):
         child = Module(self.design, self, name)
@@ -56,14 +64,16 @@ class Module:
     def add_part(self, part):
         if len(self.children) > 0:
             print('Warning: Module already has children, part list is ignored:', self.name)
+        if self.part_list == None:
+            self.part_list = PartList()
         self.part_list.add_part(part)
 
 class Design:
     def __init__(self, name):
         self.name = name
         self.modules = []
-        self.interactions = []
-        self.other_parts = []
+        self.interactions = [] # not used yet
+        self.other_parts = []  # not used yet
 
     def add_module(self, module):
         self.modules.append(module)
@@ -93,9 +103,24 @@ class Design:
 # Testing
 ###############################################################################
 
+
+# The basic data type at the moment works by having a Design object that holds 
+# lists of the modules, interactions, and other parts making up the design. At
+# the moment only the modules list is used. The other aspects will be added 
+# later. The add_module method is called with a Module object to add and it will
+# be appended to the list. There are also a couple private functions that the
+# print_design method uses to print out the tree making up the design, drilling
+# down into each module. An example of how to generate a design is shown below.
+# The key detail in the datatype is that Modules can have Modules added to them 
+
+
+
+
 def create_test_design ():
+    # You first create a design and need to give it a name   
     design = Design('design1')
-    # Create DNA module 1 (containing sub-modules)
+
+    # Once a design is created
     module1 = Module(design, None, 'module1')
     module1a = module1.add_module('module1a')
     module1a.add_part( Part(module1a, '1a','CDS') )
@@ -105,7 +130,9 @@ def create_test_design ():
     module1c.add_part( Part(module1c, '1c','CDS') )
     # Create DNA module 2
     module2 = Module(design, None, 'module2')
-    module2.add_part( Part(module2, '2','CDS') )
+    module2.add_part( Part(module2, '2a','CDS') )
+    module2.add_part( Part(module2, '2b','CDS') )
+    module2.add_part( Part(module2, '2c','CDS') )
     # Attach the different DNA segments to design
     design.add_module(module1)
     design.add_module(module2)

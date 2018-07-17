@@ -86,8 +86,9 @@ class GlyphRenderer:
                 glyph_soterm_map[soterm] = glyph_type
         return glyphs_library, glyph_soterm_map
 
-    def draw_glyph(self, ax, glyph, position, user_parameters=None):
-        merged_parameters = glyph_data['defaults'].copy()
+    def draw_glyph(self, ax, glyph_type, position, user_parameters=None):
+        glyph = self.glyphs_library[glyph_type]
+        merged_parameters = glyph['defaults'].copy()
         if user_parameters is not None:
             # Collate parameters (user parameters take priority) 
             for key in user_parameters.keys():
@@ -100,7 +101,7 @@ class GlyphRenderer:
         # Draw glyph to the axis
         # TODO - PARAMETERS
         for path in paths_to_draw:
-            patch = patches.PathPatch(path, facecolor='white', edgecolor='black', lw=2)
+            patch = patches.PathPatch(path, facecolor='white', edgecolor='black', lw=8)
             ax.add_patch(patch)
 
 class DesignRenderer:
@@ -115,12 +116,19 @@ class DesignRenderer:
 # Testing
 ###############################################################################
 
-
 renderer = GlyphRenderer()
 print(renderer.glyphs_library)
 print('------------')
 print(renderer.glyph_soterm_map)
 
+fig = plt.figure(figsize=(6,6))
+ax = fig.add_axes([0.0, 0.0, 1.0, 1.0], frameon=False, aspect=1)
+for glyph_type in ['Aptamer']: #renderer.glyphs_library.keys():
+    print(glyph_type)
+    renderer.draw_glyph(ax,glyph_type, (0.5, 0.5))
+ax.set_ylim([0,100])
+ax.set_xlim([0,100])
+plt.show()
 
 """
 ####################

@@ -1,0 +1,10 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="Terminator" soterms="SO:0000141" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
+
+<rect class="bounding-box" id="bounding-box" x="4.794" y="6.817" width="26.487" height="22.532" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:1,0.5;"/>
+
+<path class="baseline" id="baseline" d="M-0.06,29.348L36.134,29.348" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
+
+<path class="unfilled-path" id="body" d="M18,27.992L18,8.792" parametric:d="M18,27.992L18,8.792" style="fill:none;stroke:black;stroke-width:2.4px;"/>
+<path class="unfilled-path" id="head" d="M6,7.992L30,7.992" parametric:d="M6,7.992L30,7.992" style="fill:none;stroke:black;stroke-width:2.4px;"/>
+    
+</svg>

@@ -324,9 +324,9 @@ class GlyphRenderer:
 
         # update path positions 
         paths_to_draw = self.shift_to_position(paths_to_draw, initial_frame, position)
-        paths_to_draw = self.resize_to_frame(paths_to_draw, position, initial_frame, new_frame)
-        paths_to_draw = self.rotate_at_position(paths_to_draw, position, angle)
-        paths_to_draw = self.shift_to_position(paths_to_draw, self.getframe(paths_to_draw), position)
+        #paths_to_draw = self.resize_to_frame(paths_to_draw, position, initial_frame, new_frame)
+        #paths_to_draw = self.rotate_at_position(paths_to_draw, position, angle)
+        #paths_to_draw = self.shift_to_position(paths_to_draw, self.getframe(paths_to_draw), position)
 
         # add paths 
         for path in paths_to_draw:
@@ -442,20 +442,11 @@ module2 = ModuleRenderer()
 
 fig, ax = plt.subplots(1, figsize=(6,6))
 # need to set axis first 
-ax.set_xlim(-50.0, 50.0)
-ax.set_ylim(-50.0, 50.0)
+ax.set_xlim(0.0, 200.0)
+ax.set_ylim(0.0, 200.0)
 
-# macro = renderer.draw_glyph(ax, 'Macromolecule', (0., 0.), 20., 0)
-# cropped circle: m 8,8 a 9.5,9.5 0 0 0 -20,20 z
-promoter = renderer.draw_glyph(ax, 'Promoter', (-12., 0.), 8., 0)
-insulator = renderer.draw_glyph(ax, 'Insulator', (0., -4.), 8, 0)
-ori = renderer.draw_glyph(ax, 'ORI', (12., -4), 8., 0)
-strand.add_glyphs([promoter, insulator, ori])
-strand.draw_backbone_strand(ax, 0.)
-module1.add_parts([promoter])
-module1.draw_module_box(ax)
-module2.add_parts([insulator, ori])
-module2.draw_module_box(ax)
+cds = renderer.draw_glyph(ax, 'CDS', (0., 0.), 30., 0)
+#cropped circle: m 8,8 a 9.5,9.5 0 0 0 -20,20 z
 
 ax.set_axis_off()
 plt.show()

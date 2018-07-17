@@ -99,7 +99,6 @@ class Module:
         return child
 
     def add_part(self, part):
-        if len(self.children) > 0:
         if self.part_list == None:
             self.part_list = PartList()
         self.part_list.add_part(part)

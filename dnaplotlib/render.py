@@ -12,7 +12,8 @@ import matplotlib.pyplot as plt, matplotlib.patches as patches, matplotlib.lines
 from matplotlib.path import Path
 from collections import namedtuple
 
-__author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>'
+
+__author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>', 'Sunwoo Kang <swkang73@stanford.edu>'
 __license__ = 'MIT'
 __version__ = '2.0'
 
@@ -97,6 +98,7 @@ class GlyphRenderer:
         # Use regular expression to extract and then replace with evaluated version
         # https://stackoverflow.com/questions/38734335/python-regex-replace-bracketed-text-with-contents-of-brackets
         svgpaths = re.sub(r"{([^{}]+)}", lambda m: str(eval(m.group()[1:-1], parameters)), svg_text)
+        print(svgpaths)
         return svgpaths
 
     def load_glyph(self, filename):
@@ -155,16 +157,16 @@ class GlyphRenderer:
     # get rectangular frame that fit raw svg extract 
     def getframe(self, raw_paths):
         width_point, height_point, origin = ((0.0, 0.0) for i in range(3)) 
-        width, height = (0.0 for i in range(2))
+        width, height, index = (0.0 for i in range(3))
         for path in raw_paths:
             for vertices, code in path.iter_segments():
-                # check and update origin
                 verts = self.list_into_coord(vertices)
                 for vert in verts:
-                    if origin[0] == origin[1] and origin[0] == 0.0:
+                    if index == 0: # check initialization
                         origin = (float(vert[0]), float(vert[1]))
                         width_point = origin
                         height_point = origin
+                        index += 1
                     if vert[0] < origin[0]:
                         origin = (float(vert[0]), origin[1])
                     if vert[1] < origin[1]:
@@ -221,8 +223,13 @@ class GlyphRenderer:
     # resize the path into scalefactor
     def resize_to_frame(self, paths_to_d, refpoint, old_frame, new_frame):
         new_path = []
-        scalefactor = new_frame.width / old_frame.width
-
+        if old_frame.width == old_frame.height and old_frame.width == 0: return # cannot calculate resize factor
+        # calculate scae factor
+        if new_frame.width != 0:
+            scalefactor = new_frame.width / old_frame.width
+        else:
+            scalefactor = new_frame.height / old_frame.height
+        # update paths by scale factor 
         for path in paths_to_d:
             verts, codes = ([] for i in range(2))
             for old_verts, code in path.iter_segments():
@@ -323,11 +330,11 @@ class GlyphRenderer:
 
         # add paths 
         for path in paths_to_draw:
+            print(path)
             patch = patches.PathPatch(path, facecolor='white', edgecolor='black', lw=2, zorder=GLYPHZSCORE)
             ax.add_patch(patch)
 
         # return type to be pieced together in StrandRenderer
-        #return {'identity': glyph_type, 'frame': new_frame}
         return {'identity': glyph_type, 'frame': self.getframe(paths_to_draw)}
 
 # piece glyphs together 
@@ -398,7 +405,6 @@ class ModuleRenderer:
 
 		for i in range(len(self.parts_contained)):
 			part_frame = self.parts_contained[i]['frame']
-			print(part_frame)
 			# extract min/max x, min/max y 
 			if min_x > part_frame.origin[0]:
 				min_x = part_frame.origin[0]
@@ -408,7 +414,6 @@ class ModuleRenderer:
 				max_x = part_frame.origin[0] + part_frame.width
 			if max_y < part_frame.origin[1] + part_frame.height:
 				max_y = part_frame.origin[1] + part_frame.height
-		print('min_x: %f, min_y: %f, max_x: %f, max_y: %f', min_x, min_y, max_x, max_y)
 
 		p = patches.Rectangle((min_x - x_offset, min_y - y_offset), 
 			(max_x - min_x + 2*x_offset), # width
@@ -428,26 +433,29 @@ class ModuleRenderer:
 # default setting
 strand = StrandRenderer()
 renderer = GlyphRenderer()
-module = ModuleRenderer()
+module1 = ModuleRenderer()
+module2 = ModuleRenderer()
 
 #print(renderer.glyphs_library)
 #print('------------')
 #print(renderer.glyph_soterm_map)
 
-fig = plt.figure(figsize=(5,5))
-ax = fig.add_subplot(111)
+fig, ax = plt.subplots(1, figsize=(6,6))
 # need to set axis first 
 ax.set_xlim(-50.0, 50.0)
 ax.set_ylim(-50.0, 50.0)
 
-p1 = renderer.draw_glyph(ax, 'Promoter', (-20.0, 0.0), 10., 0)
-ori2 = renderer.draw_glyph(ax, 'ORI', (0.0, -5.), 10., 0)
-i3 = renderer.draw_glyph(ax, 'Insulator', (20.0, -5.), 10., 0.)
-strand.add_glyphs([p1, ori2, i3])
-bb = strand.draw_backbone_strand(ax, 0.)
-module.add_parts([p1, ori2, i3, bb])
-module_frame = module.draw_module_box(ax)
-print(module_frame)
+# macro = renderer.draw_glyph(ax, 'Macromolecule', (0., 0.), 20., 0)
+# cropped circle: m 8,8 a 9.5,9.5 0 0 0 -20,20 z
+promoter = renderer.draw_glyph(ax, 'Promoter', (-12., 0.), 8., 0)
+insulator = renderer.draw_glyph(ax, 'Insulator', (0., -4.), 8, 0)
+ori = renderer.draw_glyph(ax, 'ORI', (12., -4), 8., 0)
+strand.add_glyphs([promoter, insulator, ori])
+strand.draw_backbone_strand(ax, 0.)
+module1.add_parts([promoter])
+module1.draw_module_box(ax)
+module2.add_parts([insulator, ori])
+module2.draw_module_box(ax)
 
 ax.set_axis_off()
 plt.show()

@@ -1,9 +1,9 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="CDS" soterms="SO:0000316" parametric:defaults="totalWidth:0; height:45; box_size:35; offset:7.5; rectSize:18; otherSize:5">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="CDS" soterms="SO:0000316" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
 
-<path class="baseline" style="opacity:1; fill:#cccccc; fill-opacity:1; stroke:#b3b3b3; stroke-width:0.49999994; stroke-dasharray:0.99999988, 0.49999994; stroke-dashoffset:0; stroke-opacity:1" d="m -0.10593219,39.025419 45.23304619,0" id="path4741" parametric:d="m 0,0 l {height},0 z"></path>
+<rect class="bounding-box" id="bounding-box"  x="2.881" y="7.695" width="30.085" height="20.593" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-linecap:butt;stroke-dasharray:1,0.5;"/>
 
-<path class="cds" d="M 5.2562231,28.868803 28.707624,28.815837 28.867396,33.900582 39.743829,22.499998 28.867396,11.099413 28.813556,17.031616 5.2562231,16.925683 Z" id="path12" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round" parametric:d="M 5.2562231,28.868803 l 28.707624,28.815837 l 28.867396,33.900582 l 39.743829,22.499998 l 28.867396,11.099413 l 28.813556,17.031616 l 5.2562231,16.925683 Z"></path>
+<path class="baseline" id="baseline" d="M0,18L36.186,18" parametric:y="18" style="fill:none;stroke:rgb(179,179,179);stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
 
-<rect class="bounding-box" style="opacity:0.5;fill:none;fill-opacity:1;stroke:#999999;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:1, 0.50000000000000000;stroke-dashoffset:0;stroke-opacity:1" id="bounding_box" width="38" height="38" x="5" y="2" parametric:width="{box_size}" parametric:height="{box_size}"></rect>
+<path class="filled-path" id="cds" d="M4.205,27.12L23.094,27.12L31.795,18L23.094,8.88L4.205,8.88L4.205,27.12Z" parametric:d="M4.205,27.12L23.094,27.12L31.795,18L23.094,8.88L4.205,8.88L4.205,27.12Z" style="fill:rgb(230,230,230);fill-rule:nonzero;stroke:black;stroke-width:2.4px;stroke-linejoin:round;"/>    
 
 </svg>

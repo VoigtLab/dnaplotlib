@@ -1,0 +1,9 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="OriginOfReplication" soterms="SO:0000296" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
+
+<rect class="bounding-box" id="bounding-box" x="7.203" y="7.102" width="21.695" height="21.78" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:1,0.5;"/>
+
+<path class="baseline" id="baseline" d="M0,18L36.017,18" parametric:y="18" style="fill:none;stroke:rgb(179,179,179);stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
+
+<circle class="filled-path" id="OriginOfReplication" cx="10" cy="10" r="9.6" parametric:cx="10" parametric:cy="10" parametric:r="9.6" style="fill:rgb(179,179,179);stroke:black;stroke-width:2.4px;"/>
+  
+</svg>

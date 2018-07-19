@@ -8,7 +8,7 @@
 
 <path class="arrow-down" d="M38.44,11.44l-8,8a1.5,1.5,0,0,0,2.12,2.12l8-8a1.5,1.5,0,0,0-2.12-2.12Z" id="path11" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round" parametric:d="m {rectSize},{rectSize} l -{otherSize}, -{otherSize} z"></path>
 
-<path class="vertical-body" d="M10.75,40V12a1.5,1.5,0,0,0-3,0V40a1.5,1.5,0,0,0,3,0Z" id="path13" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round" parametric:d="m 0, {rectSize} v {rectSize}"></path>
+<path class="vertical-body" d="M10.75,40V12a1.5,1.5,0,0,0-3,0V40a1.5,1.5,0,0,0,3,0Z" id="path13" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round" parametric:d="m 0, {rectSize} v -{rectSize}"></path>
 
 <rect class="bounding-box" style="opacity:0.5;fill:none;fill-opacity:1;stroke:#999999;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:1, 0.50000000000000000;stroke-dashoffset:0;stroke-opacity:1" id="bounding_box" width="38" height="38" x="5" y="2" parametric:width="{box_size}" parametric:height="{box_size}"></rect>
 

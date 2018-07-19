@@ -1,0 +1,9 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="RibosomeEntrySite" soterms="SO:0000139" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
+
+<rect class="bounding-box" id="bounding-box" x="6.412" y="8.734" width="23.251" height="18.457" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:1,0.5;"/>
+
+<path class="baseline" id="baseline" d="M0,27.131L36.015,27.131" parametric:y="27.131" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
+
+<path class="filled-path" id="rbs" d="M7.6,26L28.4,26L28.4,22 C28.4,14 23.6,10 18,10C12.4,10 7.6,14 7.6,22L7.6,26Z" parametric:d="M7.6,26L28.4,26L28.4,22 C28.4,14 23.6,10 18,10C12.4,10 7.6,14 7.6,22L7.6,26Z" style="fill:rgb(179,179,179);fill-rule:nonzero;stroke:black;stroke-width:2.4px;"/>
+ 
+</svg>

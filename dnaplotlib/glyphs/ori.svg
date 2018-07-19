@@ -1,9 +1,0 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="ORI" soterms="SO:0000296" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:18; otherSize:5">
-
-<path class="baseline" style="opacity:1; fill:#cccccc; fill-opacity:1; stroke:#b3b3b3; stroke-width:0.49999994; stroke-dasharray:0.99999988, 0.49999994; stroke-dashoffset:0; stroke-opacity:1" d="m -0.10593219,22.5 45.23304619,0" id="path4741" parametric:d="m {height},0"></path>
-
-<circle class="ori-circle" style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:10;stroke-dashoffset:0;stroke-opacity:1" id="bounding_box" width="44.999998" height="44.999998" cx="22.499998" cy="22.499998" r="12" parametric:cx="22.499998" parametric:cy="22.499998" parametric:r="12" parametric:height="{box_size}"></circle>
-
-<rect class="bounding-box" style="opacity:0.5;fill:none;fill-opacity:1;stroke:#999999;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:1, 0.50000000000000000;stroke-dashoffset:0;stroke-opacity:1" id="bounding_box" width="33" height="33" x="6" y="6" parametric:width="{box_size}" parametric:height="{box_size}"></rect>
-
-</svg>

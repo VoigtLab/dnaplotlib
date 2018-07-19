@@ -60,16 +60,15 @@ class GlyphRenderer:
     # extract tag details for path 
     def extract_tag_details_path(self, tag_attributes):
         tag_details = {}
-        tag_details['type'] = None #svg name
-        tag_details['d'] = None # path specification
-
         # Pull out the relevant details
         for key in tag_attributes.keys():
             if key == 'class':
                 tag_details['type'] = tag_attributes[key]
-            if 'parametric' in key and key.endswith('}d'):
+            if 'parametric' in key and key.endswith('}y'): #y for baseline
+                tag_details['y'] = tag_attributes[key]  
+            elif 'parametric' in key and key.endswith('}d'): #path to be drawn
                 tag_details['d'] = tag_attributes[key]
-            
+                      
         return tag_details
 
 
@@ -98,7 +97,6 @@ class GlyphRenderer:
         # Use regular expression to extract and then replace with evaluated version
         # https://stackoverflow.com/questions/38734335/python-regex-replace-bracketed-text-with-contents-of-brackets
         svgpaths = re.sub(r"{([^{}]+)}", lambda m: str(eval(m.group()[1:-1], parameters)), svg_text)
-        print(svgpaths)
         return svgpaths
 
     def load_glyph(self, filename):
@@ -134,9 +132,9 @@ class GlyphRenderer:
         verts = []
         for i in range(len(vlist)):
             if i%2 == 0:
-                x = vlist[i]
+                x = float(vlist[i])
             else: 
-                y = vlist[i]
+                y = float(vlist[i])
                 verts.append([x, y])
         return verts
 
@@ -268,6 +266,36 @@ class GlyphRenderer:
 
         return new_path
 
+    # helper function to extract y of baseline 
+    def get_baseline_y(self, paths):
+        for p in paths:
+            if p['type'] == 'baseline':
+                return float(p['y'])
+
+    #helper function to correct_y_orientation 
+    # add the deltas from baseline 
+    def correct_y(self, old_verts, c, baseline):
+        new_v, new_c = ([] for i in range(2))
+        old_vs = self.list_into_coord(old_verts)
+        for old_v in old_vs:
+            new_v.append( (old_v[0], -(old_v[1] - baseline)) )
+            new_c.append(c)
+        return new_v, new_c
+
+    # helper function to correct orientation 
+    def correct_y_orientation(self, paths_t_d, baseline_y):
+        corrected_path = []
+        for path in paths_t_d:
+            verts, codes = ([] for i in range(2))
+            for off_verts, code in path.iter_segments():
+                corr_v, new_c = self.correct_y(off_verts, code, baseline_y)
+                verts += corr_v
+                codes += new_c 
+            path = Path(verts, codes)
+            corrected_path.append(path)
+        return corrected_path
+            
+
     # function that turn cx, cy, r into circle path 
     def get_circle_path(self, circle):
         verts = [
@@ -317,16 +345,17 @@ class GlyphRenderer:
             for key in user_parameters.keys():
                 merged_parameters[key] = user_parameters[key]
         paths_to_draw = self.get_rawpaths_to_draw(glyph, merged_parameters)
-        
+
         # get & set frames
         initial_frame = self.getframe(paths_to_draw) 
         new_frame = Frame(width=size, height=size, origin=position)
 
         # update path positions 
+        paths_to_draw = self.correct_y_orientation(paths_to_draw, self.get_baseline_y(glyph['paths']))
         paths_to_draw = self.shift_to_position(paths_to_draw, initial_frame, position)
-        #paths_to_draw = self.resize_to_frame(paths_to_draw, position, initial_frame, new_frame)
-        #paths_to_draw = self.rotate_at_position(paths_to_draw, position, angle)
-        #paths_to_draw = self.shift_to_position(paths_to_draw, self.getframe(paths_to_draw), position)
+        paths_to_draw = self.resize_to_frame(paths_to_draw, position, initial_frame, new_frame)
+        paths_to_draw = self.rotate_at_position(paths_to_draw, position, angle)
+        paths_to_draw = self.shift_to_position(paths_to_draw, self.getframe(paths_to_draw), position)
 
         # add paths 
         for path in paths_to_draw:
@@ -434,22 +463,23 @@ class ModuleRenderer:
 strand = StrandRenderer()
 renderer = GlyphRenderer()
 module1 = ModuleRenderer()
-module2 = ModuleRenderer()
 
 #print(renderer.glyphs_library)
 #print('------------')
 #print(renderer.glyph_soterm_map)
 
-fig, ax = plt.subplots(1, figsize=(6,6))
+fig, ax = plt.subplots(1, figsize=(8,10))
 # need to set axis first 
-ax.set_xlim(0.0, 200.0)
-ax.set_ylim(0.0, 200.0)
+ax.set_xlim(-50.0, 50.0)
+ax.set_ylim(-50.0, 50.0)
 
-cds = renderer.draw_glyph(ax, 'CDS', (0., 0.), 30., 0)
-#cropped circle: m 8,8 a 9.5,9.5 0 0 0 -20,20 z
+promoter = renderer.draw_glyph(ax, 'Promoter', (-40., -30.), 50., 0.)
+ax.annotate('(-40,-30)', xy=[-40,-30], ha='center')
 
 ax.set_axis_off()
 plt.show()
+
+
 
 """
 ####################

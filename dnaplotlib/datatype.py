@@ -206,31 +206,31 @@ def create_test_design2 ():
 
     # Create DNA module 1 
     module1 = Module(design, 'module1')
-    part_1_pro = Part(module1, '1a','Promoter')
+    #part_1_pro = Part(module1, '1a','Promoter')
     part_1_res = Part(module1, '1r','RibosomeEntrySite') 
     part_1_cds = Part(module1, '1c','CDS')
     part_1_ter = Part(module1, '1t','Terminator')
-    module1.add_part( [part_1_pro, part_1_res, part_1_cds, part_1_ter] )
+    module1.add_part( [part_1_res, part_1_cds, part_1_ter] )
     
     # Create DNA module 2
     module2 = Module(design, 'module2')
-    part_2_pro = Part(module2, '2p','Promoter')
+    #part_2_pro = Part(module2, '2p','Promoter')
     part_2_cds = Part(module2, '2c','CDS')
     part_2_ter = Part(module2, '2t','Terminator')
-    module2.add_part( [part_2_pro, part_2_cds, part_2_ter] )
+    module2.add_part( [part_2_cds, part_2_ter] )
     
     # Attach the different DNA segments to design
     design.add_module(module1)
     design.add_module(module2)
 
     # Add some basic interactions
-    interaction1 = Interaction(part_1_cds, part_2_pro, 'repression')
-    design.add_interaction(interaction1)
+    #interaction1 = Interaction(part_1_cds, part_2_pro, 'repression')
+    #design.add_interaction(interaction1)
     return design
 
 # Let's try it out!
-design = create_test_design2()
-design.print_design()
+#design = create_test_design2()
+#design.print_design()
 
 
 

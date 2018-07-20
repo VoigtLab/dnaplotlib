@@ -359,7 +359,6 @@ class GlyphRenderer:
 
         # add paths 
         for path in paths_to_draw:
-            print(path)
             patch = patches.PathPatch(path, facecolor='white', edgecolor='black', lw=2, zorder=GLYPHZSCORE)
             ax.add_patch(patch)
 
@@ -371,15 +370,19 @@ class StrandRenderer:
 	""" Class defining the strand for part renders.
     """
 
+
 	def __init__(self):
 		self.glyphs_contained = [] #primary sequence
 
-	def add_glyphs(self, glyph_n_frame):
-		self.glyphs_contained += glyph_n_frame
+	def add_glyphs(self, glyph_n_frame): 
+		if type(glyph_n_frame) == list: 
+			self.glyphs_contained += glyph_n_frame
+		else: 
+			self.glyphs_contained.append(glyph_n_frame)
 
 	# private
 	# helper function for adjusting backbone axis
-	def _convertXaxis(self, stX, eX, axis, ofset):
+	def __convertXaxis(self, stX, eX, axis, ofset):
 		xmin, xmax = axis 
 		dis = xmax - xmin 
 		start = (abs(xmin - stX) - ofset) / dis
@@ -387,7 +390,7 @@ class StrandRenderer:
 		return start, end 
 
 	# draw horizontal backbone strand line (drawn blue)
-	def draw_backbone_strand(self, ax, y_loc, offset=3, user_parameters=None):
+	def draw_backbone_strand(self, ax, y_loc, offset, user_parameters=None):
 		start_x, end_x, height = (0. for i in range(3))
 		for i in range(len(self.glyphs_contained)):
 			glyph_frame = self.glyphs_contained[i]['frame']
@@ -401,7 +404,7 @@ class StrandRenderer:
 				elif glyph_frame.origin[0] + glyph_frame.width > end_x:
 					end_x = glyph_frame.origin[0] + glyph_frame.width
 			
-		start, end = self._convertXaxis(start_x, end_x, ax.get_xlim(), offset)	
+		start, end = self.__convertXaxis(start_x, end_x, ax.get_xlim(), offset)	
 		ax.axhline(y=y_loc, xmin=start, xmax=end, zorder=STRANDZSCORE)
 		strand_frame = Frame(width=(end_x - start_x + 2*offset), 
 		height=0., # height updated to strokewidth later
@@ -420,7 +423,10 @@ class ModuleRenderer:
 		self.parts_contained = [] # glyphs + interaction
 
 	def add_parts(self, glyph_n_frame):
-		self.parts_contained += glyph_n_frame
+		if type(glyph_n_frame) == list:
+			self.parts_contained += glyph_n_frame
+		else:
+			self.parts_contained.append(glyph_n_frame)
 
 	# draw horizontal backbone strand line (drawn blue)
 	def draw_module_box(self, ax, x_offset=None, y_offset=None, user_parameters=None):
@@ -428,7 +434,7 @@ class ModuleRenderer:
 		min_x, min_y = (np.finfo(np.float128).max for i in range(2))
 
 		if x_offset is None:
-			x_offset = 1.5 # default x offset
+			x_offset = 3 # default x offset
 		if y_offset is None:
 			y_offset = 3 # default y offset
 
@@ -444,15 +450,15 @@ class ModuleRenderer:
 			if max_y < part_frame.origin[1] + part_frame.height:
 				max_y = part_frame.origin[1] + part_frame.height
 
-		p = patches.Rectangle((min_x - x_offset, min_y - y_offset), 
-			(max_x - min_x + 2*x_offset), # width
-			(max_y - min_y + 2*y_offset), # height
+		p = patches.Rectangle((min_x - 2 * x_offset, min_y - 1.5 * y_offset), 
+			(max_x - min_x + 4 * x_offset), # width
+			(max_y - min_y + 3.5 * y_offset), # height
 			fill=False)
 		ax.add_patch(p)
 
-		return Frame(width=(max_x - min_x + 2*x_offset), 
-			height=(max_y - min_y + 2*y_offset),
-			origin=(min_x - x_offset, min_y - y_offset))
+		return Frame(width=(max_x - min_x + 4 * x_offset), 
+			height=(max_y - min_y + 3.5 * y_offset), 
+			origin=(min_x - 2 * x_offset, min_y - 1.5 * y_offset))
 
 
 ###############################################################################
@@ -462,7 +468,7 @@ class ModuleRenderer:
 # default setting
 '''strand = StrandRenderer()
 renderer = GlyphRenderer()
-module1 = ModuleRenderer()
+module = ModuleRenderer()
 
 #print(renderer.glyphs_library)
 #print('------------')
@@ -473,37 +479,16 @@ fig, ax = plt.subplots(1, figsize=(8,10))
 ax.set_xlim(-50.0, 50.0)
 ax.set_ylim(-50.0, 50.0)
 
-promoter = renderer.draw_glyph(ax, 'Promoter', (-40., -30.), 50., 0.)
-ax.annotate('(-40,-30)', xy=[-40,-30], ha='center')
+promoter = renderer.draw_glyph(ax, 'Promoter', (-25., -40.), 50., 0.)
+strand.add_glyphs([promoter])
+bb = strand.draw_backbone_strand(ax, -40.)
+module.add_parts([bb, promoter])
+module_frame = module.draw_module_box(ax)
+
+ax.plot(-25, -40, color='red', marker='o')
 
 ax.set_axis_off()
 plt.show()'''
 
 
 
-"""
-####################
-# Make upside down
-xmin = 100
-xmax = 0
-ymin = 100
-ymax = 0
-fig = plt.figure(figsize=(5, 5))
-ax = fig.add_axes([0.0, 0.0, 1.0, 1.0], frameon=False, aspect=1)
-# Actual shape with black outline
-for path in paths_to_draw:
-    patch = patches.PathPatch(path, facecolor='orange', edgecolor='k', lw=2)
-    ax.add_patch(patch)
-    verts = path.vertices
-    xmin, xmax = min(xmin, verts[:, 0].min()-1), max(xmax, verts[:, 0].max()+1)
-    ymin, ymax = min(ymin, verts[:, 1].min()-1), max(ymax, verts[:, 1].max()+1)
-# Centering
-ax.set_xlim(xmin, xmax)
-ax.set_ylim(ymin, ymax)
-# No ticks
-ax.set_xticks([])
-ax.set_yticks([])
-# Display
-plt.show()
-####################
-"""

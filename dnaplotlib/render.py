@@ -460,7 +460,7 @@ class ModuleRenderer:
 ###############################################################################
 
 # default setting
-strand = StrandRenderer()
+'''strand = StrandRenderer()
 renderer = GlyphRenderer()
 module1 = ModuleRenderer()
 
@@ -477,7 +477,7 @@ promoter = renderer.draw_glyph(ax, 'Promoter', (-40., -30.), 50., 0.)
 ax.annotate('(-40,-30)', xy=[-40,-30], ha='center')
 
 ax.set_axis_off()
-plt.show()
+plt.show()'''
 
 
 

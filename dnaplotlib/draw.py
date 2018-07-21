@@ -8,9 +8,9 @@ import render as rd
 import matplotlib.pyplot as plt, numpy as np 
 
 # default const
-GLYPHSIZE = 7.
-XMIN, XMAX = -50., 50.
-YMIN, YMAX = -50., 50.
+GLYPHSIZE = 6.
+XMIN, XMAX = -51., 50.
+YMIN, YMAX = -51., 50.
 WIDTH, HEIGHT = 50., 25.
 SPACER = 1.5
 
@@ -29,14 +29,11 @@ def get_origin_list(modules):
 		modules_left -= 1
 		if modules_left != 0:
 			# just shift to left
-			if dynamic_x < 0.:
-				dynamic_x += WIDTH
+			if dynamic_x < 0.: dynamic_x += WIDTH
 			# shift right and down 
 			else:
-				if modules_left == 1:
-					dynamic_x == -WIDTH/2
-				else:
-					dynamic_x = -WIDTH 
+				if modules_left == 1: dynamic_x = -WIDTH/2
+				else: dynamic_x = -WIDTH 
 				dynamic_y -= HEIGHT
 
 	return origins
@@ -48,7 +45,9 @@ def get_module_frames(modules):
 
 	for i, module in enumerate(modules):
 		# width: assume horizontal rendering in one circuit (refer to ppt)
-		width = len(module.part_list.parts) * GLYPHSIZE + SPACER * (len(module.part_list.parts) - 1) + SPACER * 6
+		width = len(module.part_list.parts) * GLYPHSIZE 
+		+ SPACER * (len(module.part_list.parts) - 1) 
+		+ SPACER * 6
 		# height: assume other parts all in one line 
 		height = GLYPHSIZE + 3.5 * SPACER
 		if len(module.other_parts) != 0.:
@@ -87,10 +86,11 @@ ax.set_axis_off()
 
 for i, m_frame in enumerate(m_frames):
 	actual_frame = draw_module(ax, design.modules[i], m_frame)
-	print('desired frame: ' + str(m_frame))
+	'''print('desired frame: ' + str(m_frame))
 	print('actual frame: ' + str(actual_frame))
 	ax.scatter(actual_frame.origin[0], actual_frame.origin[1], c='red')
 	ax.scatter(actual_frame.origin[0], actual_frame.origin[1] + actual_frame.height, c='red')
-	ax.scatter(m_frame.origin[0], m_frame.origin[1] + m_frame.height, c='green')
+	ax.scatter(m_frame.origin[0], m_frame.origin[1] + m_frame.height, c='green') # mpte difference in actual frame when there is promoter
+	''' 
 plt.show()
 

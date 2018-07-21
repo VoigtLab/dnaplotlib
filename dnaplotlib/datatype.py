@@ -28,7 +28,7 @@ class Part:
         orientation : string (default: '+')
             Orientation of the part (either '+' or '-')
 
-        position : [float, float] (default: None)
+        position : (float, float) (default: None)
             [x, y] position of the baseline start for the part. This is often updated
             during the rendering process.
         """

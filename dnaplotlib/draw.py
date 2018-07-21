@@ -56,20 +56,28 @@ def get_module_frames(modules):
 
 	return frame_list
 
+# function that draw module
 def draw_module(ax, module, module_frame, haveBackbone=True):
-	glyph_pos = (module_frame.origin[0] + 3 * SPACER, 
-		module_frame.origin[1] + 1.5 * SPACER)
+	glyph_pos = [module_frame.origin[0] + 3 * SPACER, 
+		module_frame.origin[1] + 1.5 * SPACER]
 	renderer = rd.GlyphRenderer()
 	strand_rd = rd.StrandRenderer()
 	module_rd = rd.ModuleRenderer()
+	module.part_list.position = glyph_pos 
 
+	# draw each glyphs in module part list
 	for part in module.part_list.parts:
+		part.position = glyph_pos
 		child = renderer.draw_glyph(ax, part.type, glyph_pos, GLYPHSIZE, 0.)
 		strand_rd.add_glyphs(child)
 		module_rd.add_parts(child)
-		glyph_pos = (glyph_pos[0] + GLYPHSIZE + SPACER, glyph_pos[1])
-	bb = strand_rd.draw_backbone_strand(ax, glyph_pos[1], SPACER)	
-	module_rd.add_parts(bb)
+		glyph_pos = [glyph_pos[0] + GLYPHSIZE + SPACER, glyph_pos[1]]
+	
+	# draw backbone 
+	if haveBackbone:
+		bb = strand_rd.draw_backbone_strand(ax, glyph_pos[1], SPACER)
+		module_rd.add_parts(bb)
+		module.part_list.position = bb['frame'].origin	
 	module_box = module_rd.draw_module_box(ax, SPACER, SPACER)
 	return module_box
 
@@ -86,11 +94,8 @@ ax.set_axis_off()
 
 for i, m_frame in enumerate(m_frames):
 	actual_frame = draw_module(ax, design.modules[i], m_frame)
-	'''print('desired frame: ' + str(m_frame))
-	print('actual frame: ' + str(actual_frame))
-	ax.scatter(actual_frame.origin[0], actual_frame.origin[1], c='red')
-	ax.scatter(actual_frame.origin[0], actual_frame.origin[1] + actual_frame.height, c='red')
-	ax.scatter(m_frame.origin[0], m_frame.origin[1] + m_frame.height, c='green') # mpte difference in actual frame when there is promoter
-	''' 
+
+#draw_interaction(design.interactions[0])
+
 plt.show()
 

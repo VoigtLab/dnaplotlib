@@ -161,14 +161,14 @@ class GlyphRenderer:
                 verts = self.list_into_coord(vertices)
                 for vert in verts:
                     if index == 0: # check initialization
-                        origin = (float(vert[0]), float(vert[1]))
+                        origin = [float(vert[0]), float(vert[1])]
                         width_point = origin
                         height_point = origin
                         index += 1
                     if vert[0] < origin[0]:
-                        origin = (float(vert[0]), origin[1])
+                        origin = [float(vert[0]), origin[1]]
                     if vert[1] < origin[1]:
-                        origin = (origin[0], float(vert[1])) 
+                        origin = [origin[0], float(vert[1])]
                     # check and update width (index 0) / height (index 1)
                     width, width_point = self.update_frame_param(0, width, width_point, vert)
                     height, height_point = self.update_frame_param(1, width, height_point, vert)
@@ -389,7 +389,7 @@ class StrandRenderer:
 		end = start + (eX - stX + ofset*2)/dis
 		return start, end 
 
-	# draw horizontal backbone strand line (drawn blue)
+	# draw horizontal backbone strand line 
 	def draw_backbone_strand(self, ax, y_loc, offset, user_parameters=None):
 		start_x, end_x, height = (0. for i in range(3))
 		for i in range(len(self.glyphs_contained)):
@@ -405,10 +405,10 @@ class StrandRenderer:
 					end_x = glyph_frame.origin[0] + glyph_frame.width
 			
 		start, end = self.__convertXaxis(start_x, end_x, ax.get_xlim(), offset)	
-		ax.axhline(y=y_loc, xmin=start, xmax=end, zorder=STRANDZSCORE)
+		ax.axhline(y=y_loc, xmin=start, xmax=end, c='black', zorder=STRANDZSCORE)
 		strand_frame = Frame(width=(end_x - start_x + 2*offset), 
 		height=0., # height updated to strokewidth later
-		origin=(start_x - offset, y_loc)) 
+		origin=[start_x - offset, y_loc]) 
 
 		return {'identity': 'backbone-strand', 'frame': strand_frame}
 

@@ -94,6 +94,9 @@ ax.set_axis_off()
 
 for i, m_frame in enumerate(m_frames):
 	actual_frame = draw_module(ax, design.modules[i], m_frame)
+	ax.scatter(actual_frame.origin[0], actual_frame.origin[1], c='red')
+	ax.scatter(actual_frame.origin[0], actual_frame.origin[1] + actual_frame.height, c='red')
+	ax.scatter(m_frame.origin[0], m_frame.origin[1] + m_frame.height, c='green')
 
 #draw_interaction(design.interactions[0])
 

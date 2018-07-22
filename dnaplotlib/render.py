@@ -357,6 +357,11 @@ class GlyphRenderer:
         paths_to_draw = self.rotate_at_position(paths_to_draw, position, angle)
         paths_to_draw = self.shift_to_position(paths_to_draw, self.getframe(paths_to_draw), position)
 
+        print('expected frame: ')
+        print(new_frame)
+        print('actual frame: ')
+        print(self.getframe(paths_to_draw))
+
         # add paths 
         for path in paths_to_draw:
             patch = patches.PathPatch(path, facecolor='white', edgecolor='black', lw=2, zorder=GLYPHZSCORE)
@@ -480,12 +485,11 @@ ax.set_xlim(-50.0, 50.0)
 ax.set_ylim(-50.0, 50.0)
 
 promoter = renderer.draw_glyph(ax, 'Promoter', (-25., -40.), 50., 0.)
-strand.add_glyphs([promoter])
-bb = strand.draw_backbone_strand(ax, -40.)
-module.add_parts([bb, promoter])
-module_frame = module.draw_module_box(ax)
 
 ax.plot(-25, -40, color='red', marker='o')
+ax.plot(-25, 10, color='red', marker='o')
+p = patches.Rectangle((-25., -40.), 50, 50, fill=False)
+ax.add_patch(p)
 
 ax.set_axis_off()
 plt.show()'''

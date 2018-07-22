@@ -11,7 +11,7 @@ __version__ = '2.0'
 ###############################################################################
 
 class Part:
-    def __init__(self, parent_module, name, type, orientation='+', position=None):
+    def __init__(self, parent_module, name, type, orientation='+', frame=None):
         """ Constructor to generate a new Part.
 
         Parameters
@@ -28,15 +28,14 @@ class Part:
         orientation : string (default: '+')
             Orientation of the part (either '+' or '-')
 
-        position : (float, float) (default: None)
-            [x, y] position of the baseline start for the part. This is often updated
-            during the rendering process.
+        frame : (width=float, height=float, origin=float) (default: None)
+            Often updated during the rendering process.
         """
         self.parent_module = parent_module
         self.name = name
         self.type = type
         self.orientation = orientation
-        self.position = position
+        self.frame = frame
         # Bounding box of the part lower left to upper right coordinates.
         self.extent = [[0,0], [0,0]]
         # Options to tailor the rendering process
@@ -216,7 +215,7 @@ def create_test_design2 ():
     module1.add_part( [part_1_pro, part_1_res, part_1_cds, part_1_ter] )
     
     # Create DNA module 2
-    module2 = Module(design, 'module2')
+    '''module2 = Module(design, 'module2')
     part_2_pro = Part(module2, '2p','Promoter')
     part_2_cds = Part(module2, '2c','CDS')
     part_2_ter = Part(module2, '2t','Terminator')
@@ -262,14 +261,14 @@ def create_test_design2 ():
     part_8_pro = Part(module8, '8p', 'Promoter')
     part_8_res = Part(module8, '8r', 'RibosomeEntrySite')
     part_8_ter = Part(module8, '8t', 'Terminator')
-    module8.add_part( [part_8_pro, part_8_res, part_8_ter] )
+    module8.add_part( [part_8_pro, part_8_res, part_8_ter] )'''
     
     # Attach the different DNA segments to design
-    design.add_module( [module1, module2, module3, module4, module5, module6, module7, module8 ])
+    design.add_module( [module1 ])
 
     # Add some basic interactions
-    interaction1 = Interaction(part_1_cds, part_2_pro, 'repression')
-    design.add_interaction(interaction1)
+    #interaction1 = Interaction(part_1_cds, part_2_pro, 'repression')
+    #design.add_interaction(interaction1)
     return design
 
 # Let's try it out!

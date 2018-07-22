@@ -1,15 +1,11 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="Promoter" soterms="SO:0000167" parametric:defaults="totalWidth:0; height:45; box_size:35; offset:7.5; rectSize:18; otherSize:5">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="Promoter" soterms="SO:0000167" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
 
-<path class="baseline" style="opacity:1; fill:#cccccc; fill-opacity:1; stroke:#b3b3b3; stroke-width:0.49999994; stroke-dasharray:0.99999988, 0.49999994; stroke-dashoffset:0; stroke-opacity:1" d="m -0.10593219,39.025419 45.23304619,0" id="path4741" parametric:y="0" parametric:d="m 0,0 l {height},0 z"></path>
+<rect class="bounding-box" id="bounding-box" x="4.854" y="2.862" width="26.367" height="30.142" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:1,0.5;"/>
 
-<path class="horizontal-body" d="M9.25,13.5h28a1.5,1.5,0,0,0,0-3h-28a1.5,1.5,0,0,0,0,3Z" id="path12" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round" parametric:d="m 0, {rectSize} h {rectSize}"></path>
+<path class="baseline" id="baseline" d="M-0.12,32.944C35.955,32.944 36.015,32.944 36.015,32.944"  parametric:y="32.944" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
 
-<path class="arrow-up" d="M40.56,10.94l-9-7c-1.51-1.17-3.64.94-2.12,2.12l9,7c1.51,1.17,3.64-.94,2.12-2.12Z" id="path10" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round" parametric:d="m {rectSize},{rectSize} l -{otherSize}, {otherSize} z"></path>
+<path class="unfilled-path" id="promoter-body" d="M25,6 L31,13 L25,20" parametric:d="M25,6 L31,13 L25,20" style="fill:none;stroke:black;stroke-width:2.4px;"/>
 
-<path class="arrow-down" d="M38.44,11.44l-8,8a1.5,1.5,0,0,0,2.12,2.12l8-8a1.5,1.5,0,0,0-2.12-2.12Z" id="path11" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round" parametric:d="m {rectSize},{rectSize} l -{otherSize}, -{otherSize} z"></path>
-
-<path class="vertical-body" d="M10.75,40V12a1.5,1.5,0,0,0-3,0V40a1.5,1.5,0,0,0,3,0Z" id="path13" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round" parametric:d="m 0, {rectSize} v {rectSize}"></path>
-
-<rect class="bounding-box" style="opacity:0.5;fill:none;fill-opacity:1;stroke:#999999;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:1, 0.50000000000000000;stroke-dashoffset:0;stroke-opacity:1" id="bounding_box" width="38" height="38" x="5" y="2" parametric:width="{box_size}" parametric:height="{box_size}"></rect>
-
+<path class="unfilled-path" id="promoter-head" d="M6,31.797 L6,13 L30,13" parametric:d="M6,31 L6,13 L31,13 z" style="fill:none;stroke:black;stroke-width:2.4px;"/>
+    
 </svg>

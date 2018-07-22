@@ -357,11 +357,6 @@ class GlyphRenderer:
         paths_to_draw = self.rotate_at_position(paths_to_draw, position, angle)
         paths_to_draw = self.shift_to_position(paths_to_draw, self.getframe(paths_to_draw), position)
 
-        print('expected frame: ')
-        print(new_frame)
-        print('actual frame: ')
-        print(self.getframe(paths_to_draw))
-
         # add paths 
         for path in paths_to_draw:
             patch = patches.PathPatch(path, facecolor='white', edgecolor='black', lw=2, zorder=GLYPHZSCORE)

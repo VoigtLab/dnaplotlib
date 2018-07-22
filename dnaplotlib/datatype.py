@@ -36,10 +36,7 @@ class Part:
         self.type = type
         self.orientation = orientation
         self.frame = frame
-        # Bounding box of the part lower left to upper right coordinates.
-        self.extent = [[0,0], [0,0]]
-        # Options to tailor the rendering process
-        self.options = {}
+        self.options = {} # Options to tailor the rendering process
 
 
 class PartList:
@@ -59,21 +56,11 @@ class PartList:
         # Type of backbone (DNA or RNA, will affect rendering)
         self.position = position
         self.backbone = backbone
-        # List of parts making up the segment
-        self.parts = []
-        # Bounding box of the part lower left to upper right coordinates.
-        self.extent = [[0,0], [0,0]]
-        # Options to be used when rendering backbone
-        self.options = {}
+        self.parts = [] # List of parts making up the segment
+        self.extent = [[0,0], [0,0]] # Bounding box of the part lower left to upper right coordinates.
+        self.options = {} # Options to be used when rendering backbone
 
     def add_part(self, part):
-        """ Add part/parts to the part list.
-
-        Parameters
-        ----------
-        part : Part
-            Part to appended to the end of the part list.
-        """
         if type(part) != list:
             self.parts.append(part)
         else:
@@ -82,12 +69,36 @@ class PartList:
 
 
 class Interaction:
-    def __init__(self, part_start, part_end, type, path=None):
+    """ Constructor to generate Interaction. 
+
+        Parameters
+        ----------
+        position : [float, float] (default: None)
+            [x, y] position of the baseline start for the part. This is often updated
+            during the rendering process.
+        
+        part_start : Part 
+            specifies the start part of interaction 
+
+        part_end : Part
+            specifies the end part of interaction 
+
+        rendered_y : [float]
+            specifies the list of y coordinates for interaction arrow 
+            updated during rendering 
+
+        type : string 
+            Options inclue: link, stimulation, repression, production
+
+        option: dict
+            Options to tailor the rendering process
+        """
+    def __init__(self, part_start, part_end, interaction_type, path=None):
         self.part_start = part_start
         self.part_end = part_end
-        self.type = type # Options inclue: link, stimulation, repression, production
+        self.rendered_y = []
+        self.type = interaction_type 
         self.path = path
-        # Options to tailor the rendering process
         self.options = {}
 
 
@@ -127,7 +138,10 @@ class Design:
             self.modules += module
 
     def add_interaction(self, interaction):
-        self.interactions.append(interaction)
+        if type(interaction) != list:
+            self.interactions.append(interaction)
+        else:
+            self.interactions += interaction
 
     def __print_part_list(self, part_list, indent=''):
         names = []
@@ -215,7 +229,7 @@ def create_test_design2 ():
     module1.add_part( [part_1_pro, part_1_res, part_1_cds, part_1_ter] )
     
     # Create DNA module 2
-    '''module2 = Module(design, 'module2')
+    module2 = Module(design, 'module2')
     part_2_pro = Part(module2, '2p','Promoter')
     part_2_cds = Part(module2, '2c','CDS')
     part_2_ter = Part(module2, '2t','Terminator')
@@ -236,7 +250,7 @@ def create_test_design2 ():
     module4.add_part( [part_4_pro, part_4_ori, part_4_ter] )
 
     # module 5
-    module5 = Module(design, 'module5')
+    '''module5 = Module(design, 'module5')
     part_5_pro = Part(module5, '5p', 'Promoter')
     part_5_ter = Part(module5, '5t', 'Terminator')
     module5.add_part( [part_5_pro, part_5_ter] )
@@ -264,11 +278,13 @@ def create_test_design2 ():
     module8.add_part( [part_8_pro, part_8_res, part_8_ter] )'''
     
     # Attach the different DNA segments to design
-    design.add_module( [module1 ])
+    design.add_module( [module1, module2, module3, module4 ])
 
     # Add some basic interactions
-    #interaction1 = Interaction(part_1_cds, part_2_pro, 'repression')
-    #design.add_interaction(interaction1)
+    interaction1 = Interaction(part_1_cds, part_2_pro, 'repression')
+    int2 = Interaction(part_1_pro, part_3_pro, 'repression')
+    int3 = Interaction(part_2_cds, part_4_ori, 'repression')
+    design.add_interaction( [interaction1, int2, int3] )
     return design
 
 # Let's try it out!

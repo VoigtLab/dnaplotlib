@@ -2,10 +2,9 @@
 draw dataype
 : script for bringing datatype and render func together 
 """
-
-import datatype as dt 
-import render as rd 
-import matplotlib.pyplot as plt, numpy as np 
+import numpy as np 
+import datatype as dt, render as rd 
+import matplotlib.pyplot as plt, matplotlib.patches as p, matplotlib.path as mpath
 
 # default rendering const
 GLYPHSIZE = 6.
@@ -15,11 +14,12 @@ XMIN, XMAX = -60., 60.
 YMIN, YMAX = -60., 60.
 WIDTH, HEIGHT = 50., 25. # for origin pos
 WIDTHLIMIT, HEIGHTLIMIT = 45., 20. # limit for interaction
-INTERACTION_SPACER = SPACER
-INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX = 2, 4 
+INTERACTION_SPACER = 1.5
+INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX = 1, 4
+INTERACTION_FILL_ZSCORE = 10.
 
 # function that takes modules from design and return list of origins for the modules 
-def get_origin_list(modules):
+def get_origin_list(modules, module_level):
 	# initialize origin params
 	origins = []
 	modules_left = len(modules)
@@ -55,9 +55,9 @@ def __get_bigget_module_frame(framelist):
 
 # recursive function that takes modules from design 
 # and return list of frame for the modules 
-def get_module_frames(modules, glyph_size=GLYPHSIZE, space=SPACER, has_submodule=False):
+def get_module_frames(modules, module_level, glyph_size=GLYPHSIZE, space=SPACER, has_submodule=False):
 	frame_list = []
-	origins = get_origin_list(modules)
+	origins = get_origin_list(modules, 0)
 
 	for i, module in enumerate(modules):
 		if module.part_list == None:
@@ -115,7 +115,7 @@ def __convert_coord_into_scalar_0_1(start, end, axis):
 
 # helper function for draw_3/5part_interaction
 # draw arrow body
-def __draw_arrow_body(ax, coords):
+def __draw_arrow_body(ax, coords, color):
 	for i,coord in enumerate(coords):
 		if i == (len(coords) - 1): break 
 		curr_x, next_x = coord[0], coords[i + 1][0]
@@ -124,20 +124,20 @@ def __draw_arrow_body(ax, coords):
 		cy, ny = __convert_coord_into_scalar_0_1(curr_y, next_y, ax.get_ylim())
 		
 		if i % 2 == 0: # vertical
-			ax.axvline(x=curr_x, ymin=cy, ymax=ny, c='red')
+			ax.axvline(x=curr_x, ymin=cy, ymax=ny, c=color)
 		else: # horizontal 
-			ax.axhline(y=curr_y, xmin=cx, xmax=nx, c='red')
+			ax.axhline(y=curr_y, xmin=cx, xmax=nx, c=color)
 
 # helper function for draw interaction
 # draw interaction arrow body when y diff < than height limit 
-def draw_3part_interaction(ax, start_frame, end_frame, y_ofset):
+def draw_3part_interaction(ax, start_frame, end_frame, y_ofset, i_color):
 	start_x = start_frame.origin[0] + start_frame.width / 2.
 	start_y = start_frame.origin[1] + start_frame.height + INTERACTION_SPACER 
 	end_x = end_frame.origin[0] + end_frame.width / 2.
 	end_y = end_frame.origin[1] + end_frame.height + INTERACTION_SPACER
 	c1x, c1y = start_x, start_y + y_ofset 
 	c2x, c2y = end_x, c1y
-	__draw_arrow_body(ax, [ [start_x, start_y], [c1x, c1y], [c2x, c2y], [end_x, end_y] ])
+	__draw_arrow_body(ax, [ [start_x, start_y], [c1x, c1y], [c2x, c2y], [end_x, end_y] ], i_color)
 	return [c2y] # prevent this y coord for other interaction
 
 # helper function for draw_5part_interaction
@@ -153,7 +153,7 @@ def _determine_5part_interaction_middle_x(startx, endx):
 
 # helper function for draw interaction
 # draw interaction arrow body when y diff >= height limit 
-def draw_5part_interaction(ax, start_frame, end_frame, y_1_ofset, y_2_ofset):
+def draw_5part_interaction(ax, start_frame, end_frame, y_1_ofset, y_2_ofset, i_color):
 	start_x = start_frame.origin[0] + start_frame.width / 2.
 	start_y = start_frame.origin[1] + start_frame.height + INTERACTION_SPACER 
 	end_x = end_frame.origin[0] + end_frame.width / 2.
@@ -162,25 +162,130 @@ def draw_5part_interaction(ax, start_frame, end_frame, y_1_ofset, y_2_ofset):
 	c2x, c2y = _determine_5part_interaction_middle_x(start_x, end_x), c1y
 	c3x, c3y = _determine_5part_interaction_middle_x(start_x, end_x), end_y + y_2_ofset
 	c4x, c4y = end_x, c3y
-	__draw_arrow_body(ax, [ [start_x, start_y], [c1x, c1y], [c2x, c2y], [c3x, c3y], [c4x, c4y], [end_x, end_y] ])
+	__draw_arrow_body(ax, [ [start_x, start_y], [c1x, c1y], [c2x, c2y], [c3x, c3y], [c4x, c4y], [end_x, end_y] ], i_color)
 	return [c2y, c3y] # prevent this y coord for other interaction 
 
+# helper functions for draw_interaction_arrowhead
+def draw_control_ah(ax, endframe, color):
+	Path = mpath.Path
+	start_x = endframe.origin[0] + endframe.width / 2.
+	start_y = endframe.origin[1] + endframe.height + INTERACTION_SPACER
+	edge = endframe.width / 5.
+
+	path_data = [
+		(Path.MOVETO, [start_x, start_y]),
+		(Path.LINETO, [start_x - edge, start_y + edge]),
+		(Path.LINETO, [start_x, start_y + (2 * edge)]),
+		(Path.LINETO, [start_x + edge, start_y + edge]),
+		(Path.LINETO, [start_x, start_y])
+	]
+	codes, verts = zip(*path_data)
+	path = Path(verts, codes)
+	patch = p.PathPatch(path, fill=True, edgecolor=color, facecolor='w', zorder=INTERACTION_FILL_ZSCORE)
+	ax.add_patch(patch)
+
+def draw_inhibition_ah(ax, endframe, color):
+	x = endframe.origin[0] + endframe.width / 4.
+	y = endframe.origin[1] + endframe.height + INTERACTION_SPACER 
+	start_x, end_x = __convert_coord_into_scalar_0_1(x, x + endframe.width/2, ax.get_xlim())
+	ax.axhline(y=y, xmin=start_x, xmax=end_x, c=color)
+
+def draw_process_ah(ax, endframe, color):
+	Path = mpath.Path
+	start_x = endframe.origin[0] + endframe.width / 2.
+	start_y = endframe.origin[1] + endframe.height + INTERACTION_SPACER
+	edge = endframe.width / 5.
+
+	path_data = [
+		(Path.MOVETO, [start_x, start_y]),
+		(Path.LINETO, [start_x - edge, start_y + edge]),
+		(Path.LINETO, [start_x + edge, start_y + edge]),
+		(Path.LINETO, [start_x, start_y])
+	]
+	codes, verts = zip(*path_data)
+	path = Path(verts, codes)
+	patch = p.PathPatch(path, fill=True, color=color)
+	ax.add_patch(patch)
+
+def draw_stimulation_ah(ax, endframe, color):
+	Path = mpath.Path
+	start_x = endframe.origin[0] + endframe.width / 2.
+	start_y = endframe.origin[1] + endframe.height + INTERACTION_SPACER
+	edge = endframe.width / 5.
+
+	path_data = [
+		(Path.MOVETO, [start_x, start_y]),
+		(Path.LINETO, [start_x - edge, start_y + edge]),
+		(Path.LINETO, [start_x + edge, start_y + edge]),
+		(Path.LINETO, [start_x, start_y])
+	]
+	codes, verts = zip(*path_data)
+	path = Path(verts, codes)
+	patch = p.PathPatch(path, fill=True, edgecolor=color, facecolor='w', zorder=INTERACTION_FILL_ZSCORE)
+	ax.add_patch(patch)
+
+def draw_degradation_ah(ax, endframe, color):
+	Path = mpath.Path
+	# draw the same ah as process
+	draw_process_ah(ax, endframe, color)
+	# draw circle 
+	r = endframe.width / 7
+	start_x = endframe.origin[0] + endframe.width / 2.
+	start_y = endframe.origin[1] + endframe.height 
+	circle = p.Circle((start_x, start_y), r, ec=color, fc='w')
+	ax.add_patch(circle)
+	# draw circle bar 
+	path_data = [
+		(Path.MOVETO, [start_x + (r / np.sqrt(2)), start_y + (r / np.sqrt(2))]),
+		(Path.LINETO, [start_x - (r / np.sqrt(2)), start_y - (r / np.sqrt(2))])
+	]
+	codes, verts = zip(*path_data)
+	path = Path(verts, codes)
+	patch = p.PathPatch(path, color=color)
+	ax.add_patch(patch)
+
+# helper function for draw_interaction 
+# draw arrowhead and return interaction color 
+def draw_interaction_arrowhead(interaction):
+	if interaction.type == 'control':
+		intercn_color = 'grey'
+		draw_control_ah(ax, interaction.part_end.frame, intercn_color)
+	elif interaction.type == 'degradation':
+		intercn_color = 'brown'
+		draw_degradation_ah(ax, interaction.part_end.frame, intercn_color)
+	elif interaction.type == 'inhibition':
+		intercn_color = 'red'
+		draw_inhibition_ah(ax, interaction.part_end.frame, intercn_color)
+	elif interaction.type == 'process':
+		intercn_color = 'blue'
+		draw_process_ah(ax, interaction.part_end.frame, intercn_color)
+	elif interaction.type == 'stimulation':
+		intercn_color = 'green'
+		draw_stimulation_ah(ax, interaction.part_end.frame, intercn_color)
+	return intercn_color
+
 # function that draw one interaction 
-def draw_interaction(ax, intercn, ylist):
+# (offset can be user specified or randomly generated)
+def draw_interaction(ax, intercn, ylist, user_specified_y_offset=None):
 	# find valid y coord offset
-	while True:
+	if user_specified_y_offset is not None:
+		y_offset = user_specified_y_offset
+	while user_specified_y_offset is None:
 		y_offset = np.random.random_sample() + np.random.randint(INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX)
 		start_y = intercn.part_start.frame.origin[1] + GLYPHSIZE
 		from_y = intercn.part_end.frame.origin[1] + GLYPHSIZE
 		if (start_y + y_offset) not in ylist and (from_y + y_offset) not in ylist:
 			break
 
+	# distinguish interaction to get arrowhead & color
+	intercn_color = draw_interaction_arrowhead(intercn)
+	
 	# distinguish between 3 part / 5 part interaction  
 	if abs(start_y - from_y) < HEIGHTLIMIT:
-		ylist += draw_3part_interaction(ax, intercn.part_start.frame, intercn.part_end.frame, y_offset)
+		ylist += draw_3part_interaction(ax, intercn.part_start.frame, intercn.part_end.frame, y_offset, intercn_color)
 	else:
-		ylist += draw_5part_interaction(ax, intercn.part_start.frame, intercn.part_end.frame, y_offset, y_offset)
-	
+		ylist += draw_5part_interaction(ax, intercn.part_start.frame, intercn.part_end.frame, y_offset, y_offset, intercn_color)
+
 	return ylist
 
 # function that draw all interaction (without arrowhead)
@@ -188,12 +293,12 @@ def draw_all_interaction(ax, interactions):
 	y_list = []
 	for interaction in interactions:
 		y_list = draw_interaction(ax, interaction, y_list)
+		interaction.rendered_y = y_list
 
 # get test design 
 design = dt.create_test_design2()
 design.print_design()
-m_frames = get_module_frames(design.modules)
-
+m_frames = get_module_frames(design.modules, 0)
 
 # render test design
 fig, ax = plt.subplots(1, figsize=(8,10))
@@ -201,11 +306,13 @@ ax.set_xlim(XMIN, XMAX)
 ax.set_ylim(YMIN, YMAX)
 ax.set_axis_off()
 
+# render modules
 for i, m_frame in enumerate(m_frames):
 	actual_frame = draw_module(ax, design.modules[i], m_frame)
 
-# preset 
+# automatically render interaction 
 draw_all_interaction(ax, design.interactions)
+
 plt.show()
 
 

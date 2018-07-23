@@ -73,9 +73,6 @@ class Interaction:
 
         Parameters
         ----------
-        position : [float, float] (default: None)
-            [x, y] position of the baseline start for the part. This is often updated
-            during the rendering process.
         
         part_start : Part 
             specifies the start part of interaction 
@@ -88,7 +85,7 @@ class Interaction:
             updated during rendering 
 
         type : string 
-            Options inclue: link, stimulation, repression, production
+            Options inclue: control, degradation, inhibition, process, stimulation
 
         option: dict
             Options to tailor the rendering process
@@ -250,7 +247,7 @@ def create_test_design2 ():
     module4.add_part( [part_4_pro, part_4_ori, part_4_ter] )
 
     # module 5
-    '''module5 = Module(design, 'module5')
+    module5 = Module(design, 'module5')
     part_5_pro = Part(module5, '5p', 'Promoter')
     part_5_ter = Part(module5, '5t', 'Terminator')
     module5.add_part( [part_5_pro, part_5_ter] )
@@ -275,16 +272,18 @@ def create_test_design2 ():
     part_8_pro = Part(module8, '8p', 'Promoter')
     part_8_res = Part(module8, '8r', 'RibosomeEntrySite')
     part_8_ter = Part(module8, '8t', 'Terminator')
-    module8.add_part( [part_8_pro, part_8_res, part_8_ter] )'''
+    module8.add_part( [part_8_pro, part_8_res, part_8_ter] )
     
     # Attach the different DNA segments to design
-    design.add_module( [module1, module2, module3, module4 ])
+    design.add_module( [module1, module2, module3, module4, module5, module6, module7, module8 ])
 
     # Add some basic interactions
-    interaction1 = Interaction(part_1_cds, part_2_pro, 'repression')
-    int2 = Interaction(part_1_pro, part_3_pro, 'repression')
-    int3 = Interaction(part_2_cds, part_4_ori, 'repression')
-    design.add_interaction( [interaction1, int2, int3] )
+    interaction1 = Interaction(part_1_cds, part_4_pro, 'control')
+    int2 = Interaction(part_1_pro, part_3_pro, 'degradation')
+    int3 = Interaction(part_2_cds, part_4_ori, 'process')
+    int4 = Interaction(part_6_apt, part_8_pro, 'stimulation')
+    int5 = Interaction(part_7_pro, part_8_res, 'inhibition')
+    design.add_interaction( [interaction1, int2, int3, int4, int5] )
     return design
 
 # Let's try it out!

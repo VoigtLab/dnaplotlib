@@ -26,7 +26,8 @@ Frame = namedtuple("Frame", "width height origin")
 
 # Global const
 STRANDZSCORE = 1.0 # low to send strand back
-GLYPHZSCORE = 10.0 # high to send glyph front 
+GLYPHZSCORE = 10.0 # high to send glyph front
+INTERACTION_FILL_ZSCORE = 10. 
 
 class GlyphRenderer:
     """ Class defining the part renders.
@@ -472,6 +473,148 @@ class ModuleRenderer:
 			height=(max_y - min_y + 3.5 * y_offset), 
 			origin=[min_x - 2 * x_offset, min_y - 1.5 * y_offset])
 
+# visualize module for hierarchical rendering
+class InteractionRenderer:
+	""" Class for rendering interaction
+    """
+
+
+	def __init__(self, interaction_type, from_part, to_part, coordinates, space):
+		self.type = interaction_type
+		self.part_start = from_part
+		self.part_end = to_part
+		self.coordinates = coordinates
+		self.interaction_space = space
+
+	# helper function used to initialize arrowhead rendering func params 
+	def __initialize_ah_start_params(self):
+		start_x = self.part_end.frame.origin[0] + self.part_end.frame.width / 2.
+		start_y = self.part_end.frame.origin[1] + self.part_end.frame.height + self.interaction_space
+		edge = self.part_end.frame.width / 5.
+		
+		return start_x, start_y, edge
+
+	# private function for coordinate conversion
+	def __convert_coord_into_scalar_0_1(self, start, end, axis):
+		axis_min, axis_max = axis
+		dis = axis_max - axis_min 
+		adjusted_start = abs(axis_min - start) / dis
+		adjusted_end = adjusted_start + ((end - start) / dis)
+		return adjusted_start, adjusted_end
+
+	# helper functions for draw_interaction_arrowhead
+	def __draw_control_ah(self, ax, color):
+		#Path = mpath.Path
+		start_x, start_y, edge = self.__initialize_ah_start_params()
+		
+		path_data = [
+			(Path.MOVETO, [start_x, start_y]),
+			(Path.LINETO, [start_x - edge, start_y + edge]),
+			(Path.LINETO, [start_x, start_y + (2 * edge)]),
+			(Path.LINETO, [start_x + edge, start_y + edge]),
+			(Path.LINETO, [start_x, start_y])
+		]
+		codes, verts = zip(*path_data)
+		path = Path(verts, codes)
+		patch = patches.PathPatch(path, fill=True, edgecolor=color, facecolor='w', zorder=INTERACTION_FILL_ZSCORE)
+		ax.add_patch(patch)
+
+	def __draw_inhibition_ah(self, ax, color):
+		x, y, edge = self.__initialize_ah_start_params()
+		x = self.part_end.frame.origin[0] + (self.part_end.frame.width / 4.)
+		start_x, end_x = self.__convert_coord_into_scalar_0_1(x, x + self.part_end.frame.width/2, ax.get_xlim())
+		ax.axhline(y=y, xmin=start_x, xmax=end_x, c=color)
+
+	def __draw_process_ah(self, ax, color):
+		#Path = mpath.Path
+		start_x, start_y, edge = self.__initialize_ah_start_params()
+
+		path_data = [
+			(Path.MOVETO, [start_x, start_y]),
+			(Path.LINETO, [start_x - edge, start_y + edge]),
+			(Path.LINETO, [start_x + edge, start_y + edge]),
+			(Path.LINETO, [start_x, start_y])
+		]
+		codes, verts = zip(*path_data)
+		path = Path(verts, codes)
+		patch = patches.PathPatch(path, fill=True, color=color)
+		ax.add_patch(patch)
+
+	def __draw_stimulation_ah(self, ax, color):
+		#Path = mpath.Path
+		start_x, start_y, edge = self.__initialize_ah_start_params()
+
+		path_data = [
+			(Path.MOVETO, [start_x, start_y]),
+			(Path.LINETO, [start_x - edge, start_y + edge]),
+			(Path.LINETO, [start_x + edge, start_y + edge]),
+			(Path.LINETO, [start_x, start_y])
+		]
+		codes, verts = zip(*path_data)
+		path = Path(verts, codes)
+		patch = patches.PathPatch(path, fill=True, edgecolor=color, facecolor='w', zorder=INTERACTION_FILL_ZSCORE)
+		ax.add_patch(patch)
+
+	def __draw_degradation_ah(self, ax, color):
+		#Path = mpath.Path
+		# draw the same ah as process
+		self.__draw_process_ah(ax, color)
+		# draw circle 
+		r = self.part_end.frame.width / 7
+		start_x = self.part_end.frame.origin[0] + self.part_end.frame.width / 2.
+		start_y = self.part_end.frame.origin[1] + self.part_end.frame.height 
+		circle = patches.Circle((start_x, start_y), r, ec=color, fc='w')
+		ax.add_patch(circle)
+		# draw circle bar 
+		path_data = [
+			(Path.MOVETO, [start_x + (r / np.sqrt(2)), start_y + (r / np.sqrt(2))]),
+			(Path.LINETO, [start_x - (r / np.sqrt(2)), start_y - (r / np.sqrt(2))])
+		]
+		codes, verts = zip(*path_data)
+		path = Path(verts, codes)
+		patch = patches.PathPatch(path, color=color)
+		ax.add_patch(patch)
+
+	# helper function for draw_interaction 
+	# draw arrowhead and return default interaction color 
+	def __draw_interaction_arrowhead(self, ax, user_specified_color):
+		intercn_color = user_specified_color
+		if self.type == 'control':
+			if intercn_color is None: intercn_color = 'grey'
+			self.__draw_control_ah(ax, intercn_color)
+		elif self.type == 'degradation':
+			if intercn_color is None: intercn_color = 'brown'
+			self.__draw_degradation_ah(ax, intercn_color)
+		elif self.type == 'inhibition':
+			if intercn_color is None: intercn_color = 'red'
+			self.__draw_inhibition_ah(ax, intercn_color)
+		elif self.type == 'process':
+			if intercn_color is None: intercn_color = 'blue'
+			self.__draw_process_ah(ax, intercn_color)
+		elif self.type == 'stimulation':
+			if intercn_color is None: intercn_color = 'green'
+			self.__draw_stimulation_ah(ax, intercn_color)
+		return intercn_color
+
+	# draw arrow body
+	def __draw_arrow_body(self, ax, color):
+		for i,coord in enumerate(self.coordinates):
+			if i == (len(self.coordinates) - 1): break # skip last one to prevent indexOutOfBound Error
+			curr_x, next_x = coord[0], self.coordinates[i + 1][0]
+			curr_y, next_y = coord[1], self.coordinates[i + 1][1]
+			cx, nx = self.__convert_coord_into_scalar_0_1(curr_x, next_x, ax.get_xlim())
+			cy, ny = self.__convert_coord_into_scalar_0_1(curr_y, next_y, ax.get_ylim())
+			
+			if i % 2 == 0: # vertical
+				ax.axvline(x=curr_x, ymin=cy, ymax=ny, c=color)
+			else: # horizontal
+				ax.axhline(y=curr_y, xmin=cx, xmax=nx, c=color)
+
+	# main rendering interaction function
+	def draw_interaction(self, ax, user_specified_color=None):
+		interaction_color = self.__draw_interaction_arrowhead(ax, user_specified_color)
+		self.__draw_arrow_body(ax, interaction_color)
+
 
 ###############################################################################
 # Testing
@@ -499,7 +642,7 @@ p = patches.Rectangle((-25., -40.), 50, 50, fill=False)
 ax.add_patch(p)
 
 ax.set_axis_off()
-plt.show()'''
 
+plt.show()'''
 
 

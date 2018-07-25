@@ -103,7 +103,7 @@ class Module:
     def __init__(self, design, name, parent=None):
         self.design = design
         self.name = name
-        self.level = 0 # updated during rendering
+        self.level = 0 # module hierarchy level / updated during rendering
         self.children = []
         self.part_list = None
         self.other_parts = []
@@ -281,9 +281,10 @@ def create_test_design2 ():
     interaction1 = Interaction(part_1_cds, part_4_pro, 'control')
     int2 = Interaction(part_1_pro, part_3_pro, 'degradation')
     int3 = Interaction(part_2_cds, part_4_ori, 'process')
-    design.add_interaction( [interaction1, int2, int3] )
+    int4 = Interaction(part_5_pro, part_2_pro, 'inhibition')
+    int5 = Interaction(part_7_pro, part_8_res, 'stimulation')
+    design.add_interaction( [interaction1, int2, int3, int4, int5] )
     return design
-
 
 def create_test_design3 ():
     # You first create a design and need to give it a name   
@@ -293,11 +294,19 @@ def create_test_design3 ():
     module1 = Module(design, 'module1')
     module1a = module1.add_module('module1a')
     module1a_1 = module1a.add_module('module1a_1')
-    module1a_1.add_part( Part(module1a_1, '1a_1_p', 'Promoter'))
+    part1a_1_p = Part(module1a_1, '1a_1_p', 'Promoter')
+    module1a_1.add_part( part1a_1_p )
     module1a_1.add_part( Part(module1a_1, '1a_1_c', 'CDS'))
     module1a_1.add_part( Part(module1a_1, '1a_1_t', 'Terminator'))
 
-    design.add_module(module1)
+    module2 = Module(design, 'module2')
+    part_2_p = Part(module2, '2p', 'Promoter')
+    module2.add_part(part_2_p)
+
+    design.add_module( [module1, module2] )
+
+    interaction = Interaction(part1a_1_p, part_2_p, 'inhibition')
+    design.add_interaction(interaction)
 
     return design
     

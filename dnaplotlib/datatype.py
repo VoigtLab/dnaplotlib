@@ -80,8 +80,8 @@ class Interaction:
         part_end : Part
             specifies the end part of interaction 
 
-        rendered_y : [float]
-            specifies the list of y coordinates for interaction arrow 
+        coordinates : [[float, float]]
+            specifies the list of coordinates for the interaction arrow 
             updated during rendering 
 
         type : string 
@@ -93,7 +93,7 @@ class Interaction:
     def __init__(self, part_start, part_end, interaction_type, path=None):
         self.part_start = part_start
         self.part_end = part_end
-        self.rendered_y = []
+        self.coordinates = []
         self.type = interaction_type 
         self.path = path
         self.options = {}

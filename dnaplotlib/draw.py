@@ -101,7 +101,7 @@ def get_biggest_module_frame(framelist, space_offset):
 			min_y = frame.origin[1]
 		if max_y < frame.origin[1] + frame.height:
 			max_y = frame.origin[1] + frame.height 
-			
+
 	return rd.Frame(width=(max_x - min_x) + 4 * space_offset, 
 		height=(max_y - min_y) + 3.5 * space_offset, 
 		origin=[min_x - 2 * space_offset, min_y - 1.5 * space_offset])
@@ -171,17 +171,23 @@ def __convert_coord_into_scalar_0_1(start, end, axis):
 # helper function for draw_3/5part_interaction
 # draw arrow body
 def __draw_arrow_body(ax, coords, color):
+	print('list of coords')
+	print(coords)
 	for i,coord in enumerate(coords):
-		if i == (len(coords) - 1): break 
+		if i == (len(coords) - 1): break # skip last one to prevent indexOutOfBound Error
 		curr_x, next_x = coord[0], coords[i + 1][0]
 		curr_y, next_y = coord[1], coords[i + 1][1]
 		cx, nx = __convert_coord_into_scalar_0_1(curr_x, next_x, ax.get_xlim())
 		cy, ny = __convert_coord_into_scalar_0_1(curr_y, next_y, ax.get_ylim())
 		
 		if i % 2 == 0: # vertical
+			print('vertical body drawn')
 			ax.axvline(x=curr_x, ymin=cy, ymax=ny, c=color)
-		else: # horizontal 
+		else: # horizontal
+			print('horizontal body drawn')
 			ax.axhline(y=curr_y, xmin=cx, xmax=nx, c=color)
+
+	return coords
 
 # helper function for draw interaction
 # draw interaction arrow body when y diff < than height limit 
@@ -192,8 +198,8 @@ def draw_3part_interaction(ax, start_frame, end_frame, y_ofset, i_color):
 	end_y = end_frame.origin[1] + end_frame.height + INTERACTION_SPACER
 	c1x, c1y = start_x, start_y + y_ofset 
 	c2x, c2y = end_x, c1y
-	__draw_arrow_body(ax, [ [start_x, start_y], [c1x, c1y], [c2x, c2y], [end_x, end_y] ], i_color)
-	return [c2y] # prevent this y coord for other interaction
+	return __draw_arrow_body(ax, [ [start_x, start_y], [c1x, c1y], [c2x, c2y], [end_x, end_y] ], i_color)
+	
 
 # helper function for draw_5part_interaction
 # determine c2/c3x for different frame interaction 
@@ -217,8 +223,8 @@ def draw_5part_interaction(ax, start_frame, end_frame, y_1_ofset, y_2_ofset, i_c
 	c2x, c2y = _determine_5part_interaction_middle_x(start_x, end_x), c1y
 	c3x, c3y = _determine_5part_interaction_middle_x(start_x, end_x), end_y + y_2_ofset
 	c4x, c4y = end_x, c3y
-	__draw_arrow_body(ax, [ [start_x, start_y], [c1x, c1y], [c2x, c2y], [c3x, c3y], [c4x, c4y], [end_x, end_y] ], i_color)
-	return [c2y, c3y] # prevent this y coord for other interaction 
+	return __draw_arrow_body(ax, [ [start_x, start_y], [c1x, c1y], [c2x, c2y], [c3x, c3y], [c4x, c4y], [end_x, end_y] ], i_color)
+	
 
 # helper functions for draw_interaction_arrowhead
 def draw_control_ah(ax, endframe, color):
@@ -319,29 +325,46 @@ def draw_interaction_arrowhead(interaction):
 		draw_stimulation_ah(ax, interaction.part_end.frame, intercn_color)
 	return intercn_color
 
+def check_has_duplicate_y(list_of_c, y_ofset, y1, y2):
+	for c in list_of_c:
+		if c[1] == y_ofset + y1: return True
+		if c[1] == y_ofset + y2: return True
+	return False
+
+# helper function for draw_all_interaction
+def get_valid_offset(c_list, start_glyph, from_glyph, user_specified):
+	start_y = start_glyph.frame.origin[1] + (GLYPHSIZE - 2 * RECURSE_DECREMENT * start_glyph.parent_module.level)
+	from_y = from_glyph.frame.origin[1] + (GLYPHSIZE - 2 * RECURSE_DECREMENT * from_glyph.parent_module.level)
+	
+	if user_specified is not None:
+		return user_specified, start_y, from_y
+		
+	while user_specified is None:
+		y_offset = (np.random.random_sample() * 3) + np.random.randint(INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX)
+		if not check_has_duplicate_y(c_list, y_offset, start_y, from_y): break
+
+	#print('start y: %f' % (start_y + y_offset))
+	#print('from y: %f' % (from_y + y_offset))
+	return y_offset, start_y, from_y 
+
 # function that draw one interaction 
 # (offset can be user specified or randomly generated)
-def draw_interaction(ax, intercn, ylist, user_specified_y_offset=None):
-	# find valid y coord offset
-	if user_specified_y_offset is not None:
-		y_offset = user_specified_y_offset
-	while user_specified_y_offset is None:
-		y_offset = (np.random.random_sample() * 3) + np.random.randint(INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX)
-		start_y = intercn.part_start.frame.origin[1] + GLYPHSIZE
-		from_y = intercn.part_end.frame.origin[1] + GLYPHSIZE
-		if (start_y + y_offset) not in ylist and (from_y + y_offset) not in ylist:
-			break
+def draw_all_interaction(ax, all_intercn, coordlist=[], user_specified_y_offset=None):
+	for intercn in all_intercn:
+		y_offset, start_y, from_y = get_valid_offset(coordlist, intercn.part_start, intercn.part_end, user_specified_y_offset)
 
-	# distinguish interaction to get arrowhead & color
-	intercn_color = draw_interaction_arrowhead(intercn)
-	
-	# distinguish between 3 part / 5 part interaction  
-	if abs(start_y - from_y) < HEIGHT:
-		ylist += draw_3part_interaction(ax, intercn.part_start.frame, intercn.part_end.frame, y_offset, intercn_color)
-	else:
-		ylist += draw_5part_interaction(ax, intercn.part_start.frame, intercn.part_end.frame, y_offset, y_offset, intercn_color)
-
-	return ylist
+		# distinguish interaction to get arrowhead & color
+		intercn_color = draw_interaction_arrowhead(intercn)
+		
+		# distinguish between 3 part / 5 part interaction  
+		if abs(start_y - from_y) < HEIGHT:
+			coords = draw_3part_interaction(ax, intercn.part_start.frame, intercn.part_end.frame, y_offset, intercn_color)
+		else:
+			coords = draw_5part_interaction(ax, intercn.part_start.frame, intercn.part_end.frame, y_offset, y_offset, intercn_color)
+		
+		# update coords
+		intercn.coordinates = coords 
+		coordlist += coords
 
 # recursively draw all modules
 def draw_all_modules(m_frames, raw_modules, index=0):
@@ -366,18 +389,10 @@ def draw_all_modules(m_frames, raw_modules, index=0):
 		index += 1
 
 	return index 
-			
-# function that draw all interaction (without arrowhead)
-def draw_all_interaction(ax, interactions):
-	y_list = []
-	for interaction in interactions:
-		y_list = draw_interaction(ax, interaction, y_list)
-		interaction.rendered_y = y_list
 
 # get test design 
-design = dt.create_test_design3()
+design = dt.create_test_design()
 design.print_design()
-
 m_frames = get_module_frames(design.modules) # default setting
 
 # render test design
@@ -391,6 +406,9 @@ draw_all_modules(m_frames, design.modules)
 
 # automatically render interaction 
 draw_all_interaction(ax, design.interactions)
+
+for i in design.interactions:
+	print(i.coordinates)
 
 plt.show()
 

@@ -2,108 +2,163 @@
 draw dataype
 : script for bringing datatype and render func together 
 """
-import numpy as np 
+import sys, numpy as np 
 import datatype as dt, render as rd 
 import matplotlib.pyplot as plt, matplotlib.patches as p, matplotlib.path as mpath
 
 # default rendering const
+MAX_MODULE = 8
 GLYPHSIZE = 6.
 SPACER = 1.5 
 RECURSE_DECREMENT = .5
 XMIN, XMAX = -60., 60.
 YMIN, YMAX = -60., 60.
-WIDTH, HEIGHT = 50., 25. # for origin pos
-WIDTHLIMIT, HEIGHTLIMIT = 45., 20. # limit for interaction
+WIDTH, HEIGHT = 50., 25. # default setting for level 1 module & interaction
 INTERACTION_SPACER = 1.5
-INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX = 1, 4
+INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX = 4, 7
 INTERACTION_FILL_ZSCORE = 10.
 
-# function that takes modules from design and return list of origins for the modules 
-def get_origin_list(modules, module_level):
-	# initialize origin params
-	origins = []
-	modules_left = len(modules)
-	dynamic_x, dynamic_y = -WIDTH/2, 0.
-	if modules_left > 1: dynamic_x = -WIDTH
-	if modules_left > 4: dynamic_y = HEIGHT
 
-	# iterate origin calculation
-	for i in range(len(modules)):
-		origins.append((dynamic_x, dynamic_y))
-		modules_left -= 1
-		if modules_left != 0:
-			# just shift to left
-			if dynamic_x < 0.: dynamic_x += WIDTH
-			# shift right and down 
-			else:
-				if modules_left == 1: dynamic_x = -WIDTH/2
-				else: dynamic_x = -WIDTH 
-				dynamic_y -= HEIGHT
+# generic helper function 
+# return module width & height 
+def get_module_width_height(glyph_count, glyph_size, module_space, has_other_part):
+	# width: assume horizontal rendering in one circuit (refer to ppt)
+	m_width = glyph_count * glyph_size + module_space * (glyph_count - 1) + module_space * 6
+	# height: assume other parts all in one line 
+	m_height = glyph_size + 3.5 * module_space
+	if has_other_part:
+		m_height += glyph_size + module_space
+	return m_width, m_height
+
+# helper function for get_origin_list
+# return vertically stacked origin (refer to ppt)
+def get_vertical_stacked_origins(module_count):
+	origin_list = []
+
+	start_x = -WIDTH
+	if module_count < 3:
+		start_y = 0.
+	else:
+		start_y = HEIGHT
+
+	for i in range(module_count):
+		origin_list.append([start_x, start_y])
+		if start_y != - (HEIGHT * 2):
+			start_y -= HEIGHT
+		else:
+			start_x = 0.
+			start_y = HEIGHT
+	return origin_list 
+
+# helper func for get_origin_list
+# return horizontally stacked origin (refer to ppt)
+def get_horizontal_stacked_origins(submodules, glyph_sz, module_sp, original_point):
+	list_origin = []
+	p_width = 0
+	dynamic_x, static_y = original_point
+
+	for submodule in submodules:
+		list_origin.append([dynamic_x, static_y])
+		if submodule.part_list is not None:
+			p_width, p_height = get_module_width_height(len(submodule.part_list.parts),
+			glyph_sz, module_sp, len(submodule.other_parts) != 0)
+		else: 
+			p_width = 0.
+		dynamic_x += p_width + module_sp 
+
+	return list_origin
+
+
+# function that takes modules from design and return list of origins for the modules 
+def get_origin_list(modules, module_level, g_size, m_space_offset, original_p=None):
+	# check number of modules 
+	if len(modules) > MAX_MODULE:
+		sys.exit("Draw Error: DNAplotlib cannot render more than 8 modules. Current design has %d modules." % len(modules))
+	
+	origins = []
+	# module level 0 - vertical stacking 
+	if module_level == 0:
+		origins = get_vertical_stacked_origins(len(modules))
+	# module level 1,2 - horizontal stacking 
+	elif module_level == 1 or module_level == 2:
+		origins = get_horizontal_stacked_origins(modules, g_size, m_space_offset, original_p)
+	else:
+		sys.exit("Draw Error: DNAplotlib cannot render beypnd level 3 submodules.")
 
 	return origins
 
 # helper function for get_module_frames
 # takes the list of submodules and return frame for module containing all 
-def __get_bigget_module_frame(framelist):
-	width, height, origin = WIDTHLIMIT, HEIGHTLIMIT, [0., 0.]
+def get_biggest_module_frame(framelist, space_offset):
+	max_x, max_y = (np.finfo(np.float128).min for i in range(2))
+	min_x, min_y = (np.finfo(np.float128).max for i in range(2))
 	for frame in framelist:
-		if frame.origin[0] < origin[0]:
-			origin[0] = frame.origin[0] 
-		if frame.origin[1] < origin[1]:
-			origin[1] = frame.origin[1]
-	return rd.Frame(width=width, height=height, origin=origin)
+		if min_x > frame.origin[0]:
+			min_x = frame.origin[0]
+		if max_x < frame.origin[0] + frame.width:
+			max_x = frame.origin[0] + frame.width
+		if min_y > frame.origin[1]:
+			min_y = frame.origin[1]
+		if max_y < frame.origin[1] + frame.height:
+			max_y = frame.origin[1] + frame.height 
+			
+	return rd.Frame(width=(max_x - min_x) + 4 * space_offset, 
+		height=(max_y - min_y) + 3.5 * space_offset, 
+		origin=[min_x - 2 * space_offset, min_y - 1.5 * space_offset])
 
 # recursive function that takes modules from design 
 # and return list of frame for the modules 
-def get_module_frames(modules, module_level, glyph_size=GLYPHSIZE, space=SPACER, has_submodule=False):
+def get_module_frames(modules, module_level=0, glyph_size=GLYPHSIZE, space=SPACER, submodule_origin=None, has_frame_box=False):
 	frame_list = []
-	origins = get_origin_list(modules, 0)
+	origins = get_origin_list(modules, module_level, glyph_size, space, submodule_origin)
 
 	for i, module in enumerate(modules):
-		if module.part_list == None:
+		if len(module.children) != 0.:
 			frame_list += get_module_frames(module.children, 
-				GLYPHSIZE - RECURSE_DECREMENT * 2,
-				SPACER - RECURSE_DECREMENT, 
+				module_level + 1,
+				GLYPHSIZE - RECURSE_DECREMENT * 2, space, 
+				[origins[i][0] + 2 * space, origins[i][1] + 1.5 * space],
 				True)
 		else:
-			# width: assume horizontal rendering in one circuit (refer to ppt)
-			width = len(module.part_list.parts) * GLYPHSIZE + SPACER * (len(module.part_list.parts) - 1) + SPACER * 6
-			# height: assume other parts all in one line 
-			height = GLYPHSIZE + 3.5 * SPACER
-			if len(module.other_parts) != 0.:
-				height += GLYPHSIZE + SPACER
+			width, height = get_module_width_height(len(module.part_list.parts),
+				glyph_size, space, len(module.other_parts) != 0)
 			frame_list.append(rd.Frame(width=width, height=height, origin=origins[i]))
-	
-	# add frame that contains every module 
-	if has_submodule:
-		frame_list.append(__get_bigget_module_frame(frame_list))
+			module.level = module_level
 
+	if has_frame_box and len(frame_list) != 0.:
+		frame_list.append(get_biggest_module_frame(frame_list, space))
+	
 	return frame_list
 
 # function that draw module
-def draw_module(ax, module, module_frame, haveBackbone=True):
-	glyph_pos = [module_frame.origin[0] + 3 * SPACER, 
-		module_frame.origin[1] + 1.5 * SPACER]
+def draw_module(ax, module, module_frame, glyph_size, module_spacer, haveBackbone=True):
+	glyph_pos = [module_frame.origin[0] + 3 * module_spacer, 
+		module_frame.origin[1] + 1.5 * module_spacer]
 	renderer = rd.GlyphRenderer()
 	strand_rd = rd.StrandRenderer()
-	module_rd = rd.ModuleRenderer()
-	module.part_list.position = glyph_pos 
+	module_rd = rd.ModuleRenderer()	
+
+	# check whether module is empty or not 
+	if module.part_list == None:
+		return module_rd.draw_empty_module_box(ax, module_frame)
 
 	# draw each glyphs in module part list
+	module.part_list.position = glyph_pos 
 	for part in module.part_list.parts:
-		part.frame = rd.Frame(width=GLYPHSIZE, height=GLYPHSIZE, origin=glyph_pos)
-		child = renderer.draw_glyph(ax, part.type, glyph_pos, GLYPHSIZE, 0.)
+		part.frame = rd.Frame(width=glyph_size, height=glyph_size, origin=glyph_pos)
+		child = renderer.draw_glyph(ax, part.type, glyph_pos, glyph_size, 0.)
 		strand_rd.add_glyphs(child)
 		module_rd.add_parts(child)
-		glyph_pos = [glyph_pos[0] + GLYPHSIZE + SPACER, glyph_pos[1]]
-	
+		glyph_pos = [glyph_pos[0] + glyph_size + module_spacer, glyph_pos[1]]
+
 	# draw backbone 
 	if haveBackbone:
-		bb = strand_rd.draw_backbone_strand(ax, glyph_pos[1], SPACER)
+		bb = strand_rd.draw_backbone_strand(ax, glyph_pos[1], module_spacer)
 		module_rd.add_parts(bb)
-		module.part_list.position = bb['frame'].origin	
-	module_box = module_rd.draw_module_box(ax, SPACER, SPACER)
-	return module_box
+		module.part_list.position = bb['frame'].origin
+	
+	return module_rd.draw_module_box(ax, module_spacer, module_spacer)
+
 
 # private function for coordinate conversion
 def __convert_coord_into_scalar_0_1(start, end, axis):
@@ -143,7 +198,7 @@ def draw_3part_interaction(ax, start_frame, end_frame, y_ofset, i_color):
 # helper function for draw_5part_interaction
 # determine c2/c3x for different frame interaction 
 def _determine_5part_interaction_middle_x(startx, endx):
-	xintrn_spacer = (WIDTH - WIDTHLIMIT) / 2.
+	xintrn_spacer = SPACER
 	if startx < 0 and endx < 0:
 		return -(WIDTH + xintrn_spacer)
 	elif startx > 0 and endx > 0:
@@ -271,7 +326,7 @@ def draw_interaction(ax, intercn, ylist, user_specified_y_offset=None):
 	if user_specified_y_offset is not None:
 		y_offset = user_specified_y_offset
 	while user_specified_y_offset is None:
-		y_offset = np.random.random_sample() + np.random.randint(INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX)
+		y_offset = (np.random.random_sample() * 3) + np.random.randint(INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX)
 		start_y = intercn.part_start.frame.origin[1] + GLYPHSIZE
 		from_y = intercn.part_end.frame.origin[1] + GLYPHSIZE
 		if (start_y + y_offset) not in ylist and (from_y + y_offset) not in ylist:
@@ -281,13 +336,37 @@ def draw_interaction(ax, intercn, ylist, user_specified_y_offset=None):
 	intercn_color = draw_interaction_arrowhead(intercn)
 	
 	# distinguish between 3 part / 5 part interaction  
-	if abs(start_y - from_y) < HEIGHTLIMIT:
+	if abs(start_y - from_y) < HEIGHT:
 		ylist += draw_3part_interaction(ax, intercn.part_start.frame, intercn.part_end.frame, y_offset, intercn_color)
 	else:
 		ylist += draw_5part_interaction(ax, intercn.part_start.frame, intercn.part_end.frame, y_offset, y_offset, intercn_color)
 
 	return ylist
 
+# recursively draw all modules
+def draw_all_modules(m_frames, raw_modules, index=0):
+	for module in raw_modules:
+		# base case
+		if len(module.children) == 0:
+			actual_frame = draw_module(ax, module, m_frames[index], 
+				GLYPHSIZE - RECURSE_DECREMENT * 2 * module.level,
+				SPACER)
+
+		# recursive case
+		else:
+			index = draw_all_modules(m_frames, module.children, index)
+			actual_frame = draw_module(ax, module, m_frames[index], 
+				GLYPHSIZE - RECURSE_DECREMENT * 2 * module.level,
+				SPACER, False)
+		# ways to check rendering frames
+		'''print('hoping frame: ')
+		print(m_frames[index])
+		print('actual frame:')
+		print(actual_frame)'''
+		index += 1
+
+	return index 
+			
 # function that draw all interaction (without arrowhead)
 def draw_all_interaction(ax, interactions):
 	y_list = []
@@ -296,9 +375,10 @@ def draw_all_interaction(ax, interactions):
 		interaction.rendered_y = y_list
 
 # get test design 
-design = dt.create_test_design2()
+design = dt.create_test_design3()
 design.print_design()
-m_frames = get_module_frames(design.modules, 0)
+
+m_frames = get_module_frames(design.modules) # default setting
 
 # render test design
 fig, ax = plt.subplots(1, figsize=(8,10))
@@ -307,8 +387,7 @@ ax.set_ylim(YMIN, YMAX)
 ax.set_axis_off()
 
 # render modules
-for i, m_frame in enumerate(m_frames):
-	actual_frame = draw_module(ax, design.modules[i], m_frame)
+draw_all_modules(m_frames, design.modules)
 
 # automatically render interaction 
 draw_all_interaction(ax, design.interactions)

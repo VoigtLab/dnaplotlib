@@ -428,10 +428,22 @@ class ModuleRenderer:
 		else:
 			self.parts_contained.append(glyph_n_frame)
 
-	# draw horizontal backbone strand line (drawn blue)
+	def _initialize_module_param(self):
+		if len(self.parts_contained) == 0:
+			return (0. for i in range(4))
+		maxx, maxy = (np.finfo(np.float128).min for i in range(2))
+		minx, miny = (np.finfo(np.float128).max for i in range(2))
+		return maxx, maxy, minx, miny
+	
+	# draw empty module box
+	def draw_empty_module_box(self, ax, module_frame):
+		p = patches.Rectangle(module_frame.origin, module_frame.width, module_frame.height, fill=False)
+		ax.add_patch(p)
+		return module_frame
+
+	# draw module box 
 	def draw_module_box(self, ax, x_offset=None, y_offset=None, user_parameters=None):
-		max_x, max_y = (np.finfo(np.float128).min for i in range(2)) # initialize to minimum 
-		min_x, min_y = (np.finfo(np.float128).max for i in range(2))
+		max_x, max_y, min_x, min_y = self._initialize_module_param()
 
 		if x_offset is None:
 			x_offset = 3 # default x offset
@@ -450,15 +462,15 @@ class ModuleRenderer:
 			if max_y < part_frame.origin[1] + part_frame.height:
 				max_y = part_frame.origin[1] + part_frame.height
 
-		p = patches.Rectangle((min_x - 2 * x_offset, min_y - 1.5 * y_offset), 
-			(max_x - min_x + 4 * x_offset), # width
+		p = patches.Rectangle((min_x - 2. * x_offset, min_y - 1.5 * y_offset), 
+			(max_x - min_x + 4. * x_offset), # width
 			(max_y - min_y + 3.5 * y_offset), # height
 			fill=False)
 		ax.add_patch(p)
 
 		return Frame(width=(max_x - min_x + 4 * x_offset), 
 			height=(max_y - min_y + 3.5 * y_offset), 
-			origin=(min_x - 2 * x_offset, min_y - 1.5 * y_offset))
+			origin=[min_x - 2 * x_offset, min_y - 1.5 * y_offset])
 
 
 ###############################################################################

@@ -102,8 +102,8 @@ class Interaction:
 class Module:
     def __init__(self, design, name, parent=None):
         self.design = design
-        self.parent = parent
         self.name = name
+        self.level = 0 # updated during rendering
         self.children = []
         self.part_list = None
         self.other_parts = []
@@ -201,12 +201,12 @@ def create_test_design ():
     design.add_module(module2)
 
     # Add some other parts (e.g. molecules like a repressor)
-    other_part_1Rep = Part(module2, 'R1','Promoter')
+    other_part_1Rep = Part(module2, 'R1','Unspecified')
     module2.add_other_part( other_part_1Rep )
 
     # Add some basic interactions
-    interaction1 = Interaction(part_1cCDS, part_1aCDS, 'repression')
-    interaction2 = Interaction(part_1cCDS, other_part_1Rep, 'production')
+    interaction1 = Interaction(part_1cCDS, part_1aCDS, 'inhibition')
+    interaction2 = Interaction(part_1cCDS, other_part_1Rep, 'process')
     interaction3 = Interaction(other_part_1Rep, part_2CDS, 'stimulation')
     design.add_interaction(interaction1)
     design.add_interaction(interaction2)
@@ -275,16 +275,32 @@ def create_test_design2 ():
     module8.add_part( [part_8_pro, part_8_res, part_8_ter] )
     
     # Attach the different DNA segments to design
-    design.add_module( [module1, module2, module3, module4, module5, module6, module7, module8 ])
+    design.add_module( [module1, module2, module3, module4, module5, module6, module7, module8] )
 
     # Add some basic interactions
     interaction1 = Interaction(part_1_cds, part_4_pro, 'control')
     int2 = Interaction(part_1_pro, part_3_pro, 'degradation')
     int3 = Interaction(part_2_cds, part_4_ori, 'process')
-    int4 = Interaction(part_6_apt, part_8_pro, 'stimulation')
-    int5 = Interaction(part_7_pro, part_8_res, 'inhibition')
-    design.add_interaction( [interaction1, int2, int3, int4, int5] )
+    design.add_interaction( [interaction1, int2, int3] )
     return design
+
+
+def create_test_design3 ():
+    # You first create a design and need to give it a name   
+    design = Design('design3')
+
+    # Create DNA module 1 
+    module1 = Module(design, 'module1')
+    module1a = module1.add_module('module1a')
+    module1a_1 = module1a.add_module('module1a_1')
+    module1a_1.add_part( Part(module1a_1, '1a_1_p', 'Promoter'))
+    module1a_1.add_part( Part(module1a_1, '1a_1_c', 'CDS'))
+    module1a_1.add_part( Part(module1a_1, '1a_1_t', 'Terminator'))
+
+    design.add_module(module1)
+
+    return design
+    
 
 # Let's try it out!
 #design = create_test_design2()

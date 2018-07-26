@@ -19,13 +19,16 @@ INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX = 4, 7
 
 # generic helper function 
 # return module width & height 
-def get_module_width_height(glyph_count, glyph_size, module_space, has_other_part):
+def get_module_width_height(glyph_count, glyph_size, module_space, other_part_count):
 	# width: assume horizontal rendering in one circuit (refer to ppt)
 	m_width = glyph_count * glyph_size + module_space * (glyph_count - 1) + module_space * 6
+	if other_part_count > glyph_count:
+		m_width += (other_part_count - glyph_count) * (module_space + glyph_size)
+		
 	# height: assume other parts all in one line 
 	m_height = glyph_size + 3.5 * module_space
-	if has_other_part:
-		m_height += glyph_size + module_space
+	if other_part_count != 0:
+		m_height += glyph_size + module_space * 2
 	return m_width, m_height
 
 # helper function for get_origin_list
@@ -59,7 +62,7 @@ def get_horizontal_stacked_origins(submodules, glyph_sz, module_sp, original_poi
 		list_origin.append([dynamic_x, static_y])
 		if submodule.part_list is not None:
 			p_width, p_height = get_module_width_height(len(submodule.part_list.parts),
-			glyph_sz, module_sp, len(submodule.other_parts) != 0)
+			glyph_sz, module_sp, len(submodule.other_parts))
 		else: 
 			p_width = 0.
 		dynamic_x += p_width + module_sp 
@@ -118,8 +121,10 @@ def get_module_frames(modules, module_level=0, glyph_size=GLYPHSIZE, space=SPACE
 				[origins[i][0] + 2 * space, origins[i][1] + 1.5 * space],
 				True)
 		else:
-			width, height = get_module_width_height(len(module.part_list.parts),
-				glyph_size, space, len(module.other_parts) != 0)
+			if module.part_list != None:
+				parts_count = len(module.part_list.parts)
+			else: parts_count = 0
+			width, height = get_module_width_height(parts_count, glyph_size, space, len(module.other_parts))
 			frame_list.append(rd.Frame(width=width, height=height, origin=origins[i]))
 			module.level = module_level
 
@@ -127,6 +132,23 @@ def get_module_frames(modules, module_level=0, glyph_size=GLYPHSIZE, space=SPACE
 		frame_list.append(get_biggest_module_frame(frame_list, space))
 	
 	return frame_list
+
+# helper function for drawing module 
+# return list of position for other parts depending on other part count
+def __get_other_part_pos(o_p_count, frame, part_sz, glyph_sz, m_sp):
+	o_p_pos = []
+	# initialize first pos 
+	dyn_x = frame.origin[0] + (frame.width / 2.) - (part_sz / 2.)
+	fixed_y = frame.origin[1] + (m_sp * 3.5) + glyph_sz
+	if o_p_count % 2 == 0:
+		dyn_x += part_sz / 2.
+	dyn_x -= (m_sp + part_sz) * (o_p_count / 2) 
+	# shifting pos
+	for i in range(o_p_count):
+		o_p_pos.append([dyn_x, fixed_y])
+		dyn_x += glyph_sz + m_sp 
+
+	return o_p_pos
 
 # function that draw module
 def draw_module(ax, module, module_frame, glyph_size, module_spacer, haveBackbone=True):
@@ -138,23 +160,41 @@ def draw_module(ax, module, module_frame, glyph_size, module_spacer, haveBackbon
 
 	# check whether module is empty or not 
 	if module.part_list == None:
-		return module_rd.draw_empty_module_box(ax, module_frame)
+		if len(module.children) != 0:
+			return module_rd.draw_empty_module_box(ax, module_frame)
+		elif len(module.other_parts) == 0: return
 
 	# draw each glyphs in module part list
-	module.part_list.position = glyph_pos 
-	for part in module.part_list.parts:
-		part.frame = rd.Frame(width=glyph_size, height=glyph_size, origin=glyph_pos)
-		child = renderer.draw_glyph(ax, part.type, glyph_pos, glyph_size, 0.)
-		strand_rd.add_glyphs(child)
-		module_rd.add_parts(child)
-		glyph_pos = [glyph_pos[0] + glyph_size + module_spacer, glyph_pos[1]]
+	else: 
+		module.part_list.position = glyph_pos 
+		for part in module.part_list.parts:
+			part.frame = rd.Frame(width=glyph_size, height=glyph_size, origin=glyph_pos)
+			child = renderer.draw_glyph(ax, part.type, glyph_pos, glyph_size, 0.)
+			strand_rd.add_glyphs(child)
+			module_rd.add_parts(child)
+			glyph_pos = [glyph_pos[0] + glyph_size + module_spacer, glyph_pos[1]]
 
 	# draw backbone 
-	if haveBackbone:
+	if haveBackbone and module.part_list != None:
 		bb = strand_rd.draw_backbone_strand(ax, glyph_pos[1], module_spacer)
 		module_rd.add_parts(bb)
 		module.part_list.position = bb['frame'].origin
-	
+
+	# draw other parts 
+	if len(module.other_parts) != 0:
+		op_pos_list = __get_other_part_pos(len(module.other_parts), module_frame, glyph_size, glyph_size, module_spacer)
+		other_part_frames = []
+		for i, other_part in enumerate(module.other_parts):
+			other_part.frame = rd.Frame(width=glyph_size, height=glyph_size, origin=op_pos_list[i])
+			other_part_frames.append(other_part.frame)
+			other_child = renderer.draw_glyph(ax, other_part.type, op_pos_list[i], glyph_size, 0.)
+			module_rd.add_parts(other_child)
+
+	# step of deciding whether to draw  module frame box 
+		# do not draw module frame box if only has other part 
+		if module.part_list == None:
+			return get_biggest_module_frame(other_part_frames, module_spacer)
+	# draw frame module box 
 	return module_rd.draw_module_box(ax, module_spacer, module_spacer)
 
 # helper function for draw interaction
@@ -261,7 +301,8 @@ def draw_all_modules(m_frames, raw_modules, index=0):
 	return index 
 
 # get test design 
-design = dt.create_test_design2()
+# bookmark
+design = dt.create_test_design3_1()
 design.print_design()
 m_frames = get_module_frames(design.modules) # default setting
 

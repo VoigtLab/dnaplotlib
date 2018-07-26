@@ -105,8 +105,8 @@ class Module:
         self.name = name
         self.level = 0 # module hierarchy level / updated during rendering
         self.children = []
-        self.part_list = None
-        self.other_parts = []
+        self.part_list = None # parts on strand
+        self.other_parts = [] # parts off strand
 
     def add_module(self, name):
         child = Module(self.design, name, parent=self)
@@ -119,7 +119,9 @@ class Module:
         self.part_list.add_part(part)
 
     def add_other_part(self, part):
-        self.part_list.add_part(part)
+        if type(part) == list:
+            self.other_parts += part
+        else: self.other_parts.append(part)
 
 
 class Design:
@@ -141,6 +143,7 @@ class Design:
             self.interactions += interaction
 
     def __print_part_list(self, part_list, indent=''):
+        if part_list == None: return
         names = []
         for part in part_list.parts:
             names.append(part.name)
@@ -286,6 +289,7 @@ def create_test_design2 ():
     design.add_interaction( [interaction1, int2, int3, int4, int5] )
     return design
 
+# hierarchical submodule rendering
 def create_test_design3 ():
     # You first create a design and need to give it a name   
     design = Design('design3')
@@ -309,7 +313,153 @@ def create_test_design3 ():
     design.add_interaction(interaction)
 
     return design
+
+# hierarchical submodule rendering
+def create_test_design3_1 ():
+    # You first create a design and need to give it a name   
+    design = Design('design3')
+
+    # Create DNA module 1 
+    module1 = Module(design, 'module1')
+    module1a = module1.add_module('module1a')
+    module1a_1 = module1a.add_module('module1a_1')
+    part1a_1_p = Part(module1a_1, '1a_1_p', 'Promoter')
+    part1a_1_c = Part(module1a_1, '1a_1_c', 'CDS')
+    module1a_1.add_part( [part1a_1_p, part1a_1_c ])
+    module1a_1.add_part( Part(module1a_1, '1a_1_t', 'Terminator'))
+
+    module1b = module1.add_module('module1b')
+    part1b_p = Part(module1b, '1b_p', 'Promoter')
+    part1b_i = Part(module1b, '1b_i', 'Insulator')
+    part1b_o = Part(module1b, '1b_o', 'OriginOfReplication')
+    module1b.add_part([part1b_p, part1b_i, part1b_o])
+
+    module2 = Module(design, 'module2')
+    part_2_p = Part(module2, '2p', 'Promoter')
+    module2.add_part(part_2_p)
+
+    module3 = Module(design, 'module3')
+    part_3_p = Part(module2, '3p', 'Promoter')
+    module3.add_part(part_3_p)
+
+    design.add_module( [module1, module2, module3] )
+
+    design.add_interaction([Interaction(part1a_1_p, part_2_p, 'inhibition'),
+        Interaction(part_2_p, part1a_1_c, 'process')])
+
+    return design
+
+# other part rendering
+def create_test_design4 ():
+    # You first create a design and need to give it a name   
+    design = Design('design4')
+
+    # Create DNA module 1 
+    module1 = Module(design, 'module1')
+    part_1_pro = Part(module1, '1a','Promoter')
+    part_1_res1 = Part(module1, '1r1','RibosomeEntrySite') 
+    part_1_res2 = Part(module1, '1r2','RibosomeEntrySite') 
+    part_1_res3 = Part(module1, '1r3','RibosomeEntrySite') 
+    part_1_res4 = Part(module1, '1r4','RibosomeEntrySite') 
+    part_1_res5 = Part(module1, '1r5','RibosomeEntrySite') 
+    part_1_cds1 = Part(module1, '1c1','CDS')
+    part_1_cds2 = Part(module1, '1c2','CDS')
+    part_1_cds3 = Part(module1, '1c3','CDS')
+    part_1_cds4 = Part(module1, '1c4','CDS')
+    part_1_ter = Part(module1, '1t','Terminator')
+    # Add some other parts (e.g. molecules like a repressor)
+    other_part_1Rep1 = Part(module1, 'R1','Unspecified')
+    other_part_1Rep2 = Part(module1, 'R2','Macromolecule')
+    other_part_1RNA = Part(module1, 'R3', 'RNA')
+    module1.add_other_part( [other_part_1Rep1, other_part_1Rep2, other_part_1RNA])
+    module1.add_part( [part_1_pro, part_1_res1, part_1_cds1, part_1_res2, part_1_res3, 
+        part_1_cds2, part_1_res4, part_1_cds3, part_1_res5, part_1_cds4, part_1_ter] )
     
+    # Create DNA module 2
+    module2 = Module(design, 'module2')
+    part_2_pro = Part(module2, '2p','Promoter')
+    part_2_cds = Part(module2, '2c','CDS')
+    part_2_ter = Part(module2, '2t','Terminator')
+    module2.add_part( [part_2_pro, part_2_cds, part_2_ter])
+
+    # module 3
+    module3 = Module(design, 'module3')
+    part_3_pro = Part(module3, '3p', 'Promoter')
+    part_3_ins = Part(module3, '3i', 'Insulator')
+    part_3_ter = Part(module3, '3t', 'Terminator')
+    module3.add_part( [part_3_pro, part_3_ins, part_3_ter] )
+
+    # module 4
+    module4 = Module(design, 'module4')
+    part_4_pro = Part(module4, '4p', 'Promoter')
+    part_4_ori = Part(module4, '4o', 'OriginOfReplication')
+    part_4_ter = Part(module4, '4t', 'Terminator')
+    module4.add_part( [part_4_pro, part_4_ori, part_4_ter] )
+    
+    # Attach the different DNA segments to design
+    design.add_module( [module1, module2, module3, module4] )
+
+    # Add some basic interactions
+    interaction1 = Interaction(part_1_cds1, part_4_pro, 'control')
+    int2 = Interaction(part_1_pro, part_3_pro, 'degradation')
+    int3 = Interaction(part_2_cds, part_4_ori, 'process')
+    int4 = Interaction(part_2_pro, part_3_ins, 'inhibition')
+    design.add_interaction( [interaction1, int2, int3, int4] )
+    return design
+
+    
+def create_test_design5 ():
+    # You first create a design and need to give it a name   
+    design = Design('design5')
+
+    # Create DNA module 1 
+    module1 = Module(design, 'module1')
+    module1.add_part( [Part(module1, '1p', 'Promoter'), Part(module1, '1c', 'CDS'), Part(module1, '1c2', 'CDS'), Part(module1, '1t', 'Terminator')])
+    other_part_1p1 = Part(module1, 'R1','Unspecified')
+    other_part_1p2 = Part(module1, 'R2','Macromolecule')
+    other_part_1RNA1 = Part(module1, 'R5', 'RNA')
+    module1.add_other_part( [other_part_1p1, other_part_1RNA1, other_part_1p2])
+
+    # Create module 2 containing only other part 
+    module2 = Module(design, 'module2')
+    other_part_1 = Part(module2, 'p','Macromolecule')
+    module2.add_other_part(other_part_1)
+
+    # Create module 3 containing only other part 
+    module3 = Module(design, 'module3')
+    other_part_2 = Part(module3, 'rna','RNA')
+    module3.add_other_part(other_part_2)
+
+    # module 6
+    module6 = Module(design, 'module6')
+    part_6_pro = Part(module6, '6a','Promoter')
+    part_6_apt = Part(module6, '6apt', 'Aptamer')
+    part_6_res = Part(module6, '6r','RibosomeEntrySite') 
+    part_6_ter = Part(module1, '6t','Terminator')
+    module6.add_part( [part_6_pro, part_6_apt, part_6_res, part_6_ter] )
+
+    # module 7
+    module7 = Module(design, 'module7')
+    part_7_pro = Part(module7, '7p', 'Promoter')
+    part_7_res = Part(module7, '7r', 'RibosomeEntrySite')
+    part_7_ter = Part(module7, '7t', 'Terminator')
+    module7.add_part( [part_7_pro, part_7_res, part_7_ter] )
+
+    # module 8
+    module8 = Module(design, 'module8')
+    part_8_pro = Part(module8, '8p', 'Promoter')
+    part_8_cds = Part(module8, '8c', 'CDS')
+    part_8_ter = Part(module8, '8t', 'Terminator')
+    module8.add_part( [part_8_pro, part_8_cds, part_8_ter] )
+
+    design.add_interaction( [Interaction(other_part_1p2, part_7_res, 'inhibition'), 
+        Interaction(part_6_pro, other_part_1, 'process'),
+        Interaction(part_8_cds, other_part_2, 'control')])
+
+    design.add_module([module1, module6, module7, module8, module2, module3])
+
+    return design
+
 
 # Let's try it out!
 #design = create_test_design2()

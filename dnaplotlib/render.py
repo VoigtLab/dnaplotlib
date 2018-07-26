@@ -33,6 +33,9 @@ class GlyphRenderer:
     """ Class defining the part renders.
     """
 
+    # glyph rendering const
+    RNA_LINEWIDTH = 2
+
     def __init__(self, glyph_path='glyphs/', global_defaults=None):
         self.glyphs_library, self.glyph_soterm_map = self.load_glyphs_from_path(glyph_path)
     
@@ -337,7 +340,29 @@ class GlyphRenderer:
 
         return new_paths_to_draw
 
+    # helper function for rendering RNA 
+    def __draw_RNA(self, ax, position, size, user_parameters):
+    	start_x, start_y, edge = position[0], position[1] + size / 2., size / 4.
+
+    	pathdata = [
+			(Path.MOVETO, [start_x, start_y]),
+			(Path.CURVE3, [start_x + edge, start_y + edge]),
+			(Path.CURVE3, [start_x + 2 * edge, start_y]),
+			(Path.CURVE3, [start_x + 3 * edge, start_y - edge]),
+			(Path.CURVE3, [start_x + 4 * edge, start_y])
+		]
+	codes, verts = zip(*pathdata) 
+	patch = patches.PathPatch(Path(verts, codes), fc='w', ec='black', lw=self.RNA_LINEWIDTH)
+	ax.add_patch(patch)
+	return Frame(width=size, height=size, origin=position)
+
     def draw_glyph(self, ax, glyph_type, position, size, angle, user_parameters=None):
+        
+    	if glyph_type == 'RNA':
+    		# cannot rotate RNA
+    		rna_frame = self.__draw_RNA(ax, position, size, user_parameters)
+    		return {'identity': glyph_type, 'frame': rna_frame} 
+        
         # convert svg path into matplotlib path 
         glyph = self.glyphs_library[glyph_type]
         merged_parameters = glyph['defaults'].copy()
@@ -370,7 +395,6 @@ class GlyphRenderer:
 class StrandRenderer:
 	""" Class defining the strand for part renders.
     """
-
 
 	def __init__(self):
 		self.glyphs_contained = [] #primary sequence
@@ -504,7 +528,6 @@ class InteractionRenderer:
 
 	# helper functions for draw_interaction_arrowhead
 	def __draw_control_ah(self, ax, color):
-		#Path = mpath.Path
 		start_x, start_y, edge = self.__initialize_ah_start_params()
 		
 		path_data = [
@@ -526,7 +549,6 @@ class InteractionRenderer:
 		ax.axhline(y=y, xmin=start_x, xmax=end_x, c=color)
 
 	def __draw_process_ah(self, ax, color):
-		#Path = mpath.Path
 		start_x, start_y, edge = self.__initialize_ah_start_params()
 
 		path_data = [

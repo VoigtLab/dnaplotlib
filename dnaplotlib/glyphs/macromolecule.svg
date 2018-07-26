@@ -1,4 +1,4 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="Promoter" soterms="SO:0000167" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="Macromolecule" soterms="SBO:0000296"  parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
 
 <path class="baseline" style="opacity:1; fill:#cccccc; fill-opacity:1; stroke:#b3b3b3; stroke-width:0.49999994; stroke-dasharray:0.99999988, 0.49999994; stroke-dashoffset:0; stroke-opacity:1" d="m -0.10593219,39.025419 45.23304619,0" id="path4741" parametric:y="0" parametric:d="m {height},0"></path>
 

@@ -306,8 +306,11 @@ design = dt.create_test_design3_1()
 design.print_design()
 m_frames = get_module_frames(design.modules) # default setting
 
+for m in m_frames:
+	print(m)
+
 # render test design
-fig, ax = plt.subplots(1, figsize=(8,10))
+'''fig, ax = plt.subplots(1, figsize=(8,10))
 ax.set_xlim(XMIN, XMAX)
 ax.set_ylim(YMIN, YMAX)
 ax.set_axis_off()
@@ -318,6 +321,6 @@ draw_all_modules(m_frames, design.modules)
 # automatically render interaction 
 draw_all_interaction(ax, design.interactions)
 
-plt.show()
+plt.show()'''
 
 

@@ -323,8 +323,8 @@ def create_test_design3_1 ():
     module1 = Module(design, 'module1')
     module1a = module1.add_module('module1a')
     module1a_1 = module1a.add_module('module1a_1')
-    part1a_1_p = Part(module1a_1, '1a_1_p', 'Promoter')
-    part1a_1_c = Part(module1a_1, '1a_1_c', 'CDS')
+    part1a_1_p = Part(module1a, '1a_1_p', 'Promoter')
+    part1a_1_c = Part(module1a, '1a_1_c', 'CDS')
     module1a_1.add_part( [part1a_1_p, part1a_1_c ])
     module1a_1.add_part( Part(module1a_1, '1a_1_t', 'Terminator'))
 
@@ -334,18 +334,7 @@ def create_test_design3_1 ():
     part1b_o = Part(module1b, '1b_o', 'OriginOfReplication')
     module1b.add_part([part1b_p, part1b_i, part1b_o])
 
-    module2 = Module(design, 'module2')
-    part_2_p = Part(module2, '2p', 'Promoter')
-    module2.add_part(part_2_p)
-
-    module3 = Module(design, 'module3')
-    part_3_p = Part(module2, '3p', 'Promoter')
-    module3.add_part(part_3_p)
-
-    design.add_module( [module1, module2, module3] )
-
-    design.add_interaction([Interaction(part1a_1_p, part_2_p, 'inhibition'),
-        Interaction(part_2_p, part1a_1_c, 'process')])
+    design.add_module( module1 )
 
     return design
 

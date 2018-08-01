@@ -563,7 +563,6 @@ class InteractionRenderer:
 		ax.add_patch(patch)
 
 	def __draw_stimulation_ah(self, ax, color):
-		#Path = mpath.Path
 		start_x, start_y, edge = self.__initialize_ah_start_params()
 
 		path_data = [
@@ -578,7 +577,6 @@ class InteractionRenderer:
 		ax.add_patch(patch)
 
 	def __draw_degradation_ah(self, ax, color):
-		#Path = mpath.Path
 		# draw the same ah as process
 		self.__draw_process_ah(ax, color)
 		# draw circle 

@@ -37,35 +37,55 @@ def get_vertical_stacked_origins(module_count):
 	origin_list = []
 
 	start_x = -WIDTH
-	if module_count < 3:
-		start_y = 0.
-	else:
-		start_y = HEIGHT
+	if module_count < 3: start_y = 0.
+	else: start_y = HEIGHT
 
 	for i in range(module_count):
 		origin_list.append([start_x, start_y])
-		if start_y != - (HEIGHT * 2):
-			start_y -= HEIGHT
+		if start_y != - (HEIGHT * 2): start_y -= HEIGHT
 		else:
 			start_x = 0.
 			start_y = HEIGHT
 	return origin_list 
 
+# helper function for get_horizontal_stacked_origin
+# cumulative in the sense of recursion
+def get_cumulative_parts_count(module):
+	parts_count = 0
+	if module.part_list is not None:
+		parts_count += len(module.part_list.parts)
+	if len(module.children) != 0:
+		for m in module.children:
+			parts_count += get_cumulative_parts_count(m)
+	return parts_count
+
+# helper function for get_horizontal_stacked_origin
+def get_cumulative_other_parts_count(module):
+	other_parts_count = 0
+	other_parts_count += len(module.other_parts)
+	if len(module.children) != 0:
+		for m in module.children:
+			other_parts_count += get_cumulative_other_parts_count(m)
+	return other_parts_count
+
+# helper function for get_horizontal_stacked_origin
+def get_cumulative_layers_count(module):
+	layer_count = 0
+	if len(module.children) != 0:
+		layer_count += 1 + get_cumulative_layers_count(module.children[0])
+	return layer_count
+
 # helper func for get_origin_list
 # return horizontally stacked origin (refer to ppt)
 def get_horizontal_stacked_origins(submodules, glyph_sz, module_sp, original_point):
 	list_origin = []
-	p_width = 0
 	dynamic_x, static_y = original_point
 
 	for submodule in submodules:
 		list_origin.append([dynamic_x, static_y])
-		if submodule.part_list is not None:
-			p_width, p_height = get_module_width_height(len(submodule.part_list.parts),
-			glyph_sz, module_sp, len(submodule.other_parts))
-		else: 
-			p_width = 0.
-		dynamic_x += p_width + module_sp 
+		p_width, p_height = get_module_width_height(get_cumulative_parts_count(submodule),
+			glyph_sz, module_sp, get_cumulative_other_parts_count(submodule))
+		dynamic_x += p_width + (4 + get_cumulative_layers_count(submodule))* module_sp 
 
 	return list_origin
 
@@ -113,12 +133,17 @@ def get_module_frames(modules, module_level=0, glyph_size=GLYPHSIZE, space=SPACE
 	frame_list = []
 	origins = get_origin_list(modules, module_level, glyph_size, space, submodule_origin)
 
+	print('list of origins')
+	print(origins)
+
 	for i, module in enumerate(modules):
+
 		if len(module.children) != 0.:
 			frame_list += get_module_frames(module.children, 
 				module_level + 1,
 				GLYPHSIZE - RECURSE_DECREMENT * 2, space, 
-				[origins[i][0] + 2 * space, origins[i][1] + 1.5 * space],
+				[origins[i][0] + 2 * space, 
+				origins[i][1] + 1.5 * space],
 				True)
 		else:
 			if module.part_list != None:
@@ -302,15 +327,12 @@ def draw_all_modules(m_frames, raw_modules, index=0):
 
 # get test design 
 # bookmark
-design = dt.create_test_design3_1()
+design = dt.create_test_design3_3()
 design.print_design()
 m_frames = get_module_frames(design.modules) # default setting
 
-for m in m_frames:
-	print(m)
-
 # render test design
-'''fig, ax = plt.subplots(1, figsize=(8,10))
+fig, ax = plt.subplots(1, figsize=(8,10))
 ax.set_xlim(XMIN, XMAX)
 ax.set_ylim(YMIN, YMAX)
 ax.set_axis_off()
@@ -321,6 +343,6 @@ draw_all_modules(m_frames, design.modules)
 # automatically render interaction 
 draw_all_interaction(ax, design.interactions)
 
-plt.show()'''
+plt.show()
 
 

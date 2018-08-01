@@ -338,6 +338,56 @@ def create_test_design3_1 ():
 
     return design
 
+# hierarchical submodule rendering
+def create_test_design3_2 ():
+    # You first create a design and need to give it a name   
+    design = Design('design3')
+
+    # Create DNA module 1 
+    module1 = Module(design, 'module1')
+    module1a = module1.add_module('module1a')
+    part1a_1_p = Part(module1, '1a_1_p', 'Promoter')
+    part1a_1_c = Part(module1, '1a_1_c', 'CDS')
+    module1a.add_part( [part1a_1_p, part1a_1_c ])
+    #module1a_1.add_part( Part(module1a_1, '1a_1_t', 'Terminator'))
+
+    module1b = module1.add_module('module1b')
+    part1b_p = Part(module1b, '1b_p', 'Promoter')
+    part1b_i = Part(module1b, '1b_i', 'Insulator')
+    part1b_o = Part(module1b, '1b_o', 'OriginOfReplication')
+    module1b.add_part([part1b_p, part1b_i, part1b_o])
+
+    design.add_module( module1 )
+
+    return design
+
+# hierarchical submodule rendering
+def create_test_design3_3 ():
+    # You first create a design and need to give it a name   
+    design = Design('design3')
+
+    # Create DNA module 1 
+    module1 = Module(design, 'module1')
+    module1a = module1.add_module('module1a')
+    module1a_1 = module1a.add_module('module1a_1')
+    part1a_1_p = Part(module1a, '1a_1_p', 'Promoter')
+    part1a_1_c = Part(module1a, '1a_1_c', 'CDS')
+    module1a_1.add_part( [part1a_1_p, part1a_1_c ])
+    module1a_1.add_part( Part(module1a_1, '1a_1_t', 'Terminator'))
+
+    module1b = module1.add_module('module1b')
+    module1b.add_part(Part(module1b, '1b_p', 'Promoter'))
+
+    module1c = module1.add_module('module1c')
+    part1c_p = Part(module1c, '1c_p', 'Promoter')
+    part1c_i = Part(module1c, '1c_i', 'Insulator')
+    part1c_o = Part(module1c, '1c_o', 'OriginOfReplication')
+    module1c.add_part([part1c_p, part1c_i, part1c_o])
+
+    design.add_module( module1 )
+
+    return design
+
 # other part rendering
 def create_test_design4 ():
     # You first create a design and need to give it a name   

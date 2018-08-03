@@ -100,10 +100,36 @@ class Interaction:
 
 
 class Module:
+    """ Constructor to generate Module. 
+
+        Parameters
+        ----------
+        
+        design : Constructor 
+
+        name : String
+            name of the module
+
+        level : Int [0, 2]
+            module hierarchy level / updated during rendering
+
+        frame : (width=float, height=float, origin=float) (default: None)
+            Often updated during the rendering process.
+
+        children : [Module]
+            list of submodules contained within the module
+
+        part_list: Part_list
+            list of parts contained on dna backbone 
+
+        other_parts: [Part]
+            list of parts not contained on dna backbone 
+    """
     def __init__(self, design, name, parent=None):
         self.design = design
         self.name = name
-        self.level = 0 # module hierarchy level / updated during rendering
+        self.level = 0 
+        self.frame = None
         self.children = []
         self.part_list = None # parts on strand
         self.other_parts = [] # parts off strand
@@ -222,59 +248,59 @@ def create_test_design2 ():
 
     # Create DNA module 1 
     module1 = Module(design, 'module1')
-    part_1_pro = Part(module1, '1a','Promoter')
-    part_1_res = Part(module1, '1r','RibosomeEntrySite') 
-    part_1_cds = Part(module1, '1c','CDS')
-    part_1_ter = Part(module1, '1t','Terminator')
+    part_1_pro = Part(module1, 'p1a','Promoter')
+    part_1_res = Part(module1, 'p1r','RibosomeEntrySite') 
+    part_1_cds = Part(module1, 'p1c','CDS')
+    part_1_ter = Part(module1, 'p1t','Terminator')
     module1.add_part( [part_1_pro, part_1_res, part_1_cds, part_1_ter] )
     
     # Create DNA module 2
     module2 = Module(design, 'module2')
-    part_2_pro = Part(module2, '2p','Promoter')
-    part_2_cds = Part(module2, '2c','CDS')
-    part_2_ter = Part(module2, '2t','Terminator')
+    part_2_pro = Part(module2, 'p2p','Promoter')
+    part_2_cds = Part(module2, 'p2c','CDS')
+    part_2_ter = Part(module2, 'p2t','Terminator')
     module2.add_part( [part_2_pro, part_2_cds, part_2_ter])
 
     # module 3
     module3 = Module(design, 'module3')
-    part_3_pro = Part(module3, '3p', 'Promoter')
-    part_3_ins = Part(module3, '3i', 'Insulator')
-    part_3_ter = Part(module3, '3t', 'Terminator')
+    part_3_pro = Part(module3, 'p3p', 'Promoter')
+    part_3_ins = Part(module3, 'p3i', 'Insulator')
+    part_3_ter = Part(module3, 'p3t', 'Terminator')
     module3.add_part( [part_3_pro, part_3_ins, part_3_ter] )
 
     # module 4
     module4 = Module(design, 'module4')
-    part_4_pro = Part(module4, '4p', 'Promoter')
-    part_4_ori = Part(module4, '4o', 'OriginOfReplication')
-    part_4_ter = Part(module4, '4t', 'Terminator')
+    part_4_pro = Part(module4, 'p4p', 'Promoter')
+    part_4_ori = Part(module4, 'p4o', 'OriginOfReplication')
+    part_4_ter = Part(module4, 'p4t', 'Terminator')
     module4.add_part( [part_4_pro, part_4_ori, part_4_ter] )
 
     # module 5
     module5 = Module(design, 'module5')
-    part_5_pro = Part(module5, '5p', 'Promoter')
-    part_5_ter = Part(module5, '5t', 'Terminator')
+    part_5_pro = Part(module5, 'p5p', 'Promoter')
+    part_5_ter = Part(module5, 'p5t', 'Terminator')
     module5.add_part( [part_5_pro, part_5_ter] )
 
     # module 6
     module6 = Module(design, 'module6')
-    part_6_pro = Part(module6, '6a','Promoter')
-    part_6_apt = Part(module6, '6apt', 'Aptamer')
-    part_6_res = Part(module6, '6r','RibosomeEntrySite') 
-    part_6_ter = Part(module1, '6t','Terminator')
+    part_6_pro = Part(module6, 'p6a','Promoter')
+    part_6_apt = Part(module6, 'p6apt', 'Aptamer')
+    part_6_res = Part(module6, 'p6r','RibosomeEntrySite') 
+    part_6_ter = Part(module1, 'p6t','Terminator')
     module6.add_part( [part_6_pro, part_6_apt, part_6_res, part_6_ter] )
 
     # module 7
     module7 = Module(design, 'module7')
-    part_7_pro = Part(module7, '7p', 'Promoter')
-    part_7_res = Part(module7, '7r', 'RibosomeEntrySite')
-    part_7_ter = Part(module7, '7t', 'Terminator')
+    part_7_pro = Part(module7, 'p7p', 'Promoter')
+    part_7_res = Part(module7, 'p7r', 'RibosomeEntrySite')
+    part_7_ter = Part(module7, 'p7t', 'Terminator')
     module7.add_part( [part_7_pro, part_7_res, part_7_ter] )
 
     # module 8
     module8 = Module(design, 'module8')
-    part_8_pro = Part(module8, '8p', 'Promoter')
-    part_8_res = Part(module8, '8r', 'RibosomeEntrySite')
-    part_8_ter = Part(module8, '8t', 'Terminator')
+    part_8_pro = Part(module8, 'p8p', 'Promoter')
+    part_8_res = Part(module8, 'p8r', 'RibosomeEntrySite')
+    part_8_ter = Part(module8, 'p8t', 'Terminator')
     module8.add_part( [part_8_pro, part_8_res, part_8_ter] )
     
     # Attach the different DNA segments to design
@@ -346,15 +372,15 @@ def create_test_design3_2 ():
     # Create DNA module 1 
     module1 = Module(design, 'module1')
     module1a = module1.add_module('module1a')
-    part1a_1_p = Part(module1, '1a_1_p', 'Promoter')
-    part1a_1_c = Part(module1, '1a_1_c', 'CDS')
+    part1a_1_p = Part(module1, 'promoter_1a', 'Promoter')
+    part1a_1_c = Part(module1, 'cds_1a', 'CDS')
     module1a.add_part( [part1a_1_p, part1a_1_c ])
     #module1a_1.add_part( Part(module1a_1, '1a_1_t', 'Terminator'))
 
     module1b = module1.add_module('module1b')
-    part1b_p = Part(module1b, '1b_p', 'Promoter')
-    part1b_i = Part(module1b, '1b_i', 'Insulator')
-    part1b_o = Part(module1b, '1b_o', 'OriginOfReplication')
+    part1b_p = Part(module1b, 'promoter_1b', 'Promoter')
+    part1b_i = Part(module1b, 'insulator_1b', 'Insulator')
+    part1b_o = Part(module1b, 'ori_1b', 'OriginOfReplication')
     module1b.add_part([part1b_p, part1b_i, part1b_o])
 
     design.add_module( module1 )

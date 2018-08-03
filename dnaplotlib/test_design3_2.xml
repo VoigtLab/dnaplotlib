@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:dnaplotlib="http://dnaplotlib.org#"
+   xmlns:prov="http://www.w3.org/ns/prov#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:sbol="http://sbols.org/v2#"
+   xmlns:sys-bio="http://sys-bio.org#">
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/cds_1a/1.0.0">
+    <dnaplotlib:Size>5.000000</dnaplotlib:Size>
+    <dnaplotlib:XCoordinate>-36.000000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>4.500000</dnaplotlib:YCoordinate>
+    <sbol:displayId>cds_1a</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/cds_1a"/>
+    <sbol:role rdf:resource="SO:0000316"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/insulator_1b/1.0.0">
+    <dnaplotlib:Size>5.000000</dnaplotlib:Size>
+    <dnaplotlib:XCoordinate>-9.500000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>4.500000</dnaplotlib:YCoordinate>
+    <sbol:displayId>insulator_1b</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/insulator_1b"/>
+    <sbol:role rdf:resource="SO:0000627"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/ori_1b/1.0.0">
+    <dnaplotlib:Size>5.000000</dnaplotlib:Size>
+    <dnaplotlib:XCoordinate>-3.000000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>4.500000</dnaplotlib:YCoordinate>
+    <sbol:displayId>ori_1b</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/ori_1b"/>
+    <sbol:role rdf:resource="SO:0000296"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/promoter_1a/1.0.0">
+    <dnaplotlib:Size>5.000000</dnaplotlib:Size>
+    <dnaplotlib:XCoordinate>-42.500000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>4.500000</dnaplotlib:YCoordinate>
+    <sbol:displayId>promoter_1a</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/promoter_1a"/>
+    <sbol:role rdf:resource="SO:0000167"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/promoter_1b/1.0.0">
+    <dnaplotlib:Size>5.000000</dnaplotlib:Size>
+    <dnaplotlib:XCoordinate>-16.000000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>4.500000</dnaplotlib:YCoordinate>
+    <sbol:displayId>promoter_1b</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/promoter_1b"/>
+    <sbol:role rdf:resource="SO:0000167"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ModuleDefinition rdf:about="http://examples.org/ModuleDefinition/md_0_1/1.0.0">
+    <dnaplotlib:Height>15.500000</dnaplotlib:Height>
+    <dnaplotlib:Width>59.500000</dnaplotlib:Width>
+    <dnaplotlib:XCoordinate>-50.000000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>0.000000</dnaplotlib:YCoordinate>
+    <sbol:displayId>md_0_1</sbol:displayId>
+    <sbol:module>
+      <sbol:Module rdf:about="http://examples.org/ModuleDefinition/md_0_1/md_1_1/1.0.0">
+        <sbol:definition rdf:resource="http://examples.org/ModuleDefinition/md_1_1/1.0.0"/>
+        <sbol:displayId>md_1_1</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_0_1/md_1_1"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Module>
+    </sbol:module>
+    <sbol:module>
+      <sbol:Module rdf:about="http://examples.org/ModuleDefinition/md_0_1/md_1_2/1.0.0">
+        <sbol:definition rdf:resource="http://examples.org/ModuleDefinition/md_1_2/1.0.0"/>
+        <sbol:displayId>md_1_2</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_0_1/md_1_2"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Module>
+    </sbol:module>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_0_1"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ModuleDefinition>
+  <sbol:ModuleDefinition rdf:about="http://examples.org/ModuleDefinition/md_1_1/1.0.0">
+    <dnaplotlib:Height>10.250000</dnaplotlib:Height>
+    <dnaplotlib:Width>20.500000</dnaplotlib:Width>
+    <dnaplotlib:XCoordinate>-47.000000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>2.250000</dnaplotlib:YCoordinate>
+    <sbol:displayId>md_1_1</sbol:displayId>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://examples.org/ModuleDefinition/md_1_1/cds_1a/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/cds_1a/1.0.0"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#none"/>
+        <sbol:displayId>cds_1a</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_1_1/cds_1a"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://examples.org/ModuleDefinition/md_1_1/promoter_1a/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/promoter_1a/1.0.0"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#none"/>
+        <sbol:displayId>promoter_1a</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_1_1/promoter_1a"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_1_1"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ModuleDefinition>
+  <sbol:ModuleDefinition rdf:about="http://examples.org/ModuleDefinition/md_1_2/1.0.0">
+    <dnaplotlib:Height>10.250000</dnaplotlib:Height>
+    <dnaplotlib:Width>27.000000</dnaplotlib:Width>
+    <dnaplotlib:XCoordinate>-20.500000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>2.250000</dnaplotlib:YCoordinate>
+    <sbol:displayId>md_1_2</sbol:displayId>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://examples.org/ModuleDefinition/md_1_2/insulator_1b/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/insulator_1b/1.0.0"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#none"/>
+        <sbol:displayId>insulator_1b</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_1_2/insulator_1b"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://examples.org/ModuleDefinition/md_1_2/ori_1b/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/ori_1b/1.0.0"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#none"/>
+        <sbol:displayId>ori_1b</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_1_2/ori_1b"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://examples.org/ModuleDefinition/md_1_2/promoter_1b/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/promoter_1b/1.0.0"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#none"/>
+        <sbol:displayId>promoter_1b</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_1_2/promoter_1b"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_1_2"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ModuleDefinition>
+</rdf:RDF>

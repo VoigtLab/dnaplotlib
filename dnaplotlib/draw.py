@@ -1,8 +1,9 @@
 """
-draw dataype
+draw 
 : script for bringing datatype and render func together 
+: mainly for calculating position
 """
-import sys, numpy as np 
+import sys, numpy as np, sbol
 import datatype as dt, render as rd 
 import matplotlib.pyplot as plt, matplotlib.patches as p, matplotlib.path as mpath
 
@@ -132,9 +133,6 @@ def get_biggest_module_frame(framelist, space_offset):
 def get_module_frames(modules, module_level=0, glyph_size=GLYPHSIZE, space=SPACER, submodule_origin=None, has_frame_box=False):
 	frame_list = []
 	origins = get_origin_list(modules, module_level, glyph_size, space, submodule_origin)
-
-	print('list of origins')
-	print(origins)
 
 	for i, module in enumerate(modules):
 
@@ -316,6 +314,8 @@ def draw_all_modules(m_frames, raw_modules, index=0):
 			actual_frame = draw_module(ax, module, m_frames[index], 
 				GLYPHSIZE - RECURSE_DECREMENT * 2 * module.level,
 				SPACER, False)
+		
+		module.frame = actual_frame
 		# ways to check rendering frames
 		'''print('hoping frame: ')
 		print(m_frames[index])
@@ -326,13 +326,11 @@ def draw_all_modules(m_frames, raw_modules, index=0):
 	return index 
 
 # get test design 
-# bookmark
-design = dt.create_test_design3_3()
-design.print_design()
+design = dt.create_test_design2()
 m_frames = get_module_frames(design.modules) # default setting
 
 # render test design
-fig, ax = plt.subplots(1, figsize=(8,10))
+'''fig, ax = plt.subplots(1, figsize=(8,10))
 ax.set_xlim(XMIN, XMAX)
 ax.set_ylim(YMIN, YMAX)
 ax.set_axis_off()
@@ -343,6 +341,75 @@ draw_all_modules(m_frames, design.modules)
 # automatically render interaction 
 draw_all_interaction(ax, design.interactions)
 
-plt.show()
+# helper function for get_module_and_components
+# return type of other part
+def get_other_part_type(other_part_name):
+	if other_part_name == 'RNA':
+		return sbol.BIOPAX_RNA
+	return sbol.BIOPAX_PROTEIN
+
+# recursive file export func 
+# get modules and components 
+def save_module_and_components_from_design(d, modules, count=1):
+	part_rd = rd.GlyphRenderer()
+	submodules = []
+	for m in modules:
+		md = sbol.ModuleDefinition('md_%d_%d' % (m.level, count))
+		count += 1
+		submodules.append(md)
+		# add module frames as dnaplotlib extension
+		md.width = sbol.FloatProperty(md.this, 'http://dnaplotlib.org#Width', '0', '1', m.frame.width)  
+		md.height = sbol.FloatProperty(md.this, 'http://dnaplotlib.org#Height', '0', '1', m.frame.height)  
+		md.xcoord = sbol.FloatProperty(md.this, 'http://dnaplotlib.org#XCoordinate', '0', '1', m.frame.origin[0])  
+		md.ycoord = sbol.FloatProperty(md.this, 'http://dnaplotlib.org#YCoordinate', '0', '1', m.frame.origin[1])  
+
+		# save parts on strand 
+		if m.part_list is not None:
+			for c in m.part_list.parts:
+				comp = sbol.ComponentDefinition(c.name, sbol.BIOPAX_DNA)
+				comp.roles = part_rd.get_so_term(c.type)
+				func_comp = md.functionalComponents.create(comp.displayId)
+				func_comp.definition = comp
+				# add dnaplotlib extension
+				comp.size = sbol.FloatProperty(comp.this, 'http://dnaplotlib.org#Size', '0', '1', c.frame.width)  
+				comp.xcoord = sbol.FloatProperty(comp.this, 'http://dnaplotlib.org#XCoordinate', '0', '1', c.frame.origin[0])  
+				comp.ycoord = sbol.FloatProperty(comp.this, 'http://dnaplotlib.org#YCoordinate', '0', '1', c.frame.origin[1])  
+
+				d.addComponentDefinition(comp)
+		
+		# save parts not on strand
+		for op in m.other_parts:
+			op_biopax_type = get_other_part_type(op.name)
+			comp = sbol.ComponentDefinition(op.name, op_biopax_type)
+			if op_type != sbol.BIOPAX_RNA:
+				comp.roles = part_rd.get_so_term(op.type)
+			func_comp = md.functionalComponents.create(comp.displayId)
+			func_comp.definition = comp
+			# add dnaplotlib extension
+			comp.size = sbol.FloatProperty(comp.this, 'http://dnaplotlib.org#Size', '0', '1', op.frame.width)  
+			comp.xcoord = sbol.FloatProperty(comp.this, 'http://dnaplotlib.org#XCoordinate', '0', '1', op.frame.origin[0])  
+			comp.ycoord = sbol.FloatProperty(comp.this, 'http://dnaplotlib.org#YCoordinate', '0', '1', op.frame.origin[1])  
+
+			d.addComponentDefinition(comp)
+		
+		# check children modules
+		if len(m.children) != 0:
+			subcount = 0
+			m_list = get_module_and_components(d, m.children)
+			md.assemble(m_list)
+
+		d.addModuleDefinition(md)
+
+	return submodules
+
+# export to xml file 
+document = sbol.Document()
+document.addNamespace('http://dnaplotlib.org#', 'dnaplotlib')
+save_module_and_components_from_design(document, design.modules)
+document.write('test_design2.xml')'''
+
+# display canvas
+#plt.show()
+
 
 

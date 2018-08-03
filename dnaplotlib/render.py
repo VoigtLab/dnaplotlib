@@ -130,6 +130,13 @@ class GlyphRenderer:
                 glyph_soterm_map[soterm] = glyph_type
         return glyphs_library, glyph_soterm_map
 
+    # return so term given glyph_type (part name)
+    def get_so_term(self, glyph_type):
+        for term, name in self.glyph_soterm_map.items():
+            if name == glyph_type:
+                return term
+
+
     # turn list of vertices into coordinates
     def list_into_coord(self, vlist):
         x, y = (0. for i in range(2))
@@ -356,6 +363,7 @@ class GlyphRenderer:
 	ax.add_patch(patch)
 	return Frame(width=size, height=size, origin=position)
 
+    # main function for rendering glyph
     def draw_glyph(self, ax, glyph_type, position, size, angle, user_parameters=None):
         
     	if glyph_type == 'RNA':
@@ -639,30 +647,16 @@ class InteractionRenderer:
 ###############################################################################
 # Testing
 ###############################################################################
-
+'''
 # default setting
-'''strand = StrandRenderer()
+strand = StrandRenderer()
 renderer = GlyphRenderer()
 module = ModuleRenderer()
 
-#print(renderer.glyphs_library)
+print(renderer.glyphs_library)
 #print('------------')
-#print(renderer.glyph_soterm_map)
+print(renderer.glyph_soterm_map)
 
-fig, ax = plt.subplots(1, figsize=(8,10))
-# need to set axis first 
-ax.set_xlim(-50.0, 50.0)
-ax.set_ylim(-50.0, 50.0)
-
-promoter = renderer.draw_glyph(ax, 'Promoter', (-25., -40.), 50., 0.)
-
-ax.plot(-25, -40, color='red', marker='o')
-ax.plot(-25, 10, color='red', marker='o')
-p = patches.Rectangle((-25., -40.), 50, 50, fill=False)
-ax.add_patch(p)
-
-ax.set_axis_off()
-
-plt.show()'''
+'''
 
 

@@ -276,8 +276,6 @@ def get_valid_offset(c_list, start_glyph, from_glyph, user_specified):
 		y_offset = (np.random.random_sample() * 3) + np.random.randint(INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX)
 		if not check_has_duplicate_y(c_list, y_offset, start_y, from_y): break
 
-	#print('start y: %f' % (start_y + y_offset))
-	#print('from y: %f' % (from_y + y_offset))
 	return y_offset, start_y, from_y 
 
 # function that draw one interaction 
@@ -300,15 +298,12 @@ def draw_all_interaction(ax, all_intercn, coordlist=[], user_specified_y_offset=
 		interaction_rd.draw_interaction(ax)
 
 # recursively draw all modules
-def draw_all_modules(m_frames, raw_modules, index=0):
-	for module in raw_modules:
-		# base case
-		if len(module.children) == 0:
+def draw_all_modules(ax, m_frames, raw_modules, index=0):
+	for module in raw_modules: 
+		if len(module.children) == 0: # base case
 			actual_frame = draw_module(ax, module, m_frames[index], 
 				GLYPHSIZE - RECURSE_DECREMENT * 2 * module.level,
 				SPACER)
-
-		# recursive case
 		else:
 			index = draw_all_modules(m_frames, module.children, index)
 			actual_frame = draw_module(ax, module, m_frames[index], 
@@ -316,27 +311,22 @@ def draw_all_modules(m_frames, raw_modules, index=0):
 				SPACER, False)
 		
 		module.frame = actual_frame
-		# ways to check rendering frames
-		'''print('hoping frame: ')
-		print(m_frames[index])
-		print('actual frame:')
-		print(actual_frame)'''
 		index += 1
 
 	return index 
 
 # get test design 
-design = dt.create_test_design2()
+design = dt.create_test_design5()
 m_frames = get_module_frames(design.modules) # default setting
 
 # render test design
-'''fig, ax = plt.subplots(1, figsize=(8,10))
+fig, ax = plt.subplots(1, figsize=(8,10))
 ax.set_xlim(XMIN, XMAX)
 ax.set_ylim(YMIN, YMAX)
 ax.set_axis_off()
 
 # render modules
-draw_all_modules(m_frames, design.modules)
+draw_all_modules(ax, m_frames, design.modules)
 
 # automatically render interaction 
 draw_all_interaction(ax, design.interactions)
@@ -348,21 +338,29 @@ def get_other_part_type(other_part_name):
 		return sbol.BIOPAX_RNA
 	return sbol.BIOPAX_PROTEIN
 
+#def save_interaction_from_design(doc, interactions)
+
+# helper function for save_module_and_components_from_design
+# add extension to save frame (width, height, originX, originY)
+def save_frame_into_file(sbol_def, width, height, x, y):
+	# add module frames as dnaplotlib extension
+	sbol_def.width = sbol.FloatProperty(sbol_def.this, 'http://dnaplotlib.org#Width', '0', '1', width)  
+	sbol_def.height = sbol.FloatProperty(sbol_def.this, 'http://dnaplotlib.org#Height', '0', '1', height)  
+	sbol_def.xcoord = sbol.FloatProperty(sbol_def.this, 'http://dnaplotlib.org#XCoordinate', '0', '1', x)  
+	sbol_def.ycoord = sbol.FloatProperty(sbol_def.this, 'http://dnaplotlib.org#YCoordinate', '0', '1', y)  
+
+
 # recursive file export func 
 # get modules and components 
-def save_module_and_components_from_design(d, modules, count=1):
+def save_module_and_components_from_design(doc, modules, count=1):
 	part_rd = rd.GlyphRenderer()
 	submodules = []
 	for m in modules:
 		md = sbol.ModuleDefinition('md_%d_%d' % (m.level, count))
 		count += 1
 		submodules.append(md)
-		# add module frames as dnaplotlib extension
-		md.width = sbol.FloatProperty(md.this, 'http://dnaplotlib.org#Width', '0', '1', m.frame.width)  
-		md.height = sbol.FloatProperty(md.this, 'http://dnaplotlib.org#Height', '0', '1', m.frame.height)  
-		md.xcoord = sbol.FloatProperty(md.this, 'http://dnaplotlib.org#XCoordinate', '0', '1', m.frame.origin[0])  
-		md.ycoord = sbol.FloatProperty(md.this, 'http://dnaplotlib.org#YCoordinate', '0', '1', m.frame.origin[1])  
-
+		save_frame_into_file(md, m.frame.width, m.frame.height, m.frame.origin[0], m.frame.origin[1])
+		
 		# save parts on strand 
 		if m.part_list is not None:
 			for c in m.part_list.parts:
@@ -371,26 +369,20 @@ def save_module_and_components_from_design(d, modules, count=1):
 				func_comp = md.functionalComponents.create(comp.displayId)
 				func_comp.definition = comp
 				# add dnaplotlib extension
-				comp.size = sbol.FloatProperty(comp.this, 'http://dnaplotlib.org#Size', '0', '1', c.frame.width)  
-				comp.xcoord = sbol.FloatProperty(comp.this, 'http://dnaplotlib.org#XCoordinate', '0', '1', c.frame.origin[0])  
-				comp.ycoord = sbol.FloatProperty(comp.this, 'http://dnaplotlib.org#YCoordinate', '0', '1', c.frame.origin[1])  
-
-				d.addComponentDefinition(comp)
+				save_frame_into_file(comp, c.frame.width, c.frame.height, c.frame.origin[0], c.frame.origin[1])
+				doc.addComponentDefinition(comp)
 		
 		# save parts not on strand
 		for op in m.other_parts:
 			op_biopax_type = get_other_part_type(op.name)
 			comp = sbol.ComponentDefinition(op.name, op_biopax_type)
-			if op_type != sbol.BIOPAX_RNA:
+			if op_biopax_type != sbol.BIOPAX_RNA:
 				comp.roles = part_rd.get_so_term(op.type)
 			func_comp = md.functionalComponents.create(comp.displayId)
 			func_comp.definition = comp
 			# add dnaplotlib extension
-			comp.size = sbol.FloatProperty(comp.this, 'http://dnaplotlib.org#Size', '0', '1', op.frame.width)  
-			comp.xcoord = sbol.FloatProperty(comp.this, 'http://dnaplotlib.org#XCoordinate', '0', '1', op.frame.origin[0])  
-			comp.ycoord = sbol.FloatProperty(comp.this, 'http://dnaplotlib.org#YCoordinate', '0', '1', op.frame.origin[1])  
-
-			d.addComponentDefinition(comp)
+			save_frame_into_file(comp, c.frame.width, c.frame.height, c.frame.origin[0], c.frame.origin[1])
+			doc.addComponentDefinition(comp)
 		
 		# check children modules
 		if len(m.children) != 0:
@@ -398,18 +390,20 @@ def save_module_and_components_from_design(d, modules, count=1):
 			m_list = get_module_and_components(d, m.children)
 			md.assemble(m_list)
 
-		d.addModuleDefinition(md)
+		doc.addModuleDefinition(md)
 
 	return submodules
 
 # export to xml file 
-document = sbol.Document()
+'''document = sbol.Document()
 document.addNamespace('http://dnaplotlib.org#', 'dnaplotlib')
 save_module_and_components_from_design(document, design.modules)
-document.write('test_design2.xml')'''
+#save_interaction_from_design(document, design.interaction)
+document.write('test_design5.xml')
 
 # display canvas
-#plt.show()
+plt.show()'''
+
 
 
 

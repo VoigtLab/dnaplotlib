@@ -75,6 +75,28 @@ class GlyphRenderer:
                       
         return tag_details
 
+
+    # extract tag details for circle 
+    def extract_tag_details_circle(self, tag_attributes):
+        tag_details = {}
+        tag_details['type'] = None # svg name
+        tag_details['cx'] = None # x coord
+        tag_details['cy'] = None # y coord
+        tag_details['r'] = None # radius
+
+        # Pull out the relevant details
+        for key in tag_attributes.keys():
+            if key == 'class':
+                tag_details['type'] = tag_attributes[key]
+            if 'parametric' in key and key.endswith('}cx'):
+                tag_details['cx'] = float(tag_attributes[key])
+            if 'parametric' in key and key.endswith('}cy'):
+                tag_details['cy'] = float(tag_attributes[key])
+            if 'parametric' in key and key.endswith('}r'):
+                tag_details['r'] = float(tag_attributes[key])
+
+        return tag_details
+
     def eval_svg_data(self, svg_text, parameters):
         # Use regular expression to extract and then replace with evaluated version
         # https://stackoverflow.com/questions/38734335/python-regex-replace-bracketed-text-with-contents-of-brackets
@@ -88,11 +110,14 @@ class GlyphRenderer:
         glyph_type = root_attributes['glyphtype']
         glyph_soterms = root_attributes['soterms']
         glyph_data = {}
-        glyph_data['paths'] = []
+        glyph_data['paths'] , glyph_data['circles'] = ([] for i in range(2))
         glyph_data['defaults'] = root_attributes['defaults']
         for child in root:
+            # Cycle through and find all paths and circles
             if child.tag.endswith('path'):
                 glyph_data['paths'].append(self.extract_tag_details_path(child.attrib))
+            elif child.tag.endswith('circle'):
+                glyph_data['circles'].append(self.extract_tag_details_circle(child.attrib))
         return glyph_type, glyph_soterms, glyph_data
 
     def load_glyphs_from_path(self, path):
@@ -281,6 +306,35 @@ class GlyphRenderer:
             corrected_path.append(path)
         return corrected_path
             
+
+    # function that turn cx, cy, r into circle path 
+    def get_circle_path(self, circle):
+        verts = [
+            (circle['cx'] - circle['r'], circle['cy']),
+            (circle['cx'] - circle['r'], circle['cy'] + circle['r']),
+            (circle['cx'], circle['cy'] + circle['r']),
+            (circle['cx'] + circle['r'], circle['cy'] + circle['r']),
+            (circle['cx'] + circle['r'], circle['cy']),
+            (circle['cx'] + circle['r'], circle['cy'] - circle['r']),
+            (circle['cx'], circle['cy'] - circle['r']),
+            (circle['cx'] - circle['r'], circle['cy'] - circle['r']),
+            (circle['cx'] - circle['r'], circle['cy'])
+        ]
+
+        codes = [
+            Path.MOVETO, 
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.CURVE3
+        ]
+
+        return Path(verts, codes)
+
     # extract paths / circ from glyph the return raw paths to draw
     def get_rawpaths_to_draw(self, glyph, merged_params):
         new_paths_to_draw = []
@@ -288,6 +342,9 @@ class GlyphRenderer:
             if path['type'] not in ['baseline']:
                 svg_text = self.eval_svg_data(path['d'], merged_params)
                 new_paths_to_draw.append(svg2mpl.parse_path(svg_text))
+        for circle in glyph['circles']:
+            new_paths_to_draw.append(self.get_circle_path(circle))
+
         return new_paths_to_draw
 
     # helper function for rendering RNA 

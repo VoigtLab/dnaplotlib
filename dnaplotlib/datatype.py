@@ -6,6 +6,7 @@ __author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>'
 __license__ = 'MIT'
 __version__ = '2.0'
 
+
 ###############################################################################
 # New Data Type
 ###############################################################################
@@ -151,6 +152,19 @@ class Module:
 
 
 class Design:
+    """ Constructor to generate Module. 
+
+        Parameters
+        ----------
+        name : String
+            name of the module
+
+        modules: [Module]
+            list of modules contained in the design (only level 0)
+
+        interactions: [Interactions]
+            list of interactions within design
+    """
     def __init__(self, name):
         self.name = name
         self.modules = []
@@ -479,7 +493,7 @@ def create_test_design5 ():
 
     # Create DNA module 1 
     module1 = Module(design, 'module1')
-    module1.add_part( [Part(module1, '1p', 'Promoter'), Part(module1, '1c', 'CDS'), Part(module1, '1c2', 'CDS'), Part(module1, '1t', 'Terminator')])
+    module1.add_part( [Part(module1, 'p1p', 'Promoter'), Part(module1, 'p1c', 'CDS'), Part(module1, 'p1c2', 'CDS'), Part(module1, 'p1t', 'Terminator')])
     other_part_1p1 = Part(module1, 'R1','Unspecified')
     other_part_1p2 = Part(module1, 'R2','Macromolecule')
     other_part_1RNA1 = Part(module1, 'R5', 'RNA')
@@ -497,24 +511,24 @@ def create_test_design5 ():
 
     # module 6
     module6 = Module(design, 'module6')
-    part_6_pro = Part(module6, '6a','Promoter')
-    part_6_apt = Part(module6, '6apt', 'Aptamer')
-    part_6_res = Part(module6, '6r','RibosomeEntrySite') 
-    part_6_ter = Part(module1, '6t','Terminator')
+    part_6_pro = Part(module6, 'p6a','Promoter')
+    part_6_apt = Part(module6, 'p6apt', 'Aptamer')
+    part_6_res = Part(module6, 'p6r','RibosomeEntrySite') 
+    part_6_ter = Part(module1, 'p6t','Terminator')
     module6.add_part( [part_6_pro, part_6_apt, part_6_res, part_6_ter] )
 
     # module 7
     module7 = Module(design, 'module7')
-    part_7_pro = Part(module7, '7p', 'Promoter')
-    part_7_res = Part(module7, '7r', 'RibosomeEntrySite')
-    part_7_ter = Part(module7, '7t', 'Terminator')
+    part_7_pro = Part(module7, 'p7p', 'Promoter')
+    part_7_res = Part(module7, 'p7r', 'RibosomeEntrySite')
+    part_7_ter = Part(module7, 'p7t', 'Terminator')
     module7.add_part( [part_7_pro, part_7_res, part_7_ter] )
 
     # module 8
     module8 = Module(design, 'module8')
-    part_8_pro = Part(module8, '8p', 'Promoter')
-    part_8_cds = Part(module8, '8c', 'CDS')
-    part_8_ter = Part(module8, '8t', 'Terminator')
+    part_8_pro = Part(module8, 'p8p', 'Promoter')
+    part_8_cds = Part(module8, 'p8c', 'CDS')
+    part_8_ter = Part(module8, 'p8t', 'Terminator')
     module8.add_part( [part_8_pro, part_8_cds, part_8_ter] )
 
     design.add_interaction( [Interaction(other_part_1p2, part_7_res, 'inhibition'), 
@@ -527,8 +541,9 @@ def create_test_design5 ():
 
 
 # Let's try it out!
-#design = create_test_design2()
-#design.print_design()
+'''
+design = create_test_design5()
+design.print_design()'''
 
 
 

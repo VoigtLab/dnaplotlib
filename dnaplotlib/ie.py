@@ -2,16 +2,17 @@
 New DNAplotlib script for handling input and output
 """
 import sbol, csv
-import datatype as dt, draw, render as rd
+import datatype as dt, render as rd, draw
+import matplotlib.pyplot as plt
+
+
+# plt const
+XMIN, XMAX = -60., 60.
+YMIN, YMAX = -60., 60.
 
 ###############################################################################
 # Input
 ###############################################################################
-
-###############################################################################
-# Output
-###############################################################################
-
 
 # helper function for extract_module_and_components
 # match functional component with component definition
@@ -27,24 +28,29 @@ def fetch_module_def(doc, md_id):
 		if md.displayId == md_id:
 			return md
 
-# recursive function for extracting module and components and saving as design 
+def add_parts_to_module(docu, mod, fc_list):
+	for i in range(len(fc_list)):
+		fc = fc_list[i]
+		c_role, c_type = fetch_comp_role_type(docu, fc.displayId)
+		# create part
+		if len(c_role) == 0: # when part is RNA, does not have so term 
+			part = dt.Part(mod, fc.displayId, 'RNA')
+		else:
+			part = dt.Part(mod, fc.displayId, renderer.glyph_soterm_map.get(c_role[0]))
+		# add part to strand / non-strand
+		if c_type[0] == sbol.BIOPAX_DNA:
+   			mod.add_part(part)
+   		else:
+   			mod.add_other_part(part)
+
+# recursive function for extracting module and components 
+# return list of modules to be saved in design
 def extract_module_and_components(doc, design, mod_defs):
 	md_list = []
 	for md in mod_defs:
 		module = dt.Module(design, md.displayId)
-
-		for fc in md.functionalComponents:
-			c_role, c_type = fetch_comp_role_type(doc, fc.displayId)
-			print(module.name)
-			print(renderer.glyph_soterm_map.get(c_role[0]))
-			print(fc.displayId)
-			part = dt.Part(module, fc.displayId, renderer.glyph_soterm_map.get(c_role[0]))
-			print(part)
-			if c_type[0] == sbol.BIOPAX_DNA:
-	   			module.add_part(part)
-	   		else:
-	   			module.add_other_part(part)
-
+		add_parts_to_module(doc, module, md.functionalComponents)
+		
 		# add submodules
 		if len(md.modules) != 0:
 			smd_list = []
@@ -56,24 +62,32 @@ def extract_module_and_components(doc, design, mod_defs):
 
 	return md_list
 
+###############################################################################
+# Output
+###############################################################################
+
+
 # initialize renderer
 renderer = rd.GlyphRenderer()
 
 # open doc
 doc = sbol.Document()
-doc.read('test_design3_2.xml')
+doc.read('test_design5.xml')
 
 # create design 
-design = dt.Design('root_design')
-extract_module_and_components(doc, design, doc.moduleDefinitions)
-m_frames = get_module_frames(design.modules) # default setting
+design = dt.Design('design5')
+design.add_module(extract_module_and_components(doc, design, doc.moduleDefinitions))
+design.print_design()
+m_frames = draw.get_module_frames(design.modules) # default setting
+
+
 fig, ax = plt.subplots(1, figsize=(8,10))
 ax.set_xlim(XMIN, XMAX)
 ax.set_ylim(YMIN, YMAX)
 ax.set_axis_off()
 
 # render modules
-draw_all_modules(m_frames, design.modules)
+draw.draw_all_modules(ax, m_frames, design.modules)
 
 plt.show()
 

@@ -338,22 +338,40 @@ def get_other_part_type(other_part_name):
 		return sbol.BIOPAX_RNA
 	return sbol.BIOPAX_PROTEIN
 
-#def save_interaction_from_design(doc, interactions)
+def save_interaction_from_design(doc, interactions):
+	for interaction in interactions:
+		md = sbol.ModuleDefinition('random_module')
+		print('module created')
+		interaction1 = md.interactions.create('interaction1') # inhibition
+		interaction1.type = 'SBO:0000169'
+		participation1 = md.participation.create(func_comp1, 'http://identifiers.org/biomodels.sbo/SBO:0000020') # inhibitor 
+		participation2 = md.participate.create(func_comp2, 'http://identifiers.org/biomodels.sbo/SBO:0000642') # inhibited
+		interaction1.add_participations([participation1, participation2])
+		print('interaction added!')
 
 # helper function for save_module_and_components_from_design
 # add extension to save frame (width, height, originX, originY)
 def save_frame_into_file(sbol_def, width, height, x, y):
-	# add module frames as dnaplotlib extension
 	sbol_def.width = sbol.FloatProperty(sbol_def.this, 'http://dnaplotlib.org#Width', '0', '1', width)  
 	sbol_def.height = sbol.FloatProperty(sbol_def.this, 'http://dnaplotlib.org#Height', '0', '1', height)  
 	sbol_def.xcoord = sbol.FloatProperty(sbol_def.this, 'http://dnaplotlib.org#XCoordinate', '0', '1', x)  
 	sbol_def.ycoord = sbol.FloatProperty(sbol_def.this, 'http://dnaplotlib.org#YCoordinate', '0', '1', y)  
 
+# helper function for save_module_and_components_from_design
+# save part as component definition
+def save_part_as_component_definition(docu, part, part_type):
+	part_rd = rd.GlyphRenderer()
+	comp = sbol.ComponentDefinition(part.name, sbol.BIOPAX_DNA)
+	if part_type != sbol.BIOPAX_RNA:
+		comp.roles = part_rd.get_so_term(part_type)
+	func_comp = md.functionalComponents.create(comp.displayId)
+	func_comp.definition = comp
+	save_frame_into_file(comp, part.frame.width, part.frame.height, part.frame.origin[0], part.frame.origin[1])
+	doc.addComponentDefinition(comp)
 
 # recursive file export func 
 # get modules and components 
 def save_module_and_components_from_design(doc, modules, count=1):
-	part_rd = rd.GlyphRenderer()
 	submodules = []
 	for m in modules:
 		md = sbol.ModuleDefinition('md_%d_%d' % (m.level, count))
@@ -363,26 +381,13 @@ def save_module_and_components_from_design(doc, modules, count=1):
 		
 		# save parts on strand 
 		if m.part_list is not None:
-			for c in m.part_list.parts:
-				comp = sbol.ComponentDefinition(c.name, sbol.BIOPAX_DNA)
-				comp.roles = part_rd.get_so_term(c.type)
-				func_comp = md.functionalComponents.create(comp.displayId)
-				func_comp.definition = comp
-				# add dnaplotlib extension
-				save_frame_into_file(comp, c.frame.width, c.frame.height, c.frame.origin[0], c.frame.origin[1])
-				doc.addComponentDefinition(comp)
+			for part in m.part_list.parts:
+				save_part_as_component_definition(doc, part, part.type)
 		
 		# save parts not on strand
-		for op in m.other_parts:
+		for opart in m.other_parts:
 			op_biopax_type = get_other_part_type(op.name)
-			comp = sbol.ComponentDefinition(op.name, op_biopax_type)
-			if op_biopax_type != sbol.BIOPAX_RNA:
-				comp.roles = part_rd.get_so_term(op.type)
-			func_comp = md.functionalComponents.create(comp.displayId)
-			func_comp.definition = comp
-			# add dnaplotlib extension
-			save_frame_into_file(comp, c.frame.width, c.frame.height, c.frame.origin[0], c.frame.origin[1])
-			doc.addComponentDefinition(comp)
+			save_part_as_component_definition(doc, opart, op_biopax_type)
 		
 		# check children modules
 		if len(m.children) != 0:
@@ -395,14 +400,14 @@ def save_module_and_components_from_design(doc, modules, count=1):
 	return submodules
 
 # export to xml file 
-'''document = sbol.Document()
+document = sbol.Document()
 document.addNamespace('http://dnaplotlib.org#', 'dnaplotlib')
 save_module_and_components_from_design(document, design.modules)
-#save_interaction_from_design(document, design.interaction)
+save_interaction_from_design(document, design.interactions)
 document.write('test_design5.xml')
 
 # display canvas
-plt.show()'''
+plt.show()
 
 
 

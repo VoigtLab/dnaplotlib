@@ -64,14 +64,14 @@ Here are some example visualization by the updated DNAplotlib.
 <a href="dnaplotlib/examples"><img src="dnaplotlib/examples/non-dna2.png" height="200px"/></a>
 
 ### Intermodular & Intramodular Interactions 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/hierarchy.png" height="100px"/></a>
-
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/hierarchy2.png" height="160px"/></a>
-
-### Hierarchical Modules and Submodules 
 <a href="dnaplotlib/examples"><img src="dnaplotlib/examples/interaction.png" height="200px"/></a>
 
 <a href="dnaplotlib/examples"><img src="dnaplotlib/examples/interaction2.png" height="200px"/></a>
+
+### Hierarchical Modules and Submodules 
+<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/hierarchy.png" height="100px"/></a>
+
+<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/hierarchy2.png" height="160px"/></a>
 
 
 More visualization example scripts can be found under the examples directory. 

@@ -52,26 +52,26 @@ Commit period: May 16, 2018 - Now
 * <a href=https://github.com/swkang73/dnaplotlib/commits/master> 99a9238 </a> run into bug while importing sbol file 
 * <a href=https://github.com/swkang73/dnaplotlib/commits/master> fad5f32 </a> test_design5 import and export modules & components 
 * <a href=https://github.com/swkang73/dnaplotlib/commits/master> 6deec09 </a> bug fix & func decomposition
-* <a href=https://github.com/swkang73/dnaplotlib/commits/master> e7ec582, bbe6214, fe994fb, 8695653 </a> readme edit for final submission
+* <a href=https://github.com/swkang73/dnaplotlib/commits/master> e7ec582, bbe6214, fe994fb, 8695653, f821381 </a> readme edit for final submission
 
 
 ## Visualization Example
 Here are some example visualization by the updated DNAplotlib. 
 
 ### Non-DNA Components (RNA, protein, etc)
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/non-dna1.png" height="160px"/></a>
+<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/non-dna1.png" height="200px"/></a>
 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/non-dna2.png" height="160px"/></a>
+<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/non-dna2.png" height="200px"/></a>
 
 ### Intermodular & Intramodular Interactions 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/hierarchy.png" height="160px"/></a>
+<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/hierarchy.png" height="100px"/></a>
 
 <a href="dnaplotlib/examples"><img src="dnaplotlib/examples/hierarchy2.png" height="160px"/></a>
 
 ### Hierarchical Modules and Submodules 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/interaction.png" height="160px"/></a>
+<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/interaction.png" height="200px"/></a>
 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/interaction2.png" height="160px"/></a>
+<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/interaction2.png" height="200px"/></a>
 
 
 More visualization example scripts can be found under the examples directory. 

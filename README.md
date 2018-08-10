@@ -12,8 +12,8 @@ This folked repository is updated by Sunwoo Kang as a part of Google's Summer of
 4. Importing/exporting design data from SBOL files
 
 ## List of Commits
-<a href=https://github.com/swkang73/dnaplotlib/commits/master?after=e7ec582f68b08caeb8dbbe1cdec76be9a8a3d0f2+34/>ac58dd3</a> setup for rendering sbol files
-<a href=https://github.com/swkang73/dnaplotlib/commits/master?after=e7ec582f68b08caeb8dbbe1cdec76be9a8a3d0f2+34/>e38ccd1</a> sanity check for componentDefinition & targer promoter file
+* <a href=https://github.com/swkang73/dnaplotlib/commits/master> ac58dd3 </a> setup for rendering sbol files
+* <a href=https://github.com/swkang73/dnaplotlib/commits/master> e38ccd1 </a> sanity check for componentDefinition & targer promoter file
 
 
 

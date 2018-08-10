@@ -52,7 +52,7 @@ Commit period: May 16, 2018 - Now
 * <a href=https://github.com/swkang73/dnaplotlib/commits/master> 99a9238 </a> run into bug while importing sbol file 
 * <a href=https://github.com/swkang73/dnaplotlib/commits/master> fad5f32 </a> test_design5 import and export modules & components 
 * <a href=https://github.com/swkang73/dnaplotlib/commits/master> 6deec09 </a> bug fix & func decomposition
-* <a href=https://github.com/swkang73/dnaplotlib/commits/master> e7ec582, bbe6214, fe994fb, 8695653, f821381 </a> readme edit for final submission
+* <a href=https://github.com/swkang73/dnaplotlib/commits/master> e7ec582, bbe6214, fe994fb, 8695653, f821381, 419d435 </a> readme edit for final submission
 
 
 ## Visualization Example

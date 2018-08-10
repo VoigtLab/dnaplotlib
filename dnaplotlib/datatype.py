@@ -493,21 +493,24 @@ def create_test_design5 ():
 
     # Create DNA module 1 
     module1 = Module(design, 'module1')
-    module1.add_part( [Part(module1, 'p1p', 'Promoter'), Part(module1, 'p1c', 'CDS'), Part(module1, 'p1c2', 'CDS'), Part(module1, 'p1t', 'Terminator')])
+    p1 = Part(module1, 'p1p', 'Promoter')
+    part_1_cds_1 = Part(module1, 'p1c', 'CDS')
+    t1 = Part(module1, 'p1t', 'Terminator')
+    module1.add_part( [p1, part_1_cds_1, t1])
     other_part_1p1 = Part(module1, 'R1','Unspecified')
     other_part_1p2 = Part(module1, 'R2','Macromolecule')
     other_part_1RNA1 = Part(module1, 'R5', 'RNA')
     module1.add_other_part( [other_part_1p1, other_part_1RNA1, other_part_1p2])
 
     # Create module 2 containing only other part 
-    module2 = Module(design, 'module2')
+    '''module2 = Module(design, 'module2')
     other_part_1 = Part(module2, 'p','Macromolecule')
     module2.add_other_part(other_part_1)
 
     # Create module 3 containing only other part 
     module3 = Module(design, 'module3')
     other_part_2 = Part(module3, 'rna','RNA')
-    module3.add_other_part(other_part_2)
+    module3.add_other_part(other_part_2)'''
 
     # module 6
     module6 = Module(design, 'module6')
@@ -527,15 +530,17 @@ def create_test_design5 ():
     # module 8
     module8 = Module(design, 'module8')
     part_8_pro = Part(module8, 'p8p', 'Promoter')
-    part_8_cds = Part(module8, 'p8c', 'CDS')
+    part_8_cds_1 = Part(module8, 'p8c', 'CDS')
+    part_8_cds_2 = Part(module8, 'p8c', 'CDS')
     part_8_ter = Part(module8, 'p8t', 'Terminator')
-    module8.add_part( [part_8_pro, part_8_cds, part_8_ter] )
+    module8.add_part( [part_8_pro, part_8_cds_1, part_8_cds_2, part_8_ter] )
 
     design.add_interaction( [Interaction(other_part_1p2, part_7_res, 'inhibition'), 
-        Interaction(part_6_pro, other_part_1, 'process'),
-        Interaction(part_8_cds, other_part_2, 'control')])
+        Interaction(part_6_pro, part_6_apt, 'process'),
+        Interaction(part_6_apt, part_6_res, 'inhibition'),
+        Interaction(part_8_cds_1, part_8_cds_2, 'inhibition')])
 
-    design.add_module([module1, module6, module7, module8, module2, module3])
+    design.add_module([module1, module6, module7, module8])
 
     return design
 

@@ -400,11 +400,11 @@ def save_module_and_components_from_design(doc, modules, count=1):
 	return submodules
 
 # export to xml file 
-document = sbol.Document()
+'''document = sbol.Document()
 document.addNamespace('http://dnaplotlib.org#', 'dnaplotlib')
 save_module_and_components_from_design(document, design.modules)
 save_interaction_from_design(document, design.interactions)
-document.write('test_design5.xml')
+document.write('test_design5.xml')'''
 
 # display canvas
 plt.show()

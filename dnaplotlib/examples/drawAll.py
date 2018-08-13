@@ -1,3 +1,12 @@
+'''script for drawing all sypported part glyphs
+need to be moved outside the example directory 
+at the same directory as render.py
+'''
+
+from render import *
+import matplotlib.pyplot as plt
+
+
 fig, ax = plt.subplots(1, figsize=(10,10))
 # need to set axis first 
 ax.set_xlim(-50.0, 50.0)

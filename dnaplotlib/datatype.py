@@ -43,7 +43,8 @@ class Part:
 class PartList:
     def __init__(self, position=None, backbone='DNA'):
         """ Constructor to generate a new PartList. Used to hold a list of parts that
-        should be rendered as a single unit with a shared backbone.
+        should be rendered as a single unit with a shared backbone. Note that PartList 
+        does not hold all parts in a module.
 
         Parameters
         ----------
@@ -52,14 +53,19 @@ class PartList:
             during the rendering process.
 
         backbone : string (default: 'DNA')
-            The backbone type, either DNA or RNA (will affect the rendering).
+            Currently, only support DNA rendering. 
+            Later could be updated to include RNA backbone (will affect the rendering).
+
+        parts: [Part]
+
+        options: dictionary 
+            parts or backbone rendering options currently not supported
+
         """
-        # Type of backbone (DNA or RNA, will affect rendering)
         self.position = position
         self.backbone = backbone
         self.parts = [] # List of parts making up the segment
-        self.extent = [[0,0], [0,0]] # Bounding box of the part lower left to upper right coordinates.
-        self.options = {} # Options to be used when rendering backbone
+        self.options = {} 
 
     def add_part(self, part):
         if type(part) != list:
@@ -96,7 +102,6 @@ class Interaction:
         self.part_end = part_end
         self.coordinates = []
         self.type = interaction_type 
-        self.path = path
         self.options = {}
 
 
@@ -121,10 +126,10 @@ class Module:
             list of submodules contained within the module
 
         part_list: Part_list
-            list of parts contained on dna backbone 
+            list of parts contained on DNA backbone 
 
         other_parts: [Part]
-            list of parts not contained on dna backbone 
+            list of parts not contained on DNA backbone 
     """
     def __init__(self, design, name, parent=None):
         self.design = design

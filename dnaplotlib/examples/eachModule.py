@@ -1,5 +1,10 @@
 '''rough script for rendering three glyphs in 3 modules
+need to be moved outside the example directory 
+at the same directory as render.py
 '''
+
+from render import *
+import matplotlib.pyplot as plt
 
 # default setting
 strand1 = StrandRenderer()

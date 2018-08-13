@@ -75,12 +75,15 @@ class GlyphRenderer:
                       
         return tag_details
 
+    # read svg data and return paths
     def eval_svg_data(self, svg_text, parameters):
         # Use regular expression to extract and then replace with evaluated version
         # https://stackoverflow.com/questions/38734335/python-regex-replace-bracketed-text-with-contents-of-brackets
         svgpaths = re.sub(r"{([^{}]+)}", lambda m: str(eval(m.group()[1:-1], parameters)), svg_text)
         return svgpaths
 
+    # helper function for load_glyphs_from_path
+    # used to open part svg file and save params
     def load_glyph(self, filename):
         tree = ET.parse(filename)
         root = tree.getroot()
@@ -95,6 +98,7 @@ class GlyphRenderer:
                 glyph_data['paths'].append(self.extract_tag_details_path(child.attrib))
         return glyph_type, glyph_soterms, glyph_data
 
+    # function for loading glyphs 
     def load_glyphs_from_path(self, path):
         glyphs_library = {}
         glyph_soterm_map = {}
@@ -110,7 +114,6 @@ class GlyphRenderer:
         for term, name in self.glyph_soterm_map.items():
             if name == glyph_type:
                 return term
-
 
     # turn list of vertices into coordinates
     def list_into_coord(self, vlist):
@@ -597,9 +600,9 @@ renderer = GlyphRenderer()
 module = ModuleRenderer()
 
 print(renderer.glyphs_library)
-#print('------------')
-print(renderer.glyph_soterm_map)
+print('------------')
+print(renderer.glyph_soterm_map)'''
 
-'''
+
 
 

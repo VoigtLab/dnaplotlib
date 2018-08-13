@@ -1,4 +1,10 @@
-# render module and check coordinates
+'''render module and check coordinates
+need to be moved outside the example directory 
+at the same directory as render.py
+'''
+
+from render import *
+import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots(1, figsize=(8,10))
 ax.set_xlim(XMIN, XMAX)

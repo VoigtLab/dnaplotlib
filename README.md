@@ -20,19 +20,19 @@ The final step of the project was to import and export the design data into SBOL
 Here are some example visualization by the updated DNAplotlib. 
 
 ### Non-DNA Components (RNA, protein, etc)
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/gallery/non-dna1.png" height="200px"/></a>
+<a href="dnaplotlib/examples/gallery"><img src="dnaplotlib/examples/gallery/non-dna1.png" height="200px"/></a>
 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/gallery/non-dna2.png" height="200px"/></a>
+<a href="dnaplotlib/examples/gallery"><img src="dnaplotlib/examples/gallery/non-dna2.png" height="200px"/></a>
 
 ### Intermodular & Intramodular Interactions 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/gallery/interaction.png" height="200px"/></a>
+<a href="dnaplotlib/examples/gallery"><img src="dnaplotlib/examples/gallery/interaction.png" height="200px"/></a>
 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/gallery/interaction2.png" height="200px"/></a>
+<a href="dnaplotlib/examples/gallery"><img src="dnaplotlib/examples/gallery/interaction2.png" height="200px"/></a>
 
 ### Hierarchical Modules and Submodules 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/gallery/hierarchy.png" height="100px"/></a>
+<a href="dnaplotlib/examples/gallery"><img src="dnaplotlib/examples/gallery/hierarchy.png" height="100px"/></a>
 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/gallery/hierarchy2.png" height="160px"/></a>
+<a href="dnaplotlib/examples/gallery"><img src="dnaplotlib/examples/gallery/hierarchy2.png" height="160px"/></a>
 
 More visualization example scripts can be found under the dnaplotlib/examples directory. 
 

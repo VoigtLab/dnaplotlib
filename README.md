@@ -20,19 +20,19 @@ The final step of the project was to import and export the design data into SBOL
 Here are some example visualization by the updated DNAplotlib. 
 
 ### Non-DNA Components (RNA, protein, etc)
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/non-dna1.png" height="200px"/></a>
+<a href="dnaplotlib/examples/gallery"><img src="dnaplotlib/examples/gallery/non-dna1.png" height="200px"/></a>
 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/non-dna2.png" height="200px"/></a>
+<a href="dnaplotlib/examples/gallery"><img src="dnaplotlib/examples/gallery/non-dna2.png" height="200px"/></a>
 
 ### Intermodular & Intramodular Interactions 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/interaction.png" height="200px"/></a>
+<a href="dnaplotlib/examples/gallery"><img src="dnaplotlib/examples/gallery/interaction.png" height="200px"/></a>
 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/interaction2.png" height="200px"/></a>
+<a href="dnaplotlib/examples/gallery"><img src="dnaplotlib/examples/gallery/interaction2.png" height="200px"/></a>
 
 ### Hierarchical Modules and Submodules 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/hierarchy.png" height="100px"/></a>
+<a href="dnaplotlib/examples/gallery"><img src="dnaplotlib/examples/gallery/hierarchy.png" height="100px"/></a>
 
-<a href="dnaplotlib/examples"><img src="dnaplotlib/examples/hierarchy2.png" height="160px"/></a>
+<a href="dnaplotlib/examples/gallery"><img src="dnaplotlib/examples/gallery/hierarchy2.png" height="160px"/></a>
 
 More visualization example scripts can be found under the dnaplotlib/examples directory. 
 
@@ -40,30 +40,42 @@ More visualization example scripts can be found under the dnaplotlib/examples di
 
 ### import sbol file
 doc = sbol.Document()
+
 doc.read('test_design.xml')
 
 ### create visualization design from doc 
 design = dt.Design('design')
+
 design.add_module(extract_module_and_components(doc, design, doc.moduleDefinitions))
+
 design.print_design()
+
 m_frames = draw.get_module_frames(design.modules) 
 
 ### draw design
 fig, ax = plt.subplots(1, figsize=(8,10))
+
 ax.set_xlim(XMIN, XMAX)
+
 ax.set_ylim(YMIN, YMAX)
+
 ax.set_axis_off()
 
 draw.draw_all_modules(ax, m_frames, design.modules)
+
 draw_all_interaction(ax, design.interactions)
 
 plt.show()
 
 ### export sbol file
 document = sbol.Document()
+
 document.addNamespace('http://dnaplotlib.org#', 'dnaplotlib')
+
 save_module_and_components_from_design(document, design.modules)
+
 save_interaction_from_design(document, design.interactions)
+
 document.write('test_design_updated.xml')
 
 ## List of Commits
@@ -107,7 +119,7 @@ Commit period: May 16, 2018 - Now
 * <a href=https://github.com/swkang73/dnaplotlib/commits/master> 99a9238 </a>: run into bug while importing sbol file 
 * <a href=https://github.com/swkang73/dnaplotlib/commits/master> fad5f32 </a>: test_design5 import and export modules & components 
 * <a href=https://github.com/swkang73/dnaplotlib/commits/master> 6deec09 </a>: bug fix & func decomposition
-* <a href=https://github.com/swkang73/dnaplotlib/commits/master> e7ec582, bbe6214, fe994fb, 8695653, f821381, 419d435 </a>: readme edit for final submission
+* <a href=https://github.com/swkang73/dnaplotlib/commits/master> e7ec582, bbe6214, fe994fb, 8695653, f821381, 419d435, 4adf901 </a>: readme edit for final submission
 
 
 ## Installation

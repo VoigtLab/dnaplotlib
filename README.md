@@ -1,16 +1,20 @@
 # DNAplotlib supporting pySBOL2 Visual and Data Model
 
-DNAplotlib is a library that enables highly customizable visualization of individual genetic constructs and libraries of design variants. The supported visualization follows the latest standard of <a href="http://sbolstandard.org"> Synthetic Biology Open Language (SBOL) version 2.2 </a>. This library allows both import/export, and creation of sbol2 files. The original repository was developed under Voight Lab in the following link: 
-<a href="https://github.com/VoigtLab/dnaplotlib">Der B.S., Glassey E., Bartley B.A., Enghuus C., Goodman D.B., Gordon D.B., Voigt C.A., Gorochowski T.E., "DNAplotlib: programmable visualization of genetic designs and associated data", ACS Synthetic Biology, 2016. (DOI: 10.1021/acssynbio.6b00252)</a>
+DNAplotlib is a library that enables highly customizable visualization of individual genetic constructs and libraries of design variants. 
 
-This forked repository is updated by Sunwoo Kang as a part of Google's Summer of Code 2018 project. Her work was guided by mentors Thomas Gorochowski and Bryan Bartley. The updates are mainly: 
+This forked repository is updated by Sunwoo Kang as a part of Google's Summer of Code 2018 project. The updated visualization follows the latest standard of <a href="http://sbolstandard.org"> Synthetic Biology Open Language (SBOL) version 2.2 </a>. This library allows both import/export, and creation of SBOL2 files. The original repository was developed under Voigt Lab in the following link: 
 
-1. making DNAplotlib compatible with <a href=http://sbolstandard.org/visual/glyphs/>SBOL Visual Standard 2</a>
-2. Rendering of non-DNA components
-3. Defining modules and interactions between them
-4. Visualizing submodules within modules 
-5. Importing/exporting/creating design data from SBOL files
-6. Producing raw parametric files of SBOL Visual glyph
+<a href="https://github.com/VoigtLab/dnaplotlib">Der B.S., Glassey E., Bartley B.A., Enghuus C., Goodman D.B., Gordon D.B., Voigt C.A., Gorochowski T.E., "DNAplotlib: programmable visualization of genetic designs and associated data", ACS Synthetic Biology, 2016. (DOI: 10.1021/acssynbio.6b00252)</a> 
+
+## Updates
+My [Sunwoo Kang’s] task was to help the main developer of DNAplotlib, Tom Gorochowski, provide ways to render SVG files on Matplotlib canvas (svgpath2mpl.py), and develop a new datatype to store the genetic circuit design data (datatype.py) that is compatible with SBOL standard. The previous DNAplotlib rendered each part by raw coordinates, but with the updated version having more part glyphs we decided to standardize parts by having different parts saved as svg files, then using same drawing function to render them. 
+
+To develop these features, I helped Tom producing parametric SVG files of SBOL Visual glyph. There are nine clean SVG files, which includes a few new glyphs from the SBOL Visual 2 such as macromolecules and RNA strand. Since the svg files provided on the website were created by software, they came with properties that was hard to extract path values. For the sake of time, I moved on to the next step of the project. I created rendering function (render.py) to render these glyphs at a user-specified position or automatically position the genetic circuit design in the canvas. The main challenge was coming up with the best default rendering convention. This included aspects such as altering the datatype to accommodate the overall extent of a glyph and specifying the position of the origin in each glyph to be lower left corner of the SVG image. The functions automatically position and align parts on a DNA strand. In addition user can adjust size, positioning, and angle of the visual glyphs.
+
+I also wrote functions that would automatically position and draw parts not associated to a DNA strand (e.g. a protein), modules, submodules, and interactions. This involved writing recursive functions to fully visualize complex hierarchies and the interactions between components at various levels. Furthermore, I abstracted the interaction rendering in a way that allows easier differentiation of interactions by their arrowhead and colors. To avoid multiple interactions causing confusion, I added random positioning to arrow path heights so that no two or more arrows have the height values. 
+
+The final step of the project was to import and export the design data into SBOL files. DNAplotlib now allows import/export and rendering of simple genetic design consisted of parts and modules. It also supports the creation and rendering of complex genetic design with modular hierarchies and interactions. The example test design files can be found under dnaplotlib directory. However, when writing this code, I ran into backend problems with the pySBOL library, such as StopIteration errors, which I was unable to debug in the time I had available. However, I did have some success importing and exporting simple genetic circuit designs (see ie.py). 
+
 
 ## Visualization Example
 Here are some example visualization by the updated DNAplotlib. 
@@ -107,11 +111,25 @@ Commit period: May 16, 2018 - Now
 
 
 ## Installation
-DNAplotlib is based on pySBOL2. Thus, the user need to first download the latest pySBOL package. The DNAplotlib library is contained within the `dnaplotlib.py` file in the `lib` directory and requires Python 2.6 and matplotlib 1.2 or newer. To install add the location of this file to your `PYTHONPATH` and you are good to: `import dnaplotlib`
+The DNAplotlib library is contained within the `dnaplotlib.py` file in the `lib` directory and requires Python 2.6 and matplotlib 1.2 or newer and pySBOL package. To install follow instructions below and: `import dnaplotlib`
+
+Get setuptools if you don't have it:
+https://pypi.org/project/setuptools/2.0/#installation-instructions
+
+Install the Dnaplotlib package on your system in a contained development environment:
+python setup.py develop --user
+
+You should now be able to import Dnaplotlib from any directory on your system and import it into other projects. Edits to source code in your development repository will be reflected in the behavior of the package without reinstalling it.
+
+To clean the development package from your system:
+python setup.py develop --user --uninstall
+
+<a href="https://stackoverflow.com/questions/27630114/matplotlib-issue-on-os-x-importerror-cannot-import-name-thread"> Note some issue importing matplotlib dependency on Mac OS X Yosemite and later </a>
 
 
 ## To Do 
-- debug StopIteration Error during recursive reading of submodules 
-- import/export csv files containing genetic circuit design data 
-- read/save interaction into design data
-- support user rendering customization (color, linewidth, etc)
+DNAplotlib would be useful if it can also handle simple CSV files with genetic design definitions.  Also it should allow more visualization options (e.g. customization of basic visual properties like color) and save back the visual properties generated by my functions to SBOL files as an extension. Finally, the 
+StopIteration Error during recursive reading of submodules need debugging.
+
+## Acknowledgement
+I would like to thank my mentors, Thomas Gorochowski, PhD (University of Bristol) and Bryan Bartley, PhD (Raytheon BBN Technologies), for their guidance and support. I would further like thank NRNB and SBOL community for their warm welcome, and National Science Foundation for generous support to attend the COMBINE 2018 conference. Lastly, I express my gratitude to Google for hosting Code for Summer program. 

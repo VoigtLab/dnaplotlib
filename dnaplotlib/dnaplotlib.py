@@ -377,25 +377,25 @@ def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 def sbol_ribozyme (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     """ Built-in SBOL ribozyme renderer.
     """
-    return stick_figure(ax,type,num,start,end,prev_end,scale,linewidth,opts)    
+    return stick_figure(ax,type,num,start,end,prev_end,scale,linewidth,opts)
 
 
 def sbol_protein_stability (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     """ Built-in SBOL protein stability element renderer.
     """
-    return stick_figure(ax,type,num,start,end,prev_end,scale,linewidth,opts)    
+    return stem_top(ax,type,num,start,end,prev_end,scale,linewidth,opts)
 
 
 def sbol_protease (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     """ Built-in SBOL protease site renderer.
     """
-    return stick_figure(ax,type,num,start,end,prev_end,scale,linewidth,opts)
+    return stem_top(ax,type,num,start,end,prev_end,scale,linewidth,opts)
 
 
 def sbol_ribonuclease (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     """ Built-in SBOL ribonuclease site renderer.
     """
-    return stick_figure(ax,type,num,start,end,prev_end,scale,linewidth,opts)
+    return stem_top(ax,type,num,start,end,prev_end,scale,linewidth,opts)
 
 
 def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
@@ -523,6 +523,186 @@ def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
             ax.add_line(x2)
             ax.add_line(solidX)
     
+    if opts != None and 'label' in list(opts.keys()):
+        if final_start > final_end:
+            write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
+        else:
+            write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
+
+    if final_start > final_end:
+        return prev_end, final_start
+    else:
+        return prev_end, final_end
+
+def stem_top (ax, type, num, start, end, prev_end, scale, linewidth, opts):
+    """ General function for drawing step-top parts (e.g., ribozyme and protease sites).
+    """
+    # Default options
+    zorder_add = 0.0
+    color = (0,0,0)
+    start_pad = 2.0
+    end_pad = 2.0
+    x_extent = 5.0
+    y_extent = 10.0
+    linestyle = '-'
+    shapetype = "";
+    if type in ["DNACleavageSite"]:
+        stemtype = 'straight'
+        toptype = 'X'
+    elif type in ["RNACleavageSite", "Ribonuclease"]:
+        stemtype = 'wavy'
+        toptype = 'X'
+    elif type in ["ProteinCleavageSite", "Protease"]:
+        stemtype = 'loopy'
+        toptype = 'X'
+    elif type in ["DNALocation"]:
+        stemtype = 'straight'
+        toptype = 'O'
+    elif type in ["RNALocation"]:
+        stemtype = 'wavy'
+        toptype = 'O'
+    elif type in ["ProteinLocation"]:
+        stemtype = 'loopy'
+        toptype = 'O'
+    elif type in ["DNAStabilityElement"]:
+        stemtype = 'straight'
+        toptype = 'P'
+    elif type in ["RNAStabilityElement"]:
+        stemtype = 'wavy'
+        toptype = 'P'
+    elif type in ["ProteinStabilityElement", "ProteinStability"]:
+        stemtype = 'loopy'
+        toptype = 'P'
+    elif type in ["StemTop"]:
+        stemtype = opts['stem']
+        toptype = opts['top']
+
+    # Reset defaults if provided
+    if opts != None:
+        if 'zorder_add' in list(opts.keys()):
+            zorder_add = opts['zorder_add']
+        if 'color' in list(opts.keys()):
+            color = opts['color']
+        if 'start_pad' in list(opts.keys()):
+            start_pad = opts['start_pad']
+        if 'end_pad' in list(opts.keys()):
+            end_pad = opts['end_pad']
+        if 'x_extent' in list(opts.keys()):
+            x_extent = opts['x_extent']
+        if 'y_extent' in list(opts.keys()):
+            y_extent = opts['y_extent']
+        if 'linestyle' in list(opts.keys()):
+            linestyle = opts['linestyle']
+        if 'linewidth' in list(opts.keys()):
+            linewidth = opts['linewidth']
+        if 'scale' in list(opts.keys()):
+            scale = opts['scale']
+    # Check direction add start padding
+    final_end = end
+    final_start = prev_end
+
+    if start > end:
+        start = prev_end+end_pad+x_extent
+        end = prev_end+end_pad
+        final_end = start+start_pad
+        rbs_center = (end+((start-end)/2.0),-y_extent)
+        pentagon_xy = [[end, -y_extent - x_extent*0.5],
+                       [end, -y_extent + x_extent*0.4],
+                       [(start + end)/2, -y_extent - x_extent*0.8],
+                       [start, -y_extent + x_extent*0.4],
+                       [start, -y_extent - x_extent*0.5],
+                       ]
+        # Patches and lines for top glyph
+        # toptype=="O"
+        c1 = Circle(rbs_center, x_extent/2.0, linewidth=linewidth, edgecolor=color,
+                    facecolor=(1,1,1), zorder=8+zorder_add)
+        # toptype=="X"
+        x1 = Line2D([start,end],[-y_extent*1.25,-y_extent/1.5],
+                    linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
+        x2 = Line2D([start,end],[-y_extent/1.5,-y_extent*1.25],
+                    linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
+        # toptype=='P'
+        p1 = Polygon(pentagon_xy, closed=True, linewidth=linewidth, edgecolor=color,
+                    facecolor=(1,1,1), zorder=8+zorder_add)
+
+        # Lines for stem glyph
+        dash1  = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,-y_extent/4],
+                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
+        dash2  = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[-y_extent/2,-y_extent+(x_extent/2.0)],
+                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
+        solidO = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,-y_extent+(x_extent/2.0)],
+                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
+        solidX = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,-y_extent],
+                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
+
+        # if(headgroup == "O" and linetype == "dash"):
+        #     ax.add_patch(c1)
+        #     ax.add_line(dash1)
+        #     ax.add_line(dash2)
+        # elif(headgroup == "X" and linetype == "dash"):
+        #     ax.add_line(x1)
+        #     ax.add_line(x2)
+        #     ax.add_line(dash1)
+        #     ax.add_line(dash2)
+        # elif(headgroup == "O" and linetype == "solid"):
+        #     ax.add_patch(c1)
+        #     ax.add_line(solidO)
+        # elif(headgroup == "X" and linetype == "solid"):
+        #     ax.add_line(x1)
+        #     ax.add_line(x2)
+        #     ax.add_line(solidX)
+    else:
+        start = prev_end+start_pad
+        end = start+x_extent
+        final_end = end+end_pad
+        rbs_center = (start+((end-start)/2.0),y_extent)
+        pentagon_xy = [[start, y_extent + x_extent*0.5],
+                       [start, y_extent - x_extent*0.4],
+                       [(start + end)/2, y_extent - x_extent*0.8],
+                       [end, y_extent - x_extent*0.4],
+                       [end, y_extent + x_extent*0.5],
+                       ]
+        # Patches and lines for top glyph
+        # toptype=="O"
+        c1 = Circle(rbs_center, x_extent/2.0, linewidth=linewidth, edgecolor=color,
+                    facecolor=(1,1,1), zorder=8+zorder_add)
+        # toptype=="X"
+        x1 = Line2D([start,end],[y_extent*1.25,y_extent/1.5],
+                    linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
+        x2 = Line2D([start,end],[y_extent/1.5,y_extent*1.25],
+                    linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
+        # toptype=='P'
+        p1 = Polygon(pentagon_xy, closed=True, linewidth=linewidth, edgecolor=color,
+                    facecolor=(1,1,1), zorder=8+zorder_add)
+
+        dash1 = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,y_extent/4],
+                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
+        dash2 = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[y_extent/2,y_extent-(x_extent/2.0)],
+                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
+        solidO = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,y_extent-(x_extent/2.0)],
+                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
+        solidX = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,y_extent],
+                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
+
+    # Add stem patches and/or lines
+    if stemtype == 'straight':
+        ax.add_line(solidO)
+    elif stemtype == 'wavy':
+        ax.add_line(dash1)
+        ax.add_line(dash2)
+    elif stemtype == 'loopy':
+        ax.add_line(dash1)
+        ax.add_line(dash2)
+
+    # Add top patches and/or lines
+    if toptype == 'O':
+        ax.add_patch(c1)
+    elif toptype == 'X':
+        ax.add_line(x1)
+        ax.add_line(x2)
+    elif toptype == 'P':
+        ax.add_patch(p1)
+
     if opts != None and 'label' in list(opts.keys()):
         if final_start > final_end:
             write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)

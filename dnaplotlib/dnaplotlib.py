@@ -380,24 +380,6 @@ def sbol_ribozyme (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     return stick_figure(ax,type,num,start,end,prev_end,scale,linewidth,opts)
 
 
-def sbol_protein_stability (ax, type, num, start, end, prev_end, scale, linewidth, opts):
-    """ Built-in SBOL protein stability element renderer.
-    """
-    return stem_top(ax,type,num,start,end,prev_end,scale,linewidth,opts)
-
-
-def sbol_protease (ax, type, num, start, end, prev_end, scale, linewidth, opts):
-    """ Built-in SBOL protease site renderer.
-    """
-    return stem_top(ax,type,num,start,end,prev_end,scale,linewidth,opts)
-
-
-def sbol_ribonuclease (ax, type, num, start, end, prev_end, scale, linewidth, opts):
-    """ Built-in SBOL ribonuclease site renderer.
-    """
-    return stem_top(ax,type,num,start,end,prev_end,scale,linewidth,opts)
-
-
 def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     """ General function for drawing stick based parts (e.g., ribozyme and protease sites).
     """
@@ -534,7 +516,7 @@ def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     else:
         return prev_end, final_end
 
-def stem_top (ax, type, num, start, end, prev_end, scale, linewidth, opts):
+def sbol_stem_top (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     """ General function for drawing step-top parts (e.g., ribozyme and protease sites).
     """
     # Default options
@@ -564,13 +546,13 @@ def stem_top (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     elif type in ["ProteinLocation"]:
         stemtype = 'loopy'
         toptype = 'O'
-    elif type in ["DNAStabilityElement"]:
+    elif type in ["DNAStability"]:
         stemtype = 'straight'
         toptype = 'P'
-    elif type in ["RNAStabilityElement"]:
+    elif type in ["RNAStability"]:
         stemtype = 'wavy'
         toptype = 'P'
-    elif type in ["ProteinStabilityElement", "ProteinStability"]:
+    elif type in ["ProteinStability"]:
         stemtype = 'loopy'
         toptype = 'P'
     elif type in ["StemTop"]:
@@ -635,22 +617,6 @@ def stem_top (ax, type, num, start, end, prev_end, scale, linewidth, opts):
         solidX = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,-y_extent],
                     linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
 
-        # if(headgroup == "O" and linetype == "dash"):
-        #     ax.add_patch(c1)
-        #     ax.add_line(dash1)
-        #     ax.add_line(dash2)
-        # elif(headgroup == "X" and linetype == "dash"):
-        #     ax.add_line(x1)
-        #     ax.add_line(x2)
-        #     ax.add_line(dash1)
-        #     ax.add_line(dash2)
-        # elif(headgroup == "O" and linetype == "solid"):
-        #     ax.add_patch(c1)
-        #     ax.add_line(solidO)
-        # elif(headgroup == "X" and linetype == "solid"):
-        #     ax.add_line(x1)
-        #     ax.add_line(x2)
-        #     ax.add_line(solidX)
     else:
         start = prev_end+start_pad
         end = start+x_extent
@@ -2366,29 +2332,38 @@ class DNARenderer:
         """ Return dictionary of all standard built-in SBOL part renderers.
         """
         return {
-            'Promoter'         :sbol_promoter, 
-            'CDS'              :sbol_cds, 
-            'Terminator'       :sbol_terminator,
-            'RBS'              :sbol_rbs,
-            'Scar'             :sbol_scar,
-            'Spacer'           :sbol_spacer,
-            'EmptySpace'       :sbol_empty_space,
-            'Ribozyme'         :sbol_ribozyme,
-            'Ribonuclease'     :sbol_ribonuclease,
-            'ProteinStability' :sbol_protein_stability,
-            'Protease'         :sbol_protease,
-            'Operator'         :sbol_operator,
-            'Origin'           :sbol_origin,
-            'Insulator'        :sbol_insulator,
-            '5Overhang'        :sbol_5_overhang,
-            '3Overhang'        :sbol_3_overhang,
-            'RestrictionSite'  :sbol_restriction_site,
+            'Promoter'           :sbol_promoter, 
+            'CDS'                :sbol_cds, 
+            'Terminator'         :sbol_terminator,
+            'RBS'                :sbol_rbs,
+            'Scar'               :sbol_scar,
+            'Spacer'             :sbol_spacer,
+            'EmptySpace'         :sbol_empty_space,
+            'Ribozyme'           :sbol_ribozyme,
+            'Ribonuclease'       :sbol_stem_top,
+            'Protease'           :sbol_stem_top,
+            'DNACleavageSite'    :sbol_stem_top,
+            'RNACleavageSite'    :sbol_stem_top,
+            'ProteinCleavageSite':sbol_stem_top,
+            'DNALocation'        :sbol_stem_top,
+            'RNALocation'        :sbol_stem_top,
+            'ProteinLocation'    :sbol_stem_top,
+            'DNAStability'       :sbol_stem_top,
+            'RNAStability'       :sbol_stem_top,
+            'ProteinStability'   :sbol_stem_top,
+            'StemTop'            :sbol_stem_top,
+            'Operator'           :sbol_operator,
+            'Origin'             :sbol_origin,
+            'Insulator'          :sbol_insulator,
+            '5Overhang'          :sbol_5_overhang,
+            '3Overhang'          :sbol_3_overhang,
+            'RestrictionSite'    :sbol_restriction_site,
             'BluntRestrictionSite'   :sbol_blunt_restriction_site,
             'PrimerBindingSite'      :sbol_primer_binding_site,
             '5StickyRestrictionSite' :sbol_5_sticky_restriction_site,
             '3StickyRestrictionSite' :sbol_3_sticky_restriction_site,
-            'UserDefined'      :sbol_user_defined,
-            'Signature'        :sbol_signature}
+            'UserDefined'        :sbol_user_defined,
+            'Signature'          :sbol_signature}
 
     def trace_part_renderers (self):
         """ Return dictionary of all standard built-in trace part renderers.

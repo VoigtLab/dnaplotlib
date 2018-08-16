@@ -517,7 +517,7 @@ def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
         return prev_end, final_end
 
 def sbol_stem_top (ax, type, num, start, end, prev_end, scale, linewidth, opts):
-    """ General function for drawing step-top parts (e.g., ribozyme and protease sites).
+    """ General function for drawing stem-top parts (e.g., ribozyme and protease sites).
     """
     # Default options
     zorder_add = 0.0
@@ -587,78 +587,194 @@ def sbol_stem_top (ax, type, num, start, end, prev_end, scale, linewidth, opts):
         start = prev_end+end_pad+x_extent
         end = prev_end+end_pad
         final_end = start+start_pad
-        rbs_center = (end+((start-end)/2.0),-y_extent)
-        pentagon_xy = [[end, -y_extent - x_extent*0.5],
-                       [end, -y_extent + x_extent*0.4],
-                       [(start + end)/2, -y_extent - x_extent*0.8],
-                       [start, -y_extent + x_extent*0.4],
-                       [start, -y_extent - x_extent*0.5],
-                       ]
         # Patches and lines for top glyph
-        # toptype=="O"
-        c1 = Circle(rbs_center, x_extent/2.0, linewidth=linewidth, edgecolor=color,
-                    facecolor=(1,1,1), zorder=8+zorder_add)
         # toptype=="X"
-        x1 = Line2D([start,end],[-y_extent*1.25,-y_extent/1.5],
+        x1 = Line2D([start,end],[-y_extent*1.25,-y_extent/1.25],
                     linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
-        x2 = Line2D([start,end],[-y_extent/1.5,-y_extent*1.25],
+        x2 = Line2D([start,end],[-y_extent/1.25,-y_extent*1.25],
                     linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
+        # toptype=="O"
+        center = (end+((start-end)/2.0),-y_extent)
+        c1 = Circle(center, x_extent/2.0, linewidth=linewidth, edgecolor=color,
+                    facecolor=(1,1,1), zorder=12+zorder_add)
         # toptype=='P'
+        pentagon_xy = [[end, -y_extent*1.25],
+                       [end, -y_extent*0.87],
+                       [(start + end)/2, -y_extent*0.68],
+                       [start, -y_extent*0.87],
+                       [start, -y_extent*1.25],
+                       ]
         p1 = Polygon(pentagon_xy, closed=True, linewidth=linewidth, edgecolor=color,
-                    facecolor=(1,1,1), zorder=8+zorder_add)
+                    facecolor=(1,1,1), zorder=12+zorder_add)
 
         # Lines for stem glyph
-        dash1  = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,-y_extent/4],
+        # stemtype=='straight'
+        straight_stem = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0, -y_extent],
                     linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
-        dash2  = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[-y_extent/2,-y_extent+(x_extent/2.0)],
-                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
-        solidO = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,-y_extent+(x_extent/2.0)],
-                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
-        solidX = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,-y_extent],
-                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
+        # stemtype=='wavy'
+        wave_height = y_extent/6
+        wave_start = (start + end)/2
+        wave_bezier_amp = x_extent*0.2
+        wave_bezier_dx = wave_bezier_amp*math.cos(math.pi/4)
+        wave_bezier_dy = wave_bezier_amp*math.sin(math.pi/4)
+        wavy_stem_path = Path(vertices=[[wave_start, 0],
+                                        [wave_start - wave_bezier_dx, -wave_bezier_dy],
+                                        [wave_start - wave_bezier_dx, -(wave_height - wave_bezier_dy)],
+                                        [wave_start, -wave_height],
+                                        [wave_start + wave_bezier_dx, -(wave_height + wave_bezier_dy)],
+                                        [wave_start + wave_bezier_dx, -(2*wave_height - wave_bezier_dy)],
+                                        [wave_start, -2*wave_height],
+                                        [wave_start - wave_bezier_dx, -(2*wave_height + wave_bezier_dy)],
+                                        [wave_start - wave_bezier_dx, -(3*wave_height - wave_bezier_dy)],
+                                        [wave_start, -3*wave_height],
+                                        [wave_start + wave_bezier_dx, -(3*wave_height + wave_bezier_dy)],
+                                        [wave_start + wave_bezier_dx, -(4*wave_height - wave_bezier_dy)],
+                                        [wave_start, -4*wave_height],
+                                        [wave_start - wave_bezier_dx, -(4*wave_height + wave_bezier_dy)],
+                                        [wave_start - wave_bezier_dx, -(5*wave_height - wave_bezier_dy)],
+                                        [wave_start, -5*wave_height],
+                                        [wave_start + wave_bezier_dx, -(5*wave_height + wave_bezier_dy)],
+                                        [wave_start + wave_bezier_dx, -(6*wave_height - wave_bezier_dy)],
+                                        [wave_start, -6*wave_height]],
+                              codes=[1, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4])
+        wavy_stem = PathPatch(wavy_stem_path, linewidth=linewidth, edgecolor=color,
+                    facecolor='none', zorder=8+zorder_add, linestyle=linestyle)
+        # stemtype=='loopy'
+        loop_offset_y = y_extent*0.015
+        loop_height = (y_extent - 2*loop_offset_y)/4
+        loop_start = (start + end)/2 + x_extent*0.05
+        loop_end = end + x_extent*0.15
+        loop_bezier_amp = y_extent*0.03
+        loop_stem_path = Path(vertices=[[loop_start, -loop_offset_y],
+                                        [loop_start, -(loop_offset_y - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height*0.5)],
+                                        [loop_end, -(loop_offset_y + loop_height + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height)],
+                                        [loop_start, -(loop_offset_y + loop_height - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height*1.5)],
+                                        [loop_end, -(loop_offset_y + loop_height*2 + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height*2 + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height*2)],
+                                        [loop_start, -(loop_offset_y + loop_height*2 - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height*2 - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height*2.5)],
+                                        [loop_end, -(loop_offset_y + loop_height*3 + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height*3 + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height*3)],
+                                        [loop_start, -(loop_offset_y + loop_height*3 - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height*3 - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height*3.5)],
+                                        [loop_end, -(loop_offset_y + loop_height*4 + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height*4 + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height*4)],
+                                        ],
+                              codes=[1, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4])
+        loop_stem = PathPatch(loop_stem_path, linewidth=linewidth, edgecolor=color,
+                    facecolor='none', zorder=8+zorder_add, linestyle=linestyle)
 
     else:
         start = prev_end+start_pad
         end = start+x_extent
         final_end = end+end_pad
-        rbs_center = (start+((end-start)/2.0),y_extent)
-        pentagon_xy = [[start, y_extent + x_extent*0.5],
-                       [start, y_extent - x_extent*0.4],
-                       [(start + end)/2, y_extent - x_extent*0.8],
-                       [end, y_extent - x_extent*0.4],
-                       [end, y_extent + x_extent*0.5],
-                       ]
         # Patches and lines for top glyph
-        # toptype=="O"
-        c1 = Circle(rbs_center, x_extent/2.0, linewidth=linewidth, edgecolor=color,
-                    facecolor=(1,1,1), zorder=8+zorder_add)
         # toptype=="X"
-        x1 = Line2D([start,end],[y_extent*1.25,y_extent/1.5],
+        x1 = Line2D([start,end],[y_extent*1.25,y_extent/1.25],
                     linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
-        x2 = Line2D([start,end],[y_extent/1.5,y_extent*1.25],
+        x2 = Line2D([start,end],[y_extent/1.25,y_extent*1.25],
                     linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
-        # toptype=='P'
-        p1 = Polygon(pentagon_xy, closed=True, linewidth=linewidth, edgecolor=color,
-                    facecolor=(1,1,1), zorder=8+zorder_add)
 
-        dash1 = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,y_extent/4],
+        # toptype=="O"
+        center = (start+((end-start)/2.0),y_extent)
+        c1 = Circle(center, x_extent/2.0, linewidth=linewidth, edgecolor=color,
+                    facecolor=(1,1,1), zorder=12+zorder_add)
+        # toptype=='P'
+        pentagon_xy = [[start, y_extent*1.25],
+                       [start, y_extent*0.87],
+                       [(start + end)/2, y_extent*0.68],
+                       [end, y_extent*0.87],
+                       [end, y_extent*1.25],
+                       ]
+        p1 = Polygon(pentagon_xy, closed=True, linewidth=linewidth, edgecolor=color,
+                    facecolor=(1,1,1), zorder=12+zorder_add)
+
+        # Lines for stem glyph
+        # stemtype=='straight'
+        straight_stem = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,y_extent],
                     linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
-        dash2 = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[y_extent/2,y_extent-(x_extent/2.0)],
-                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
-        solidO = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,y_extent-(x_extent/2.0)],
-                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
-        solidX = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,y_extent],
-                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
+        # stemtype=='wavy'
+        wave_height = y_extent/6
+        wave_start = (start + end)/2
+        wave_bezier_amp = x_extent*0.2
+        wave_bezier_dx = wave_bezier_amp*math.cos(math.pi/4)
+        wave_bezier_dy = wave_bezier_amp*math.sin(math.pi/4)
+        wavy_stem_path = Path(vertices=[[wave_start, 0],
+                                        [wave_start + wave_bezier_dx, wave_bezier_dy],
+                                        [wave_start + wave_bezier_dx, wave_height - wave_bezier_dy],
+                                        [wave_start, wave_height],
+                                        [wave_start - wave_bezier_dx, wave_height + wave_bezier_dy],
+                                        [wave_start - wave_bezier_dx, 2*wave_height - wave_bezier_dy],
+                                        [wave_start, 2*wave_height],
+                                        [wave_start + wave_bezier_dx, 2*wave_height + wave_bezier_dy],
+                                        [wave_start + wave_bezier_dx, 3*wave_height - wave_bezier_dy],
+                                        [wave_start, 3*wave_height],
+                                        [wave_start - wave_bezier_dx, 3*wave_height + wave_bezier_dy],
+                                        [wave_start - wave_bezier_dx, 4*wave_height - wave_bezier_dy],
+                                        [wave_start, 4*wave_height],
+                                        [wave_start + wave_bezier_dx, 4*wave_height + wave_bezier_dy],
+                                        [wave_start + wave_bezier_dx, 5*wave_height - wave_bezier_dy],
+                                        [wave_start, 5*wave_height],
+                                        [wave_start - wave_bezier_dx, 5*wave_height + wave_bezier_dy],
+                                        [wave_start - wave_bezier_dx, 6*wave_height - wave_bezier_dy],
+                                        [wave_start, 6*wave_height]],
+                              codes=[1, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4])
+        wavy_stem = PathPatch(wavy_stem_path, linewidth=linewidth, edgecolor=color,
+                    facecolor='none', zorder=8+zorder_add, linestyle=linestyle)
+        # stemtype=='loopy'
+        loop_offset_y = y_extent*0.015
+        loop_height = (y_extent - 2*loop_offset_y)/4
+        loop_start = (start + end)/2 - x_extent*0.05
+        loop_end = end - x_extent*0.15
+        loop_bezier_amp = y_extent*0.03
+        loop_stem_path = Path(vertices=[[loop_start, loop_offset_y],
+                                        [loop_start, loop_offset_y - loop_bezier_amp],
+                                        [loop_end, loop_offset_y - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height*0.5],
+                                        [loop_end, loop_offset_y + loop_height + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height],
+                                        [loop_start, loop_offset_y + loop_height - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height*1.5],
+                                        [loop_end, loop_offset_y + loop_height*2 + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height*2 + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height*2],
+                                        [loop_start, loop_offset_y + loop_height*2 - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height*2 - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height*2.5],
+                                        [loop_end, loop_offset_y + loop_height*3 + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height*3 + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height*3],
+                                        [loop_start, loop_offset_y + loop_height*3 - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height*3 - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height*3.5],
+                                        [loop_end, loop_offset_y + loop_height*4 + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height*4 + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height*4],
+                                        ],
+                              codes=[1, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4])
+        loop_stem = PathPatch(loop_stem_path, linewidth=linewidth, edgecolor=color,
+                    facecolor='none', zorder=8+zorder_add, linestyle=linestyle)
 
     # Add stem patches and/or lines
     if stemtype == 'straight':
-        ax.add_line(solidO)
+        ax.add_line(straight_stem)
     elif stemtype == 'wavy':
-        ax.add_line(dash1)
-        ax.add_line(dash2)
+        ax.add_line(wavy_stem)
     elif stemtype == 'loopy':
-        ax.add_line(dash1)
-        ax.add_line(dash2)
+        ax.add_line(loop_stem)
 
     # Add top patches and/or lines
     if toptype == 'O':
@@ -679,7 +795,6 @@ def sbol_stem_top (ax, type, num, start, end, prev_end, scale, linewidth, opts):
         return prev_end, final_start
     else:
         return prev_end, final_end
-
 
 def sbol_scar (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     """ Built-in SBOL scar renderer.

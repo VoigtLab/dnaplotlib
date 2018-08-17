@@ -1571,6 +1571,87 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
         return prev_end, final_end
 
 
+def sbol_5_chromosomal_locus  (ax, type, num, start, end, prev_end, scale, linewidth, opts):
+    """ Built-in SBOL 5' chromosomal locus renderer.
+    """
+    raise NotImplementedError
+    # # Default options
+    # zorder_add = 0.0
+    # color = (0,0,0)
+    # start_pad = 2.0
+    # end_pad = 2.0
+    # y_extent = 4.0
+    # x_extent = 8.0
+    # end_space = 1.0
+    # linestyle = '-'
+    # # Reset defaults if provided
+    # if opts != None:
+    #     if 'zorder_add' in list(opts.keys()):
+    #         zorder_add = opts['zorder_add']
+    #     if 'color' in list(opts.keys()):
+    #         color = opts['color']
+    #     if 'end_space' in list(opts.keys()):
+    #         end_space = opts['end_space']
+    #     if 'start_pad' in list(opts.keys()):
+    #         start_pad = opts['start_pad']
+    #     if 'end_pad' in list(opts.keys()):
+    #         end_pad = opts['end_pad']
+    #     if 'x_extent' in list(opts.keys()):
+    #         x_extent = opts['x_extent']
+    #     if 'y_extent' in list(opts.keys()):
+    #         y_extent = opts['y_extent']
+    #     if 'linestyle' in list(opts.keys()):
+    #         linestyle = opts['linestyle']
+    #     if 'linewidth' in list(opts.keys()):
+    #         linewidth = opts['linewidth']
+    #     if 'scale' in list(opts.keys()):
+    #         scale = opts['scale']
+    
+    # # Direction is meaningless for this part => start is always < end
+    # if start > end:
+    #     temp_end = end
+    #     end = start
+    #     start = temp_end
+
+    # # Check direction add start padding
+    # final_end = end
+    # final_start = prev_end
+    # start = prev_end+start_pad
+    # end = start+end_space+x_extent+end_space
+    # final_end = end+end_pad
+    
+    # l1        = Line2D([start+end_space,start+end_space+x_extent],[0,0], 
+    #                linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
+    # l1_top    = Line2D([start+end_space,start+end_space],[0,y_extent], 
+    #                linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
+    # l1_bottom = Line2D([start+end_space+x_extent,start+end_space+x_extent],[0,-y_extent], 
+    #                linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
+    # ax.add_line(l1)
+    # ax.add_line(l1_top)
+    # ax.add_line(l1_bottom)
+
+    # # White rectangle overlays backbone line
+    # p1 = Polygon([(start, y_extent), 
+    #               (start, -y_extent),
+    #               (end, -y_extent),
+    #               (end, y_extent)],
+    #               edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=linewidth, zorder=11+zorder_add, 
+    #               path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)     
+
+    # ax.add_patch(p1)
+
+    # if opts != None and 'label' in list(opts.keys()):
+    #     write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
+
+    # return final_start, final_end
+
+
+def sbol_3_chromosomal_locus  (ax, type, num, start, end, prev_end, scale, linewidth, opts):
+    """ Built-in SBOL 3' chromosomal locus renderer.
+    """
+    raise NotImplementedError
+
+
 # Not used at present
 def temporary_repressor (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     # Default options
@@ -2149,6 +2230,8 @@ class DNARenderer:
                       'PrimerBindingSite',
                       '5StickyRestrictionSite',
                       '3StickyRestrictionSite',
+                      '5ChromosomalLocus',
+                      '3ChromosomalLocus',
                       'UserDefined',
                       'Signature']
 
@@ -2207,6 +2290,8 @@ class DNARenderer:
             'PrimerBindingSite'      :sbol_primer_binding_site,
             '5StickyRestrictionSite' :sbol_5_sticky_restriction_site,
             '3StickyRestrictionSite' :sbol_3_sticky_restriction_site,
+            '5ChromosomalLocus'      :sbol_5_chromosomal_locus,
+            '3ChromosomalLocus'      :sbol_3_chromosomal_locus,
             'UserDefined'      :sbol_user_defined,
             'Signature'        :sbol_signature}
 

@@ -1579,8 +1579,8 @@ def sbol_5_chromosomal_locus  (ax, type, num, start, end, prev_end, scale, linew
     color = (0,0,0)
     start_pad = 0.0
     end_pad = 2.0
-    y_extent = 4.5
-    x_extent = 14.0
+    y_extent = 7.5
+    x_extent = 18.0
     linestyle = '-'
     dashed_end = True
     # Reset defaults if provided
@@ -1686,8 +1686,8 @@ def sbol_3_chromosomal_locus  (ax, type, num, start, end, prev_end, scale, linew
     color = (0,0,0)
     start_pad = 2.0
     end_pad = 0.0
-    y_extent = 4.5
-    x_extent = 14.0
+    y_extent = 7.5
+    x_extent = 18.0
     linestyle = '-'
     dashed_end = True
     # Reset defaults if provided

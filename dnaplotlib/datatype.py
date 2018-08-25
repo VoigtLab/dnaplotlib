@@ -535,8 +535,8 @@ def create_test_design5 ():
     # module 8
     module8 = Module(design, 'module8')
     part_8_pro = Part(module8, 'p8p', 'Promoter')
-    part_8_cds_1 = Part(module8, 'p8c', 'CDS')
-    part_8_cds_2 = Part(module8, 'p8c', 'CDS')
+    part_8_cds_1 = Part(module8, 'p8c1', 'CDS')
+    part_8_cds_2 = Part(module8, 'p8c2', 'CDS')
     part_8_ter = Part(module8, 'p8t', 'Terminator')
     module8.add_part( [part_8_pro, part_8_cds_1, part_8_cds_2, part_8_ter] )
 

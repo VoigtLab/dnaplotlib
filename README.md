@@ -38,45 +38,31 @@ More visualization example scripts can be found under the dnaplotlib/examples di
 
 ## Code example 
 
-### import sbol file
-doc = sbol.Document()
+###import sbol file
+	doc = sbol.Document()
+	doc.read('test_design.xml')
 
-doc.read('test_design.xml')
+###create visualization design from doc 
+	design = dt.Design('design')
+	design.add_module(extract_module_and_components(doc, design, doc.moduleDefinitions))
+	design.print_design()
+	m_frames = draw.get_module_frames(design.modules) 
 
-### create visualization design from doc 
-design = dt.Design('design')
-
-design.add_module(extract_module_and_components(doc, design, doc.moduleDefinitions))
-
-design.print_design()
-
-m_frames = draw.get_module_frames(design.modules) 
-
-### draw design
-fig, ax = plt.subplots(1, figsize=(8,10))
-
-ax.set_xlim(XMIN, XMAX)
-
-ax.set_ylim(YMIN, YMAX)
-
-ax.set_axis_off()
-
-draw.draw_all_modules(ax, m_frames, design.modules)
-
-draw_all_interaction(ax, design.interactions)
-
-plt.show()
+###draw design
+	fig, ax = plt.subplots(1, figsize=(8,10))
+	ax.set_xlim(XMIN, XMAX)
+	ax.set_ylim(YMIN, YMAX)
+	ax.set_axis_off()
+	draw.draw_all_modules(ax, m_frames, design.modules)
+	draw_all_interaction(ax, design.interactions)
+	plt.show()
 
 ### export sbol file
-document = sbol.Document()
-
-document.addNamespace('http://dnaplotlib.org#', 'dnaplotlib')
-
-save_module_and_components_from_design(document, design.modules)
-
-save_interaction_from_design(document, design.interactions)
-
-document.write('test_design_updated.xml')
+	document = sbol.Document()	
+	document.addNamespace('http://dnaplotlib.org#', 'dnaplotlib')
+	save_module_and_components_from_design(document, design.modules)
+	save_interaction_from_design(document, design.interactions)
+	document.write('test_design_updated.xml')
 
 ## List of Commits
 Commit period: May 16, 2018 - Now

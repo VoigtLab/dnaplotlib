@@ -38,17 +38,17 @@ More visualization example scripts can be found under the dnaplotlib/examples di
 
 ## Code example 
 
-###import sbol file
+### import sbol file
 	doc = sbol.Document()
 	doc.read('test_design.xml')
 
-###create visualization design from doc 
+### create visualization design from doc 
 	design = dt.Design('design')
 	design.add_module(extract_module_and_components(doc, design, doc.moduleDefinitions))
-	design.print_design()
+	design.print_design() # optional - check whether design properly imported 
 	m_frames = draw.get_module_frames(design.modules) 
 
-###draw design
+### draw design
 	fig, ax = plt.subplots(1, figsize=(8,10))
 	ax.set_xlim(XMIN, XMAX)
 	ax.set_ylim(YMIN, YMAX)
@@ -60,8 +60,7 @@ More visualization example scripts can be found under the dnaplotlib/examples di
 ### export sbol file
 	document = sbol.Document()	
 	document.addNamespace('http://dnaplotlib.org#', 'dnaplotlib')
-	save_module_and_components_from_design(document, design.modules)
-	save_interaction_from_design(document, design.interactions)
+	datatype.save_design_into_doc(document, design)
 	document.write('test_design_updated.xml')
 
 ## List of Commits

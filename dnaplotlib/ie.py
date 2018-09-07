@@ -214,6 +214,10 @@ def save_modules_and_components_from_design(doc, modules, count=1):
 
 	return submodules
 
+def save_design_into_doc(doc, design):
+	save_module_and_components_from_design(doc, design.modules)
+	save_interaction_from_design(doc, design.interactions)
+
 # initialize renderer
 '''renderer = rd.GlyphRenderer()
 

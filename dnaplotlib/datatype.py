@@ -97,7 +97,7 @@ class Interaction:
         option: dict
             Options to tailor the rendering process
         """
-    def __init__(self, part_start, part_end, interaction_type, path=None):
+    def __init__(self, interaction_type, part_start, part_end=None, path=None):
         self.part_start = part_start
         self.part_end = part_end
         self.coordinates = []
@@ -253,13 +253,24 @@ def create_test_design ():
     module2.add_other_part( other_part_1Rep )
 
     # Add some basic interactions
-    interaction1 = Interaction(part_1cCDS, part_1aCDS, 'inhibition')
-    interaction2 = Interaction(part_1cCDS, other_part_1Rep, 'process')
-    interaction3 = Interaction(other_part_1Rep, part_2CDS, 'stimulation')
+    interaction1 = Interaction('inhibition', part_1cCDS, part_1aCDS)
+    interaction2 = Interaction('process', part_1cCDS, other_part_1Rep)
+    interaction3 = Interaction('stimulation', other_part_1Rep, part_2CDS)
     design.add_interaction(interaction1)
     design.add_interaction(interaction2)
     design.add_interaction(interaction3)
     return design
+
+# for rendering degradation
+def create_test_design1_1 ():
+    design = Design('design1_1')
+    module = Module(design, module)
+    part1_p = Part(module, '1p', 'Promoter')
+    module.add_part(part1_p)
+    design.add_module(module)
+
+    interaction1 = Interaction()
+
 
 def create_test_design2 ():
     # You first create a design and need to give it a name   
@@ -326,11 +337,11 @@ def create_test_design2 ():
     design.add_module( [module1, module2, module3, module4, module5, module6, module7, module8] )
 
     # Add some basic interactions
-    interaction1 = Interaction(part_1_cds, part_4_pro, 'control')
-    int2 = Interaction(part_1_pro, part_3_pro, 'degradation')
-    int3 = Interaction(part_2_cds, part_4_ori, 'process')
-    int4 = Interaction(part_5_pro, part_2_pro, 'inhibition')
-    int5 = Interaction(part_7_pro, part_8_res, 'stimulation')
+    interaction1 = Interaction('control', part_1_cds, part_4_pro)
+    int2 = Interaction('degradation', part_1_pro, part_3_pro)
+    int3 = Interaction('process', part_2_cds, part_4_ori)
+    int4 = Interaction('inhibition', part_5_pro, part_2_pro)
+    int5 = Interaction('stimulation', part_7_pro, part_8_res)
     design.add_interaction( [interaction1, int2, int3, int4, int5] )
     return design
 
@@ -354,7 +365,7 @@ def create_test_design3 ():
 
     design.add_module( [module1, module2] )
 
-    interaction = Interaction(part1a_1_p, part_2_p, 'inhibition')
+    interaction = Interaction('inhibition', part1a_1_p, part_2_p)
     design.add_interaction(interaction)
 
     return design
@@ -484,10 +495,10 @@ def create_test_design4 ():
     design.add_module( [module1, module2, module3, module4] )
 
     # Add some basic interactions
-    interaction1 = Interaction(part_1_cds1, part_4_pro, 'control')
-    int2 = Interaction(part_1_pro, part_3_pro, 'degradation')
-    int3 = Interaction(part_2_cds, part_4_ori, 'process')
-    int4 = Interaction(part_2_pro, part_3_ins, 'inhibition')
+    interaction1 = Interaction('control', part_1_cds1, part_4_pro)
+    int2 = Interaction('degradation', part_1_pro, part_3_pro)
+    int3 = Interaction('process', part_2_cds, part_4_ori)
+    int4 = Interaction('inhibition', part_2_pro, part_3_ins)
     design.add_interaction( [interaction1, int2, int3, int4] )
     return design
 
@@ -540,10 +551,10 @@ def create_test_design5 ():
     part_8_ter = Part(module8, 'p8t', 'Terminator')
     module8.add_part( [part_8_pro, part_8_cds_1, part_8_cds_2, part_8_ter] )
 
-    design.add_interaction( [Interaction(other_part_1p2, part_7_res, 'inhibition'), 
-        Interaction(part_6_pro, part_6_apt, 'process'),
-        Interaction(part_6_apt, part_6_res, 'inhibition'),
-        Interaction(part_8_cds_1, part_8_cds_2, 'inhibition')])
+    design.add_interaction( [Interaction('inhibition', other_part_1p2, part_7_res), 
+        Interaction('process', part_6_pro, part_6_apt),
+        Interaction('inhibition', part_6_apt, part_6_res),
+        Interaction('inhibition', part_8_cds_1, part_8_cds_2)])
 
     design.add_module([module1, module6, module7, module8])
 

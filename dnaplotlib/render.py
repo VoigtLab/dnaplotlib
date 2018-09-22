@@ -510,6 +510,8 @@ class InteractionRenderer:
 	""" Class for rendering interaction
     """
 
+    ARROWHEAD_EDGE_FACTOR = 5.
+    DEGRADATION_CIRCLE_RADIUS_FACTOR = 7.
 
 	def __init__(self, interaction_type, from_part, to_part, coordinates, space):
 		self.type = interaction_type
@@ -520,9 +522,9 @@ class InteractionRenderer:
 
 	# helper function used to initialize arrowhead rendering func params 
 	def __initialize_ah_start_params(self):
-		start_x = self.part_end.frame.origin[0] + self.part_end.frame.width / 2.
-		start_y = self.part_end.frame.origin[1] + self.part_end.frame.height + self.interaction_space
-		edge = self.part_end.frame.width / 5.
+		start_x = self.coordinates[-1][0]
+		start_y = self.coordinates[-1][1]
+		edge = self.part_start.frame.width / self.ARROWHEAD_EDGE_FACTOR
 		
 		return start_x, start_y, edge
 
@@ -546,8 +548,7 @@ class InteractionRenderer:
 			(Path.LINETO, [start_x, start_y])
 		]
 		codes, verts = zip(*path_data)
-		path = Path(verts, codes)
-		patch = patches.PathPatch(path, fill=True, edgecolor=color, facecolor='w', zorder=INTERACTION_FILL_ZSCORE)
+		patch = patches.PathPatch(Path(verts, codes), fill=True, edgecolor=color, facecolor='w', zorder=INTERACTION_FILL_ZSCORE)
 		ax.add_patch(patch)
 
 	def __draw_inhibition_ah(self, ax, color):
@@ -566,8 +567,7 @@ class InteractionRenderer:
 			(Path.LINETO, [start_x, start_y])
 		]
 		codes, verts = zip(*path_data)
-		path = Path(verts, codes)
-		patch = patches.PathPatch(path, fill=True, color=color)
+		patch = patches.PathPatch(Path(verts, codes), fill=True, color=color)
 		ax.add_patch(patch)
 
 	def __draw_stimulation_ah(self, ax, color):
@@ -580,18 +580,17 @@ class InteractionRenderer:
 			(Path.LINETO, [start_x, start_y])
 		]
 		codes, verts = zip(*path_data)
-		path = Path(verts, codes)
-		patch = patches.PathPatch(path, fill=True, edgecolor=color, facecolor='w', zorder=INTERACTION_FILL_ZSCORE)
+		patch = patches.PathPatch(Path(verts, codes), fill=True, edgecolor=color, facecolor='w', zorder=INTERACTION_FILL_ZSCORE)
 		ax.add_patch(patch)
 
 	def __draw_degradation_ah(self, ax, color):
 		# draw the same ah as process
 		self.__draw_process_ah(ax, color)
 		# draw circle 
-		r = self.part_start.frame.width / 7
-		#start_x = self.part_end.frame.origin[0] + self.part_end.frame.width / 2.
-		#start_y = self.part_end.frame.origin[1] + self.part_end.frame.height 
-		circle = patches.Circle((coordinates[-1][0], coordinates[-1][1]), r, ec=color, fc='w')
+		r = self.part_start.frame.width / self.DEGRADATION_CIRCLE_RADIUS_FACTOR
+		start_x = self.coordinates[-1][0]
+		start_y = self.coordinates[-1][1] - 1.5 * r
+		circle = patches.Circle((start_x, start_y), r, ec=color, fc='w')
 		ax.add_patch(circle)
 		# draw circle bar 
 		path_data = [
@@ -599,8 +598,7 @@ class InteractionRenderer:
 			(Path.LINETO, [start_x - (r / np.sqrt(2)), start_y - (r / np.sqrt(2))])
 		]
 		codes, verts = zip(*path_data)
-		path = Path(verts, codes)
-		patch = patches.PathPatch(path, color=color)
+		patch = patches.PathPatch(Path(verts, codes), color=color)
 		ax.add_patch(patch)
 
 	# helper function for draw_interaction 
@@ -647,6 +645,7 @@ class InteractionRenderer:
 ###############################################################################
 # Testing
 ###############################################################################
+
 '''
 # default setting
 strand = StrandRenderer()

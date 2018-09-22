@@ -12,7 +12,6 @@ __author__  = 'Sunwoo Kang <swkang73@stanford.edu>'
 __license__ = 'MIT'
 __version__ = '2.0'
 
-
 # default rendering const
 MAX_MODULE = 8
 GLYPHSIZE = 6.
@@ -253,7 +252,7 @@ def draw_all_modules(ax, m_frames, raw_modules, index=0):
 
 # helper function for draw interaction
 # draw interaction arrow body when y diff < than height limit 
-def get_3part_interaction_coord(ax, start_frame, end_frame, y_ofset):
+def get_3part_interaction_coord(start_frame, end_frame, y_ofset):
 	start_x = start_frame.origin[0] + start_frame.width / 2.
 	start_y = start_frame.origin[1] + start_frame.height + INTERACTION_SPACER 
 	end_x = end_frame.origin[0] + end_frame.width / 2.
@@ -276,7 +275,7 @@ def _determine_5part_interaction_middle_x(startx, endx):
 
 # helper function for draw interaction
 # draw interaction arrow body when y diff >= height limit 
-def get_5part_interaction_coord(ax, start_frame, end_frame, y_1_ofset, y_2_ofset):
+def get_5part_interaction_coord(start_frame, end_frame, y_1_ofset, y_2_ofset):
 	start_x = start_frame.origin[0] + start_frame.width / 2.
 	start_y = start_frame.origin[1] + start_frame.height + INTERACTION_SPACER 
 	end_x = end_frame.origin[0] + end_frame.width / 2.
@@ -287,6 +286,18 @@ def get_5part_interaction_coord(ax, start_frame, end_frame, y_1_ofset, y_2_ofset
 	c4x, c4y = end_x, c3y
 	return [[start_x, start_y], [c1x, c1y], [c2x, c2y], [c3x, c3y], [c4x, c4y], [end_x, end_y]]
 
+# helper function for draw interaction 
+# draw degradation arrow body 
+def get_degradation_interaction_coord(start_frame, y_offset):
+	start_x = start_frame.origin[0] + start_frame.width / 2.
+	start_y = start_frame.origin[1] + start_frame.height + INTERACTION_SPACER 
+	if start_x <= 0: 
+		end_x = XMIN+INTERACTION_OFFSET_MIN
+	else: 
+		end_x = XMAX-INTERACTION_OFFSET_MAX
+	end_y = start_y 
+	return [[start_x, start_y], [start_x, start_y + y_offset], [end_x, start_y + y_offset], [end_x, end_y]]
+
 # helper function for get_valid_offset
 # check whether the randomly selected  y_ofset has duplicate in past list of coordinates
 def check_has_duplicate_y(list_of_c, y_ofset, y1, y2):
@@ -296,35 +307,44 @@ def check_has_duplicate_y(list_of_c, y_ofset, y1, y2):
 	return False
 
 # helper function for draw_all_interaction
-def get_valid_offset(c_list, start_glyph, from_glyph, user_specified):
+def get_valid_offset(c_list, i_type, start_glyph, from_glyph, user_specified):
 	start_y = start_glyph.frame.origin[1] + (GLYPHSIZE - 2 * RECURSE_DECREMENT * start_glyph.parent_module.level)
-	from_y = from_glyph.frame.origin[1] + (GLYPHSIZE - 2 * RECURSE_DECREMENT * from_glyph.parent_module.level)
-	
+	if i_type == 'degradation':
+		from_y = start_y
+	else:
+		from_y = from_glyph.frame.origin[1] + (GLYPHSIZE - 2 * RECURSE_DECREMENT * from_glyph.parent_module.level)
+
 	if user_specified is not None:
+		c_list.append(user_specified)
 		return user_specified, start_y, from_y
 		
 	while user_specified is None:
 		y_offset = (np.random.random_sample() * 3) + np.random.randint(INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX)
-		if not check_has_duplicate_y(c_list, y_offset, start_y, from_y): break
+		if not check_has_duplicate_y(c_list, y_offset, start_y, from_y): 
+			c_list.append(y_offset)
+			break
 
-	return y_offset, start_y, from_y 
+	return y_offset, start_y, from_y, c_list 
 
 # function that draw one interaction 
 # (offset can be user specified or randomly generated)
-def draw_all_interaction(ax, all_intercn, coordlist=[], user_specified_y_offset=None):
+def draw_all_interactions(ax, all_intercn, coordlist=[], user_specified_y_offset=None):
 	for intercn in all_intercn:
-		y_offset, start_y, from_y = get_valid_offset(coordlist, intercn.part_start, intercn.part_end, user_specified_y_offset)
-		
-		# distinguish between 3 part / 5 part interaction  
-		if abs(start_y - from_y) < HEIGHT:
-			coords = get_3part_interaction_coord(ax, intercn.part_start.frame, intercn.part_end.frame, y_offset)
-		else:
-			coords = get_5part_interaction_coord(ax, intercn.part_start.frame, intercn.part_end.frame, y_offset, y_offset)
-		
+		if intercn.type != 'degradation':
+			y_offset, start_y, from_y, coordlist = get_valid_offset(coordlist, intercn.type, intercn.part_start, intercn.part_end, user_specified_y_offset)
+			
+			# distinguish between 3 part / 5 part interaction - assume one element in ends
+			if abs(start_y - from_y) < HEIGHT:
+				coords = get_3part_interaction_coord(intercn.part_start.frame, intercn.part_end.frame, y_offset)
+			else:
+				coords = get_5part_interaction_coord(intercn.part_start.frame, intercn.part_end.frame, y_offset, y_offset)
+		else: 
+			y_offset, start_y, from_y, coordlist = get_valid_offset(coordlist, intercn.type, intercn.part_start, None, user_specified_y_offset)
+			coords = get_degradation_interaction_coord(intercn.part_start.frame, y_offset)
+
 		# update coords
 		interaction_rd = rd.InteractionRenderer(intercn.type, intercn.part_start, intercn.part_end, coords, INTERACTION_SPACER)
 		intercn.coordinates = coords 
-		coordlist += coords
 
 		interaction_rd.draw_interaction(ax)
 

@@ -560,17 +560,15 @@ def create_test_design5 ():
 
     return design
 
+def create_test_design6 ():
+    design = Design('design6')
+    module1 = Module(design, 'module1')
+    part_1_pro = Part(module1, 'p1p', 'Promoter')
+    module1.add_part(part_1_pro)
 
-# Let's try it out!
-'''
-design = create_test_design5()
-design.print_design()'''
+    design.add_interaction([Interaction('degradation', part_1_pro)])
+    design.add_module([module1])
 
-
-
-
-
-
-
+    return design
 
 

@@ -3,7 +3,7 @@ Import & Export
 : script for importing / exporting sbol file 
 """
 import sbol, csv
-import datatype as dt, render as rd
+import datatype as dt, render as rd, draw 
 import matplotlib.pyplot as plt
 
 
@@ -214,6 +214,7 @@ def save_modules_and_components_from_design(doc, modules, count=1):
 
 	return submodules
 
+# func to save design into sbol document 
 def save_design_into_doc(doc, design):
 	save_module_and_components_from_design(doc, design.modules)
 	save_interaction_from_design(doc, design.interactions)
@@ -242,4 +243,16 @@ draw.draw_all_modules(ax, m_frames, design.modules)
 
 plt.show()'''
 
+
+design = dt.create_test_design6()
+m_frames = draw.get_module_frames(design.modules)
+fig, ax = plt.subplots(1, figsize=(8,10))
+ax.set_xlim(XMIN, XMAX)
+ax.set_ylim(YMIN, YMAX)
+ax.set_axis_off()
+
+draw.draw_all_modules(ax, m_frames, design.modules)
+draw.draw_all_interactions(ax, design.interactions)
+
+plt.show()
 

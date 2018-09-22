@@ -50,11 +50,11 @@ More visualization example scripts can be found under the dnaplotlib/examples di
 
 ### draw design
 	fig, ax = plt.subplots(1, figsize=(8,10))
-	ax.set_xlim(XMIN, XMAX)
-	ax.set_ylim(YMIN, YMAX)
+	ax.set_xlim(XMIN, XMAX) # recommend XMIN=-60, XMAX=60
+	ax.set_ylim(YMIN, YMAX) # recommend YMIN=-60, YMAX=60
 	ax.set_axis_off()
 	draw.draw_all_modules(ax, m_frames, design.modules)
-	draw_all_interaction(ax, design.interactions)
+	draw.draw_all_interactions(ax, design.interactions)
 	plt.show()
 
 ### export sbol file

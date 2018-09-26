@@ -510,8 +510,9 @@ class InteractionRenderer:
 	""" Class for rendering interaction
     """
 
-    ARROWHEAD_EDGE_FACTOR = 5.
-    DEGRADATION_CIRCLE_RADIUS_FACTOR = 7.
+    # glyph rendering const
+	ARROWHEAD_EDGE_FACTOR = 5.
+	DEGRADATION_CIRCLE_RADIUS_FACTOR = 7.
 
 	def __init__(self, interaction_type, from_part, to_part, coordinates, space):
 		self.type = interaction_type

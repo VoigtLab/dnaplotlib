@@ -137,7 +137,7 @@ class Module:
         self.level = 0 
         self.frame = None
         self.children = []
-        self.part_list = None # parts on strand
+        self.part_list = None#PartList() # parts on strand
         self.other_parts = [] # parts off strand
 
     def add_module(self, name):
@@ -146,7 +146,7 @@ class Module:
         return child
 
     def add_part(self, part):
-        if self.part_list == None:
+        if self.part_list is None:
             self.part_list = PartList()
         self.part_list.add_part(part)
 
@@ -188,11 +188,19 @@ class Design:
             self.interactions += interaction
 
     def __print_part_list(self, part_list, indent=''):
-        if part_list == None: return
+        if len(part_list.parts) == 0: return
         names = []
         for part in part_list.parts:
             names.append(part.name)
         print(indent + '  Parts: ' + ','.join(names))
+
+    def __print_other_parts(self, other_part_list, indent=''):
+    	if len(other_part_list) == 0: return
+    	names = []
+    	for op in other_part_list:
+            names.append(op.name)
+        print(indent + '  Other parts: ' + ','.join(names))
+
 
     def __print_module_tree(self, starting_module, indent=''):
         # Recursive method to print tree details
@@ -202,6 +210,7 @@ class Design:
                 self.__print_module_tree(node, indent + '  ')
         else:
             self.__print_part_list(starting_module.part_list, indent)
+            self.__print_other_parts(starting_module.other_parts, indent)
 
     def print_design(self):
         # Generate a human-readable version of the data type
@@ -209,9 +218,14 @@ class Design:
         for module in self.modules:
             self.__print_module_tree(module, indent='  ')
         for interaction in self.interactions:
-            print('Interaction from part:', interaction.part_start.name, 
+            if interaction.part_end != None:
+                print('Interaction from part:', interaction.part_start.name, 
                   'to part:', interaction.part_end.name,
                   'of type:', interaction.type)
+            else:
+                print('Interaction from part:', interaction.part_start.name, 
+                  'of type:', interaction.type)
+
 
 ###############################################################################
 # Testing
@@ -570,5 +584,38 @@ def create_test_design6 ():
     design.add_module([module1])
 
     return design
+
+def create_test_design6_2 ():
+    design = Design('design6_1')
+    module1 = Module(design, 'module1')
+    module1a = module1.add_module('module1a')
+    module1b = module1.add_module('module1b')
+    module2 = Module(design, 'module2')
+
+    part_1a_p = Part(module1a, 'p1ap', 'Promoter')
+    part_1a_t = Part(module1a, 'p1at', 'Terminator')
+    part_1b_o = Part(module1b, 'p1bo', 'OriginOfReplication')
+    part_1b_i = Part(module1b, 'p1bi', 'Insulator')
+    module1a.add_part([part_1a_p, part_1a_t])
+    module1b.add_part([part_1b_o, part_1b_i])
+
+    part_2_p = Part(module2, 'p2p', 'Promoter')
+    part_2_a = Part(module2, 'p2a', 'Aptamer')
+    part_2_r = Part(module2, 'p2r', 'RibosomeEntrySite')
+    module2.add_part([part_2_p, part_2_a, part_2_r])
+
+    other_part_1aRep = Part(module1a, 'R1','Unspecified')
+    other_part_2Mac = Part(module2, 'M1', 'Macromolecule')
+    module1a.add_other_part( other_part_1aRep )
+    module2.add_other_part( other_part_2Mac )
+
+    design.add_module([module1, module2])
+    interaction1 = Interaction('control', part_1a_p, part_1b_o)
+    int2 = Interaction('inhibition', other_part_2Mac, part_2_p)
+    int3 = Interaction('process', part_2_r, part_1b_i)
+    design.add_interaction( [interaction1, int2, int3] )
+    return design
+
+
 
 

@@ -236,7 +236,7 @@ def draw_all_modules(ax, m_frames, raw_modules, index=0):
 				GLYPHSIZE - RECURSE_DECREMENT * 2 * module.level,
 				SPACER)
 		else:
-			index = draw_all_modules(m_frames, module.children, index)
+			index = draw_all_modules(ax, m_frames, module.children, index)
 			actual_frame = draw_module(ax, module, m_frames[index], 
 				GLYPHSIZE - RECURSE_DECREMENT * 2 * module.level,
 				SPACER, False)
@@ -302,8 +302,8 @@ def get_degradation_interaction_coord(start_frame, y_offset):
 # check whether the randomly selected  y_ofset has duplicate in past list of coordinates
 def check_has_duplicate_y(list_of_c, y_ofset, y1, y2):
 	for c in list_of_c:
-		if c[1] == y_ofset + y1: return True
-		if c[1] == y_ofset + y2: return True
+		if c == y_ofset + y1: return True
+		if c == y_ofset + y2: return True
 	return False
 
 # helper function for draw_all_interaction

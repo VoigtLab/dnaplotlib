@@ -244,7 +244,7 @@ draw.draw_all_modules(ax, m_frames, design.modules)
 plt.show()'''
 
 
-design = dt.create_test_design6()
+design = dt.create_test_design6_2()
 m_frames = draw.get_module_frames(design.modules)
 fig, ax = plt.subplots(1, figsize=(8,10))
 ax.set_xlim(XMIN, XMAX)

@@ -510,7 +510,10 @@ class InteractionRenderer:
 	""" Class for rendering interaction
     """
 
+<<<<<<< HEAD
     # glyph rendering const
+=======
+>>>>>>> 776358f46f227ba9c9ab619094a2b0ca7966e9bb
 	ARROWHEAD_EDGE_FACTOR = 5.
 	DEGRADATION_CIRCLE_RADIUS_FACTOR = 7.
 

@@ -267,6 +267,11 @@ design_original.print_design()
 m_frames = draw.get_module_frames(design_original.modules) # default setting
 
 
+<<<<<<< HEAD
+=======
+design = dt.create_test_design6_2()
+m_frames = draw.get_module_frames(design.modules)
+>>>>>>> 776358f46f227ba9c9ab619094a2b0ca7966e9bb
 fig, ax = plt.subplots(1, figsize=(8,10))
 ax.set_xlim(XMIN, XMAX)
 ax.set_ylim(YMIN, YMAX)

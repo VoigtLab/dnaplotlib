@@ -616,6 +616,3 @@ def create_test_design6_2 ():
     design.add_interaction( [interaction1, int2, int3] )
     return design
 
-
-
-

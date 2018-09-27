@@ -585,6 +585,34 @@ def create_test_design6 ():
 
     return design
 
+def create_test_design6_1 ():
+    design = Design('design6_1')
+    module1 = Module(design, 'module1')
+    module1a = module1.add_module('module1a')
+    module1b = module1.add_module('module1b')
+    module2 = Module(design, 'module2')
+
+    part_1a_p = Part(module1a, 'p1ap', 'Promoter')
+    part_1a_t = Part(module1a, 'p1at', 'Terminator')
+    part_1b_o = Part(module1b, 'p1bo', 'OriginOfReplication')
+    part_1b_i = Part(module1b, 'p1bi', 'Insulator')
+    module1a.add_part([part_1a_p, part_1a_t])
+    module1b.add_part([part_1b_o, part_1b_i])
+
+    part_2_p = Part(module2, 'p2p', 'Promoter')
+    part_2_a = Part(module2, 'p2a', 'Aptamer')
+    part_2_r = Part(module2, 'p2r', 'RibosomeEntrySite')
+    module2.add_part([part_2_p, part_2_a, part_2_r])
+
+    other_part_2Mac = Part(module2, 'M1', 'Macromolecule')
+    module2.add_other_part( other_part_2Mac )
+
+    design.add_module([module1, module2])
+    interaction1 = Interaction('degradation', part_1b_o)
+    int2 = Interaction('inhibition', other_part_2Mac, part_2_p)
+    design.add_interaction( [interaction1, int2] )
+    return design
+
 def create_test_design6_2 ():
     design = Design('design6_1')
     module1 = Module(design, 'module1')
@@ -611,8 +639,24 @@ def create_test_design6_2 ():
 
     design.add_module([module1, module2])
     interaction1 = Interaction('control', part_1a_p, part_1b_o)
-    int2 = Interaction('inhibition', other_part_2Mac, part_2_p)
+    int2 = Interaction('degradation', other_part_2Mac)
     int3 = Interaction('process', part_2_r, part_1b_i)
     design.add_interaction( [interaction1, int2, int3] )
+    return design
+
+def create_test_design7():
+    design = Design('design7')
+    module1 = Module(design, 'module1')
+    part_1_p = Part(module1, 'p1p', 'Promoter')
+    part_1_o = Part(module1, 'p1o', 'OriginOfReplication')
+    module1.add_part([part_1_p, part_1_o])
+
+    design.add_module(module1)
+    design.add_interaction([
+        Interaction('degradation', part_1_p),
+        Interaction('inhibition', part_1_p, part_1_o)
+        ]
+    )
+
     return design
 

@@ -178,6 +178,15 @@
     <sbol:interaction>
       <sbol:Interaction rdf:about="http://examples.org/ModuleDefinition/md_0_2/interaction_1/1.0.0">
         <sbol:displayId>interaction_1</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://examples.org/ModuleDefinition/md_0_2/interaction_1/M1/1.0.0">
+            <sbol:displayId>M1</sbol:displayId>
+            <sbol:participant rdf:resource="http://examples.org/ModuleDefinition/md_0_2/M1/1.0.0"/>
+            <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_0_2/interaction_1/M1"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000010"/>
+            <sbol:version>1.0.0</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
         <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_0_2/interaction_1"/>
         <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000179"/>
         <sbol:version>1.0.0</sbol:version>
@@ -186,8 +195,17 @@
     <sbol:interaction>
       <sbol:Interaction rdf:about="http://examples.org/ModuleDefinition/md_0_2/interaction_2_0/1.0.0">
         <sbol:displayId>interaction_2_0</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://examples.org/ModuleDefinition/md_0_2/interaction_2_0/p2r/1.0.0">
+            <sbol:displayId>p2r</sbol:displayId>
+            <sbol:participant rdf:resource="http://examples.org/ModuleDefinition/md_0_2/p2r/1.0.0"/>
+            <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_0_2/interaction_2_0/p2r"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000645"/>
+            <sbol:version>1.0.0</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
         <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_0_2/interaction_2_0"/>
-        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000343"/>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000589"/>
         <sbol:version>1.0.0</sbol:version>
       </sbol:Interaction>
     </sbol:interaction>
@@ -233,8 +251,17 @@
     <sbol:interaction>
       <sbol:Interaction rdf:about="http://examples.org/ModuleDefinition/md_1_1/interaction_0_0/1.0.0">
         <sbol:displayId>interaction_0_0</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://examples.org/ModuleDefinition/md_1_1/interaction_0_0/p1ap/1.0.0">
+            <sbol:displayId>p1ap</sbol:displayId>
+            <sbol:participant rdf:resource="http://examples.org/ModuleDefinition/md_1_1/p1ap/1.0.0"/>
+            <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_1_1/interaction_0_0/p1ap"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000598"/>
+            <sbol:version>1.0.0</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
         <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_1_1/interaction_0_0"/>
-        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000343"/>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000168"/>
         <sbol:version>1.0.0</sbol:version>
       </sbol:Interaction>
     </sbol:interaction>
@@ -270,16 +297,34 @@
     <sbol:interaction>
       <sbol:Interaction rdf:about="http://examples.org/ModuleDefinition/md_1_2/interaction_0_1/1.0.0">
         <sbol:displayId>interaction_0_1</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://examples.org/ModuleDefinition/md_1_2/interaction_0_1/p1bo/1.0.0">
+            <sbol:displayId>p1bo</sbol:displayId>
+            <sbol:participant rdf:resource="http://examples.org/ModuleDefinition/md_1_2/p1bo/1.0.0"/>
+            <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_1_2/interaction_0_1/p1bo"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000644"/>
+            <sbol:version>1.0.0</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
         <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_1_2/interaction_0_1"/>
-        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000343"/>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000168"/>
         <sbol:version>1.0.0</sbol:version>
       </sbol:Interaction>
     </sbol:interaction>
     <sbol:interaction>
       <sbol:Interaction rdf:about="http://examples.org/ModuleDefinition/md_1_2/interaction_2_1/1.0.0">
         <sbol:displayId>interaction_2_1</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://examples.org/ModuleDefinition/md_1_2/interaction_2_1/p1bi/1.0.0">
+            <sbol:displayId>p1bi</sbol:displayId>
+            <sbol:participant rdf:resource="http://examples.org/ModuleDefinition/md_1_2/p1bi/1.0.0"/>
+            <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_1_2/interaction_2_1/p1bi"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000011"/>
+            <sbol:version>1.0.0</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
         <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/md_1_2/interaction_2_1"/>
-        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000343"/>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000589"/>
         <sbol:version>1.0.0</sbol:version>
       </sbol:Interaction>
     </sbol:interaction>

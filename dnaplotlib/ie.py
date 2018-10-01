@@ -36,11 +36,13 @@ def add_parts_to_module(mod, raw_md, cd_list):
 	renderer = rd.GlyphRenderer()
 	for fc in raw_md.functionalComponents:
 		c = fetch_cd_by_fc(cd_list, fc.displayId)
+		
 		# create part
 		if len(c.roles) == 0: # when part is RNA, does not have so term 
 			part = dt.Part(mod, fc.displayId, 'RNA')
 		else:
 			part = dt.Part(mod, fc.displayId, renderer.glyph_soterm_map.get(c.roles[0]))
+		
 		# add part to strand / non-strand
 		if c.types[0] == sbol.BIOPAX_DNA:
    			mod.add_part(part)
@@ -78,16 +80,19 @@ def fetch_part_by_id(modules, ids):
 		if m.part_list is not None:
 			for p in m.part_list.parts:
 				if p.name in ids:
-					parts[ids.index(p.name)] = part
+					parts.append(p)
+		for op in m.other_parts:
+			if op.name in ids:
+				parts.append(p)
+		# recursively search for parts
+		parts += fetch_part_by_id(m.children, ids)
 	return parts
 
 # helper function for assemble_raw_interactions
 # receive interaction sboltype, return interaction type
 def fetch_interaction_type(i_type):
-	print(i_type)
-	
 	if i_type == 'http://identifiers.org/biomodels.sbo/SBO:0000168':
-		return control
+		return 'control'
 	elif i_type == 'http://identifiers.org/biomodels.sbo/SBO:0000179':
 		return 'degradation'
 	elif i_type == 'http://identifiers.org/biomodels.sbo/SBO:0000169':
@@ -107,29 +112,28 @@ def assemble_parts_by_order(order1, p_list1, p_list2):
 
 # helper function for extract_interactions
 # assemble raw intrxn from md into interxn
-def assemble_raw_interactions(interxn_lists):
+def assemble_raw_interactions(interxn_lists, modules):
 	complete, incomplete = [], []
 	for i in interxn_lists:
-		interxn_type = fetch_interaction_type(i.type)
-		p_ids = list(map(lambda p: p.displayId, i.participations))
-		parts = fetch_part_by_id(design.modules, p_ids)
+		interxn_type = fetch_interaction_type(i.types[0]) # assume first types as primary rendering
+		parts = fetch_part_by_id(modules, list(map(lambda p: p.displayId, i.participations)))
 
 		if i.displayId.count('_') == 1: # has single part
-			complete.add((interxn_type, parts))
+			complete.append((interxn_type, parts))
 		else:
 			i_index = i.displayId[:len(STANDARD_INTERACTION)] 
-
-			if i_index not in [inc[0] for inc in incomplete]:
+			if i_index in [inc[0] for inc in incomplete]:
 				for inc in incomplete:
 					if i_index == inc[0]:
 						parts = assemble_parts_by_order(i.displayId, parts, inc[1])
-						complete.add((interxn_type, parts))
+						complete.append((interxn_type, parts))
 			else:
-				incomplete.add([i_index, parts])
+				incomplete.append([i_index, parts])
+	
 	return complete
 
 # extract interaction from document then return list of interaction datatype
-def extract_interactions(document):
+def extract_interactions(document, design_modules):
 	i_list = []
 	interactions = []
 	# first extract all interactions from document
@@ -138,16 +142,15 @@ def extract_interactions(document):
 			i_list.append(interaction)
 
 	# assemble interactions (esp intermodular interactions)
-	i_list = assemble_raw_interactions(i_list)
+	i_list = assemble_raw_interactions(i_list, design_modules)
 
-	for i in i_list:
-		for i_type, parts in i:
-			if len(parts)==1:
-				interactions.append(dt.Interaction(i_type, parts[0]))
-			elif len(parts)==2:
-				interactions.append(dt.Interaction(i_type, parts[0], parts[2]))
-			else:
-				sys.exit('too many parts found while importing interactions')
+	for i_type, parts in i_list:
+		if len(parts)==1:
+			interactions.append(dt.Interaction(i_type, parts[0]))
+		elif len(parts)==2:
+			interactions.append(dt.Interaction(i_type, parts[0], parts[1]))
+		else:
+			sys.exit('too many parts found while importing interactions: found %d parts' % len(parts))
 	return interactions
 
 ###############################################################################
@@ -196,11 +199,12 @@ def find_fcs_mds_of_interaction(doc, interxn):
 # helper function for save_interactions
 # receive interaction, return roles of parts_start, parts_end
 def find_roles_of_interaction_parts(intrxn):
+	roles = []
+
 	if intrxn.part_end is None:
 		parts = [intrxn.part_start]
 	else: 
 		parts = [intrxn.part_start, intrxn.part_end]
-	roles = []
 
 	for p in parts:
 		if p.type == 'Promoter':
@@ -240,18 +244,19 @@ def save_interactions(doc, des_interactions):
 		# create participation 
 		participant_list = []
 		for participant, role in zip(fcs, roles):
-			pp = sbol.Participation(displayId, participant.identity)
+			pp = sbol.Participation(participant.displayId, participant.identity)
 			pp.roles = role
 			participant_list.append(pp)
 
 		if len(participant_list) == 1 or len(list(set(mds))) == 1: # single interaction 
 			new_interxn = sbol.Interaction(displayId, get_interaction_type(interaction))
-			new_interxn.participations = participant_list
+			new_interxn.participations.add(participant_list[0])
 			mds[0].interactions.add(new_interxn)
+
 		else:
 			for partp, md in zip(participant_list, mds): # save as two interactions 
-				new_interxn = sbol.Interaction(displayId + '_%d' % participant_list.index(partp))
-				new_interxn.participations = [partp]
+				new_interxn = sbol.Interaction(displayId + '_%d' % participant_list.index(partp), get_interaction_type(interaction))
+				new_interxn.participations.add(partp)
 				md.interactions.add(new_interxn)
 
 # helper function for save_modules_and_components_from_design
@@ -311,7 +316,6 @@ def save_design_into_doc(doc, design):
 	save_modules_and_components(doc, design.modules)
 	save_interactions(doc, design.interactions)
 
-
 # open doc
 '''doc = sbol.Document()
 doc.addNamespace('http://dnaplotlib.org#', 'dnaplotlib')
@@ -337,15 +341,17 @@ doc = sbol.Document()
 doc.read('test_6_2.xml')
 
 # create design 
-raw_mds = doc.moduleDefinitions
 design_import = dt.Design('design6_2')
-design_import.add_module(extract_full_modules(doc, design_import, list(map(lambda m: m.displayId, raw_mds))))
-design_import.add_interaction(extract_interactions(doc))
+design_import.add_module(
+	extract_full_modules(doc, design_import, 
+		list(map(lambda m: m.displayId, doc.moduleDefinitions))))
+design_import.add_interaction(extract_interactions(doc, design_import.modules))
 design_import.print_design()
 
-'''print('-------------------')
+print('-------------------')
 design_original = dt.create_test_design6_2()
 design_original.print_design()
+'''
 m_frames = draw.get_module_frames(design_original.modules) # default setting
 
 
@@ -361,19 +367,19 @@ draw.draw_all_interactions(ax, design.interactions)
 
 
 
-design = dt.create_test_design6_1()
-m_frames = draw.get_module_frames(design_original.modules)
+
+design = dt.create_test_design6_2()
+m_frames = draw.get_module_frames(design.modules)
 fig, ax = plt.subplots(1, figsize=(8,10))
 ax.set_xlim(XMIN, XMAX)
 ax.set_ylim(YMIN, YMAX)
 ax.set_axis_off()
 
-draw.draw_all_modules(ax, m_frames, design_original.modules)
-draw.draw_all_interactions(ax, design_original.interactions)
+draw.draw_all_modules(ax, m_frames, design.modules)
+draw.draw_all_interactions(ax, design.interactions)
 
 document = sbol.Document()
 document.addNamespace('http://dnaplotlib.org#', 'dnaplotlib')
 save_design_into_doc(document, design)
-document.write('test_design_6_1.xml')
+document.write('test_6_2.xml')
 plt.show()'''
-

@@ -641,7 +641,7 @@ def create_test_design6_2 ():
     interaction1 = Interaction('control', part_1a_p, part_1b_o)
     int2 = Interaction('degradation', other_part_2Mac)
     int3 = Interaction('process', part_2_r, part_1b_i)
-    design.add_interaction( [interaction1, int2, int3] )
+    design.add_interaction([interaction1, int2, int3] )
     return design
 
 def create_test_design7():

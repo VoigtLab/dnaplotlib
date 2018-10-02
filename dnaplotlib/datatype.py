@@ -645,18 +645,40 @@ def create_test_design6_2 ():
     return design
 
 def create_test_design7():
+    # create design 
+    design = Design('design7')
+
+    # create modules & parts
+    module1 = Module(design, 'module1')
+    part_1_p = Part(module1, 'promoter1', 'Promoter')
+    part_1_c = Part(module1, 'fnr_gene', 'CDS')
+    part_1_t = Part(module1, 'terminator', 'Terminator')
+    other_part_p = Part(module1, 'fnr', 'Macromolecule')
+    
+    module1.add_part([part_1_p, part_1_c, part_1_t])   
+    module1.add_other_part(other_part_p) # non-dna onto other parts!
+    design.add_module(module1)
+
+    # create interaction
+    design.add_interaction(Interaction('inhibition', other_part_p, part_1_p))
+
+    return design
+
+def create_test_design7_1():
     design = Design('design7')
     module1 = Module(design, 'module1')
-    part_1_p = Part(module1, 'p1p', 'Promoter')
+    part_1_p = Part(module1, 'promoter', 'Promoter')
+    part_1_c = Part(module1, 'p1c', 'CDS')
     part_1_o = Part(module1, 'p1o', 'OriginOfReplication')
-    module1.add_part([part_1_p, part_1_o])
-
+    part_1_i = Part(module1, 'p1i', 'Insulator')
+    part_1_t = Part(module1, 'p1t', 'Terminator')
+    module1.add_part([part_1_p, part_1_c, part_1_o, part_1_i, part_1_t])
+    other_part_p = Part(module1, 'M1', 'Macromolecule')
+    module1.add_other_part(other_part_p)
     design.add_module(module1)
-    design.add_interaction([
-        Interaction('degradation', part_1_p),
-        Interaction('inhibition', part_1_p, part_1_o)
-        ]
-    )
+
+    
+    design.add_interaction(Interaction('inhibition', other_part_p, part_1_p))
 
     return design
 

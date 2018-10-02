@@ -14,7 +14,7 @@ __version__ = '2.0'
 
 # default rendering const
 MAX_MODULE = 8
-GLYPHSIZE = 6.
+GLYPHSIZE = 10.
 SPACER = 1.5 
 RECURSE_DECREMENT = .5
 XMIN, XMAX = -60., 60.
@@ -22,6 +22,7 @@ YMIN, YMAX = -60., 60.
 WIDTH, HEIGHT = 50., 25. # default setting for level 1 module & interaction
 INTERACTION_SPACER = 1.5 
 INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX = 4, 7
+LOWER_ORIGIN_GLYPHS = ['CDS', 'OriginOfReplication', 'Insulator']
 
 ###############################################################################
 # Module Drawing Func
@@ -182,10 +183,21 @@ def __get_other_part_pos(o_p_count, frame, part_sz, glyph_sz, m_sp):
 
 	return o_p_pos
 
+# helper function for drawing module 
+# get strand adjustment in case of lower origin glyphs
+def __get_strand_adjustment(part_list, adjustment):
+	if part_list != None:
+		for p in part_list.parts:
+			if p.type in LOWER_ORIGIN_GLYPHS:
+				return adjustment
+	return 0.
+
+
 # function that draw module
 def draw_module(ax, module, module_frame, glyph_size, module_spacer, haveBackbone=True):
+	strand_adjustment = __get_strand_adjustment(module.part_list, glyph_size/3.)
 	glyph_pos = [module_frame.origin[0] + 3 * module_spacer, 
-		module_frame.origin[1] + 1.5 * module_spacer]
+		module_frame.origin[1] + 1.5 * module_spacer + strand_adjustment] 
 	renderer = rd.GlyphRenderer()
 	strand_rd = rd.StrandRenderer()
 	module_rd = rd.ModuleRenderer()	
@@ -200,15 +212,19 @@ def draw_module(ax, module, module_frame, glyph_size, module_spacer, haveBackbon
 	else: 
 		module.part_list.position = glyph_pos 
 		for part in module.part_list.parts:
+			if part.type in LOWER_ORIGIN_GLYPHS:
+				glyph_pos[1] -= strand_adjustment
 			part.frame = rd.Frame(width=glyph_size, height=glyph_size, origin=glyph_pos)
 			child = renderer.draw_glyph(ax, part.type, glyph_pos, glyph_size, 0.)
 			strand_rd.add_glyphs(child)
 			module_rd.add_parts(child)
+			if part.type in LOWER_ORIGIN_GLYPHS:
+				glyph_pos[1] += strand_adjustment
 			glyph_pos = [glyph_pos[0] + glyph_size + module_spacer, glyph_pos[1]]
 
 	# draw backbone 
 	if haveBackbone and module.part_list != None:
-		bb = strand_rd.draw_backbone_strand(ax, glyph_pos[1], module_spacer)
+		bb = strand_rd.draw_backbone_strand(ax, glyph_pos[1], module_spacer) 
 		module_rd.add_parts(bb)
 		module.part_list.position = bb['frame'].origin
 

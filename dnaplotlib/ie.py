@@ -336,7 +336,7 @@ doc.write('test_6_2.xml')
 
 plt.show()
 '''
-
+'''
 doc = sbol.Document()
 doc.read('test_6_2.xml')
 
@@ -351,7 +351,7 @@ design_import.print_design()
 print('-------------------')
 design_original = dt.create_test_design6_2()
 design_original.print_design()
-'''
+
 m_frames = draw.get_module_frames(design_original.modules) # default setting
 
 
@@ -366,9 +366,9 @@ draw.draw_all_modules(ax, m_frames, design.modules)
 draw.draw_all_interactions(ax, design.interactions)
 
 
+'''
 
-
-design = dt.create_test_design6_2()
+design = dt.create_test_design7()
 m_frames = draw.get_module_frames(design.modules)
 fig, ax = plt.subplots(1, figsize=(8,10))
 ax.set_xlim(XMIN, XMAX)
@@ -378,8 +378,8 @@ ax.set_axis_off()
 draw.draw_all_modules(ax, m_frames, design.modules)
 draw.draw_all_interactions(ax, design.interactions)
 
-document = sbol.Document()
+'''document = sbol.Document()
 document.addNamespace('http://dnaplotlib.org#', 'dnaplotlib')
 save_design_into_doc(document, design)
-document.write('test_6_2.xml')
-plt.show()'''
+document.write('test_6_2.xml')'''
+plt.show()

@@ -136,7 +136,6 @@ class GlyphRenderer:
             if name == glyph_type:
                 return term
 
-
     # turn list of vertices into coordinates
     def list_into_coord(self, vlist):
         x, y = (0. for i in range(2))

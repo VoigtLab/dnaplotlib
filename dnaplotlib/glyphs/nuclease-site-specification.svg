@@ -1,0 +1,10 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="NucleaseSite" soterms="SO:0001688" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
+
+	<rect class="bounding-box" id="bounding-box" x="10.367" y="3.102" width="15.341" height="29.663" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:1,0.5;"/>
+
+    <path class="unfilled-path" id="n1" d="M18,31.598L18,11.598" parametric:d="M18,31.598L18,11.598" style="fill:none;stroke:black;stroke-width:2.4px;"/>
+    <path class="unfilled-path" id="n2" d="M11.6,4.398L24.4,17.198" parametric:d="M11.6,4.398L24.4,17.198" style="fill:none;stroke:black;stroke-width:2.4px;"/>
+    <path class="unfilled-path" id="n3" d="M24.4,4.398L11.6,17.198" parametric:d="M24.4,4.398L11.6,17.198" style="fill:none;stroke:black;stroke-width:2.4px;"/>
+    
+    <path class="baseline" id="baseline" d="M-0.06,32.764L36.015,32.764" parametric:y="32.764" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
+</svg>

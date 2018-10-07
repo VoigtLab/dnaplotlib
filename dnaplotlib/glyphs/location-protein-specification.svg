@@ -1,0 +1,12 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="ProteinLocation" soterms="SO:0001956" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
+
+    <rect class="bounding-box" id="bounding-box" x="11.186" y="3.797" width="13.729" height="28.22" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
+    
+    <path class="baseline" id="baseline" d="M-0.12,32.944C35.955,32.944 36.015,32.944 36.015,32.944"  parametric:y="32.944" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
+
+
+    <path class="unfilled-path" id="location-body" d="M17.347,16.3C24.438,14.762 24.629,22.606 17.223,21.428C24.535,19.415 24.263,27.874 17.152,26.499C24.403,24.522 24.343,32.749 17.093,31.49" parametric:d="M17.347,16.3C24.438,14.762 24.629,22.606 17.223,21.428C24.535,19.415 24.263,27.874 17.152,26.499C24.403,24.522 24.343,32.749 17.093,31.49" style="fill:none;stroke:black;stroke-width:2.4px;stroke-linecap:round;stroke-linejoin:round;"/>
+    
+    <circle class="filled-circle" id="location-head" cx="18" cy="10.791" r="5.6" style="fill:rgb(179,179,179);stroke:black;stroke-width:2.4px;stroke-linecap:round;stroke-linejoin:round;"/>
+    
+</svg>

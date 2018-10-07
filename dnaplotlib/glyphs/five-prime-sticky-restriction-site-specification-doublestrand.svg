@@ -1,0 +1,10 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="5'StickyRestrictionSite" soterms="SO:0001975" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
+
+
+    <path class="baseline" id="baseline" d="M-0.085,14.992L36.186,14.992" parametric:y="14.992" style="fill:none;stroke:rgb(179,179,179);stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
+    
+
+    <path class="unfilled-path" id="restriction-site" d="M6,7.6L6,18L30,18L30,28.4" parametric:d="M6,7.6L6,18L30,18L30,28.4" style="fill:none;stroke:black;stroke-width:2.4px;stroke-linejoin:round;"/>
+    
+    <rect class="bounding-box" id="bounding-box" xx="4.661" y="6.254" width="26.61" height="23.644" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-linecap:butt;stroke-dasharray:1,0.5;"/>
+</svg>

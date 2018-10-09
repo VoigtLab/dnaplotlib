@@ -362,8 +362,21 @@ class GlyphRenderer:
 	ax.add_patch(patch)
 	return Frame(width=size, height=size, origin=position)
 
+    # fuction to return either default colors / c from user_params 
+    def get_custom_colors(self, user_params):
+        fc, ec = 'white', 'black'
+        if user_params == None:
+            return fc, ec
+        if 'color' in user_params.keys():
+            fc, ec = user_params['color'], user_params['color']
+        if 'facecolor' in user_params.keys():
+            fc = user_params['facecolor']
+        if 'edgecolor' in user_params.keys():
+            ec = user_params['edgecolor']
+        return fc, ec
+
     # main function for rendering glyph
-    def draw_glyph(self, ax, glyph_type, position, size, angle, user_parameters=None):
+    def draw_glyph(self, ax, glyph_type, position, size, angle=0, user_parameters=None):
         
     	if glyph_type == 'RNA':
     		# cannot rotate RNA
@@ -392,7 +405,8 @@ class GlyphRenderer:
 
         # add paths 
         for path in paths_to_draw:
-            patch = patches.PathPatch(path, facecolor='white', edgecolor='black', lw=2, zorder=GLYPHZSCORE)
+            fc, ec = self.get_custom_colors(user_parameters)
+            patch = patches.PathPatch(path, facecolor=fc, edgecolor=ec, lw=2, zorder=GLYPHZSCORE)
             ax.add_patch(patch)
 
         # return type to be pieced together in StrandRenderer
@@ -468,13 +482,13 @@ class ModuleRenderer:
 		return maxx, maxy, minx, miny
 	
 	# draw empty module box
-	def draw_empty_module_box(self, ax, module_frame):
+	def draw_module_box(self, ax, module_frame):
 		p = patches.Rectangle(module_frame.origin, module_frame.width, module_frame.height, fill=False)
 		ax.add_patch(p)
 		return module_frame
 
 	# draw module box 
-	def draw_module_box(self, ax, x_offset=None, y_offset=None, user_parameters=None):
+	def draw_module_box2(self, ax, x_offset=None, y_offset=None, user_parameters=None):
 		max_x, max_y, min_x, min_y = self._initialize_module_param()
 
 		if x_offset is None:

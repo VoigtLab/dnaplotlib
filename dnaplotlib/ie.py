@@ -83,7 +83,7 @@ def fetch_part_by_id(modules, ids):
 					parts.append(p)
 		for op in m.other_parts:
 			if op.name in ids:
-				parts.append(p)
+				parts.append(op)
 		# recursively search for parts
 		parts += fetch_part_by_id(m.children, ids)
 	return parts
@@ -152,6 +152,15 @@ def extract_interactions(document, design_modules):
 		else:
 			sys.exit('too many parts found while importing interactions: found %d parts' % len(parts))
 	return interactions
+
+# func to read doc and produce design
+def read_doc_into_design(doc):
+	design = dt.Design('default_design')
+	design.add_module(extract_full_modules(doc, design, 
+			list(map(lambda m: m.displayId, doc.moduleDefinitions))))
+	design.add_interaction(extract_interactions(doc, design.modules))
+	return design
+
 
 ###############################################################################
 # Export
@@ -310,7 +319,6 @@ def save_modules_and_components(doc, modules, count=1):
 	return submodules
 
 
-
 # func to save design into sbol document 
 def save_design_into_doc(doc, design):
 	save_modules_and_components(doc, design.modules)
@@ -341,11 +349,7 @@ doc = sbol.Document()
 doc.read('test_6_2.xml')
 
 # create design 
-design_import = dt.Design('design6_2')
-design_import.add_module(
-	extract_full_modules(doc, design_import, 
-		list(map(lambda m: m.displayId, doc.moduleDefinitions))))
-design_import.add_interaction(extract_interactions(doc, design_import.modules))
+design_import = read_doc_into_design(doc)
 design_import.print_design()
 
 print('-------------------')
@@ -368,18 +372,54 @@ draw.draw_all_interactions(ax, design.interactions)
 
 '''
 
-design = dt.create_test_design7()
+#design = dt.create_test_design5()
+'''doc = sbol.Document()
+doc.read('test_6_2.xml')
+
+# UPDATES
+m = doc.moduleDefinitions['foo']
+import_design = dt.import_design_from_file(module)
+
+design_imported = 
+design.print_design()'''
+
+design = dt.create_test_design8()
+'''doc = sbol.Document()
+doc.read('test_8.xml')
+design_import = dt.Design('design8')
+design_import.add_module(
+	extract_full_modules(doc, design_import, 
+		list(map(lambda m: m.displayId, doc.moduleDefinitions))))
+design_import.add_interaction(extract_interactions(doc, design_import.modules))
+design_import.print_design()'''
+
 m_frames = draw.get_module_frames(design.modules)
+
 fig, ax = plt.subplots(1, figsize=(8,10))
 ax.set_xlim(XMIN, XMAX)
 ax.set_ylim(YMIN, YMAX)
 ax.set_axis_off()
 
-draw.draw_all_modules(ax, m_frames, design.modules)
+user_customization = [
+	{'target': 'p1c',
+	'size': 1.5,
+	'facecolor': 'lime'},
+	{'target': 'r1',
+	'facecolor': 'lime'	
+	},
+	{'target': 'p2c',
+	'size': 1.5,
+	'facecolor': 'yellow'},
+	{'target': 'r2',
+	'facecolor': 'yellow'	
+	}
+]
+
+draw.draw_all_modules(ax, m_frames, design.modules, user_params=user_customization)
 draw.draw_all_interactions(ax, design.interactions)
 
 '''document = sbol.Document()
 document.addNamespace('http://dnaplotlib.org#', 'dnaplotlib')
 save_design_into_doc(document, design)
-document.write('test_6_2.xml')'''
+document.write('test_8.xml')'''
 plt.show()

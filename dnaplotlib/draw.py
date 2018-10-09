@@ -14,7 +14,7 @@ __version__ = '2.0'
 
 # default rendering const
 MAX_MODULE = 8
-GLYPHSIZE = 10.
+GLYPHSIZE = 6.
 SPACER = 1.5 
 RECURSE_DECREMENT = .5
 XMIN, XMAX = -60., 60.
@@ -185,42 +185,94 @@ def __get_other_part_pos(o_p_count, frame, part_sz, glyph_sz, m_sp):
 
 # helper function for drawing module 
 # get strand adjustment in case of lower origin glyphs
-def __get_strand_adjustment(part_list, adjustment):
+def __get_strand_adjustment(part_list, user_specification, default_size):
 	if part_list != None:
 		for p in part_list.parts:
 			if p.type in LOWER_ORIGIN_GLYPHS:
-				return adjustment
+				if user_specification != None:
+					if type(user_specification) == list:
+						for u in user_specification:
+							if type(u['target']) == list:
+								if p.name in u['target'] and u.get('size') != None:
+									return u['size'] * default_size / 3.
+							else:
+								if p.name == u['target'] and u.get('size') != None:
+									return u['size'] * default_size / 3.
+					else:
+						if type(user_specification['target']) == list:
+							if p.name in user_specification['target'] and user_specification.get('size') != None:
+								return user_specification['size'] * default_size / 3.
+						else:
+							if p.name == user_specification['target'] and user_specification.get('size') != None:
+								return user_specification['size'] * default_size / 3.
+				return default_size / 3.
 	return 0.
 
+# helper function for draw module 
+# return matching user specificiation or none
+def __find_right_spec(part_name, user_spec):
+	if user_spec != None:
+		if type(user_spec) == list:
+			for sp in user_spec:
+				if type(sp['target']) == list:
+					if part_name in sp['target']: return sp
+				else:
+					if sp['target'] == part_name: return sp 
+		else:
+			if user_spec['target'] == part_name: return user_spec
+	return None
+
+# helper function for draw_module
+# func to check whether part size specified in user_spec
+def __check_custom_size(part_name, user_options, def_size=None):
+	if user_options == None:
+		return def_size
+	if type(user_options) == list:
+		for u in user_options:
+			if type(u['target']) == list:
+				if part_name in u['target'] and u.get('size') != None: return u['size']
+			if part_name == u['target'] and u.get('size') != None: return u['size']
+	else:
+		if type(user_options['target']) == list:
+			if part_name in user_options['target'] and user_options.get('size') != None: return user_options['size']
+		if part_name == user_options['target'] and user_options.get('size') != None: return user_options['size']
+	return def_size
 
 # function that draw module
-def draw_module(ax, module, module_frame, glyph_size, module_spacer, haveBackbone=True):
-	strand_adjustment = __get_strand_adjustment(module.part_list, glyph_size/3.)
+def draw_module(ax, module, module_frame, glyph_size, module_spacer, haveBackbone=True, user_spec=None):
+	strand_adjustment = __get_strand_adjustment(module.part_list, user_spec, glyph_size)
 	glyph_pos = [module_frame.origin[0] + 3 * module_spacer, 
 		module_frame.origin[1] + 1.5 * module_spacer + strand_adjustment] 
 	renderer = rd.GlyphRenderer()
 	strand_rd = rd.StrandRenderer()
 	module_rd = rd.ModuleRenderer()	
 
+
 	# check whether module is empty or not 
 	if module.part_list == None:
-		if len(module.children) != 0:
-			return module_rd.draw_empty_module_box(ax, module_frame)
-		elif len(module.other_parts) == 0: return
+		if len(module.children) != 0 and len(module.other_parts) == 0:
+			return module_rd.draw_module_box(ax, module_frame)
 
 	# draw each glyphs in module part list
 	else: 
 		module.part_list.position = glyph_pos 
+		custom_glyph_size = glyph_size
 		for part in module.part_list.parts:
-			if part.type in LOWER_ORIGIN_GLYPHS:
+			if part.type in LOWER_ORIGIN_GLYPHS: # adjust for cds etc
 				glyph_pos[1] -= strand_adjustment
+			if __check_custom_size(part.name, user_spec, glyph_size) != glyph_size: # user_param
+				glyph_size *= __check_custom_size(part.name, user_spec)
+
+			#rendering
 			part.frame = rd.Frame(width=glyph_size, height=glyph_size, origin=glyph_pos)
-			child = renderer.draw_glyph(ax, part.type, glyph_pos, glyph_size, 0.)
+			child = renderer.draw_glyph(ax, part.type, glyph_pos, glyph_size, 0., user_parameters=__find_right_spec(part.name, user_spec))
 			strand_rd.add_glyphs(child)
 			module_rd.add_parts(child)
-			if part.type in LOWER_ORIGIN_GLYPHS:
-				glyph_pos[1] += strand_adjustment
+
+			# prepare for next part 
+			if part.type in LOWER_ORIGIN_GLYPHS: glyph_pos[1] += strand_adjustment
 			glyph_pos = [glyph_pos[0] + glyph_size + module_spacer, glyph_pos[1]]
+			if custom_glyph_size != glyph_size: glyph_size = custom_glyph_size
 
 	# draw backbone 
 	if haveBackbone and module.part_list != None:
@@ -235,32 +287,28 @@ def draw_module(ax, module, module_frame, glyph_size, module_spacer, haveBackbon
 		for i, other_part in enumerate(module.other_parts):
 			other_part.frame = rd.Frame(width=glyph_size, height=glyph_size, origin=op_pos_list[i])
 			other_part_frames.append(other_part.frame)
-			other_child = renderer.draw_glyph(ax, other_part.type, op_pos_list[i], glyph_size, 0.)
+			other_child = renderer.draw_glyph(ax, other_part.type, op_pos_list[i], glyph_size, user_parameters=__find_right_spec(other_part.name, user_spec))
 			module_rd.add_parts(other_child)
 
-		# do not draw module frame box if only has other part 
-		if module.part_list == None:
-			return get_biggest_module_frame(other_part_frames, module_spacer)
-	
-	return module_rd.draw_module_box(ax, module_spacer, module_spacer)
+	return module_rd.draw_module_box(ax, module_frame)
 
 # recursively draw all modules
-def draw_all_modules(ax, m_frames, raw_modules, index=0):
+def draw_all_modules(ax, m_frames, raw_modules, index=0, user_params=None):
 	for module in raw_modules: 
 		if len(module.children) == 0: # base case
 			actual_frame = draw_module(ax, module, m_frames[index], 
 				GLYPHSIZE - RECURSE_DECREMENT * 2 * module.level,
-				SPACER)
+				SPACER, user_spec=user_params)
 		else:
-			index = draw_all_modules(ax, m_frames, module.children, index)
+			index = draw_all_modules(ax, m_frames, module.children, index, user_params)
 			actual_frame = draw_module(ax, module, m_frames[index], 
 				GLYPHSIZE - RECURSE_DECREMENT * 2 * module.level,
-				SPACER, False)
+				SPACER, False, user_spec=user_params)
 		
 		module.frame = actual_frame
 		index += 1
+	return index
 
-	return index 
 
 ###############################################################################
 # Interaction Drawing Func
@@ -283,11 +331,11 @@ def get_3part_interaction_coord(start_frame, end_frame, y_ofset):
 def _determine_5part_interaction_middle_x(startx, endx):
 	xintrn_spacer = SPACER
 	if startx < 0 and endx < 0:
-		return -(WIDTH + xintrn_spacer)
+		return -(WIDTH + xintrn_spacer + np.random.randint(INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX)) 
 	elif startx > 0 and endx > 0:
-		return WIDTH + xintrn_spacer
+		return WIDTH + xintrn_spacer + np.random.randint(INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX)
 	else:
-		return -xintrn_spacer
+		return -xintrn_spacer - np.random.randint(INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX)
 
 # helper function for draw interaction
 # draw interaction arrow body when y diff >= height limit 
@@ -298,7 +346,7 @@ def get_5part_interaction_coord(start_frame, end_frame, y_1_ofset, y_2_ofset):
 	end_y = end_frame.origin[1] + end_frame.height + INTERACTION_SPACER
 	c1x, c1y = start_x, start_y + y_1_ofset 
 	c2x, c2y = _determine_5part_interaction_middle_x(start_x, end_x), c1y
-	c3x, c3y = _determine_5part_interaction_middle_x(start_x, end_x), end_y + y_2_ofset
+	c3x, c3y = c2x, end_y + y_2_ofset
 	c4x, c4y = end_x, c3y
 	return [[start_x, start_y], [c1x, c1y], [c2x, c2y], [c3x, c3y], [c4x, c4y], [end_x, end_y]]
 
@@ -308,9 +356,9 @@ def get_degradation_interaction_coord(start_frame, y_offset):
 	start_x = start_frame.origin[0] + start_frame.width / 2.
 	start_y = start_frame.origin[1] + start_frame.height + INTERACTION_SPACER 
 	if start_x <= 0: 
-		end_x = XMIN+INTERACTION_OFFSET_MIN
+		end_x = XMIN + INTERACTION_OFFSET_MIN + (np.random.randint(INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX))
 	else: 
-		end_x = XMAX-INTERACTION_OFFSET_MAX
+		end_x = XMAX - INTERACTION_OFFSET_MAX - (np.random.randint(INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX))
 	end_y = start_y 
 	return [[start_x, start_y], [start_x, start_y + y_offset], [end_x, start_y + y_offset], [end_x, end_y]]
 
@@ -344,7 +392,8 @@ def get_valid_offset(c_list, i_type, start_glyph, from_glyph, user_specified):
 
 # function that draw one interaction 
 # (offset can be user specified or randomly generated)
-def draw_all_interactions(ax, all_intercn, coordlist=[], user_specified_y_offset=None):
+def draw_all_interactions(ax, all_intercn, colors=None, user_specified_y_offset=None):
+	coordlist = [] 
 	for intercn in all_intercn:
 		if intercn.type != 'degradation':
 			y_offset, start_y, from_y, coordlist = get_valid_offset(coordlist, intercn.type, intercn.part_start, intercn.part_end, user_specified_y_offset)
@@ -362,5 +411,9 @@ def draw_all_interactions(ax, all_intercn, coordlist=[], user_specified_y_offset
 		interaction_rd = rd.InteractionRenderer(intercn.type, intercn.part_start, intercn.part_end, coords, INTERACTION_SPACER)
 		intercn.coordinates = coords 
 
-		interaction_rd.draw_interaction(ax)
-
+		# draw interaction
+		if colors != None:
+			interaction_rd.draw_interaction(ax, colors[all_intercn.index(intercn)])
+		else:
+			interaction_rd.draw_interaction(ax)
+		

@@ -49,17 +49,17 @@ module = dt.Module(design, 'md')
 # tetR
 p1 = dt.Part(module, 'tetR_promoter', 'Promoter')
 cds1 = dt.Part(module, 'tetR', 'CDS')
-module.add_part([p1, dt.Part(module, 'tetR_res', 'RibosomeEntrySite'),
+module.add_strand_part([p1, dt.Part(module, 'tetR_res', 'RibosomeEntrySite'),
 			cds1, dt.Part(module, 'tetR_terminator', 'Terminator')])
 # lac1
 p2 = dt.Part(module, 'lac_promoter', 'Promoter')
 cds2 = dt.Part(module, 'lac1', 'CDS')
-module.add_part([p2, dt.Part(module, 'lac_res', 'RibosomeEntrySite'),
+module.add_strand_part([p2, dt.Part(module, 'lac_res', 'RibosomeEntrySite'),
 			cds2, dt.Part(module, 'lac_terminator', 'Terminator')])
 # gamma 
 p3 = dt.Part(module, 'gamma_promoter', 'Promoter')
 cds3 = dt.Part(module, 'gamma', 'CDS')
-module.add_part([p3, dt.Part(module, 'gamma_res', 'RibosomeEntrySite'),
+module.add_strand_part([p3, dt.Part(module, 'gamma_res', 'RibosomeEntrySite'),
 			cds3, dt.Part(module, 'gamma_terminator', 'Terminator')])
 design.add_module(module)
 # interactions
@@ -117,5 +117,3 @@ plt.legend(['tetR', 'lacI', 'gamma'], frameon=False, fontsize=8, labelspacing=0.
 
 # Save the figure
 plt.show()
-#plt.savefig('repressilator_animate.png', dpi=300)
-#plt.savefig('repressilator_animate.pdf', transparent=True)

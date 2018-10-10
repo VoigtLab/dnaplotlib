@@ -421,7 +421,7 @@ def draw_all_interactions(ax, all_intercn, colors=None, user_specified_y_offset=
 # draw everything in design
 ###############################################################################
 
-def draw_design(ax, design):
-	m_frames = draw.get_module_frames(design.modules)
-	draw_all_modules(ax, m_frames, design.modules, user_params=user_customization)
-	draw_all_interactions(ax, design.interactions)		
+def draw_design(ax, des, user_params=None):
+	m_frames = get_module_frames(des.modules)
+	draw_all_modules(ax, m_frames, des.modules, user_params=user_params)
+	draw_all_interactions(ax, des.interactions)		

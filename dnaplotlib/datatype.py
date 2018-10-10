@@ -155,7 +155,6 @@ class Module:
             self.other_parts += part
         else: self.other_parts.append(part)
 
-
 class Design:
     """ Constructor to generate Module. 
 

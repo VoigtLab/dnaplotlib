@@ -416,4 +416,12 @@ def draw_all_interactions(ax, all_intercn, colors=None, user_specified_y_offset=
 			interaction_rd.draw_interaction(ax, colors[all_intercn.index(intercn)])
 		else:
 			interaction_rd.draw_interaction(ax)
-		
+
+###############################################################################
+# draw everything in design
+###############################################################################
+
+def draw_design(ax, design):
+	m_frames = draw.get_module_frames(design.modules)
+	draw_all_modules(ax, m_frames, design.modules, user_params=user_customization)
+	draw_all_interactions(ax, design.interactions)		

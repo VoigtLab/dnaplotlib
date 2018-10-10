@@ -16,26 +16,12 @@ STANDARD_INTERACTION = 'interaction_n'
 # Import  
 ###############################################################################
 
-# helper function for extract_full_modules
-# match functional component with component definition
-def fetch_cd_by_fc(cd_list, fc_id):
-	for comp in cd_list:
-		if comp.displayId == fc_id:
-			return comp
-
-# helper function for extract_full_modules
-# match module with module definition
-def fetch_module_def(doc, md_id):
-	for md in doc.moduleDefinitions:
-		if md.displayId == md_id:
-			return md
-
 # helper function to extract_full_modules
 # get parts from raw_module then add to module
-def add_parts_to_module(mod, raw_md, cd_list):
+def add_parts_to_module(mod, raw_md, d):
 	renderer = rd.GlyphRenderer()
 	for fc in raw_md.functionalComponents:
-		c = fetch_cd_by_fc(cd_list, fc.displayId)
+		c = d.componentDefinitions[fc.displayId]
 		
 		# create part
 		if len(c.roles) == 0: # when part is RNA, does not have so term 
@@ -45,9 +31,9 @@ def add_parts_to_module(mod, raw_md, cd_list):
 		
 		# add part to strand / non-strand
 		if c.types[0] == sbol.BIOPAX_DNA:
-   			mod.add_part(part)
+   			mod.add_strand_part(part)
    		else:
-   			mod.add_other_part(part)
+   			mod.add_non_strand_part(part)
    	return mod
 
 # recursive function for extracting module and components from design 
@@ -60,7 +46,7 @@ def extract_full_modules(doc, design, module_ids):
 			if md.displayId in module_ids:
 				module = dt.Module(design, md.displayId)
 				module_ids.remove(md.displayId)
-				module = add_parts_to_module(module, md, doc.componentDefinitions)
+				module = add_parts_to_module(module, md, doc)
 				
 				# add submodules
 				if len(md.modules) != 0:
@@ -193,17 +179,24 @@ def get_interaction_type(interxn):
 # receive doc and interaction, return functionalComponents and modules of parts involved in interaction
 def find_fcs_mds_of_interaction(doc, interxn):
 	if interxn.part_end is None:
-		find = [interxn.part_start.name]
+		find = [interxn.part_start.parent_module.name]
 	else: 
-		find = [interxn.part_start.name, interxn.part_end.name]
+		find = [interxn.part_start.parent_module.name, interxn.part_end.parent_module.name]
+	
+	for f in find:
+		md_list.append(doc.moduleDefinitions[f])
+		for md in doc.moduleDefinitions:
+			fc_list.append(md.functionalComponents[f])
+	return fc_list, md_list
+
 	fc_list, md_list = [], []
-	for md in doc.moduleDefinitions:
+	'''for md in doc.moduleDefinitions:
 		for fc in md.functionalComponents:
 			if fc.displayId in find:
 				index = find.index(fc.displayId)
 				md_list.insert(index, md)
 				fc_list.insert(index, fc)
-	return fc_list, md_list
+	return fc_list, md_list'''
 			
 # helper function for save_interactions
 # receive interaction, return roles of parts_start, parts_end
@@ -383,17 +376,12 @@ import_design = dt.import_design_from_file(module)
 design_imported = 
 design.print_design()'''
 
-design = dt.create_test_design8()
-'''doc = sbol.Document()
-doc.read('test_8.xml')
-design_import = dt.Design('design8')
-design_import.add_module(
-	extract_full_modules(doc, design_import, 
-		list(map(lambda m: m.displayId, doc.moduleDefinitions))))
-design_import.add_interaction(extract_interactions(doc, design_import.modules))
-design_import.print_design()'''
+#design = dt.create_test_design8()
+doc = sbol.Document()
+doc.read('test_5.xml')
+design = read_doc_into_design(doc)
 
-m_frames = draw.get_module_frames(design.modules)
+
 
 fig, ax = plt.subplots(1, figsize=(8,10))
 ax.set_xlim(XMIN, XMAX)
@@ -415,8 +403,7 @@ user_customization = [
 	}
 ]
 
-draw.draw_all_modules(ax, m_frames, design.modules, user_params=user_customization)
-draw.draw_all_interactions(ax, design.interactions)
+draw.draw_design(ax, design)
 
 '''document = sbol.Document()
 document.addNamespace('http://dnaplotlib.org#', 'dnaplotlib')

@@ -61,6 +61,7 @@ p3 = dt.Part(module, 'gamma_promoter', 'Promoter')
 cds3 = dt.Part(module, 'gamma', 'CDS')
 module.add_strand_part([p3, dt.Part(module, 'gamma_res', 'RibosomeEntrySite'),
 			cds3, dt.Part(module, 'gamma_terminator', 'Terminator')])
+
 design.add_module(module)
 # interactions
 design.add_interaction([
@@ -71,20 +72,20 @@ design.add_interaction([
 # rendering 
 m_frames = draw.get_module_frames(design.modules)
 ax1 = plt.subplot(gs[0])
-ax1.set_xlim(draw.XMIN/1.2, draw.XMAX)
-ax1.set_ylim(0, draw.YMAX)
+ax1.set_xlim(draw.XMIN/1.2, draw.XMAX/1.2)
+ax1.set_ylim(0, draw.YMAX/1.5)
 ax1.set_axis_off()
 
 # draw modules
 custom_rendering = [
     {'target': cds1.name,
-    'size': 1.5,
+    #'size': 1.5,
     'facecolor': TETR_COLOR},
     {'target': cds2.name,
-    'size': 1.5,
+    #'size': 1.5,
     'facecolor': LAC_COLOR},
     {'target': cds3.name,
-    'size': 1.5,
+    #'size': 1.5,
     'facecolor': GAMMA_COLOR},
     {'target': p3.name,
     'edgecolor': TETR_COLOR},
@@ -116,4 +117,5 @@ ax2.set_ylabel('Protein Concentration', fontsize=8, labelpad=2)
 plt.legend(['tetR', 'lacI', 'gamma'], frameon=False, fontsize=8, labelspacing=0.15, loc=(0.06,0.65))
 
 # Save the figure
+plt.savefig('demo.svg')
 plt.show()

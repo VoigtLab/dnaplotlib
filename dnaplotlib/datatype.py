@@ -143,7 +143,9 @@ class Module:
     def add_module(self, name):
         child = Module(self.design, name, parent=self)
         self.children.append(child)
-        return child
+    
+    def add_modules(self, modules):
+    	self.children += modules
 
     def add_strand_part(self, part):
         if self.part_list is None:
@@ -177,11 +179,10 @@ class Design:
     def rename_design(self, name):
         self.name = name
 
+    # note that this add a single supermodule containing every modules 
     def add_module(self, module):
         if type(module) != list:
             self.modules.append(module)
-        else:
-            self.modules += module
 
     def add_interaction(self, interaction):
         if type(interaction) != list:
@@ -284,8 +285,6 @@ def create_test_design1_1 ():
     module.add_part(part1_p)
     design.add_module(module)
 
-    interaction1 = Interaction()
-
 
 def create_test_design2 ():
     # You first create a design and need to give it a name   
@@ -369,19 +368,18 @@ def create_test_design3 ():
     module1 = Module(design, 'module1')
     module1a = module1.add_module('module1a')
     module1a_1 = module1a.add_module('module1a_1')
-    part1a_1_p = Part(module1a_1, '1a_1_p', 'Promoter')
+    part1a_1_p = Part(module1a_1, 'p1a_1_p', 'Promoter')
     module1a_1.add_strand_part( part1a_1_p )
-    module1a_1.add_strand_part( Part(module1a_1, '1a_1_c', 'CDS'))
-    module1a_1.add_strand_part( Part(module1a_1, '1a_1_t', 'Terminator'))
+    module1a_1.add_strand_part( Part(module1a_1, 'p1a_1_c', 'CDS'))
+    module1a_1.add_strand_part( Part(module1a_1, 'p1a_1_t', 'Terminator'))
 
     module2 = Module(design, 'module2')
-    part_2_p = Part(module2, '2p', 'Promoter')
+    part_2_p = Part(module2, 'p2p', 'Promoter')
     module2.add_strand_part(part_2_p)
 
     design.add_module( [module1, module2] )
 
-    interaction = Interaction('inhibition', part1a_1_p, part_2_p)
-    design.add_interaction(interaction)
+    design.add_interaction([Interaction('inhibition', part1a_1_p, part_2_p)])
 
     return design
 
@@ -394,15 +392,15 @@ def create_test_design3_1 ():
     module1 = Module(design, 'module1')
     module1a = module1.add_module('module1a')
     module1a_1 = module1a.add_module('module1a_1')
-    part1a_1_p = Part(module1a, '1a_1_p', 'Promoter')
-    part1a_1_c = Part(module1a, '1a_1_c', 'CDS')
+    part1a_1_p = Part(module1a, 'p1a_1_p', 'Promoter')
+    part1a_1_c = Part(module1a, 'p1a_1_c', 'CDS')
     module1a_1.add_strand_part( [part1a_1_p, part1a_1_c ])
-    module1a_1.add_strand_part( Part(module1a_1, '1a_1_t', 'Terminator'))
+    module1a_1.add_strand_part( Part(module1a_1, 'p1a_1_t', 'Terminator'))
 
     module1b = module1.add_module('module1b')
-    part1b_p = Part(module1b, '1b_p', 'Promoter')
-    part1b_i = Part(module1b, '1b_i', 'Insulator')
-    part1b_o = Part(module1b, '1b_o', 'OriginOfReplication')
+    part1b_p = Part(module1b, 'p1b_p', 'Promoter')
+    part1b_i = Part(module1b, 'p1b_i', 'Insulator')
+    part1b_o = Part(module1b, 'p1b_o', 'OriginOfReplication')
     module1b.add_strand_part([part1b_p, part1b_i, part1b_o])
 
     design.add_module( module1 )
@@ -661,10 +659,24 @@ def create_test_design7():
     
     module1.add_strand_part([part_1_p, part_1_c, part_1_t])   
     module1.add_non_strand_part(other_part_p) # non-dna onto other parts!
-    design.add_module(module1)
+
+    # module2
+    module2 = Module(design, 'module2')
+    other_part_2 = Part(module2, 'tnf', 'Macromolecule')
+    module2.add_non_strand_part(other_part_2)
+
+    # module 3
+    module3 = Module(design, 'SuperModule')
+    module3.add_modules([module1, module2])
+
+    design.add_module(module3)
+
 
     # create interaction
-    design.add_interaction(Interaction('inhibition', other_part_p, part_1_p))
+    design.add_interaction(
+    	[Interaction('process', part_1_c, other_part_p),
+    	Interaction('degradation', other_part_2)]
+    )
 
     return design
 

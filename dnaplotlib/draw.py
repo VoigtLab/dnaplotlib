@@ -314,7 +314,7 @@ def draw_all_modules(ax, m_frames, raw_modules, index=0, user_params=None):
 # Interaction Drawing Func
 ###############################################################################
 
-# helper function for draw interaction
+# helper function for draw interaction assuming one end part
 # draw interaction arrow body when y diff < than height limit 
 def get_3part_interaction_coord(start_frame, end_frame, y_ofset):
 	start_x = start_frame.origin[0] + start_frame.width / 2.
@@ -326,7 +326,7 @@ def get_3part_interaction_coord(start_frame, end_frame, y_ofset):
 	return [[start_x, start_y], [c1x, c1y], [c2x, c2y], [end_x, end_y]]
 	
 
-# helper function for draw_5part_interaction
+# helper function for draw_5part_interaction 
 # determine c2/c3x for different frame interaction 
 def _determine_5part_interaction_middle_x(startx, endx):
 	xintrn_spacer = SPACER
@@ -337,7 +337,7 @@ def _determine_5part_interaction_middle_x(startx, endx):
 	else:
 		return -xintrn_spacer - np.random.randint(INTERACTION_OFFSET_MIN, INTERACTION_OFFSET_MAX)
 
-# helper function for draw interaction
+# helper function for draw interaction assuming one end part
 # draw interaction arrow body when y diff >= height limit 
 def get_5part_interaction_coord(start_frame, end_frame, y_1_ofset, y_2_ofset):
 	start_x = start_frame.origin[0] + start_frame.width / 2.
@@ -390,22 +390,60 @@ def get_valid_offset(c_list, i_type, start_glyph, from_glyph, user_specified):
 
 	return y_offset, start_y, from_y, c_list 
 
+# return coordinate for intermodular frame 
+# True direction - top --> bottom / false: bottom --> top 
+def __get_im_coord(top_frame, bottom_frame, direction):
+	if direction == True:
+		start_x = top_frame.origin[0] + top_frame.width/2.
+		start_y = top_frame.origin[1] - INTERACTION_SPACER
+		end_x = bottom_frame.origin[0] + bottom_frame.width/2.
+		end_y = bottom_frame.origin[1] + bottom_frame.height + INTERACTION_SPACER
+
+	else: 
+		start_x = bottom_frame.origin[0] + bottom_frame.width/2.
+		start_y = bottom_frame.origin[1] + bottom_frame.height + INTERACTION_SPACER
+		end_x = top_frame.origin[1] + top_frame.width/2.
+		end_y = top_frame.origin[1] - INTERACTION_SPACER
+
+	return [[start_x, start_y], [end_x, end_y]]
+
+# helper function for get complex interaction coord
+# decide which one comes at the top and bottom 
+def get_intermodular_coord(start_frame, end_frame):
+	if start_frame.origin[1] > end_frame.origin[1]:
+		return __get_im_coord(start_frame, end_frame, True)
+	else:
+		return __get_im_coord(end_frame, start_frame, False)
+
+# return interaction coordinate distinguishing intermodular / intramodular
+def get_complex_interaction_coord(interaction, clist, user_specified_y_offset):
+	y_offset, start_y, from_y, clist = get_valid_offset(clist, interaction.type, interaction.part_start, interaction.part_end, user_specified_y_offset)
+	
+	# if intramodular interaction 
+	if interaction.part_start.parent_module.name != interaction.part_end.parent_module.name:
+		if abs(start_y - from_y) < HEIGHT:
+			coords = get_3part_interaction_coord(interaction.part_start.frame, interaction.part_end.frame, y_offset)
+		else:
+			coords = get_5part_interaction_coord(interaction.part_start.frame, interaction.part_end.frame, y_offset, y_offset)
+	
+	# intermodular interaction
+	else:
+		coords = get_intermodular_coord(interaction.part_start.frame, interaction.part_end.frame)
+
+	return coords, clist
+
 # function that draw one interaction 
 # (offset can be user specified or randomly generated)
 def draw_all_interactions(ax, all_intercn, colors=None, user_specified_y_offset=None):
 	coordlist = [] 
 	for intercn in all_intercn:
-		if intercn.type != 'degradation':
-			y_offset, start_y, from_y, coordlist = get_valid_offset(coordlist, intercn.type, intercn.part_start, intercn.part_end, user_specified_y_offset)
-			
-			# distinguish between 3 part / 5 part interaction - assume one element in ends
-			if abs(start_y - from_y) < HEIGHT:
-				coords = get_3part_interaction_coord(intercn.part_start.frame, intercn.part_end.frame, y_offset)
-			else:
-				coords = get_5part_interaction_coord(intercn.part_start.frame, intercn.part_end.frame, y_offset, y_offset)
-		else: 
+		# draw degradation interaction
+		if intercn.type == 'degradation':
 			y_offset, start_y, from_y, coordlist = get_valid_offset(coordlist, intercn.type, intercn.part_start, None, user_specified_y_offset)
 			coords = get_degradation_interaction_coord(intercn.part_start.frame, y_offset)
+
+		else: 
+			coords, coordlist = get_complex_interaction_coord(intercn, coordlist, user_specified_y_offset)
 
 		# update coords
 		interaction_rd = rd.InteractionRenderer(intercn.type, intercn.part_start, intercn.part_end, coords, INTERACTION_SPACER)

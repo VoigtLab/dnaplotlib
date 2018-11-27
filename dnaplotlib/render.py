@@ -524,7 +524,6 @@ class InteractionRenderer:
     """
 
     # glyph rendering const
-
 	ARROWHEAD_EDGE_FACTOR = 5.
 	DEGRADATION_CIRCLE_RADIUS_FACTOR = 7.
 
@@ -535,6 +534,7 @@ class InteractionRenderer:
 		self.coordinates = coordinates
 		self.interaction_space = space
 
+    # TODO - modify to account for arrow head direction
 	# helper function used to initialize arrowhead rendering func params 
 	def __initialize_ah_start_params(self):
 		start_x = self.coordinates[-1][0]

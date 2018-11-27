@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:dnaplotlib="http://dnaplotlib.org#"
+   xmlns:prov="http://www.w3.org/ns/prov#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:sbol="http://sbols.org/v2#"
+   xmlns:sys-bio="http://sys-bio.org#">
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/fnr/1.0.0">
+    <dnaplotlib:Height>5.000000</dnaplotlib:Height>
+    <dnaplotlib:Width>5.000000</dnaplotlib:Width>
+    <dnaplotlib:XCoordinate>-36.000000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>12.500000</dnaplotlib:YCoordinate>
+    <sbol:displayId>fnr</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/fnr"/>
+    <sbol:role rdf:resource="SBO:0000296"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/fnr_gene/1.0.0">
+    <dnaplotlib:Height>5.000000</dnaplotlib:Height>
+    <dnaplotlib:Width>5.000000</dnaplotlib:Width>
+    <dnaplotlib:XCoordinate>-36.000000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>6.166667</dnaplotlib:YCoordinate>
+    <sbol:displayId>fnr_gene</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/fnr_gene"/>
+    <sbol:role rdf:resource="SO:0000316"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/promoter1/1.0.0">
+    <dnaplotlib:Height>5.000000</dnaplotlib:Height>
+    <dnaplotlib:Width>5.000000</dnaplotlib:Width>
+    <dnaplotlib:XCoordinate>-42.500000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>6.166667</dnaplotlib:YCoordinate>
+    <sbol:displayId>promoter1</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/promoter1"/>
+    <sbol:role rdf:resource="SO:0000167"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/terminator/1.0.0">
+    <dnaplotlib:Height>5.000000</dnaplotlib:Height>
+    <dnaplotlib:Width>5.000000</dnaplotlib:Width>
+    <dnaplotlib:XCoordinate>-29.500000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>6.166667</dnaplotlib:YCoordinate>
+    <sbol:displayId>terminator</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/terminator"/>
+    <sbol:role rdf:resource="SO:0000141"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://examples.org/ComponentDefinition/tnf/1.0.0">
+    <dnaplotlib:Height>5.000000</dnaplotlib:Height>
+    <dnaplotlib:Width>5.000000</dnaplotlib:Width>
+    <dnaplotlib:XCoordinate>-9.500000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>12.500000</dnaplotlib:YCoordinate>
+    <sbol:displayId>tnf</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ComponentDefinition/tnf"/>
+    <sbol:role rdf:resource="SBO:0000296"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ModuleDefinition rdf:about="http://examples.org/ModuleDefinition/SuperModule/1.0.0">
+    <dnaplotlib:Height>23.500000</dnaplotlib:Height>
+    <dnaplotlib:Width>53.000000</dnaplotlib:Width>
+    <dnaplotlib:XCoordinate>-50.000000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>0.000000</dnaplotlib:YCoordinate>
+    <sbol:displayId>SuperModule</sbol:displayId>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://examples.org/ModuleDefinition/SuperModule/fnr/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/fnr/1.0.0"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#none"/>
+        <sbol:displayId>fnr</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/SuperModule/fnr"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:module>
+      <sbol:Module rdf:about="http://examples.org/ModuleDefinition/SuperModule/module1/1.0.0">
+        <sbol:definition rdf:resource="http://examples.org/ModuleDefinition/module1/1.0.0"/>
+        <sbol:displayId>module1</sbol:displayId>
+        <sbol:mapsTo>
+          <sbol:MapsTo rdf:about="http://examples.org/ModuleDefinition/SuperModule/module1/fnr/1.0.0">
+            <sbol:displayId>fnr</sbol:displayId>
+            <sbol:local rdf:resource="http://examples.org/ModuleDefinition/SuperModule/fnr/1.0.0"/>
+            <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/SuperModule/module1/fnr"/>
+            <sbol:refinement rdf:resource="http://sbols.org/v2#verifyIdentical"/>
+            <sbol:remote rdf:resource="http://examples.org/ModuleDefinition/module1/fnr/1.0.0"/>
+            <sbol:version>1.0.0</sbol:version>
+          </sbol:MapsTo>
+        </sbol:mapsTo>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/SuperModule/module1"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Module>
+    </sbol:module>
+    <sbol:module>
+      <sbol:Module rdf:about="http://examples.org/ModuleDefinition/SuperModule/module2/1.0.0">
+        <sbol:definition rdf:resource="http://examples.org/ModuleDefinition/module2/1.0.0"/>
+        <sbol:displayId>module2</sbol:displayId>
+        <sbol:mapsTo>
+          <sbol:MapsTo rdf:about="http://examples.org/ModuleDefinition/SuperModule/module2/fnr/1.0.0">
+            <sbol:displayId>fnr</sbol:displayId>
+            <sbol:local rdf:resource="http://examples.org/ModuleDefinition/SuperModule/fnr/1.0.0"/>
+            <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/SuperModule/module2/fnr"/>
+            <sbol:refinement rdf:resource="http://sbols.org/v2#verifyIdentical"/>
+            <sbol:remote rdf:resource="http://examples.org/ModuleDefinition/module2/fnr/1.0.0"/>
+            <sbol:version>1.0.0</sbol:version>
+          </sbol:MapsTo>
+        </sbol:mapsTo>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/SuperModule/module2"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Module>
+    </sbol:module>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/SuperModule"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ModuleDefinition>
+  <sbol:ModuleDefinition rdf:about="http://examples.org/ModuleDefinition/module1/1.0.0">
+    <dnaplotlib:Height>18.250000</dnaplotlib:Height>
+    <dnaplotlib:Width>27.000000</dnaplotlib:Width>
+    <dnaplotlib:XCoordinate>-47.000000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>2.250000</dnaplotlib:YCoordinate>
+    <sbol:displayId>module1</sbol:displayId>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://examples.org/ModuleDefinition/module1/fnr/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/fnr/1.0.0"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#out"/>
+        <sbol:displayId>fnr</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/module1/fnr"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://examples.org/ModuleDefinition/module1/fnr_gene/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/fnr_gene/1.0.0"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#none"/>
+        <sbol:displayId>fnr_gene</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/module1/fnr_gene"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://examples.org/ModuleDefinition/module1/promoter1/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/promoter1/1.0.0"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#none"/>
+        <sbol:displayId>promoter1</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/module1/promoter1"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://examples.org/ModuleDefinition/module1/terminator/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/terminator/1.0.0"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#none"/>
+        <sbol:displayId>terminator</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/module1/terminator"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/module1"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ModuleDefinition>
+  <sbol:ModuleDefinition rdf:about="http://examples.org/ModuleDefinition/module2/1.0.0">
+    <dnaplotlib:Height>18.250000</dnaplotlib:Height>
+    <dnaplotlib:Width>14.000000</dnaplotlib:Width>
+    <dnaplotlib:XCoordinate>-14.000000</dnaplotlib:XCoordinate>
+    <dnaplotlib:YCoordinate>2.250000</dnaplotlib:YCoordinate>
+    <sbol:displayId>module2</sbol:displayId>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://examples.org/ModuleDefinition/module2/fnr/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/fnr/1.0.0"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#in"/>
+        <sbol:displayId>fnr</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/module2/fnr"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://examples.org/ModuleDefinition/module2/tnf/1.0.0">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://examples.org/ComponentDefinition/tnf/1.0.0"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#none"/>
+        <sbol:displayId>tnf</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/module2/tnf"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://examples.org/ModuleDefinition/module2/interaction_0/1.0.0">
+        <sbol:displayId>interaction_0</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://examples.org/ModuleDefinition/module2/interaction_0/fnr/1.0.0">
+            <sbol:displayId>fnr</sbol:displayId>
+            <sbol:participant rdf:resource="http://examples.org/ModuleDefinition/module1/fnr/1.0.0"/>
+            <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/module2/interaction_0/fnr"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000459"/>
+            <sbol:version>1.0.0</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://examples.org/ModuleDefinition/module2/interaction_0/tnf/1.0.0">
+            <sbol:displayId>tnf</sbol:displayId>
+            <sbol:participant rdf:resource="http://examples.org/ModuleDefinition/module2/tnf/1.0.0"/>
+            <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/module2/interaction_0/tnf"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000643"/>
+            <sbol:version>1.0.0</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/module2/interaction_0"/>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000170"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://examples.org/ModuleDefinition/module2/interaction_1/1.0.0">
+        <sbol:displayId>interaction_1</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://examples.org/ModuleDefinition/module2/interaction_1/tnf/1.0.0">
+            <sbol:displayId>tnf</sbol:displayId>
+            <sbol:participant rdf:resource="http://examples.org/ModuleDefinition/module2/tnf/1.0.0"/>
+            <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/module2/interaction_1/tnf"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000010"/>
+            <sbol:version>1.0.0</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/module2/interaction_1"/>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000179"/>
+        <sbol:version>1.0.0</sbol:version>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:persistentIdentity rdf:resource="http://examples.org/ModuleDefinition/module2"/>
+    <sbol:version>1.0.0</sbol:version>
+  </sbol:ModuleDefinition>
+</rdf:RDF>

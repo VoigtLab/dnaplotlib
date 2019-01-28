@@ -396,11 +396,11 @@ def get_intermodular_coord(start_frame, end_frame):
 	end_x = float(end_frame.origin[0]) + end_frame.width/2.
 
 	if start_frame.origin[1] > end_frame.origin[1]:
-		start_y = float(start_frame.origin[1]) - INTERACTION_SPACER
-		end_y = float(end_frame.origin[1]) + INTERACTION_SPACER
+		start_y = float(start_frame.origin[1]) #- INTERACTION_SPACER
+		end_y = float(end_frame.origin[1]) + end_frame.height #+ INTERACTION_SPACER
 	else:
-		start_y = float(start_frame.origin[1]) + INTERACTION_SPACER
-		end_y = float(end_frame.origin[1]) - INTERACTION_SPACER
+		start_y = float(start_frame.origin[1]) + start_frame.height #+ INTERACTION_SPACER 
+		end_y = float(end_frame.origin[1]) #- INTERACTION_SPACER
 
 	return [[start_x, start_y], [end_x, end_y]]
 
@@ -443,7 +443,6 @@ def draw_all_interactions(ax, all_intercn, colors=None, user_specified_y_offset=
 		# filter out intermodular interaction bottom to up 
 		if (len(coords) == 2) and (coords[0][1] < coords[1][1]):
 			interaction_rd = rd.InteractionRenderer(intercn.type, intercn.part_start, intercn.part_end, coords, INTERACTION_SPACER, face_up=True)
-
 		else: 
 			interaction_rd = rd.InteractionRenderer(intercn.type, intercn.part_start, intercn.part_end, coords, INTERACTION_SPACER)
 		intercn.coordinates = coords 
@@ -452,6 +451,9 @@ def draw_all_interactions(ax, all_intercn, colors=None, user_specified_y_offset=
 		print(intercn.part_start.frame)
 		print('part end location')
 		print(intercn.part_end.frame)
+
+		print('interaction coordinates')
+		print(coords)
 
 		# draw interaction
 		if colors != None:

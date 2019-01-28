@@ -16,7 +16,7 @@ XMIN, XMAX = -60., 60.
 YMIN, YMAX = -60., 60.
 
 # get test design 
-design = dt.create_test_design7() # can be different test design (more examples in datatype.py)
+design = dt.create_test_design9() # can be different test design (more examples in datatype.py)
 m_frames = draw.get_module_frames(design.modules) # default setting
 
 # render test design
@@ -37,4 +37,4 @@ ie.save_design_into_doc(document, design)
 document.write('td_7.xml')'''
 
 # display canvas
-plt.show()
+#plt.show()

@@ -198,9 +198,9 @@ class Design:
         print(indent + '  Parts: ' + ','.join(names))
 
     def __print_other_parts(self, other_part_list, indent=''):
-    	if len(other_part_list) == 0: return
-    	names = []
-    	for op in other_part_list:
+        if len(other_part_list) == 0: return
+        names = []
+        for op in other_part_list:
             names.append(op.name)
         print(indent + '  Other parts: ' + ','.join(names))
 
@@ -694,6 +694,24 @@ def create_test_design7_1():
     design.add_module(module1)
 
     design.add_interaction(Interaction('inhibition', other_part_p, part_1_p))
+
+    return design
+
+# test rendering intermodular interaction 
+def create_test_design9():
+    design = Design('design9')
+    module1 = Module(design, 'module9')
+
+    part1p = Part(module1, 'p1a', 'Promoter')
+    part1m = Part(module1, 'op1m', 'Macromolecule')
+    module1.add_strand_part([part1p])
+    module1.add_non_strand_part(part1m)
+
+    design.add_module(module1)
+
+    design.add_interaction([
+        Interaction('process', part1p, part1m)
+    ])
 
     return design
 

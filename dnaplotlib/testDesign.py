@@ -37,4 +37,4 @@ ie.save_design_into_doc(document, design)
 document.write('td_7.xml')'''
 
 # display canvas
-#plt.show()
+plt.show()

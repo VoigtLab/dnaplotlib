@@ -440,19 +440,24 @@ def draw_all_interactions(ax, all_intercn, colors=None, user_specified_y_offset=
 		else: 
 			coords, coordlist = get_complex_interaction_coord(intercn, coordlist, user_specified_y_offset)
 
-		print('current part locations')
-		print(intercn.part_start.frame)
-		print(intercn.part_end.frame)
+		# filter out intermodular interaction bottom to up 
+		if (len(coords) == 2) and (coords[0][1] < coords[1][1]):
+			interaction_rd = rd.InteractionRenderer(intercn.type, intercn.part_start, intercn.part_end, coords, INTERACTION_SPACER, face_up=True)
 
-		# update coords
-		'''interaction_rd = rd.InteractionRenderer(intercn.type, intercn.part_start, intercn.part_end, coords, INTERACTION_SPACER)
+		else: 
+			interaction_rd = rd.InteractionRenderer(intercn.type, intercn.part_start, intercn.part_end, coords, INTERACTION_SPACER)
 		intercn.coordinates = coords 
+
+		print('parts start location')
+		print(intercn.part_start.frame)
+		print('part end location')
+		print(intercn.part_end.frame)
 
 		# draw interaction
 		if colors != None:
 			interaction_rd.draw_interaction(ax, colors[all_intercn.index(intercn)])
 		else:
-			interaction_rd.draw_interaction(ax)'''
+			interaction_rd.draw_interaction(ax)
 
 ###############################################################################
 # draw everything in design

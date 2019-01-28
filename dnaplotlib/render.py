@@ -527,20 +527,20 @@ class InteractionRenderer:
 	ARROWHEAD_EDGE_FACTOR = 5.
 	DEGRADATION_CIRCLE_RADIUS_FACTOR = 7.
 
-	def __init__(self, interaction_type, from_part, to_part, coordinates, space):
+	def __init__(self, interaction_type, from_part, to_part, coordinates, space, face_up = False):
 		self.type = interaction_type
 		self.part_start = from_part
 		self.part_end = to_part
 		self.coordinates = coordinates
 		self.interaction_space = space
+		self.face_up = face_up
 
-    # TODO - modify to account for arrow head direction
 	# helper function used to initialize arrowhead rendering func params 
 	def __initialize_ah_start_params(self):
 		start_x = self.coordinates[-1][0]
 		start_y = self.coordinates[-1][1]
 		edge = self.part_start.frame.width / self.ARROWHEAD_EDGE_FACTOR
-		
+
 		return start_x, start_y, edge
 
 	# private function for coordinate conversion
@@ -563,6 +563,8 @@ class InteractionRenderer:
 			(Path.LINETO, [start_x, start_y])
 		]
 		codes, verts = zip(*path_data)
+		if self.face_up:
+			verts = [(v[0], start_y - abs(start_y - v[1])) for v in verts]
 		patch = patches.PathPatch(Path(verts, codes), fill=True, edgecolor=color, facecolor='w', zorder=INTERACTION_FILL_ZSCORE)
 		ax.add_patch(patch)
 
@@ -582,6 +584,8 @@ class InteractionRenderer:
 			(Path.LINETO, [start_x, start_y])
 		]
 		codes, verts = zip(*path_data)
+		if self.face_up:
+			verts = [(v[0], start_y - abs(start_y - v[1])) for v in verts]
 		patch = patches.PathPatch(Path(verts, codes), fill=True, color=color)
 		ax.add_patch(patch)
 
@@ -595,9 +599,12 @@ class InteractionRenderer:
 			(Path.LINETO, [start_x, start_y])
 		]
 		codes, verts = zip(*path_data)
+		if self.face_up:
+			verts = [(v[0], start_y - abs(start_y - v[1])) for v in verts]
 		patch = patches.PathPatch(Path(verts, codes), fill=True, edgecolor=color, facecolor='w', zorder=INTERACTION_FILL_ZSCORE)
 		ax.add_patch(patch)
 
+	# note that degradation always face down 
 	def __draw_degradation_ah(self, ax, color):
 		# draw the same ah as process
 		self.__draw_process_ah(ax, color)
@@ -607,11 +614,13 @@ class InteractionRenderer:
 		start_y = self.coordinates[-1][1] - 1.5 * r
 		circle = patches.Circle((start_x, start_y), r, ec=color, fc='w')
 		ax.add_patch(circle)
+		
 		# draw circle bar 
 		path_data = [
 			(Path.MOVETO, [start_x + (r / np.sqrt(2)), start_y + (r / np.sqrt(2))]),
 			(Path.LINETO, [start_x - (r / np.sqrt(2)), start_y - (r / np.sqrt(2))])
 		]
+
 		codes, verts = zip(*path_data)
 		patch = patches.PathPatch(Path(verts, codes), color=color)
 		ax.add_patch(patch)

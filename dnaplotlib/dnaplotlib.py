@@ -1551,9 +1551,11 @@ def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	final_start = prev_end
 	y_lower = -1 * y_extent/2
 	y_upper = y_extent/2
+
+
 	if start > end:
 		start = prev_end+end_pad+x_extent+linewidth
-		end = prev_end+end_pad
+		end = prev_end+end_pad+linewidth
 		final_end = start+start_pad
 		color = color2
 	else:
@@ -1623,7 +1625,7 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	y_upper = y_extent/2
 	if start > end:
 		start = prev_end+end_pad+x_extent+linewidth
-		end = prev_end+end_pad
+		end = prev_end+end_pad+linewidth
 		final_end = start+start_pad
 		temp = color
 		color = color2

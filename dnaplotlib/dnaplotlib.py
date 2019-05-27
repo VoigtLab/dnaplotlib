@@ -1615,6 +1615,7 @@ def sbol_ncrna (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	final_start = prev_end
 	y_lower = -1 * y_extent/2
 	y_upper = y_extent/2
+    wavemult = 1
 	if start > end:
 		start = prev_end+end_pad+x_extent+linewidth
 		end = prev_end+end_pad+linewidth
@@ -1622,28 +1623,47 @@ def sbol_ncrna (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 		temp = color
 		color = color2
 		color2 = temp
+        wavemult = -1
 	else:
 		start = prev_end+start_pad+linewidth
 		end = start+x_extent
 		final_end = end+end_pad
-	# Draw the site
-	p1 = Polygon([(start, y_lower),
-		         (start, y_upper),
-		          (end,0)],
-		          edgecolor=(0,0,0), facecolor=color, linewidth=linewidth, zorder=11,
-		          path_effects=[Stroke(joinstyle="miter")])
 	midpoint = (end + start) / 2
-	hypotenuse = math.sqrt( (y_extent/2)**2 + (x_extent)**2 )
-	hypotenuse2 = hypotenuse / 2
-	cosineA = (y_extent/2) / hypotenuse
-	f = hypotenuse2 * cosineA
-	p2 = Polygon([(midpoint, -1*f),
-		          (midpoint, f),
-		          (end,0)],
-		          edgecolor=(0,0,0), facecolor=color2, linewidth=linewidth, zorder=12,
-		          path_effects=[Stroke(joinstyle="miter")])
-	ax.add_patch(p1)
-	ax.add_patch(p2)
+
+
+    wave_height = wavemult*y_extent
+    #wave_height = -y_extent
+    wave_start = start
+
+    wave_length = end-start
+    wave_bezier_amp = y_extent*0.2
+    wave_bezier_dx = wave_length/15.0#wave_bezier_amp*math.cos(math.pi/4)
+    wave_bezier_dy = wavemult*wave_bezier_amp*math.sin(math.pi/4)
+    wavy_rna_path = Path(vertices=[[wave_start,0],
+                                [wave_start, wave_height],
+                                [wave_start + wave_bezier_dx, wave_height+wave_bezier_dy],
+                                [wave_start + wave_bezier_dx*2, wave_height+wave_bezier_dy],
+                                [wave_start + wave_bezier_dx*3, wave_height],
+                                [wave_start + wave_bezier_dx*4, wave_height-wave_bezier_dy],
+                                [wave_start + wave_bezier_dx*5, wave_height-wave_bezier_dy],
+                                [wave_start + wave_bezier_dx*6, wave_height],
+                                [wave_start + wave_bezier_dx*7, wave_height+wave_bezier_dy],
+                                [wave_start + wave_bezier_dx*8, wave_height+wave_bezier_dy],
+                                [wave_start + wave_bezier_dx*9, wave_height],
+                                [wave_start + wave_bezier_dx*10, wave_height-wave_bezier_dy],
+                                [wave_start + wave_bezier_dx*11, wave_height-wave_bezier_dy],
+                                [wave_start + wave_bezier_dx*12, wave_height],
+                                [wave_start + wave_bezier_dx*13, wave_height+wave_bezier_dy],
+                                [wave_start + wave_bezier_dx*14, wave_height+wave_bezier_dy],
+                                [wave_end,wave_height],
+                                [wave_end,0],
+                                [wave_end,0]
+                               ],
+                              codes=[1, 2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,2,79])
+    wavy_rna = PathPatch(wavy_rna_path, linewidth=linewidth, edgecolor=(0,0,0),
+                facecolor=color, zorder=12, linestyle='-')
+
+	ax.add_patch(wavy_rna)
 	# Add a label if needed
 	if opts != None and 'label' in list(opts.keys()):
 		if final_start > final_end:

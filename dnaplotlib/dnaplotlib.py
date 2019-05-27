@@ -1620,9 +1620,6 @@ def sbol_ncrna (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 		start = prev_end+end_pad+x_extent+linewidth
 		end = prev_end+end_pad+linewidth
 		final_end = start+start_pad
-		temp = color
-		color = color2
-		color2 = temp
         wavemult = -1
 	else:
 		start = prev_end+start_pad+linewidth

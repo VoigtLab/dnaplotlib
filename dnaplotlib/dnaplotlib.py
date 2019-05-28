@@ -1631,7 +1631,7 @@ def sbol_ncrna (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	wave_height = wavemult*y_extent
 	#wave_height = -y_extent
 	wave_start = start
-
+	wave_end = end
 	wave_length = end-start
 	wave_bezier_amp = y_extent*0.2
 	wave_bezier_dx = wave_length/15.0#wave_bezier_amp*math.cos(math.pi/4)

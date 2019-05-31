@@ -57,6 +57,7 @@ from matplotlib.path import Path
 from matplotlib.lines import Line2D
 from matplotlib.patheffects import Stroke
 import matplotlib.patches as patches
+import numpy as np
 
 
 __author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>\n\
@@ -320,10 +321,10 @@ def sbol_aptamer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	# Default options
 	zorder_add = 0.0
 	color = (0,0,0)
-	start_pad = 2.0
-	end_pad = 2.0
-	y_extent = 10.0
-	x_extent = 8.0
+	start_pad = 0
+	end_pad = 0
+	y_extent = 12.0
+	x_extent = 12.0
 	# Reset defaults if provided
 	if opts != None:
 		if 'zorder_add' in list(opts.keys()):
@@ -348,20 +349,69 @@ def sbol_aptamer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	final_start = prev_end
 	if start > end:
 		dir_fac = -1.0
-		start = prev_end+end_pad+x_extent
-		end = prev_end+end_pad
-		final_end = start+start_pad
+		start = prev_end+end_pad
+		end = start+x_extent
+		final_end = end+start_pad
 	else:
 		start = prev_end+start_pad
 		end = start+x_extent
 		final_end = end+end_pad
-	# Draw the terminator symbol
-	l1 = Line2D([start+dir_fac*(x_extent/2.0),start+dir_fac*(x_extent/2.0)],[0,dir_fac*y_extent], linewidth=linewidth,
-				color=color, zorder=8+zorder_add)
-	l2 = Line2D([start,start+(dir_fac*x_extent)],[dir_fac*y_extent,dir_fac*y_extent],
-				linewidth=linewidth, color=color, zorder=9+zorder_add)
-	ax.add_line(l1)
-	ax.add_line(l2)
+	# Draw the aptamer symbol
+	aptavertex = np.array([[ 0.43387125, -0.01575775],
+                         [ 0.43387125,  0.27341225],
+                         [ 0.51520025,  0.29435275],
+                         [ 0.57536225,  0.3680035 ],
+                         [ 0.57536225,  0.45586   ],
+                         [ 0.57536225,  0.47506525],
+                         [ 0.572457,    0.49357225],
+                         [ 0.567137,    0.51102275],
+                         [ 0.73824675,  0.60982125],
+                         [ 0.751528,    0.60265225],
+                         [ 0.7664885,   0.59823775],
+                         [ 0.782656,    0.59823775],
+                         [ 0.8347625,   0.59823775],
+                         [ 0.8769835,   0.64045875],
+                         [ 0.8769835,   0.69256525],
+                         [ 0.8769835,   0.74465275],
+                         [ 0.8347625,   0.7868925 ],
+                         [ 0.782656,    0.7868925 ],
+                         [ 0.73053075,  0.7868925 ],
+                         [ 0.68832875,  0.74465275],
+                         [ 0.68832875,  0.69256525],
+                         [ 0.68832875,  0.69171525],
+                         [ 0.68855375,  0.69090525],
+                         [ 0.68859375,  0.69007525],
+                         [ 0.5176915,   0.5914275 ],
+                         [ 0.4837525,   0.6242535 ],
+                         [ 0.4376265,   0.644515  ],
+                         [ 0.386671,    0.644515  ],
+                         [ 0.28251475,  0.644515  ],
+                         [ 0.19801625,  0.56005425],
+                         [ 0.19801625,  0.45586025],
+                         [ 0.19801625,  0.367985  ],
+                         [ 0.25817825,  0.294353  ],
+                         [ 0.33950725,  0.2734125 ],
+                         [ 0.33950725, -0.0157575 ]])
+	aptacodes = [1, 2, 4, 4, 4, 4,\
+	             4, 4, 2, 4, 4, 4,\
+	             4, 4, 4, 4, 4, 4,\
+	             4, 4, 4, 4, 4, 4,\
+	             2, 4, 4, 4, 4, 4,\
+	             4, 4, 4, 4, 2]
+	aptavertexFlip = np.dot(aptavertex,np.array([[-1,0],[0,-1]]))+(1,0)
+	aptavertexScaled = aptavertex*(x_extent,y_extent)+(start,0)
+	aptavertexFlipScaled = aptavertexFlip*(x_extent,y_extent)+(start,0)
+	#aptapath = Path(aptavertex,aptacodes)
+	#aptapathFlip = Path(aptavertexFlip,aptacodes)
+
+	if(dir_fac==-1):
+		aptapath = Path(aptavertexFlipScaled,aptacodes)
+	else:
+		aptapath = Path(aptavertexScaled,aptacodes)
+	aptapatch = PathPatch(aptapath, linewidth=linewidth, edgecolor=color,
+	                facecolor=(1,1,1), zorder=8+zorder_add, linestyle='-')
+
+	ax.add_patch(aptapatch)
 	if opts != None and 'label' in list(opts.keys()):
 		if final_start > final_end:
 			write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
@@ -2772,6 +2822,7 @@ class DNARenderer:
 
 	# Standard part types
 	STD_PART_TYPES = ['Promoter',
+					  'Aptamer',
 					  'CDS',
 					  'Terminator',
 					  'RBS',
@@ -2843,6 +2894,7 @@ class DNARenderer:
 		"""
 		return {
 			'Promoter'           :sbol_promoter,
+			'Aptamer'            :sbol_aptamer,
 			'CDS'                :sbol_cds,
 			'Terminator'         :sbol_terminator,
 			'RBS'                :sbol_rbs,

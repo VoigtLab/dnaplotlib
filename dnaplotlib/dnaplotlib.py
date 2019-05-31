@@ -314,6 +314,64 @@ def sbol_terminator (ax, type, num, start, end, prev_end, scale, linewidth, opts
 		return prev_end, final_end
 
 
+def sbol_aptamer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
+	""" Built-in SBOL terminator renderer.
+	"""
+	# Default options
+	zorder_add = 0.0
+	color = (0,0,0)
+	start_pad = 2.0
+	end_pad = 2.0
+	y_extent = 10.0
+	x_extent = 8.0
+	# Reset defaults if provided
+	if opts != None:
+		if 'zorder_add' in list(opts.keys()):
+			zorder_add = opts['zorder_add']
+		if 'color' in list(opts.keys()):
+			color = opts['color']
+		if 'start_pad' in list(opts.keys()):
+			start_pad = opts['start_pad']
+		if 'end_pad' in list(opts.keys()):
+			end_pad = opts['end_pad']
+		if 'y_extent' in list(opts.keys()):
+			y_extent = opts['y_extent']
+		if 'x_extent' in list(opts.keys()):
+			x_extent = opts['x_extent']
+		if 'linewidth' in list(opts.keys()):
+			linewidth = opts['linewidth']
+		if 'scale' in list(opts.keys()):
+			scale = opts['scale']
+	# Check direction add start padding
+	dir_fac = 1.0
+	final_end = end
+	final_start = prev_end
+	if start > end:
+		dir_fac = -1.0
+		start = prev_end+end_pad+x_extent
+		end = prev_end+end_pad
+		final_end = start+start_pad
+	else:
+		start = prev_end+start_pad
+		end = start+x_extent
+		final_end = end+end_pad
+	# Draw the terminator symbol
+	l1 = Line2D([start+dir_fac*(x_extent/2.0),start+dir_fac*(x_extent/2.0)],[0,dir_fac*y_extent], linewidth=linewidth,
+				color=color, zorder=8+zorder_add)
+	l2 = Line2D([start,start+(dir_fac*x_extent)],[dir_fac*y_extent,dir_fac*y_extent],
+				linewidth=linewidth, color=color, zorder=9+zorder_add)
+	ax.add_line(l1)
+	ax.add_line(l2)
+	if opts != None and 'label' in list(opts.keys()):
+		if final_start > final_end:
+			write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
+		else:
+			write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
+	if final_start > final_end:
+		return prev_end, final_start
+	else:
+		return prev_end, final_end
+
 def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL ribosome binding site renderer.
 	"""
@@ -1936,6 +1994,79 @@ def sbol_origin (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	else:
 		return prev_end, final_end
 
+def sbol_origin_of_transfer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
+	""" Built-in SBOL origin of transfer renderer.
+	"""
+	# Default options
+	zorder_add = 0.0
+	color = (0,0,0)
+	start_pad = 2.0
+	end_pad = 2.0
+	x_extent = 10.0
+	y_extent = 10.0
+	linestyle = '-'
+	# Reset defaults if provided
+	if opts != None:
+		if 'zorder_add' in list(opts.keys()):
+			zorder_add = opts['zorder_add']
+		if 'color' in list(opts.keys()):
+			color = opts['color']
+		if 'start_pad' in list(opts.keys()):
+			start_pad = opts['start_pad']
+		if 'end_pad' in list(opts.keys()):
+			end_pad = opts['end_pad']
+		if 'x_extent' in list(opts.keys()):
+			x_extent = opts['x_extent']
+		if 'y_extent' in list(opts.keys()):
+			y_extent = opts['y_extent']
+		if 'linestyle' in list(opts.keys()):
+			linestyle = opts['linestyle']
+		if 'linewidth' in list(opts.keys()):
+			linewidth = opts['linewidth']
+		if 'scale' in list(opts.keys()):
+			scale = opts['scale']
+	# Check direction add start padding
+	final_end = end
+	final_start = prev_end
+
+	start = prev_end+start_pad
+	end = start+x_extent
+	final_end = end+end_pad
+	ori_center = (start+((end-start)/2.0),0)
+	extend = 1.2
+	arrowlongedge = x_extent*extend*.20
+	arrowshortedge = x_extent*extend*.09
+	arrowdest = (start+x_extent*extend,y_extent*extend/2)
+
+	c1 = Circle(ori_center, x_extent/2.0, linewidth=linewidth, edgecolor=color,
+				facecolor=(1,1,1), zorder=12+zorder_add)
+	#arrow = FancyArrow(ori_center[0],ori_center[1],\
+	#					x_extent/2*extend,y_extent/2*extend,width=linewidth)
+	arrowpath =Path(vertices=[ori_center,
+				  arrowdest,
+				  (arrowdest[0]-arrowlongedge,arrowdest[1]-arrowshortedge),
+				  (arrowdest[0]-arrowshortedge,arrowdest[1]-arrowlongedge),
+				  arrowdest,
+				  arrowdest,],
+						  codes=[1, 2,2,1,2,79])
+	p2 = PathPatch(arrowpath, linewidth=linewidth, edgecolor=color,
+				facecolor=(1,1,1), zorder=12+zorder_add, linestyle='-')
+
+
+	ax.add_patch(c1)
+	ax.add_patch(p2)
+
+	if opts != None and 'label' in list(opts.keys()):
+		if final_start > final_end:
+			write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
+		else:
+			write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
+
+	if final_start > final_end:
+		return prev_end, final_start
+	else:
+		return prev_end, final_end
+
 
 def sbol_operator (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL operator renderer.
@@ -1977,14 +2108,24 @@ def sbol_operator (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	final_end = end+end_pad
 
 	#white rectangle overlays backbone line
-	p1 = Polygon([(start, y_extent),
+
+	#p1 = Polygon([(start, y_extent),
+	#			  (start, -y_extent),
+	#			  (start+x_extent, -y_extent),
+	#			  (start+x_extent, y_extent)],
+	#			  edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=None, zorder=11+zorder_add,
+	#			  path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
+	operatorpath = Path(vertices=[(start, y_extent),
 				  (start, -y_extent),
 				  (start+x_extent, -y_extent),
-				  (start+x_extent, y_extent)],
-				  edgecolor=(0,0,0), facecolor=(1,1,1), linewidth=linewidth, zorder=11+zorder_add,
-				  path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
-
-	ax.add_patch(p1)
+				  (start+x_extent, y_extent),
+				  (start, y_extent),
+				  (start, y_extent)],
+						  codes=[1, 2,2,2,1,79])
+	p2 = PathPatch(operatorpath, linewidth=linewidth, edgecolor=color,
+				facecolor=(1,1,1), zorder=11+zorder_add, linestyle='-')
+	#ax.add_patch(p1)
+	ax.add_patch(p2)
 
 	if opts != None and 'label' in list(opts.keys()):
 		if final_start > final_end:
@@ -2655,6 +2796,7 @@ class DNARenderer:
 					  'StemTop',
 					  'Operator',
 					  'Origin',
+					  'OriginOfTransfer',
 					  'Insulator',
 					  '5Overhang',
 					  '3Overhang',
@@ -2725,6 +2867,7 @@ class DNARenderer:
 			'StemTop'            :sbol_stem_top,
 			'Operator'           :sbol_operator,
 			'Origin'             :sbol_origin,
+			'OriginOfTransfer'   :sbol_origin_of_transfer,
 			'Insulator'          :sbol_insulator,
 			'5Overhang'          :sbol_5_overhang,
 			'3Overhang'          :sbol_3_overhang,

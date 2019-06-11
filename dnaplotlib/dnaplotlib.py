@@ -1030,16 +1030,23 @@ def sbol_5_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
 		if 'scale' in list(opts.keys()):
 			scale = opts['scale']
 	# Check direction add start padding
-	final_end = end
+	fliptopbottom = 1
 	final_start = prev_end
+	spmod = 0
+	if(start > end):
+		start = prev_end+end_pad
+		end = start+x_extent
+		fliptopbottom = -1
+		final_end = end+start_pad
+		spmod = (x_extent/2.0)
+	else:
+		start = prev_end+start_pad
+		end = start+x_extent
+		final_end = end+end_pad
 
-	start = prev_end+start_pad
-	end = start+x_extent
-	final_end = end+end_pad
-
-	l_top    = Line2D([start,start+x_extent],[y_extent,y_extent],
+	l_top    = Line2D([start,start+x_extent],[y_extent*fliptopbottom,y_extent*fliptopbottom],
 				linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
-	l_bottom = Line2D([start+(x_extent/2.0),start+x_extent],[-1*y_extent,-1*y_extent],
+	l_bottom = Line2D([start+(x_extent/2.0)-spmod,start+x_extent-spmod],[-1*y_extent*fliptopbottom,-1*y_extent*fliptopbottom],
 				linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	#white rectangle overlays backbone line
 	p1 = Polygon([(start, y_extent),
@@ -1097,16 +1104,23 @@ def sbol_3_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
 		if 'scale' in list(opts.keys()):
 			scale = opts['scale']
 	# Check direction add start padding
-	final_end = end
+	fliptopbottom = 1
 	final_start = prev_end
+	spmod = 0
+	if(start > end):
+		start = prev_end+end_pad
+		end = start+x_extent
+		fliptopbottom = -1
+		final_end = end+start_pad
+		spmod = (x_extent/2.0)
+	else:
+		start = prev_end+start_pad
+		end = start+x_extent
+		final_end = end+end_pad
 
-	start = prev_end+start_pad
-	end = start+x_extent
-	final_end = end+end_pad
-
-	l_top    = Line2D([start,start+x_extent],[y_extent,y_extent],
+	l_top    = Line2D([start,start+x_extent],[y_extent*fliptopbottom,y_extent*fliptopbottom],
 				linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
-	l_bottom = Line2D([start,start+(x_extent/2.0)],[-1*y_extent,-1*y_extent],
+	l_bottom = Line2D([start+spmod,start+(x_extent/2.0)+spmod],[-1*y_extent*fliptopbottom,-1*y_extent*fliptopbottom],
 				linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	#white rectangle overlays backbone line
 	p1 = Polygon([(start, y_extent),
@@ -1664,12 +1678,14 @@ def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	if start > end:
 		start = prev_end+end_pad+x_extent+linewidth
 		end = prev_end+end_pad+linewidth
-		final_end = start+start_pad
+		final_end = start+start_pad+linewidth
+		#temp = color
 		color = color2
+		#color2 = temp
 	else:
 		start = prev_end+start_pad+linewidth
 		end = start+x_extent
-		final_end = end+end_pad
+		final_end = end+end_pad+linewidth
 	# Draw the site
 	p1 = Polygon([(start, y_lower),
 				  (start, y_upper),
@@ -1724,15 +1740,16 @@ def sbol_ncrna (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	y_lower = -1 * y_extent/2
 	y_upper = y_extent/2
 	wavemult = 1
+	#print("oogabooga")
 	if start > end:
 		start = prev_end+end_pad+x_extent+linewidth
 		end = prev_end+end_pad+linewidth
-		final_end = start+start_pad
+		final_end = start+start_pad+linewidth
 		wavemult = -1
 	else:
 		start = prev_end+start_pad+linewidth
 		end = start+x_extent
-		final_end = end+end_pad
+		final_end = end+end_pad+linewidth
 	midpoint = (end + start) / 2
 
 
@@ -1827,14 +1844,14 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	if start > end:
 		start = prev_end+end_pad+x_extent+linewidth
 		end = prev_end+end_pad+linewidth
-		final_end = start+start_pad
+		final_end = start+start_pad+linewidth
 		temp = color
 		color = color2
 		color2 = temp
 	else:
 		start = prev_end+start_pad+linewidth
 		end = start+x_extent
-		final_end = end+end_pad
+		final_end = end+end_pad+linewidth
 	# Draw the site
 	p1 = Polygon([(start, y_lower),
 				 (start, y_upper),
@@ -1898,8 +1915,8 @@ def sbol_restriction_site (ax, type, num, start, end, prev_end, scale, linewidth
 	final_end = end
 	final_start = prev_end
 
-	start = prev_end+start_pad
-	end = start + linewidth
+	start = prev_end+start_pad+linewidth/2
+	end = start + linewidth/2
 	final_end = end+end_pad
 
 	l1    = Line2D([start,start],[-y_extent,y_extent],

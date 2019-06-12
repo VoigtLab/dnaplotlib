@@ -1712,7 +1712,7 @@ def sbol_ncrna (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	color = (0,0,0)
 	start_pad = 0.0
 	end_pad = 0.0
-	x_extent = 6.0
+	x_extent = 30.0
 	y_extent = 6.0
 	linestyle = '-'
 	# Update default parameters if provided

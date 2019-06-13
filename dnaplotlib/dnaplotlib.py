@@ -1645,8 +1645,8 @@ def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	color2 = (0,0,0)
 	start_pad = 0.0
 	end_pad = 0.0
-	x_extent = 6.0
-	y_extent = 6.0
+	x_extent = 12.0
+	y_extent = 12.0
 	linestyle = '-'
 	# Update default parameters if provided
 	if opts != None:
@@ -1807,8 +1807,8 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	color2 = (0,0,0)
 	start_pad = 0.0
 	end_pad = 0.0
-	x_extent = 6.0
-	y_extent = 6.0
+	x_extent = 12.0
+	y_extent = 12.0
 	linestyle = '-'
 	# Update default parameters if provided
 	if opts != None:

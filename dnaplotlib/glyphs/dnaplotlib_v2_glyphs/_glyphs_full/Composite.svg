@@ -1,0 +1,95 @@
+<svg  version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:parametric="https://parametric-svg.github.io/v0.2"
+      width="100"
+      height="100"
+      glyphtype="Spacer"
+      soterms=""
+      parametric:defaults="baseline_offset=0;baseline_x=0;baseline_y=25;height=12;pad_after=2;pad_before=2;pad_bottom=3;pad_top=3;width=40">
+
+<rect class="bounding-box"
+      id="bounding-box"
+      parametric:x="{baseline_x}"
+      x="0"
+      parametric:y="{(baseline_y-baseline_offset)-pad_top}"
+      y="22"
+      parametric:width="{pad_before+width+pad_after}"
+      width="44"
+      parametric:height="{pad_top+height+pad_bottom}"
+      height="18"
+      style="fill:none;stroke:rgb(150,150,150);stroke-opacity:0.5;stroke-width:1pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:1.5,0.8"/>
+
+<path class="baseline"
+      id="baseline"
+      parametric:d="M{baseline_x},{baseline_y} L{pad_before+width+pad_after},{baseline_y}"
+      d="M0,25 L44,25"
+      parametric:y="{baseline_y}"
+      style="fill:none;stroke:black;stroke-width:1pt"/>
+
+<path class="filled-background-path" 
+      id="poly-a-site-background" 
+      parametric:d="M{(baseline_x+pad_before)+(width*0.15)},{(baseline_y-baseline_offset)} L{(baseline_x+pad_before)+(width*0.15)},{(baseline_y-baseline_offset)-pad_top} L{(baseline_x+pad_before)+width-(width*0.15)},{(baseline_y-baseline_offset)-pad_top} L{(baseline_x+pad_before)+width-(width*0.15)},{(baseline_y-baseline_offset)} L{(baseline_x+pad_before)+width},{(baseline_y-baseline_offset)+height} L{(baseline_x+pad_before)},{(baseline_y-baseline_offset)+height} Z}" 
+      d="M8.0,25 L8.0,22 L36.0,22 L36.0,25 L42,37 L2,37 Z}" 
+      style="fill:rgb(255,255,255);fill-rule:nonzero;stroke:none" />
+
+<path class="unfilled-path" 
+      id="composite-path" 
+      parametric:d="M{(baseline_x+pad_before)},{(baseline_y-baseline_offset)+height} L{(baseline_x+pad_before)+(width*0.37)},{(baseline_y-baseline_offset)+height}" 
+      d="M2,37 L16.8,37" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+<path class="unfilled-path" 
+      id="composite-path" 
+      parametric:d="M{(baseline_x+pad_before)+width-(width*0.37)},{(baseline_y-baseline_offset)+height} L{(baseline_x+pad_before)+width},{(baseline_y-baseline_offset)+height}" 
+      d="M27.2,37 L42,37" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+<path class="unfilled-path" 
+      id="composite-path" 
+      parametric:d="M{(baseline_x+pad_before)+((width*0.15)*(10.0/10.0))},{(baseline_y-baseline_offset)+height-(height*(10.0/10.0))} L{(baseline_x+pad_before)+((width*0.15)*(8.0/10.0))},{(baseline_y-baseline_offset)+height-(height*(8.0/10.0))}" 
+      d="M8.0,25.0 L6.800000000000001,27.4" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+<path class="unfilled-path" 
+      id="composite-path" 
+      parametric:d="M{(baseline_x+pad_before)+((width*0.15)*(6.0/10.0))},{(baseline_y-baseline_offset)+height-(height*(6.0/10.0))} L{(baseline_x+pad_before)+((width*0.15)*(4.0/10.0))},{(baseline_y-baseline_offset)+height-(height*(4.0/10.0))}" 
+      d="M5.6,29.8 L4.4,32.2" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+<path class="unfilled-path" 
+      id="composite-path" 
+      parametric:d="M{(baseline_x+pad_before)+((width*0.15)*(2.0/10.0))},{(baseline_y-baseline_offset)+height-(height*(2.0/10.0))} L{(baseline_x+pad_before)+((width*0.15)*(0.0/10.0))},{(baseline_y-baseline_offset)+height-(height*(0.0/10.0))}" 
+      d="M3.2,34.6 L2.0,37.0" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+<path class="unfilled-path" 
+      id="composite-path" 
+      parametric:d="M{(baseline_x+pad_before)+width-((width*0.15)*(10.0/10.0))},{(baseline_y-baseline_offset)+height-(height*(10.0/10.0))} L{(baseline_x+pad_before)+width-((width*0.15)*(8.0/10.0))},{(baseline_y-baseline_offset)+height-(height*(8.0/10.0))}" 
+      d="M36.0,25.0 L37.2,27.4" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+<path class="unfilled-path" 
+      id="composite-path" 
+      parametric:d="M{(baseline_x+pad_before)+width-((width*0.15)*(6.0/10.0))},{(baseline_y-baseline_offset)+height-(height*(6.0/10.0))} L{(baseline_x+pad_before)+width-((width*0.15)*(4.0/10.0))},{(baseline_y-baseline_offset)+height-(height*(4.0/10.0))}" 
+      d="M38.4,29.8 L39.6,32.2" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+<path class="unfilled-path" 
+      id="composite-path" 
+      parametric:d="M{(baseline_x+pad_before)+width-((width*0.15)*(2.0/10.0))},{(baseline_y-baseline_offset)+height-(height*(2.0/10.0))} L{(baseline_x+pad_before)+width-((width*0.15)*(0.0/10.0))},{(baseline_y-baseline_offset)+height-(height*(0.0/10.0))}" 
+      d="M40.8,34.6 L42.0,37.0" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+<path class="unfilled-path" 
+      id="composite-path" 
+      parametric:d="M{(baseline_x+pad_before)+(width*0.43)},{(baseline_y-baseline_offset)+height} L{(baseline_x+pad_before)+(width*0.47)},{(baseline_y-baseline_offset)+height}" 
+      d="M19.2,37 L20.799999999999997,37" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+<path class="unfilled-path" 
+      id="composite-path" 
+      parametric:d="M{(baseline_x+pad_before)+(width*0.53)},{(baseline_y-baseline_offset)+height} L{(baseline_x+pad_before)+(width*0.57)},{(baseline_y-baseline_offset)+height}" 
+      d="M23.200000000000003,37 L24.799999999999997,37" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+</svg>

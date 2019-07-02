@@ -357,10 +357,10 @@ class GlyphRenderer:
 			(Path.CURVE3, [start_x + 3 * edge, start_y - edge]),
 			(Path.CURVE3, [start_x + 4 * edge, start_y])
 		]
-	codes, verts = zip(*pathdata) 
-	patch = patches.PathPatch(Path(verts, codes), fc='w', ec='black', lw=self.RNA_LINEWIDTH)
-	ax.add_patch(patch)
-	return Frame(width=size, height=size, origin=position)
+    	codes, verts = zip(*pathdata) 
+    	patch = patches.PathPatch(Path(verts, codes), fc='w', ec='black', lw=self.RNA_LINEWIDTH)
+    	ax.add_patch(patch)
+    	return Frame(width=size, height=size, origin=position)
 
     # fuction to return either default colors / c from user_params 
     def get_custom_colors(self, user_params):
@@ -377,12 +377,11 @@ class GlyphRenderer:
 
     # main function for rendering glyph
     def draw_glyph(self, ax, glyph_type, position, size, angle=0, user_parameters=None):
-        
-    	if glyph_type == 'RNA':
+        if glyph_type == 'RNA':
     		# cannot rotate RNA
-    		rna_frame = self.__draw_RNA(ax, position, size, user_parameters)
-    		return {'identity': glyph_type, 'frame': rna_frame} 
-        
+            rna_frame = self.__draw_RNA(ax, position, size, user_parameters)
+            return {'identity': glyph_type, 'frame': rna_frame} 
+
         # convert svg path into matplotlib path 
         glyph = self.glyphs_library[glyph_type]
         merged_parameters = glyph['defaults'].copy()
@@ -534,6 +533,7 @@ class InteractionRenderer:
 		self.coordinates = coordinates
 		self.interaction_space = space
 		self.face_up = face_up
+		self.arrowhead_frame = None
 
 	# helper function used to initialize arrowhead rendering func params 
 	def __initialize_ah_start_params(self):
@@ -542,6 +542,17 @@ class InteractionRenderer:
 		edge = self.part_start.frame.width / self.ARROWHEAD_EDGE_FACTOR
 
 		return start_x, start_y, edge
+
+	# helper function to get arrowhead frame 
+	def __get_arrowhead_frame(self, verts):
+		x = [v[0] for v in verts]
+		y = [v[1] for v in verts]
+		min_x = min(x)
+		max_x = max(x)
+		min_y = min(y)
+		max_y = max(y)
+
+		self.arrowhead_frame = Frame(origin=[min_x, min_y], width=(max_x - min_x), height=(max_y - min_y))
 
 	# private function for coordinate conversion
 	def __convert_coord_into_scalar_0_1(self, start, end, axis):
@@ -567,12 +578,14 @@ class InteractionRenderer:
 			verts = [(v[0], start_y - abs(start_y - v[1])) for v in verts]
 		patch = patches.PathPatch(Path(verts, codes), fill=True, edgecolor=color, facecolor='w', zorder=INTERACTION_FILL_ZSCORE)
 		ax.add_patch(patch)
+		self.__get_arrowhead_frame(verts)
 
 	def __draw_inhibition_ah(self, ax, color):
 		x, y, edge = self.__initialize_ah_start_params()
 		x = self.part_end.frame.origin[0] + (self.part_end.frame.width / 4.)
 		start_x, end_x = self.__convert_coord_into_scalar_0_1(x, x + self.part_end.frame.width/2, ax.get_xlim())
 		ax.axhline(y=y, xmin=start_x, xmax=end_x, c=color)
+		self.__get_arrowhead_frame(verts)
 
 	def __draw_process_ah(self, ax, color):
 		start_x, start_y, edge = self.__initialize_ah_start_params()
@@ -588,6 +601,7 @@ class InteractionRenderer:
 			verts = [(v[0], start_y - abs(start_y - v[1])) for v in verts]
 		patch = patches.PathPatch(Path(verts, codes), fill=True, color=color)
 		ax.add_patch(patch)
+		self.__get_arrowhead_frame(verts)
 
 	def __draw_stimulation_ah(self, ax, color):
 		start_x, start_y, edge = self.__initialize_ah_start_params()
@@ -603,6 +617,7 @@ class InteractionRenderer:
 			verts = [(v[0], start_y - abs(start_y - v[1])) for v in verts]
 		patch = patches.PathPatch(Path(verts, codes), fill=True, edgecolor=color, facecolor='w', zorder=INTERACTION_FILL_ZSCORE)
 		ax.add_patch(patch)
+		self.__get_arrowhead_frame(verts)
 
 	# note that degradation always face down 
 	def __draw_degradation_ah(self, ax, color):
@@ -624,6 +639,7 @@ class InteractionRenderer:
 		codes, verts = zip(*path_data)
 		patch = patches.PathPatch(Path(verts, codes), color=color)
 		ax.add_patch(patch)
+		self.__get_arrowhead_frame(verts)
 
 	# helper function for draw_interaction 
 	# draw arrowhead and return default interaction color 
@@ -648,6 +664,7 @@ class InteractionRenderer:
 
 	# draw arrow body
 	def __draw_arrow_body(self, ax, color):
+		#if len(self.coordinates) > 2:
 		for i,coord in enumerate(self.coordinates):
 			if i == (len(self.coordinates) - 1): break # skip last one to prevent indexOutOfBound Error
 			curr_x, next_x = coord[0], self.coordinates[i + 1][0]
@@ -659,6 +676,13 @@ class InteractionRenderer:
 				ax.axvline(x=curr_x, ymin=cy, ymax=ny, c=color)
 			else: # horizontal
 				ax.axhline(y=curr_y, xmin=cx, xmax=nx, c=color)
+		'''else:
+			endpoint_x = self.arrowhead_frame.origin[0] + self.arrowhead_frame.width / 2.
+			endpoint_y = self.arrowhead_frame.origin[1] 
+			x = [self.coordinates[0][0], endpoint_x]
+			y = [self.coordinates[0][1], endpoint_y]
+			ax.plot(x, y, c=color)'''
+
 
 	# main rendering interaction function
 	def draw_interaction(self, ax, user_specified_color=None):

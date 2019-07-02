@@ -1,0 +1,16 @@
+<svg  version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:parametric="https://parametric-svg.github.io/v0.2"
+      width="100"
+      height="100"
+      glyphtype="CDS"
+      soterms="SO:0000316"
+      parametric:defaults="arrowbody_height=7.5;arrowbody_width=30;arrowhead_height=0;arrowhead_width=6;baseline_offset=0;baseline_x=0;baseline_y=25;pad_after=2;pad_before=2;pad_bottom=3;pad_top=3">
+
+<path class="filled-path" 
+      id="cds" 
+      parametric:d="M{baseline_x+pad_before},{(baseline_y-baseline_offset)} L{baseline_x+pad_before},{(baseline_y-baseline_offset)-arrowbody_height} L{baseline_x+pad_before+arrowbody_width-arrowhead_width},{(baseline_y-baseline_offset)-arrowbody_height} L{baseline_x+pad_before+arrowbody_width-arrowhead_width},{(baseline_y-baseline_offset)-arrowbody_height-arrowhead_height} L{baseline_x+pad_before+arrowbody_width},{(baseline_y-baseline_offset)} L{baseline_x+pad_before+arrowbody_width-arrowhead_width},{(baseline_y-baseline_offset)+arrowbody_height+arrowhead_height} L{baseline_x+pad_before+arrowbody_width-arrowhead_width},{(baseline_y-baseline_offset)+arrowbody_height} L{baseline_x+pad_before},{(baseline_y-baseline_offset)+arrowbody_height} Z" 
+      d="M2,25 L2,17.5 L26,17.5 L26,17.5 L32,25 L26,32.5 L26,32.5 L2,32.5 Z" 
+      style="fill:rgb(230,230,230);fill-rule:nonzero;stroke:black;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt" />
+
+</svg>

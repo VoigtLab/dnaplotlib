@@ -1,0 +1,28 @@
+<svg  version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:parametric="https://parametric-svg.github.io/v0.2"
+      width="100"
+      height="100"
+      glyphtype="Insulator"
+      soterms="SO:0000627"
+      parametric:defaults="baseline_offset=0;baseline_x=0;baseline_y=25;pad_after=2;pad_before=2;pad_bottom=3;pad_top=3;width=15">
+
+<path class="filled-background-path" 
+      id="insulator-background" 
+      parametric:d="M{baseline_x+pad_before},{(baseline_y-baseline_offset)-(width*0.5)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)-(width*0.5)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)+(width*0.5)} L{baseline_x+pad_before},{(baseline_y-baseline_offset)+(width*0.5)} Z}" 
+      d="M2,17.5 L17,17.5 L17,32.5 L2,32.5 Z}" 
+      style="fill:rgb(255,255,255);fill-rule:nonzero;stroke:none" />
+
+<path class="unfilled-path" 
+      id="insulator-outer-path" 
+      parametric:d="M{baseline_x+pad_before},{(baseline_y-baseline_offset)-(width*0.5)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)-(width*0.5)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)+(width*0.5)} L{baseline_x+pad_before},{(baseline_y-baseline_offset)+(width*0.5)} Z" 
+      d="M2,17.5 L17,17.5 L17,32.5 L2,32.5 Z" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+<path class="filled-path" 
+      id="insulator-inner-path" 
+      parametric:d="M{baseline_x+pad_before+(width*0.2)},{(baseline_y-baseline_offset)-(width*0.3)} L{baseline_x+pad_before+width-(width*0.2)},{(baseline_y-baseline_offset)-(width*0.3)} L{baseline_x+pad_before+width-(width*0.2)},{(baseline_y-baseline_offset)+(width*0.3)} L{baseline_x+pad_before+(width*0.2)},{(baseline_y-baseline_offset)+(width*0.3)} Z" 
+      d="M5.0,20.5 L14.0,20.5 L14.0,29.5 L5.0,29.5 Z" 
+      style="fill:rgb(230,230,230);fill-rule:nonzero;stroke:black;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt" />
+
+</svg>

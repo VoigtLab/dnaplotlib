@@ -703,8 +703,11 @@ def create_test_design9():
     module1 = Module(design, 'module9')
 
     part1p = Part(module1, 'p1a', 'Promoter')
+    part2p = Part(module1, 'p2a', 'Promoter')
+    part3p = Part(module1, 'p3a', 'Promoter')
+    part4p = Part(module1, 'p4a', 'Promoter')
     part1m = Part(module1, 'op1m', 'Macromolecule')
-    module1.add_strand_part([part1p])
+    module1.add_strand_part([part1p, part2p, part3p, part4p])
     module1.add_non_strand_part(part1m)
 
     design.add_module(module1)

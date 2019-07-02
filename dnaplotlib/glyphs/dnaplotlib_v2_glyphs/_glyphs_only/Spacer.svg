@@ -1,0 +1,28 @@
+<svg  version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:parametric="https://parametric-svg.github.io/v0.2"
+      width="100"
+      height="100"
+      glyphtype="Aptamer"
+      soterms="SO:0000031"
+      parametric:defaults="baseline_offset=0;baseline_x=0;baseline_y=25;pad_after=2;pad_before=2;pad_bottom=3;pad_top=3;width=10">
+
+<path class="filled-path" 
+      id="spacer-circle-path" 
+      parametric:d="M{baseline_x+pad_before},{(baseline_y-baseline_offset)} C{baseline_x+pad_before},{(baseline_y-baseline_offset)-(width/1.5)} {baseline_x+pad_before+width},{(baseline_y-baseline_offset)-(width/1.5)} {baseline_x+pad_before+width},{(baseline_y-baseline_offset)} C{baseline_x+pad_before+width},{(baseline_y-baseline_offset)+(width/1.5)} {baseline_x+pad_before},{(baseline_y-baseline_offset)+(width/1.5)} {baseline_x+pad_before},{(baseline_y-baseline_offset)} Z" 
+      d="M2,25 C2,18.333333333333332 12,18.333333333333332 12,25 C12,31.666666666666668 2,31.666666666666668 2,25 Z" 
+      style="fill:rgb(230,230,230);fill-rule:nonzero;stroke:black;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt" />
+
+<path class="unfilled-path" 
+      id="spacer-cross1-path" 
+      parametric:d="M{(baseline_x+pad_before)+((width*0.5)-((width*0.5)*-0.6669380616522619))},{(baseline_y-baseline_offset)-((width*0.5)*0.7451131604793488)} L{(baseline_x+pad_before)+(width*0.5)+((width*0.5)*-0.6669380616522619)},{(baseline_y-baseline_offset)+((width*0.5)*0.7451131604793488)}" 
+      d="M10.33469030826131,21.274434197603256 L3.6653096917386905,28.725565802396744" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+<path class="unfilled-path" 
+      id="spacer-cross2-path" 
+      parametric:d="M{(baseline_x+pad_before)+((width*0.5)-((width*0.5)*-0.6669380616522619))},{(baseline_y-baseline_offset)+((width*0.5)*0.7451131604793488)} L{(baseline_x+pad_before)+(width*0.5)+((width*0.5)*-0.6669380616522619)},{(baseline_y-baseline_offset)-((width*0.5)*0.7451131604793488)}" 
+      d="M10.33469030826131,28.725565802396744 L3.6653096917386905,21.274434197603256" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+</svg>

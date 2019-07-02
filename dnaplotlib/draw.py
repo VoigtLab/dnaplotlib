@@ -423,9 +423,15 @@ def get_complex_interaction_coord(interaction, clist, user_specified_y_offset):
 
 		# else part on strand & not on strand 
 		else:
-			coords = get_intermodular_coord(interaction.part_start.frame, interaction.part_end.frame)
-
+			if interaction.part_start.frame.origin[0] == interaction.part_end.frame.origin[0]:
+				coords = get_intermodular_coord(interaction.part_start.frame, interaction.part_end.frame)
+			else:
+				coords = get_3part_intermodular_coord(interaction.part_start.frame, interaction.part_end.frame)
 	return coords, clist
+
+
+def get_3part_intermodular_coord(start_frame, end_frame):
+	print("TODO: make 3 part function for intermodular coordinate")
 
 # function that draw one interaction 
 # (offset can be user specified or randomly generated)

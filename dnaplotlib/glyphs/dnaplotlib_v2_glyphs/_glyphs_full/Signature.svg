@@ -1,0 +1,53 @@
+<svg  version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:parametric="https://parametric-svg.github.io/v0.2"
+      width="100"
+      height="100"
+      glyphtype="Signature"
+      soterms="SO:0001978"
+      parametric:defaults="baseline_offset=0;baseline_x=0;baseline_y=25;height=10;pad_after=2;pad_before=2;pad_bottom=3;pad_top=3;width=20">
+
+<rect class="bounding-box"
+      id="bounding-box"
+      parametric:x="{baseline_x}"
+      x="0"
+      parametric:y="{(baseline_y-baseline_offset)-height-pad_top}"
+      y="12"
+      parametric:width="{pad_before+width+pad_after}"
+      width="24"
+      parametric:height="{pad_top+height+pad_bottom}"
+      height="16"
+      style="fill:none;stroke:rgb(150,150,150);stroke-opacity:0.5;stroke-width:1pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:1.5,0.8"/>
+
+<path class="baseline"
+      id="baseline"
+      parametric:d="M{baseline_x},{baseline_y} L{pad_before+width+pad_after},{baseline_y}"
+      d="M0,25 L24,25"
+      parametric:y="{baseline_y}"
+      style="fill:none;stroke:black;stroke-width:1pt"/>
+
+<path class="filled-path" 
+      id="signature-box-path" 
+      parametric:d="M{baseline_x+pad_before},{(baseline_y-baseline_offset)-height} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)-height} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)} {baseline_x+pad_before},{(baseline_y-baseline_offset)} Z" 
+      d="M2,15 L22,15 L22,25 2,25 Z" 
+      style="fill:rgb(230,230,230);fill-rule:nonzero;stroke:black;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt" />
+
+<path class="unfilled-path" 
+      id="signature-cross-path1" 
+      parametric:d="M{baseline_x+pad_before+(height*0.3)},{(baseline_y-baseline_offset)-height+(height*0.3)} L{baseline_x+pad_before+(height*0.7)},{(baseline_y-baseline_offset)-height+(height*0.7)}" 
+      d="M5.0,18.0 L9.0,22.0" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+<path class="unfilled-path" 
+      id="signature-cross-path2" 
+      parametric:d="M{baseline_x+pad_before+(height*0.3)},{(baseline_y-baseline_offset)-(height*0.3)} L{baseline_x+pad_before+(height*0.7)},{(baseline_y-baseline_offset)-(height*0.7)}" 
+      d="M5.0,22.0 L9.0,18.0" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+<path class="unfilled-path" 
+      id="signature-line-path" 
+      parametric:d="M{baseline_x+pad_before+height},{(baseline_y-baseline_offset)-(height*0.3)} L{baseline_x+pad_before+width-(height*0.3)},{(baseline_y-baseline_offset)-(height*0.3)}" 
+      d="M12,22.0 L19.0,22.0" 
+      style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
+
+</svg>

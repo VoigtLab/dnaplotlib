@@ -1,0 +1,35 @@
+<svg  version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:parametric="https://parametric-svg.github.io/v0.2"
+      width="100"
+      height="100"
+      glyphtype="Engineered Region"
+      soterms="SO:0000804"
+      parametric:defaults="baseline_offset=0;baseline_x=0;baseline_y=25;height=15;pad_after=2;pad_before=2;pad_bottom=3;pad_top=3;width=30">
+
+<rect class="bounding-box"
+      id="bounding-box"
+      parametric:x="{baseline_x}"
+      x="0"
+      parametric:y="{(baseline_y-baseline_offset)-(height*0.5)-pad_top}"
+      y="14.5"
+      parametric:width="{pad_before+width+pad_after}"
+      width="34"
+      parametric:height="{pad_top+height+pad_bottom}"
+      height="21"
+      style="fill:none;stroke:rgb(150,150,150);stroke-opacity:0.5;stroke-width:1pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:1.5,0.8"/>
+
+<path class="baseline"
+      id="baseline"
+      parametric:d="M{baseline_x},{baseline_y} L{pad_before+width+pad_after},{baseline_y}"
+      d="M0,25 L34,25"
+      parametric:y="{baseline_y}"
+      style="fill:none;stroke:black;stroke-width:1pt"/>
+
+<path class="filled-path" 
+      id="engineered-region-path" 
+      parametric:d="M{baseline_x+pad_before},{(baseline_y-baseline_offset)-(height*0.5)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)-(height*0.5)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)+(height*0.5)} {baseline_x+pad_before},{(baseline_y-baseline_offset)+(height*0.5)} Z" 
+      d="M2,17.5 L32,17.5 L32,32.5 2,32.5 Z" 
+      style="fill:rgb(230,230,230);fill-rule:nonzero;stroke:black;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt" />
+
+</svg>

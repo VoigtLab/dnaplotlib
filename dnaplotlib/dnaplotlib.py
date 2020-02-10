@@ -1842,17 +1842,19 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	y_lower = -1 * y_extent/2
 	y_upper = y_extent/2
 	if start > end:
+		#this is reverse
 		start = prev_end+end_pad+x_extent+linewidth
 		end = prev_end+end_pad+linewidth
 		final_end = start+start_pad+linewidth
-		temp = color
-		color = color2
-		color2 = temp
+		#temp = color
+		#color = color2
+		#color2 = temp
 	else:
 		start = prev_end+start_pad+linewidth
 		end = start+x_extent
 		final_end = end+end_pad+linewidth
 	# Draw the site
+	#big triangle (the whole thing)
 	p1 = Polygon([(start, y_lower),
 				 (start, y_upper),
 				  (end,0)],
@@ -1863,6 +1865,7 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	hypotenuse2 = hypotenuse / 2
 	cosineA = (y_extent/2) / hypotenuse
 	f = hypotenuse2 * cosineA
+	#small triangle
 	p2 = Polygon([(midpoint, -1*f),
 				  (midpoint, f),
 				  (end,0)],

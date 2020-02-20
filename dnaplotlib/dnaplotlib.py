@@ -2569,12 +2569,11 @@ class DNARenderer:
             if 'type' in keys:
                 if 'fwd' not in keys:
                     part['fwd'] = True
-                else:
-                    if part['fwd'] == False:
-                        start = part['start']
-                        end = part['end']
-                        part['end'] = start
-                        part['start'] = end
+                elif part['fwd'] == False and 'start' in keys and 'end' in keys:
+                    start = part['start']
+                    end = part['end']
+                    part['end'] = start
+                    part['start'] = end
                 if 'start' not in keys:
                     if part['fwd'] == True:
                         part['start'] = part_num

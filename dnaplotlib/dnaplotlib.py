@@ -2422,6 +2422,7 @@ def regulation (ax, type, num, from_part, to_part, scale, linewidth, arc_height_
 	base = startHeight;
 	indHeight = arrowhead_length
 	corr = 0*linewidth*2
+	
 
 	if to_part['fwd'] == False:
 		base = -1*startHeight
@@ -2449,7 +2450,7 @@ def regulation (ax, type, num, from_part, to_part, scale, linewidth, arc_height_
 		ax.add_line(line_away)
 		ax.add_line(line_across)
 		ax.add_line(line_toward)
-
+	print(corr)
 	if(type == 'Activation'):
 		ax.add_line(line_ind1)
 		ax.add_line(line_ind2)

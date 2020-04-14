@@ -57,6 +57,7 @@ from matplotlib.path import Path
 from matplotlib.lines import Line2D
 from matplotlib.patheffects import Stroke
 import matplotlib.patches as patches
+import numpy as np
 
 
 __author__  = 'Thomas E. Gorochowski <tom@chofski.co.uk>\n\
@@ -313,6 +314,113 @@ def sbol_terminator (ax, type, num, start, end, prev_end, scale, linewidth, opts
 	else:
 		return prev_end, final_end
 
+
+def sbol_aptamer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
+	""" Built-in SBOL terminator renderer.
+	"""
+	# Default options
+	zorder_add = 0.0
+	color = (0,0,0)
+	start_pad = 0
+	end_pad = 0
+	y_extent = 12.0
+	x_extent = 12.0
+	# Reset defaults if provided
+	if opts != None:
+		if 'zorder_add' in list(opts.keys()):
+			zorder_add = opts['zorder_add']
+		if 'color' in list(opts.keys()):
+			color = opts['color']
+		if 'start_pad' in list(opts.keys()):
+			start_pad = opts['start_pad']
+		if 'end_pad' in list(opts.keys()):
+			end_pad = opts['end_pad']
+		if 'y_extent' in list(opts.keys()):
+			y_extent = opts['y_extent']
+		if 'x_extent' in list(opts.keys()):
+			x_extent = opts['x_extent']
+		if 'linewidth' in list(opts.keys()):
+			linewidth = opts['linewidth']
+		if 'scale' in list(opts.keys()):
+			scale = opts['scale']
+	# Check direction add start padding
+	dir_fac = 1.0
+	final_end = end
+	final_start = prev_end
+	if start > end:
+		dir_fac = -1.0
+		start = prev_end+end_pad
+		end = start+x_extent
+		final_end = end+start_pad
+	else:
+		start = prev_end+start_pad
+		end = start+x_extent
+		final_end = end+end_pad
+	# Draw the aptamer symbol
+	aptavertex = np.array([[ 0.43387125, -0.01575775],
+                         [ 0.43387125,  0.27341225],
+                         [ 0.51520025,  0.29435275],
+                         [ 0.57536225,  0.3680035 ],
+                         [ 0.57536225,  0.45586   ],
+                         [ 0.57536225,  0.47506525],
+                         [ 0.572457,    0.49357225],
+                         [ 0.567137,    0.51102275],
+                         [ 0.73824675,  0.60982125],
+                         [ 0.751528,    0.60265225],
+                         [ 0.7664885,   0.59823775],
+                         [ 0.782656,    0.59823775],
+                         [ 0.8347625,   0.59823775],
+                         [ 0.8769835,   0.64045875],
+                         [ 0.8769835,   0.69256525],
+                         [ 0.8769835,   0.74465275],
+                         [ 0.8347625,   0.7868925 ],
+                         [ 0.782656,    0.7868925 ],
+                         [ 0.73053075,  0.7868925 ],
+                         [ 0.68832875,  0.74465275],
+                         [ 0.68832875,  0.69256525],
+                         [ 0.68832875,  0.69171525],
+                         [ 0.68855375,  0.69090525],
+                         [ 0.68859375,  0.69007525],
+                         [ 0.5176915,   0.5914275 ],
+                         [ 0.4837525,   0.6242535 ],
+                         [ 0.4376265,   0.644515  ],
+                         [ 0.386671,    0.644515  ],
+                         [ 0.28251475,  0.644515  ],
+                         [ 0.19801625,  0.56005425],
+                         [ 0.19801625,  0.45586025],
+                         [ 0.19801625,  0.367985  ],
+                         [ 0.25817825,  0.294353  ],
+                         [ 0.33950725,  0.2734125 ],
+                         [ 0.33950725, -0.0157575 ]])
+	aptacodes = [1, 2, 4, 4, 4, 4,\
+	             4, 4, 2, 4, 4, 4,\
+	             4, 4, 4, 4, 4, 4,\
+	             4, 4, 4, 4, 4, 4,\
+	             2, 4, 4, 4, 4, 4,\
+	             4, 4, 4, 4, 2]
+	aptavertexFlip = np.dot(aptavertex,np.array([[-1,0],[0,-1]]))+(1,0)
+	aptavertexScaled = aptavertex*(x_extent,y_extent)+(start,0)
+	aptavertexFlipScaled = aptavertexFlip*(x_extent,y_extent)+(start,0)
+	#aptapath = Path(aptavertex,aptacodes)
+	#aptapathFlip = Path(aptavertexFlip,aptacodes)
+
+	if(dir_fac==-1):
+		aptapath = Path(aptavertexFlipScaled,aptacodes)
+	else:
+		aptapath = Path(aptavertexScaled,aptacodes)
+	aptapatch = PathPatch(aptapath, linewidth=linewidth, edgecolor=color,
+	                facecolor=(1,1,1), zorder=8+zorder_add, linestyle='-')
+
+	ax.add_patch(aptapatch)
+	if opts != None and 'label' in list(opts.keys()):
+		if final_start > final_end:
+			write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
+		else:
+			write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
+	if final_start > final_end:
+		return prev_end, final_start
+	else:
+		return prev_end, final_end
 
 def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL ribosome binding site renderer.
@@ -922,16 +1030,23 @@ def sbol_5_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
 		if 'scale' in list(opts.keys()):
 			scale = opts['scale']
 	# Check direction add start padding
-	final_end = end
+	fliptopbottom = 1
 	final_start = prev_end
+	spmod = 0
+	if(start > end):
+		start = prev_end+end_pad
+		end = start+x_extent
+		fliptopbottom = -1
+		final_end = end+start_pad
+		spmod = (x_extent/2.0)
+	else:
+		start = prev_end+start_pad
+		end = start+x_extent
+		final_end = end+end_pad
 
-	start = prev_end+start_pad
-	end = start+x_extent
-	final_end = end+end_pad
-
-	l_top    = Line2D([start,start+x_extent],[y_extent,y_extent],
+	l_top    = Line2D([start,start+x_extent],[y_extent*fliptopbottom,y_extent*fliptopbottom],
 				linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
-	l_bottom = Line2D([start+(x_extent/2.0),start+x_extent],[-1*y_extent,-1*y_extent],
+	l_bottom = Line2D([start+(x_extent/2.0)-spmod,start+x_extent-spmod],[-1*y_extent*fliptopbottom,-1*y_extent*fliptopbottom],
 				linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	#white rectangle overlays backbone line
 	p1 = Polygon([(start, y_extent),
@@ -989,16 +1104,23 @@ def sbol_3_overhang (ax, type, num, start, end, prev_end, scale, linewidth, opts
 		if 'scale' in list(opts.keys()):
 			scale = opts['scale']
 	# Check direction add start padding
-	final_end = end
+	fliptopbottom = 1
 	final_start = prev_end
+	spmod = 0
+	if(start > end):
+		start = prev_end+end_pad
+		end = start+x_extent
+		fliptopbottom = -1
+		final_end = end+start_pad
+		spmod = (x_extent/2.0)
+	else:
+		start = prev_end+start_pad
+		end = start+x_extent
+		final_end = end+end_pad
 
-	start = prev_end+start_pad
-	end = start+x_extent
-	final_end = end+end_pad
-
-	l_top    = Line2D([start,start+x_extent],[y_extent,y_extent],
+	l_top    = Line2D([start,start+x_extent],[y_extent*fliptopbottom,y_extent*fliptopbottom],
 				linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
-	l_bottom = Line2D([start,start+(x_extent/2.0)],[-1*y_extent,-1*y_extent],
+	l_bottom = Line2D([start+spmod,start+(x_extent/2.0)+spmod],[-1*y_extent*fliptopbottom,-1*y_extent*fliptopbottom],
 				linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle=linestyle)
 	#white rectangle overlays backbone line
 	p1 = Polygon([(start, y_extent),
@@ -1523,8 +1645,8 @@ def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	color2 = (0,0,0)
 	start_pad = 0.0
 	end_pad = 0.0
-	x_extent = 6.0
-	y_extent = 6.0
+	x_extent = 12.0
+	y_extent = 12.0
 	linestyle = '-'
 	# Update default parameters if provided
 	if opts != None:
@@ -1556,12 +1678,14 @@ def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	if start > end:
 		start = prev_end+end_pad+x_extent+linewidth
 		end = prev_end+end_pad+linewidth
-		final_end = start+start_pad
+		final_end = start+start_pad+linewidth
+		#temp = color
 		color = color2
+		#color2 = temp
 	else:
 		start = prev_end+start_pad+linewidth
 		end = start+x_extent
-		final_end = end+end_pad
+		final_end = end+end_pad+linewidth
 	# Draw the site
 	p1 = Polygon([(start, y_lower),
 				  (start, y_upper),
@@ -1588,7 +1712,7 @@ def sbol_ncrna (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	color = (0,0,0)
 	start_pad = 0.0
 	end_pad = 0.0
-	x_extent = 6.0
+	x_extent = 30.0
 	y_extent = 6.0
 	linestyle = '-'
 	# Update default parameters if provided
@@ -1616,15 +1740,16 @@ def sbol_ncrna (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	y_lower = -1 * y_extent/2
 	y_upper = y_extent/2
 	wavemult = 1
+	#print("oogabooga")
 	if start > end:
 		start = prev_end+end_pad+x_extent+linewidth
 		end = prev_end+end_pad+linewidth
-		final_end = start+start_pad
+		final_end = start+start_pad+linewidth
 		wavemult = -1
 	else:
 		start = prev_end+start_pad+linewidth
 		end = start+x_extent
-		final_end = end+end_pad
+		final_end = end+end_pad+linewidth
 	midpoint = (end + start) / 2
 
 
@@ -1682,8 +1807,8 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	color2 = (0,0,0)
 	start_pad = 0.0
 	end_pad = 0.0
-	x_extent = 6.0
-	y_extent = 6.0
+	x_extent = 12.0
+	y_extent = 12.0
 	linestyle = '-'
 	# Update default parameters if provided
 	if opts != None:
@@ -1717,17 +1842,19 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	y_lower = -1 * y_extent/2
 	y_upper = y_extent/2
 	if start > end:
+		#this is reverse
 		start = prev_end+end_pad+x_extent+linewidth
 		end = prev_end+end_pad+linewidth
-		final_end = start+start_pad
-		temp = color
-		color = color2
-		color2 = temp
+		final_end = start+start_pad+linewidth
+		#temp = color
+		#color = color2
+		#color2 = temp
 	else:
 		start = prev_end+start_pad+linewidth
 		end = start+x_extent
-		final_end = end+end_pad
+		final_end = end+end_pad+linewidth
 	# Draw the site
+	#big triangle (the whole thing)
 	p1 = Polygon([(start, y_lower),
 				 (start, y_upper),
 				  (end,0)],
@@ -1738,6 +1865,7 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	hypotenuse2 = hypotenuse / 2
 	cosineA = (y_extent/2) / hypotenuse
 	f = hypotenuse2 * cosineA
+	#small triangle
 	p2 = Polygon([(midpoint, -1*f),
 				  (midpoint, f),
 				  (end,0)],
@@ -1790,8 +1918,8 @@ def sbol_restriction_site (ax, type, num, start, end, prev_end, scale, linewidth
 	final_end = end
 	final_start = prev_end
 
-	start = prev_end+start_pad
-	end = start + linewidth
+	start = prev_end+start_pad+linewidth/2
+	end = start + linewidth/2
 	final_end = end+end_pad
 
 	l1    = Line2D([start,start],[-y_extent,y_extent],
@@ -1936,6 +2064,79 @@ def sbol_origin (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	else:
 		return prev_end, final_end
 
+def sbol_origin_of_transfer (ax, type, num, start, end, prev_end, scale, linewidth, opts):
+	""" Built-in SBOL origin of transfer renderer.
+	"""
+	# Default options
+	zorder_add = 0.0
+	color = (0,0,0)
+	start_pad = 2.0
+	end_pad = 2.0
+	x_extent = 10.0
+	y_extent = 10.0
+	linestyle = '-'
+	# Reset defaults if provided
+	if opts != None:
+		if 'zorder_add' in list(opts.keys()):
+			zorder_add = opts['zorder_add']
+		if 'color' in list(opts.keys()):
+			color = opts['color']
+		if 'start_pad' in list(opts.keys()):
+			start_pad = opts['start_pad']
+		if 'end_pad' in list(opts.keys()):
+			end_pad = opts['end_pad']
+		if 'x_extent' in list(opts.keys()):
+			x_extent = opts['x_extent']
+		if 'y_extent' in list(opts.keys()):
+			y_extent = opts['y_extent']
+		if 'linestyle' in list(opts.keys()):
+			linestyle = opts['linestyle']
+		if 'linewidth' in list(opts.keys()):
+			linewidth = opts['linewidth']
+		if 'scale' in list(opts.keys()):
+			scale = opts['scale']
+	# Check direction add start padding
+	final_end = end
+	final_start = prev_end
+
+	start = prev_end+start_pad
+	end = start+x_extent
+	final_end = end+end_pad
+	ori_center = (start+((end-start)/2.0),0)
+	extend = 1.2
+	arrowlongedge = x_extent*extend*.20
+	arrowshortedge = x_extent*extend*.09
+	arrowdest = (start+x_extent*extend,y_extent*extend/2)
+
+	c1 = Circle(ori_center, x_extent/2.0, linewidth=linewidth, edgecolor=color,
+				facecolor=(1,1,1), zorder=12+zorder_add)
+	#arrow = FancyArrow(ori_center[0],ori_center[1],\
+	#					x_extent/2*extend,y_extent/2*extend,width=linewidth)
+	arrowpath =Path(vertices=[ori_center,
+				  arrowdest,
+				  (arrowdest[0]-arrowlongedge,arrowdest[1]-arrowshortedge),
+				  (arrowdest[0]-arrowshortedge,arrowdest[1]-arrowlongedge),
+				  arrowdest,
+				  arrowdest,],
+						  codes=[1, 2,2,1,2,79])
+	p2 = PathPatch(arrowpath, linewidth=linewidth, edgecolor=color,
+				facecolor=(1,1,1), zorder=12+zorder_add, linestyle='-')
+
+
+	ax.add_patch(c1)
+	ax.add_patch(p2)
+
+	if opts != None and 'label' in list(opts.keys()):
+		if final_start > final_end:
+			write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
+		else:
+			write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
+
+	if final_start > final_end:
+		return prev_end, final_start
+	else:
+		return prev_end, final_end
+
 
 def sbol_operator (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	""" Built-in SBOL operator renderer.
@@ -1977,14 +2178,24 @@ def sbol_operator (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	final_end = end+end_pad
 
 	#white rectangle overlays backbone line
-	p1 = Polygon([(start, y_extent),
+
+	#p1 = Polygon([(start, y_extent),
+	#			  (start, -y_extent),
+	#			  (start+x_extent, -y_extent),
+	#			  (start+x_extent, y_extent)],
+	#			  edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=None, zorder=11+zorder_add,
+	#			  path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
+	operatorpath = Path(vertices=[(start, y_extent),
 				  (start, -y_extent),
 				  (start+x_extent, -y_extent),
-				  (start+x_extent, y_extent)],
-				  edgecolor=(0,0,0), facecolor=(1,1,1), linewidth=linewidth, zorder=11+zorder_add,
-				  path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
-
-	ax.add_patch(p1)
+				  (start+x_extent, y_extent),
+				  (start, y_extent),
+				  (start, y_extent)],
+						  codes=[1, 2,2,2,1,79])
+	p2 = PathPatch(operatorpath, linewidth=linewidth, edgecolor=color,
+				facecolor=(1,1,1), zorder=11+zorder_add, linestyle='-')
+	#ax.add_patch(p1)
+	ax.add_patch(p2)
 
 	if opts != None and 'label' in list(opts.keys()):
 		if final_start > final_end:
@@ -2631,6 +2842,7 @@ class DNARenderer:
 
 	# Standard part types
 	STD_PART_TYPES = ['Promoter',
+					  'Aptamer',
 					  'CDS',
 					  'Terminator',
 					  'RBS',
@@ -2655,6 +2867,7 @@ class DNARenderer:
 					  'StemTop',
 					  'Operator',
 					  'Origin',
+					  'OriginOfTransfer',
 					  'Insulator',
 					  '5Overhang',
 					  '3Overhang',
@@ -2701,6 +2914,7 @@ class DNARenderer:
 		"""
 		return {
 			'Promoter'           :sbol_promoter,
+			'Aptamer'            :sbol_aptamer,
 			'CDS'                :sbol_cds,
 			'Terminator'         :sbol_terminator,
 			'RBS'                :sbol_rbs,
@@ -2725,6 +2939,7 @@ class DNARenderer:
 			'StemTop'            :sbol_stem_top,
 			'Operator'           :sbol_operator,
 			'Origin'             :sbol_origin,
+			'OriginOfTransfer'   :sbol_origin_of_transfer,
 			'Insulator'          :sbol_insulator,
 			'5Overhang'          :sbol_5_overhang,
 			'3Overhang'          :sbol_3_overhang,

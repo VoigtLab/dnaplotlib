@@ -2210,7 +2210,7 @@ def regulation (ax, type, num, from_part, to_part, scale, linewidth, arc_height_
 	top = arcHeight;
 	base = startHeight;
 	indHeight = arrowhead_length
-	corr = linewidth
+	corr = linewidth/2
 
 	if to_part['fwd'] == False:
 		base = -1*startHeight

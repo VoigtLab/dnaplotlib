@@ -1680,7 +1680,7 @@ def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, op
 		end = prev_end+end_pad+linewidth
 		final_end = start+start_pad+linewidth
 		#temp = color
-		color = color2
+		#color = color2
 		#color2 = temp
 	else:
 		start = prev_end+start_pad+linewidth

@@ -52,7 +52,7 @@ from operator import itemgetter
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from matplotlib.patches import Polygon, Ellipse, Wedge, Circle, PathPatch
+from matplotlib.patches import Polygon, Ellipse, Wedge, Circle, PathPatch, FancyBboxPatch
 from matplotlib.path import Path
 from matplotlib.lines import Line2D
 from matplotlib.patheffects import Stroke
@@ -2969,7 +2969,7 @@ class DNARenderer:
 			'Activation' :induce,
 			'Connection' :connect}
 
-	def renderDNA (self, ax, parts, part_renderers, regs=None, reg_renderers=None, plot_backbone=True):
+	def renderDNA (self, ax, parts, part_renderers, regs=None, reg_renderers=None, plot_backbone=True,circular=False):
 		""" Render the parts on the DNA and regulation.
 
 		Parameters
@@ -3222,9 +3222,22 @@ class DNARenderer:
 				reg_num += 1
 		# Plot the backbone (z=1)
 		if plot_backbone == True:
-			l1 = Line2D([first_start-self.backbone_pad_left,prev_end+self.backbone_pad_right],[0,0],
-						linewidth=self.linewidth, color=self.linecolor, zorder=10)
-			ax.add_line(l1)
+			if(circular):
+				circ_start = first_start-self.backbone_pad_left
+				circ_end = prev_end+self.backbone_pad_right
+				vheight = 5 #this is the height of the oval.
+				curves = (circ_end-circ_start)*.1 #curves are 5% of the length, lengthwise
+				plasmid = FancyBboxPatch((circ_start-curves, -curves*2), \
+									(circ_end-circ_start)+curves*2, curves*2,\
+						fc="none",ec=self.linecolor, linewidth=self.linewidth, \
+						boxstyle='round,pad=0,rounding_size={}'.format(curves), \
+						joinstyle="round", capstyle='round',mutation_aspect=1, zorder=5)
+				ax.add_patch(plasmid)
+			else:
+				l1 = Line2D([first_start-self.backbone_pad_left,prev_end+self.backbone_pad_right],[0,0],
+						linewidth=self.linewidth, color=self.linecolor, zorder=5)
+			
+				ax.add_line(l1)
 		return first_start, prev_end
 
 	def annotate (self, ax, part_renderers, part, annotate_zorder=1000):

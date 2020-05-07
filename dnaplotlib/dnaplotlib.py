@@ -2969,7 +2969,7 @@ class DNARenderer:
 			'Activation' :induce,
 			'Connection' :connect}
 
-	def renderDNA (self, ax, parts, part_renderers, regs=None, reg_renderers=None, plot_backbone=True,circular=False):
+	def renderDNA (self, ax, parts, part_renderers, regs=None, reg_renderers=None, plot_backbone=True,circular=False,circle_vheight=12):
 		""" Render the parts on the DNA and regulation.
 
 		Parameters
@@ -3225,14 +3225,16 @@ class DNARenderer:
 			if(circular):
 				circ_start = first_start-self.backbone_pad_left
 				circ_end = prev_end+self.backbone_pad_right
-				vheight = 5 #this is the height of the oval.
+				circle_vheight #this is the height of the oval.
 				curves = (circ_end-circ_start)*.1 #curves are 5% of the length, lengthwise
-				plasmid = FancyBboxPatch((circ_start-curves, -curves*2), \
-									(circ_end-circ_start)+curves*2, curves*2,\
+				plasmid = FancyBboxPatch((circ_start-circle_vheight/2, -circle_vheight), \
+									(circ_end-circ_start)+circle_vheight, circle_vheight,\
 						fc="none",ec=self.linecolor, linewidth=self.linewidth, \
-						boxstyle='round,pad=0,rounding_size={}'.format(curves), \
+						boxstyle='round,pad=0,rounding_size={}'.format(circle_vheight/2), \
 						joinstyle="round", capstyle='round',mutation_aspect=1, zorder=5)
 				ax.add_patch(plasmid)
+				first_start = first_start-circle_vheight/2
+				prev_end = prev_end+circle_vheight/2
 			else:
 				l1 = Line2D([first_start-self.backbone_pad_left,prev_end+self.backbone_pad_right],[0,0],
 						linewidth=self.linewidth, color=self.linecolor, zorder=5)

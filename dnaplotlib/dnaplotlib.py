@@ -217,8 +217,8 @@ def sbol_cds (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 			linewidth = opts['linewidth']
 		if 'scale' in list(opts.keys()):
 			scale = opts['scale']
-		if 'edge_color' in list(opts.keys()):
-			edgecolor = opts['edge_color']
+		if 'edgecolor' in list(opts.keys()):
+			edgecolor = opts['edgecolor']
 
 	# Check direction add start padding
 	dir_fac = 1.0
@@ -448,8 +448,8 @@ def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 			linewidth = opts['linewidth']
 		if 'scale' in list(opts.keys()):
 			scale = opts['scale']
-		if 'edge_color' in list(opts.keys()):
-			edgecolor = opts['edge_color']
+		if 'edgecolor' in list(opts.keys()):
+			edgecolor = opts['edgecolor']
 	# Check direction add start padding
 	dir_fac = 1.0
 	final_end = end
@@ -499,8 +499,8 @@ def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	x_extent = 5.0
 	y_extent = 10.0
 	linestyle = '-'
-	linetype  = "";
-	shapetype = "";
+	linetype  = ""
+	shapetype = ""
 	if(type == "Ribozyme"):
 		linetype = 'dash'
 		headgroup = 'O'
@@ -1648,6 +1648,7 @@ def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	x_extent = 12.0
 	y_extent = 12.0
 	linestyle = '-'
+	edgecolor = (0,0,0)
 	# Update default parameters if provided
 	if opts != None:
 		if 'start_pad' in list(opts.keys()):
@@ -1668,6 +1669,8 @@ def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, op
 			color = opts['color']
 		if 'color2' in list(opts.keys()):
 			color2 = opts['color2']
+		if 'edgecolor' in list(opts.keys()):
+			edgecolor = opts['edgecolor']
 	# Check direction add start padding
 	final_end = end
 	final_start = prev_end
@@ -1690,7 +1693,7 @@ def sbol_recombinase1 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	p1 = Polygon([(start, y_lower),
 				  (start, y_upper),
 				  (end,0)],
-				  edgecolor=(0,0,0), facecolor=color, linewidth=linewidth, zorder=11,
+				  edgecolor=edgecolor, facecolor=color, linewidth=linewidth, zorder=11,
 				  path_effects=[Stroke(joinstyle="miter")])
 	ax.add_patch(p1)
 	# Add a label if needed
@@ -1715,6 +1718,7 @@ def sbol_ncrna (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	x_extent = 30.0
 	y_extent = 6.0
 	linestyle = '-'
+	edgecolor = (0,0,0)
 	# Update default parameters if provided
 	if opts != None:
 		if 'start_pad' in list(opts.keys()):
@@ -1733,6 +1737,8 @@ def sbol_ncrna (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 			scale = opts['scale']
 		if 'color' in list(opts.keys()):
 			color = opts['color']
+		if 'edgecolor' in list(opts.keys()):
+			edgecolor = opts['edgecolor']
 	# Check direction add start padding
 
 	final_end = end
@@ -1782,7 +1788,7 @@ def sbol_ncrna (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 								[wave_end,0]
 							   ],
 							  codes=[1, 2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,2,79])
-	wavy_rna = PathPatch(wavy_rna_path, linewidth=linewidth, edgecolor=(0,0,0),
+	wavy_rna = PathPatch(wavy_rna_path, linewidth=linewidth, edgecolor=edgecolor,
 				facecolor=color, zorder=12, linestyle='-')
 
 	ax.add_patch(wavy_rna)
@@ -1810,6 +1816,7 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	x_extent = 12.0
 	y_extent = 12.0
 	linestyle = '-'
+	edgecolor = (0,0,0)
 	# Update default parameters if provided
 	if opts != None:
 		if 'start_pad' in list(opts.keys()):
@@ -1836,6 +1843,8 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 				g2 = float(color[1]) / 2
 				b2 = float(color[2]) / 2
 				color2 = (r2,g2,b2)
+		if 'edgecolor' in list(opts.keys()):
+			edgecolor = opts['edgecolor']
 	# Check direction add start padding
 	final_end = end
 	final_start = prev_end
@@ -1858,7 +1867,7 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	p1 = Polygon([(start, y_lower),
 				 (start, y_upper),
 				  (end,0)],
-				  edgecolor=(0,0,0), facecolor=color, linewidth=linewidth, zorder=11,
+				  edgecolor=edgecolor, facecolor=color, linewidth=linewidth, zorder=11,
 				  path_effects=[Stroke(joinstyle="miter")])
 	midpoint = (end + start) / 2
 	hypotenuse = math.sqrt( (y_extent/2)**2 + (x_extent)**2 )
@@ -1869,7 +1878,7 @@ def sbol_recombinase2 (ax, type, num, start, end, prev_end, scale, linewidth, op
 	p2 = Polygon([(midpoint, -1*f),
 				  (midpoint, f),
 				  (end,0)],
-				  edgecolor=(0,0,0), facecolor=color2, linewidth=linewidth, zorder=12,
+				  edgecolor=edgecolor, facecolor=color2, linewidth=linewidth, zorder=12,
 				  path_effects=[Stroke(joinstyle="miter")])
 	ax.add_patch(p1)
 	ax.add_patch(p2)
@@ -2220,6 +2229,7 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
 	x_extent = 8.0
 	y_extent = 4.0
 	linestyle = '-'
+	edgecolor = (0,0,0)
 	# Reset defaults if provided
 	if opts != None:
 		if 'zorder_add' in list(opts.keys()):
@@ -2240,6 +2250,8 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
 			linewidth = opts['linewidth']
 		if 'scale' in list(opts.keys()):
 			scale = opts['scale']
+		if 'edgecolor' in list(opts.keys()):
+			edgecolor = opts['edgecolor']
 
 	# Check direction add start padding
 	final_end = end
@@ -2253,7 +2265,7 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
 				  (start, -y_extent),
 				  (start+x_extent, -y_extent),
 				  (start+x_extent, y_extent)],
-				  edgecolor=(0,0,0), facecolor=(1,1,1), linewidth=linewidth, zorder=11+zorder_add,
+				  edgecolor=edgecolor, facecolor=(1,1,1), linewidth=linewidth, zorder=11+zorder_add,
 				  path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 
 	bits = 5.0
@@ -2266,7 +2278,7 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
 				  (x_inset_start, -y_extent+gap_size),
 				  (x_inset_end, -y_extent+gap_size),
 				  (x_inset_end,  y_extent-gap_size)],
-				  edgecolor=(0,0,0), facecolor=(1,1,1), linewidth=linewidth, zorder=12+zorder_add,
+				  edgecolor=edgecolor, facecolor=(1,1,1), linewidth=linewidth, zorder=12+zorder_add,
 				  path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
 
 	ax.add_patch(p1)

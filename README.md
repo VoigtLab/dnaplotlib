@@ -15,7 +15,7 @@ The DNAplotlib library is contained within the `dnaplotlib.py` file in the `lib`
 We provide an extensive gallery of use cases for DNAplotlib in the `gallery` directory. Click on a thumbnail below to go directly to the example code:
 
 ### Genetic Designs and Annotation
-<a href="gallery/all_parts"><img src="gallery/all_parts/actually_all_parts.png" height="160px"/></a>
+<a href="gallery/all_parts"><img src="gallery/all_parts/actually_all_parts.png" height="320px"/></a>
 <a href="gallery/xnor_truthtable"><img src="gallery/xnor_truthtable/xnor_truthtable.png" height="160px"/></a>
 <a href="gallery/scatter_annotate"><img src="gallery/scatter_annotate/scatter_annotate.png" height="160px"/></a>
 <a href="gallery/offset_features"><img src="gallery/offset_features/offset_features_y_offset.png" height="80px"/></a>

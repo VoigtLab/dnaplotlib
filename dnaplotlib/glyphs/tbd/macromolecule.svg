@@ -1,9 +1,0 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="Macromolecule" soterms="SBO:0000296" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:18; otherSize:5">
-
-<path class="baseline" style="opacity:1; fill:#cccccc; fill-opacity:1; stroke:#b3b3b3; stroke-width:0.49999994; stroke-dasharray:0.99999988, 0.49999994; stroke-dashoffset:0; stroke-opacity:1" d="m -0.10593219,22.5 45.23304619,0" id="path47" parametric:d="m {height},0"></path>
-
-<path class="two-circles" d="m 22.91113,11.713864 a 9.5129835,9.5129835 0 0 0 -9.513671,9.513672 9.5129835,9.5129835 0 0 0 1.5625,5.210937 3.5205528,3.5205528 0 0 0 -2.384766,3.328126 3.5205528,3.5205528 0 0 0 3.519531,3.519531 3.5205528,3.5205528 0 0 0 3.501953,-3.154297 9.5129835,9.5129835 0 0 0 3.314453,0.607422 9.5129835,9.5129835 0 0 0 9.513672,-9.511719 9.5129835,9.5129835 0 0 0 -9.513672,-9.513672 z" id="path10" style="fill:none; stroke:#000000; stroke-width:3; stroke-linecap:round; stroke-linejoin:round" parametric:d="m 230 80 a 45 45, 0, 1, 0, 275 125 l 275 80 Z"></path>
-
-<rect class="bounding-box" style="opacity:0.5;fill:none;fill-opacity:1;stroke:#999999;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:1, 0.50000000000000000;stroke-dashoffset:0;stroke-opacity:1" id="bounding_box" width="33" height="33" x="6" y="6" parametric:width="{box_size}" parametric:height="{box_size}"></rect>
-
-</svg>

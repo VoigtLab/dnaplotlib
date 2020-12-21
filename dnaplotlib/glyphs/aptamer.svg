@@ -1,23 +1,35 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="Aptamer" soterms="SO:0000031" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
+<svg  version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:parametric="https://parametric-svg.github.io/v0.2"
+      width="100"
+      height="100"
+      glyphtype="Aptamer"
+      soterms="SO:0000031"
+      parametric:defaults="baseline_offset=0;baseline_x=0;baseline_y=25;pad_after=2;pad_before=2;pad_bottom=3;pad_top=3;width=18">
 
-<rect class="bounding-box" id="bounding-box" x="6.46" y="4.821" width="23.005" height="26.103" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
+<rect class="bounding-box"
+      id="bounding-box"
+      parametric:x="{baseline_x}"
+      x="0"
+      parametric:y="{(baseline_y-baseline_offset)-width-pad_top}"
+      y="4"
+      parametric:width="{pad_before+width+pad_after}"
+      width="22"
+      parametric:height="{pad_top+width+pad_bottom}"
+      height="24"
+      style="fill:none;stroke:rgb(150,150,150);stroke-opacity:0.5;stroke-width:1pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:1.5,0.8"/>
 
-<path class="baseline" id="baseline" d="M-0.066,31 L36.056,30.99" parametric:y="30.99" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
+<path class="baseline"
+      id="baseline"
+      parametric:d="M{baseline_x},{baseline_y} L{pad_before+width+pad_after},{baseline_y}"
+      d="M0,25 L22,25"
+      parametric:y="{baseline_y}"
+      style="fill:none;stroke:black;stroke-width:1pt"/>
 
-<path class="filled-path" id="aptamer" 
-	d="M14.684,31.144 L 14.684,21.891
-	C17.286,21.221 19.212,18.864 19.212,16.052
-	C19.212,15.438 19.119,14.846 18.948,14.287
-	L24.424,11.126
-	C24.849,11.355 25.328,11.496 25.845,11.496
-	C27.512,11.496 28.863,10.145 28.863,8.478
-	C28.863,6.811 27.512,5.459 25.845,5.459
-	C24.177,5.459 22.827,6.811 22.827,8.478
-	C22.827,8.505 22.834,8.531 22.835,8.558
-	L17.366,11.714
-	C16.28,10.664 14.804,10.016 13.173,10.016
-	C9.84,10.016 7.137,12.718 7.137,16.052
-	C7.137,18.864 9.062,21.221 11.664,21.891L11.664,31.144" 
-	parametric:d="M14.684,31.144L14.684,21.891C17.286,21.221 19.212,18.864 19.212,16.052C19.212,15.438 19.119,14.846 18.948,14.287L24.424,11.126C24.849,11.355 25.328,11.496 25.845,11.496C27.512,11.496 28.863,10.145 28.863,8.478C28.863,6.811 27.512,5.459 25.845,5.459C24.177,5.459 22.827,6.811 22.827,8.478C22.827,8.505 22.834,8.531 22.835,8.558L17.366,11.714C16.28,10.664 14.804,10.016 13.173,10.016C9.84,10.016 7.137,12.718 7.137,16.052C7.137,18.864 9.062,21.221 11.664,21.891L11.664,31.144" style="fill:rgb(204,204,204);fill-rule:nonzero;stroke:black;stroke-width:1.21px;"/>
+<path class="filled-path" 
+      id="aptamer-path" 
+      parametric:d="M{(baseline_x+pad_before)+(width*0.35)},{(baseline_y-baseline_offset)} L{(baseline_x+pad_before)+(width*0.35)},{(baseline_y-baseline_offset)-(width*0.3)} C{(baseline_x+pad_before)+(width*0.0)},{(baseline_y-baseline_offset)-(width*0.4)} {(baseline_x+pad_before)+(width*0.3)},{(baseline_y-baseline_offset)-(width*0.9)} {(baseline_x+pad_before)+(width*0.55)},{(baseline_y-baseline_offset)-(width*0.65)} L{(baseline_x+pad_before)+(width*0.75)},{(baseline_y-baseline_offset)-(width*0.8)} C{(baseline_x+pad_before)+(width*0.72)},{(baseline_y-baseline_offset)-(width*0.95)} {(baseline_x+pad_before)+(width*0.9)},{(baseline_y-baseline_offset)-(width*1.0)} {(baseline_x+pad_before)+(width*0.97)},{(baseline_y-baseline_offset)-(width*0.92)} C{(baseline_x+pad_before)+(width*1.05)},{(baseline_y-baseline_offset)-(width*0.72)} {(baseline_x+pad_before)+(width*0.9)},{(baseline_y-baseline_offset)-(width*0.7)} {(baseline_x+pad_before)+(width*0.82)},{(baseline_y-baseline_offset)-(width*0.68)} L{(baseline_x+pad_before)+(width*0.6)},{(baseline_y-baseline_offset)-(width*0.5)} C{(baseline_x+pad_before)+(width*0.63)},{(baseline_y-baseline_offset)-(width*0.37)} {(baseline_x+pad_before)+(width*0.5)},{(baseline_y-baseline_offset)-(width*0.35)} {(baseline_x+pad_before)+(width*0.5)},{(baseline_y-baseline_offset)-(width*0.3)} L{(baseline_x+pad_before)+(width*0.5)},{(baseline_y-baseline_offset)} Z" 
+      d="M8.3,25 L8.3,19.6 C2.0,17.8 7.3999999999999995,8.8 11.9,13.299999999999999 L15.5,10.6 C14.959999999999999,7.900000000000002 18.2,7.0 19.46,8.439999999999998 C20.900000000000002,12.040000000000001 18.2,12.4 16.759999999999998,12.76 L12.799999999999999,16.0 C13.34,18.34 11.0,18.7 11.0,19.6 L11.0,25 Z" 
+      style="fill:rgb(230,230,230);fill-rule:nonzero;stroke:black;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt" />
 
 </svg>

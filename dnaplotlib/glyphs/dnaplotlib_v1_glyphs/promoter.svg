@@ -1,0 +1,11 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="Promoter" soterms="SO:0000167" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
+
+<rect class="bounding-box" id="bounding-box" x="4.854" y="2.862" width="26.367" height="30.142" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:1,0.5;"/>
+
+<path class="baseline" id="baseline" d="M-0.12,32.944C35.955,32.944 36.015,32.944 36.015,32.944"  parametric:y="32.944" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
+
+<path class="unfilled-path" id="promoter-body" d="M25,6 L31,13 L25,20" parametric:d="M25,6 L31,13 L25,20" style="fill:none;stroke:black;stroke-width:2.4px;"/>
+
+<path class="unfilled-path" id="promoter-head" d="M6,31.797 L6,13 L30,13" parametric:d="M6,31 L6,13 L31,13 z" style="fill:none;stroke:black;stroke-width:2.4px;"/>
+    
+</svg>

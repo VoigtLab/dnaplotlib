@@ -3,9 +3,9 @@
       xmlns:parametric="https://parametric-svg.github.io/v0.2"
       width="100"
       height="100"
-      glyphtype="Spacer"
-      soterms=""
-      parametric:defaults="baseline_offset=0;baseline_x=0;baseline_y=25;pad_after=2;pad_before=2;pad_bottom=3;pad_top=3;width=18">
+      glyphtype="Aptamer2"
+      soterms="SO:0000031"
+      parametric:defaults="baseline_offset=0; baseline_x=0; baseline_y=25; pad_after=2; pad_before=2; pad_bottom=3; pad_top=3; width=18">
 
 <path class="filled-path" 
       id="aptamer-path" 

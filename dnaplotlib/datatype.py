@@ -143,6 +143,7 @@ class Module:
     def add_module(self, name):
         child = Module(self.design, name, parent=self)
         self.children.append(child)
+        return child
     
     def add_modules(self, modules):
     	self.children += modules

@@ -1,9 +1,35 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="680" height="190"  xmlns:parametric="https://parametric-svg.github.io/v0.2" glyphtype="CDS" soterms="SO:0000316" parametric:defaults="totalWidth:0; height:45; box_size:33; offset:7.5; rectSize:30; othersize:16">
+<svg  version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:parametric="https://parametric-svg.github.io/v0.2"
+      width="100"
+      height="100"
+      glyphtype="CDS"
+      soterms="SO:0000316"
+      parametric:defaults="arrowbody_height=7.5;arrowbody_width=30;arrowhead_height=0;arrowhead_width=6;baseline_offset=0;baseline_x=0;baseline_y=25;pad_after=2;pad_before=2;pad_bottom=3;pad_top=3">
 
-<rect class="bounding-box" id="bounding-box"  x="2.881" y="7.695" width="30.085" height="20.593" style="fill:none;stroke:rgb(153,153,153);stroke-opacity:0.5;stroke-width:0.4px;stroke-linecap:butt;stroke-dasharray:1,0.5;"/>
+<rect class="bounding-box"
+      id="bounding-box"
+      parametric:x="{baseline_x}"
+      x="0"
+      parametric:y="{(baseline_y-baseline_offset)-arrowbody_height-arrowhead_height-pad_top}"
+      y="14.5"
+      parametric:width="{pad_before+arrowbody_width+pad_after}"
+      width="34"
+      parametric:height="{pad_top+(arrowbody_height*2.0)+(arrowhead_height*2.0)+pad_bottom}"
+      height="21.0"
+      style="fill:none;stroke:rgb(150,150,150);stroke-opacity:0.5;stroke-width:1pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:1.5,0.8"/>
 
-<path class="baseline" id="baseline" d="M0,18L36.186,18" parametric:y="18" style="fill:none;stroke:rgb(179,179,179);stroke-width:0.4px;stroke-dasharray:1,0.5;"/>
+<path class="baseline"
+      id="baseline"
+      parametric:d="M{baseline_x},{baseline_y} L{pad_before+arrowbody_width+pad_after},{baseline_y}"
+      d="M0,25 L34,25"
+      parametric:y="{baseline_y}"
+      style="fill:none;stroke:black;stroke-width:1pt"/>
 
-<path class="filled-path" id="cds" d="M4.205,27.12L23.094,27.12L31.795,18L23.094,8.88L4.205,8.88L4.205,27.12Z" parametric:d="M4.205,27.12L23.094,27.12L31.795,18L23.094,8.88L4.205,8.88L4.205,27.12Z" style="fill:rgb(230,230,230);fill-rule:nonzero;stroke:black;stroke-width:2.4px;stroke-linejoin:round;"/>    
+<path class="filled-path" 
+      id="cds" 
+      parametric:d="M{baseline_x+pad_before},{(baseline_y-baseline_offset)+arrowbody_height} L{baseline_x+pad_before},{(baseline_y-baseline_offset)-arrowbody_height} L{baseline_x+pad_before+arrowbody_width-arrowhead_width},{(baseline_y-baseline_offset)-arrowbody_height} L{baseline_x+pad_before+arrowbody_width-arrowhead_width},{(baseline_y-baseline_offset)-arrowbody_height-arrowhead_height} L{baseline_x+pad_before+arrowbody_width},{(baseline_y-baseline_offset)} L{baseline_x+pad_before+arrowbody_width-arrowhead_width},{(baseline_y-baseline_offset)+arrowbody_height+arrowhead_height} L{baseline_x+pad_before+arrowbody_width-arrowhead_width},{(baseline_y-baseline_offset)+arrowbody_height} L{baseline_x+pad_before},{(baseline_y-baseline_offset)+arrowbody_height} Z" 
+      d="M2,25 L2,17.5 L26,17.5 L26,17.5 L32,25 L26,32.5 L26,32.5 L2,32.5 Z" 
+      style="fill:rgb(230,230,230);fill-rule:nonzero;stroke:black;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt" />
 
 </svg>

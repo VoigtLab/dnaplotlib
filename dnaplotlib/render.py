@@ -55,7 +55,7 @@ class GlyphRenderer:
                 split_defaults_text = tag_attributes[key].split(';')
                 defaults = {}
                 for element in split_defaults_text:
-                    key_value = element.split(':')
+                    key_value = element.split('=')
                     defaults[key_value[0].strip()] = float(key_value[1].strip())
                 tag_details['defaults'] = defaults
         
@@ -276,13 +276,7 @@ class GlyphRenderer:
 
         return new_path
 
-    # helper function to extract y of baseline 
-    def get_baseline_y(self, paths):
-        for p in paths:
-            if p['type'] == 'baseline':
-                return float(p['y'])
-
-    #helper function to correct_y_orientation 
+    # helper function to correct_y_orientation 
     # add the deltas from baseline 
     def correct_y(self, old_verts, c, baseline):
         new_v, new_c = ([] for i in range(2))
@@ -396,7 +390,7 @@ class GlyphRenderer:
         new_frame = Frame(width=size, height=size, origin=position)
 
         # update path positions 
-        paths_to_draw = self.correct_y_orientation(paths_to_draw, self.get_baseline_y(glyph['paths']))
+        paths_to_draw = self.correct_y_orientation(paths_to_draw, glyph['defaults']['baseline_y'])
         paths_to_draw = self.shift_to_position(paths_to_draw, initial_frame, position)
         paths_to_draw = self.resize_to_frame(paths_to_draw, position, initial_frame, new_frame)
         paths_to_draw = self.rotate_at_position(paths_to_draw, position, angle)

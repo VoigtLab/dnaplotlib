@@ -3,8 +3,8 @@
       xmlns:parametric="https://parametric-svg.github.io/v0.2"
       width="100"
       height="100"
-      glyphtype="Assembly Scar"
-      soterms="SO:0001953"
+      glyphtype="OverhangSite5"
+      soterms="SO:0001932"
       parametric:defaults="baseline_offset=0;baseline_x=0;baseline_y=25;height=5;pad_after=2;pad_before=2;pad_bottom=3;pad_top=3;width=15">
 
 <rect class="bounding-box"
@@ -26,22 +26,17 @@
       parametric:y="{baseline_y}"
       style="fill:none;stroke:black;stroke-width:1pt"/>
 
-<path class="filled-background-path" 
-      id="assembly-scar-background" 
-      parametric:d="M{baseline_x+pad_before},{(baseline_y-baseline_offset)-(height*0.5)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)-pad_top-(height*0.5)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)+(height*0.5)} L{baseline_x+pad_before},{(baseline_y-baseline_offset)+(height*0.5)} Z}" 
-      d="M2,22.5 L17,19.5 L17,27.5 L2,27.5 Z}" 
-      style="fill:rgb(255,255,255);fill-rule:nonzero;stroke:none" />
 
 <path class="unfilled-path" 
-      id="assembly-scar-path1" 
+      id="overhang_site-path1" 
       parametric:d="M{baseline_x+pad_before},{(baseline_y-baseline_offset)-(height*0.5)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)-(height*0.5)}" 
       d="M2,22.5 L17,22.5" 
       style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
 
 <path class="unfilled-path" 
-      id="assembly-scar-path1" 
-      parametric:d="M{baseline_x+pad_before},{(baseline_y-baseline_offset)+(height*0.5)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)+(height*0.5)}" 
-      d="M2,27.5 L17,27.5" 
+      id="overhang_site-path1" 
+      parametric:d="M{baseline_x+pad_before+(width*0.4)},{(baseline_y-baseline_offset)+(height*0.5)} L{baseline_x+pad_before+width},{(baseline_y-baseline_offset)+(height*0.5)}" 
+      d="M8.0,27.5 L17,27.5" 
       style="fill:none;stroke:black;stroke-width:1pt;stroke-linejoin:round;stroke-linecap:round" />
 
 </svg>

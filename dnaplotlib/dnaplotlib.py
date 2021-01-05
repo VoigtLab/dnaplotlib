@@ -117,6 +117,7 @@ def sbol_promoter (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	x_extent = 10
 	arrowhead_height = 2
 	arrowhead_length = 4
+	y_offset = 0
 	# Reset defaults if provided
 	if opts != None:
 		if 'zorder_add' in list(opts.keys()):
@@ -139,6 +140,9 @@ def sbol_promoter (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 			linewidth = opts['linewidth']
 		if 'scale' in list(opts.keys()):
 			scale = opts['scale']
+		if 'y_offset' in list(opts.keys()):
+			y_offset = opts['y_offset']
+	print(y_offset)
 	# Check direction add start padding
 	dir_fac = 1.0
 	final_end = end
@@ -153,18 +157,19 @@ def sbol_promoter (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 		end = start+x_extent
 		final_end = end+end_pad
 	# Draw the promoter symbol
-	l1 = Line2D([start,start],[0,dir_fac*y_extent], linewidth=linewidth,
+	l1 = Line2D([start,start],[0+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth,
 				color=color, zorder=9+zorder_add)
 	l2 = Line2D([start,start+dir_fac*x_extent-dir_fac*(arrowhead_length*0.5)],
-				[dir_fac*y_extent,dir_fac*y_extent], linewidth=linewidth,
+				[dir_fac*y_extent+y_offset,dir_fac*y_extent+y_offset], linewidth=linewidth,
 				color=color, zorder=10+zorder_add)
 	ax.add_line(l1)
 	ax.add_line(l2)
 	p1 = Polygon([(start+dir_fac*x_extent-dir_fac*arrowhead_length,
-				   dir_fac*y_extent+(arrowhead_height)),
-				  (start+dir_fac*x_extent, dir_fac*y_extent),
+				               dir_fac*y_extent+(arrowhead_height)+y_offset),
+				  (start+dir_fac*x_extent,
+				               dir_fac*y_extent+y_offset),
 				  (start+dir_fac*x_extent-dir_fac*arrowhead_length,
-				   dir_fac*y_extent-(arrowhead_height))],
+				               dir_fac*y_extent+y_offset-(arrowhead_height))],
 				  facecolor=color, edgecolor=color, linewidth=linewidth,  zorder=1+zorder_add,
 				  path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0
 	ax.add_patch(p1)
@@ -2028,6 +2033,8 @@ def sbol_origin (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	x_extent = 10.0
 	y_extent = 10.0
 	linestyle = '-'
+	y_offset = 0
+	face_color = (1,1,1)
 	# Reset defaults if provided
 	if opts != None:
 		if 'zorder_add' in list(opts.keys()):
@@ -2048,6 +2055,10 @@ def sbol_origin (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 			linewidth = opts['linewidth']
 		if 'scale' in list(opts.keys()):
 			scale = opts['scale']
+		if 'y_offset' in list(opts.keys()):
+			y_offset = opts['y_offset']
+		if 'face_color' in list(opts.keys()):
+			face_color = tuple(opts['face_color'])
 	# Check direction add start padding
 	final_end = end
 	final_start = prev_end
@@ -2055,10 +2066,10 @@ def sbol_origin (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 	start = prev_end+start_pad
 	end = start+x_extent
 	final_end = end+end_pad
-	ori_center = (start+((end-start)/2.0),0)
+	ori_center = (start+((end-start)/2.0),y_offset)
 
 	c1 = Circle(ori_center, x_extent/2.0, linewidth=linewidth, edgecolor=color,
-				facecolor=(1,1,1), zorder=12+zorder_add)
+				facecolor=face_color, zorder=12+zorder_add)
 
 	ax.add_patch(c1)
 
@@ -2382,6 +2393,19 @@ def connect (ax, type, num, from_part, to_part, scale, linewidth, arc_height_ind
 	"""
 	regulation(ax, type, num, from_part, to_part, scale, linewidth, arc_height_index, opts)
 
+def bound(ax,type,num,from_part,to_part, scale, linewidth, arc_height_index, opts):
+	"""renders a circle above a part to indicate that it is bound"""
+	color = (0.0,0.0,0.0)
+	circle_offset = 5
+	part_midpt = ((from_part['start'] + from_part['end']) / 2) 
+	start = part_midpt- circle_offset
+	end = part_midpt + circle_offset
+	if('y_offset' not in opts):
+		opts['y_offset']=3
+	opts['y_offset'] = opts['y_offset']*arc_height_index
+	opts['x_extent']=circle_offset*2
+	opts['start_pad']=0
+	sbol_origin(ax,"Origin",0,start,end,start, 1.0,linewidth,opts)
 
 def regulation (ax, type, num, from_part, to_part, scale, linewidth, arc_height_index, opts):
 	""" General function for drawing regulation arcs.
@@ -2894,7 +2918,8 @@ class DNARenderer:
 	# Standard regulatory types
 	STD_REG_TYPES = ['Repression',
 					 'Activation',
-					 'Connection']
+					 'Connection',
+					 'Binding']
 
 	def __init__(self, scale=1.0, linewidth=1.0, linecolor=(0,0,0),
 				 backbone_pad_left=0.0, backbone_pad_right=0.0):
@@ -2979,7 +3004,8 @@ class DNARenderer:
 		return {
 			'Repression' :repress,
 			'Activation' :induce,
-			'Connection' :connect}
+			'Connection' :connect,
+			'Binding':bound}
 
 	def renderDNA (self, ax, parts, part_renderers, regs=None, reg_renderers=None, plot_backbone=True,circular=False,circle_vheight=12):
 		""" Render the parts on the DNA and regulation.
@@ -3120,7 +3146,10 @@ class DNARenderer:
 
 						##############################################################################
 						arcstart = (reg['from_part']['start'] + reg['from_part']['end']) / 2
-						arcend   = (reg['to_part']['start']   + reg['to_part']['end']) / 2
+						if(reg['from_part']==reg['to_part']):
+							arcend = arcstart+.1
+						else:
+							arcend   = (reg['to_part']['start']   + reg['to_part']['end']) / 2
 						arcrange = [arcstart,arcend]
 						reg['arclength'] = math.fabs(arcstart-arcend)
 						reg['arc_height_index'] = 1
@@ -3152,7 +3181,10 @@ class DNARenderer:
 						# arc height algorithm: greedy from left-to-right on DNA design
 
 						arcstart = (reg['from_part']['start'] + reg['from_part']['end']) / 2
-						arcend   = (reg['to_part']['start']   + reg['to_part']['end']) / 2
+						if(reg['from_part']==reg['to_part']):
+							arcend = arcstart+.1
+						else:
+							arcend   = (reg['to_part']['start']   + reg['to_part']['end']) / 2
 
 						arcmin = min(arcstart,arcend)
 						arcmax = max(arcstart,arcend)

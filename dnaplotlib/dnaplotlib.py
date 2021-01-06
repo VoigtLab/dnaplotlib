@@ -3473,6 +3473,104 @@ dpl_default_type_map = {'gene': 'CDS',
 						'terminator': 'Terminator',
 						'rbs': 'RBS'}
 
+def simple_plot_design(simple_design,label_size = 13, label_y_offset = -8,cmap ='Set3',cmap2 = 'Set2',ax=None,\
+                            part_renderers=None,circular=False,ylift=-12,simplereg = None,regs=None,reg_renderers=None,\
+                                linewidth=3,edgecolor = (1,.2,.2)):
+    """a simpler way to plot a construct.
+    simple_design: list of "SimplePart" objects, containing
+                        name: string name that is displayed below the object
+                        dpl_type: string representing dnaplotlib type to display it as
+                        direction: direction "forward" or "reverse"
+                        added_opts: dictionary of "opts" as seen in other dna plot lib objects
+    label
+    simplereg: dictionary of lists which determines how to display regulation
+                        {<name of regulation to apply>: [[from_item_index,to_item_index,name],
+                [from_item_index,to_item_index,name], ...]}
+    regs: normal dictionary of regulation elements like in dnaplotlib
+
+    other options self explanatory
+    """
+
+    cmap_obj = plt.get_cmap(cmap).colors
+    cmap2_obj = plt.get_cmap(cmap2).colors
+    color_count = 0
+    design_list = []
+    annotate_list = []
+    for part in simple_design:
+        part_dict = {'type':part.dpl_type, 'name':'test', 'fwd':'forward'==part.direction,\
+               'opts':{'label':part.name,'label_size':label_size,'label_y_offset':label_y_offset,\
+                   'color':cmap_obj[color_count],'color2':cmap2_obj[color_count]}}
+        if(part.added_opts is not None):
+            part_dict['opts'].update(part.added_opts)
+        color_count += 1
+        if(color_count >= len(cmap_obj) or color_count >= len(cmap2_obj)):
+            color_count = 0
+        design_list += [part_dict]
+    if(part_renderers is None):
+        dr = DNARenderer(scale = 5,linewidth=linewidth,linecolor=edgecolor)
+        part_renderers = dr.SBOL_part_renderers()
+    if(ax is None):
+        figsize = (len(design_list)*.75,1.6)
+        
+        fig = plt.figure(figsize=figsize)
+        
+        ax = fig.add_axes([0,0,1,1])
+        plt.tight_layout(pad=0.01)
+    if(simplereg is not None):
+        regs = []
+        
+        protein_color = 0
+        for regtype,reg_list in simplereg.items():
+            reg_labels = {}
+            for reg in reg_list:
+                from_part = design_list[reg[0]]
+                if(len(reg)==3):
+                    to_part = design_list[reg[1]]
+                else:
+                    to_part = from_part
+                binding_label = reg[-1]
+                if(binding_label in reg_labels):
+                    fill_color = reg_labels[binding_label]
+                else:
+                    fill_color = cmap2_obj[protein_color]
+                    reg_labels[binding_label] = fill_color
+                    protein_color += 1
+                    if(protein_color >= len(cmap2_obj)):
+                        protein_color = 0
+                arc = {'type':regtype, 'from_part':from_part, 'to_part':to_part, 'opts':{'label':binding_label,'label_size':label_size*.7,\
+                                                            'label_x_offset':-1,'color':'blue', 'linewidth':linewidth,'y_offset':10,'face_color':fill_color}}
+                regs += [arc]
+        if(reg_renderers is None):
+            reg_renderers = dr.std_reg_renderers()
+    start,end = dr.renderDNA(ax,design_list,part_renderers,circular=circular,regs=regs, reg_renderers=reg_renderers)
+    
+    fig = ax.get_figure()
+    
+    ylimits = [0,0]
+    xlimits = [0,0]
+    for patch in ax.patches:
+        bbox = patch.get_window_extent()
+        if(bbox.y1 > ylimits[1]):
+            ylimits[1] = bbox.y1
+        if(bbox.y0 < ylimits[0]):
+            ylimits[0] = bbox.y0
+
+        if(bbox.x1 > xlimits[1]):
+            xlimits[1] = bbox.x1
+        if(bbox.x0 < xlimits[0]):
+            xlimits[0] = bbox.x0
+    ylimits = [a/fig.dpi for a in ylimits]
+    xlimits = [a/fig.dpi for a in xlimits]
+    yheight = ylimits[1]-ylimits[0]
+    xheight = xlimits[1]-xlimits[0]
+    
+    addedsize = 1
+    axis_xlim = [start-addedsize,end+addedsize]
+    fig.set_size_inches((axis_xlim[1]-axis_xlim[0])/yheight*1.5,1.5)
+    ax.axis('off')
+    ax.set_xlim(axis_xlim)
+    ax.set_ylim(ylimits)
+    return ax
 
 def load_design_from_gff (filename, chrom, type_map=dpl_default_type_map, region=None):
 	# Load the GFF data

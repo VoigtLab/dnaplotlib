@@ -2428,7 +2428,7 @@ class DNARenderer:
                      'Connection']
 
     def __init__(self, scale=1.0, linewidth=1.0, linecolor=(0,0,0), 
-                 backbone_pad_left=0.0, backbone_pad_right=0.0):
+                 backbone_pad_left=0.0, backbone_pad_right=0.0, circular_depth=15.0):
         """ Constructor to generate an empty DNARenderer.
 
         Parameters
@@ -2444,12 +2444,16 @@ class DNARenderer:
 
         backbone_pad_right : float (default=0.0)
             Padding to add to the left side of the backbone.
+
+        circular_depth : float (default=15.0)
+            Depth of the closed-loop plasmid backbone.
         """
         self.scale = scale
         self.linewidth = linewidth
         self.linecolor = linecolor
         self.backbone_pad_left = backbone_pad_left
         self.backbone_pad_right = backbone_pad_right
+        self.circular_depth = circular_depth
         self.reg_height = 15
 
     def SBOL_part_renderers (self):
@@ -2507,7 +2511,7 @@ class DNARenderer:
             'Activation' :induce,
             'Connection' :connect}
 
-    def renderDNA (self, ax, parts, part_renderers, regs=None, reg_renderers=None, plot_backbone=True):
+    def renderDNA (self, ax, parts, part_renderers, regs=None, reg_renderers=None, plot_backbone=True, circular=False):
         """ Render the parts on the DNA and regulation.
 
         Parameters
@@ -2757,9 +2761,38 @@ class DNARenderer:
                 reg_num += 1
         # Plot the backbone (z=1)
         if plot_backbone == True:
-            l1 = Line2D([first_start-self.backbone_pad_left,prev_end+self.backbone_pad_right],[0,0], 
-                        linewidth=self.linewidth, color=self.linecolor, zorder=10)
-            ax.add_line(l1)
+            backbone_start = first_start-self.backbone_pad_left
+            backbone_end = prev_end+self.backbone_pad_right
+            kwargs = dict(linewidth=self.linewidth, color=self.linecolor, zorder=10)
+            if circular == False:
+                l1 = Line2D([backbone_start,backbone_end], [0,0], **kwargs)
+                ax.add_line(l1)
+            else:
+                rad = 5
+                if self.circular_depth < 2*rad:
+                    self.circular_depth = 2*rad
+                verts = [
+                    (backbone_start, 0),                                # moveto
+                    (backbone_start - rad, 0),                          # curve3 control
+                    (backbone_start - rad, -rad),                       # curve3 end
+                    (backbone_start - rad, -self.circular_depth + rad), # lineto
+                    (backbone_start - rad, -self.circular_depth),       # curve3 control
+                    (backbone_start, -self.circular_depth),             # curve3 end
+                    (backbone_end, -self.circular_depth),               # lineto
+                    (backbone_end + rad, -self.circular_depth),         # curve3 control
+                    (backbone_end + rad, -self.circular_depth + rad),   # curve3 end
+                    (backbone_end + rad, -rad),                         # lineto
+                    (backbone_end + rad, 0),                            # curve3 control
+                    (backbone_end, 0),                                  # curve3 end
+                    (backbone_start, 0),                                # lineto
+                ]
+                codes = [Path.MOVETO, Path.CURVE3, Path.CURVE3, Path.LINETO,
+                         Path.CURVE3, Path.CURVE3, Path.LINETO, Path.CURVE3,
+                         Path.CURVE3, Path.LINETO, Path.CURVE3, Path.CURVE3,
+                         Path.LINETO]
+                path = Path(verts, codes)
+                patch = PathPatch(path, fill=False, **kwargs)
+                ax.add_patch(patch)
         return first_start, prev_end
 
     def annotate (self, ax, part_renderers, part, annotate_zorder=1000):

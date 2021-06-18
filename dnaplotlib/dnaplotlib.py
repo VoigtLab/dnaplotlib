@@ -377,24 +377,6 @@ def sbol_rbs (ax, type, num, start, end, prev_end, scale, linewidth, opts):
 def sbol_ribozyme (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     """ Built-in SBOL ribozyme renderer.
     """
-    return stick_figure(ax,type,num,start,end,prev_end,scale,linewidth,opts)    
-
-
-def sbol_protein_stability (ax, type, num, start, end, prev_end, scale, linewidth, opts):
-    """ Built-in SBOL protein stability element renderer.
-    """
-    return stick_figure(ax,type,num,start,end,prev_end,scale,linewidth,opts)    
-
-
-def sbol_protease (ax, type, num, start, end, prev_end, scale, linewidth, opts):
-    """ Built-in SBOL protease site renderer.
-    """
-    return stick_figure(ax,type,num,start,end,prev_end,scale,linewidth,opts)
-
-
-def sbol_ribonuclease (ax, type, num, start, end, prev_end, scale, linewidth, opts):
-    """ Built-in SBOL ribonuclease site renderer.
-    """
     return stick_figure(ax,type,num,start,end,prev_end,scale,linewidth,opts)
 
 
@@ -534,6 +516,285 @@ def stick_figure (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     else:
         return prev_end, final_end
 
+def sbol_stem_top (ax, type, num, start, end, prev_end, scale, linewidth, opts):
+    """ General function for drawing stem-top parts (e.g., ribozyme and protease sites).
+    """
+    # Default options
+    zorder_add = 0.0
+    color = (0,0,0)
+    start_pad = 2.0
+    end_pad = 2.0
+    x_extent = 5.0
+    y_extent = 10.0
+    linestyle = '-'
+    shapetype = "";
+    if type in ["DNACleavageSite"]:
+        stemtype = 'straight'
+        toptype = 'X'
+    elif type in ["RNACleavageSite", "Ribonuclease"]:
+        stemtype = 'wavy'
+        toptype = 'X'
+    elif type in ["ProteinCleavageSite", "Protease"]:
+        stemtype = 'loopy'
+        toptype = 'X'
+    elif type in ["DNALocation"]:
+        stemtype = 'straight'
+        toptype = 'O'
+    elif type in ["RNALocation"]:
+        stemtype = 'wavy'
+        toptype = 'O'
+    elif type in ["ProteinLocation"]:
+        stemtype = 'loopy'
+        toptype = 'O'
+    elif type in ["DNAStability"]:
+        stemtype = 'straight'
+        toptype = 'P'
+    elif type in ["RNAStability"]:
+        stemtype = 'wavy'
+        toptype = 'P'
+    elif type in ["ProteinStability"]:
+        stemtype = 'loopy'
+        toptype = 'P'
+    elif type in ["StemTop"]:
+        stemtype = opts['stem']
+        toptype = opts['top']
+
+    # Reset defaults if provided
+    if opts != None:
+        if 'zorder_add' in list(opts.keys()):
+            zorder_add = opts['zorder_add']
+        if 'color' in list(opts.keys()):
+            color = opts['color']
+        if 'start_pad' in list(opts.keys()):
+            start_pad = opts['start_pad']
+        if 'end_pad' in list(opts.keys()):
+            end_pad = opts['end_pad']
+        if 'x_extent' in list(opts.keys()):
+            x_extent = opts['x_extent']
+        if 'y_extent' in list(opts.keys()):
+            y_extent = opts['y_extent']
+        if 'linestyle' in list(opts.keys()):
+            linestyle = opts['linestyle']
+        if 'linewidth' in list(opts.keys()):
+            linewidth = opts['linewidth']
+        if 'scale' in list(opts.keys()):
+            scale = opts['scale']
+    # Check direction add start padding
+    final_end = end
+    final_start = prev_end
+
+    if start > end:
+        start = prev_end+end_pad+x_extent
+        end = prev_end+end_pad
+        final_end = start+start_pad
+        # Patches and lines for top glyph
+        # toptype=="X"
+        x1 = Line2D([start,end],[-y_extent*1.25,-y_extent/1.25],
+                    linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
+        x2 = Line2D([start,end],[-y_extent/1.25,-y_extent*1.25],
+                    linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
+        # toptype=="O"
+        center = (end+((start-end)/2.0),-y_extent)
+        c1 = Circle(center, x_extent/2.0, linewidth=linewidth, edgecolor=color,
+                    facecolor=(1,1,1), zorder=12+zorder_add)
+        # toptype=='P'
+        pentagon_xy = [[end, -y_extent*1.25],
+                       [end, -y_extent*0.87],
+                       [(start + end)/2, -y_extent*0.68],
+                       [start, -y_extent*0.87],
+                       [start, -y_extent*1.25],
+                       ]
+        p1 = Polygon(pentagon_xy, closed=True, linewidth=linewidth, edgecolor=color,
+                    facecolor=(1,1,1), zorder=12+zorder_add)
+
+        # Lines for stem glyph
+        # stemtype=='straight'
+        straight_stem = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0, -y_extent],
+                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
+        # stemtype=='wavy'
+        wave_height = y_extent/6
+        wave_start = (start + end)/2
+        wave_bezier_amp = x_extent*0.2
+        wave_bezier_dx = wave_bezier_amp*math.cos(math.pi/4)
+        wave_bezier_dy = wave_bezier_amp*math.sin(math.pi/4)
+        wavy_stem_path = Path(vertices=[[wave_start, 0],
+                                        [wave_start - wave_bezier_dx, -wave_bezier_dy],
+                                        [wave_start - wave_bezier_dx, -(wave_height - wave_bezier_dy)],
+                                        [wave_start, -wave_height],
+                                        [wave_start + wave_bezier_dx, -(wave_height + wave_bezier_dy)],
+                                        [wave_start + wave_bezier_dx, -(2*wave_height - wave_bezier_dy)],
+                                        [wave_start, -2*wave_height],
+                                        [wave_start - wave_bezier_dx, -(2*wave_height + wave_bezier_dy)],
+                                        [wave_start - wave_bezier_dx, -(3*wave_height - wave_bezier_dy)],
+                                        [wave_start, -3*wave_height],
+                                        [wave_start + wave_bezier_dx, -(3*wave_height + wave_bezier_dy)],
+                                        [wave_start + wave_bezier_dx, -(4*wave_height - wave_bezier_dy)],
+                                        [wave_start, -4*wave_height],
+                                        [wave_start - wave_bezier_dx, -(4*wave_height + wave_bezier_dy)],
+                                        [wave_start - wave_bezier_dx, -(5*wave_height - wave_bezier_dy)],
+                                        [wave_start, -5*wave_height],
+                                        [wave_start + wave_bezier_dx, -(5*wave_height + wave_bezier_dy)],
+                                        [wave_start + wave_bezier_dx, -(6*wave_height - wave_bezier_dy)],
+                                        [wave_start, -6*wave_height]],
+                              codes=[1, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4])
+        wavy_stem = PathPatch(wavy_stem_path, linewidth=linewidth, edgecolor=color,
+                    facecolor='none', zorder=8+zorder_add, linestyle=linestyle)
+        # stemtype=='loopy'
+        loop_offset_y = y_extent*0.015
+        loop_height = (y_extent - 2*loop_offset_y)/4
+        loop_start = (start + end)/2 + x_extent*0.05
+        loop_end = end + x_extent*0.15
+        loop_bezier_amp = y_extent*0.03
+        loop_stem_path = Path(vertices=[[loop_start, -loop_offset_y],
+                                        [loop_start, -(loop_offset_y - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height*0.5)],
+                                        [loop_end, -(loop_offset_y + loop_height + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height)],
+                                        [loop_start, -(loop_offset_y + loop_height - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height*1.5)],
+                                        [loop_end, -(loop_offset_y + loop_height*2 + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height*2 + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height*2)],
+                                        [loop_start, -(loop_offset_y + loop_height*2 - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height*2 - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height*2.5)],
+                                        [loop_end, -(loop_offset_y + loop_height*3 + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height*3 + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height*3)],
+                                        [loop_start, -(loop_offset_y + loop_height*3 - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height*3 - loop_bezier_amp)],
+                                        [loop_end, -(loop_offset_y + loop_height*3.5)],
+                                        [loop_end, -(loop_offset_y + loop_height*4 + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height*4 + loop_bezier_amp)],
+                                        [loop_start, -(loop_offset_y + loop_height*4)],
+                                        ],
+                              codes=[1, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4])
+        loop_stem = PathPatch(loop_stem_path, linewidth=linewidth, edgecolor=color,
+                    facecolor='none', zorder=8+zorder_add, linestyle=linestyle)
+
+    else:
+        start = prev_end+start_pad
+        end = start+x_extent
+        final_end = end+end_pad
+        # Patches and lines for top glyph
+        # toptype=="X"
+        x1 = Line2D([start,end],[y_extent*1.25,y_extent/1.25],
+                    linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
+        x2 = Line2D([start,end],[y_extent/1.25,y_extent*1.25],
+                    linewidth=linewidth, color=color, zorder=12+zorder_add, linestyle='-')
+
+        # toptype=="O"
+        center = (start+((end-start)/2.0),y_extent)
+        c1 = Circle(center, x_extent/2.0, linewidth=linewidth, edgecolor=color,
+                    facecolor=(1,1,1), zorder=12+zorder_add)
+        # toptype=='P'
+        pentagon_xy = [[start, y_extent*1.25],
+                       [start, y_extent*0.87],
+                       [(start + end)/2, y_extent*0.68],
+                       [end, y_extent*0.87],
+                       [end, y_extent*1.25],
+                       ]
+        p1 = Polygon(pentagon_xy, closed=True, linewidth=linewidth, edgecolor=color,
+                    facecolor=(1,1,1), zorder=12+zorder_add)
+
+        # Lines for stem glyph
+        # stemtype=='straight'
+        straight_stem = Line2D([end+((start-end)/2.0),end+((start-end)/2.0)],[0,y_extent],
+                    linewidth=linewidth, color=color, zorder=8+zorder_add, linestyle=linestyle)
+        # stemtype=='wavy'
+        wave_height = y_extent/6
+        wave_start = (start + end)/2
+        wave_bezier_amp = x_extent*0.2
+        wave_bezier_dx = wave_bezier_amp*math.cos(math.pi/4)
+        wave_bezier_dy = wave_bezier_amp*math.sin(math.pi/4)
+        wavy_stem_path = Path(vertices=[[wave_start, 0],
+                                        [wave_start + wave_bezier_dx, wave_bezier_dy],
+                                        [wave_start + wave_bezier_dx, wave_height - wave_bezier_dy],
+                                        [wave_start, wave_height],
+                                        [wave_start - wave_bezier_dx, wave_height + wave_bezier_dy],
+                                        [wave_start - wave_bezier_dx, 2*wave_height - wave_bezier_dy],
+                                        [wave_start, 2*wave_height],
+                                        [wave_start + wave_bezier_dx, 2*wave_height + wave_bezier_dy],
+                                        [wave_start + wave_bezier_dx, 3*wave_height - wave_bezier_dy],
+                                        [wave_start, 3*wave_height],
+                                        [wave_start - wave_bezier_dx, 3*wave_height + wave_bezier_dy],
+                                        [wave_start - wave_bezier_dx, 4*wave_height - wave_bezier_dy],
+                                        [wave_start, 4*wave_height],
+                                        [wave_start + wave_bezier_dx, 4*wave_height + wave_bezier_dy],
+                                        [wave_start + wave_bezier_dx, 5*wave_height - wave_bezier_dy],
+                                        [wave_start, 5*wave_height],
+                                        [wave_start - wave_bezier_dx, 5*wave_height + wave_bezier_dy],
+                                        [wave_start - wave_bezier_dx, 6*wave_height - wave_bezier_dy],
+                                        [wave_start, 6*wave_height]],
+                              codes=[1, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4])
+        wavy_stem = PathPatch(wavy_stem_path, linewidth=linewidth, edgecolor=color,
+                    facecolor='none', zorder=8+zorder_add, linestyle=linestyle)
+        # stemtype=='loopy'
+        loop_offset_y = y_extent*0.015
+        loop_height = (y_extent - 2*loop_offset_y)/4
+        loop_start = (start + end)/2 - x_extent*0.05
+        loop_end = end - x_extent*0.15
+        loop_bezier_amp = y_extent*0.03
+        loop_stem_path = Path(vertices=[[loop_start, loop_offset_y],
+                                        [loop_start, loop_offset_y - loop_bezier_amp],
+                                        [loop_end, loop_offset_y - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height*0.5],
+                                        [loop_end, loop_offset_y + loop_height + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height],
+                                        [loop_start, loop_offset_y + loop_height - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height*1.5],
+                                        [loop_end, loop_offset_y + loop_height*2 + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height*2 + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height*2],
+                                        [loop_start, loop_offset_y + loop_height*2 - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height*2 - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height*2.5],
+                                        [loop_end, loop_offset_y + loop_height*3 + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height*3 + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height*3],
+                                        [loop_start, loop_offset_y + loop_height*3 - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height*3 - loop_bezier_amp],
+                                        [loop_end, loop_offset_y + loop_height*3.5],
+                                        [loop_end, loop_offset_y + loop_height*4 + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height*4 + loop_bezier_amp],
+                                        [loop_start, loop_offset_y + loop_height*4],
+                                        ],
+                              codes=[1, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4, 4,4,4])
+        loop_stem = PathPatch(loop_stem_path, linewidth=linewidth, edgecolor=color,
+                    facecolor='none', zorder=8+zorder_add, linestyle=linestyle)
+
+    # Add stem patches and/or lines
+    if stemtype == 'straight':
+        ax.add_line(straight_stem)
+    elif stemtype == 'wavy':
+        ax.add_line(wavy_stem)
+    elif stemtype == 'loopy':
+        ax.add_line(loop_stem)
+
+    # Add top patches and/or lines
+    if toptype == 'O':
+        ax.add_patch(c1)
+    elif toptype == 'X':
+        ax.add_line(x1)
+        ax.add_line(x2)
+    elif toptype == 'P':
+        ax.add_patch(p1)
+
+    if opts != None and 'label' in list(opts.keys()):
+        if final_start > final_end:
+            write_label(ax, opts['label'], final_end+((final_start-final_end)/2.0), opts=opts)
+        else:
+            write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
+
+    if final_start > final_end:
+        return prev_end, final_start
+    else:
+        return prev_end, final_end
 
 def sbol_scar (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     """ Built-in SBOL scar renderer.
@@ -2351,8 +2612,17 @@ class DNARenderer:
                       'EmptySpace',
                       'Ribozyme',
                       'Ribonuclease',
-                      'ProteinStability',
                       'Protease',
+                      'DNACleavageSite',
+                      'RNACleavageSite',
+                      'ProteinCleavageSite',
+                      'DNALocation',
+                      'RNALocation',
+                      'ProteinLocation',
+                      'DNAStability',
+                      'RNAStability',
+                      'ProteinStability',
+                      'StemTop',
                       'Operator',
                       'Origin',
                       'Insulator',
@@ -2374,7 +2644,7 @@ class DNARenderer:
                      'Connection']
 
     def __init__(self, scale=1.0, linewidth=1.0, linecolor=(0,0,0), 
-                 backbone_pad_left=0.0, backbone_pad_right=0.0):
+                 backbone_pad_left=0.0, backbone_pad_right=0.0, circular_depth=15.0):
         """ Constructor to generate an empty DNARenderer.
 
         Parameters
@@ -2390,35 +2660,48 @@ class DNARenderer:
 
         backbone_pad_right : float (default=0.0)
             Padding to add to the left side of the backbone.
+
+        circular_depth : float (default=15.0)
+            Depth of the closed-loop plasmid backbone.
         """
         self.scale = scale
         self.linewidth = linewidth
         self.linecolor = linecolor
         self.backbone_pad_left = backbone_pad_left
         self.backbone_pad_right = backbone_pad_right
+        self.circular_depth = circular_depth
         self.reg_height = 15
 
     def SBOL_part_renderers (self):
         """ Return dictionary of all standard built-in SBOL part renderers.
         """
         return {
-            'Promoter'         :sbol_promoter, 
-            'CDS'              :sbol_cds, 
-            'Terminator'       :sbol_terminator,
-            'RBS'              :sbol_rbs,
-            'Scar'             :sbol_scar,
-            'Spacer'           :sbol_spacer,
-            'EmptySpace'       :sbol_empty_space,
-            'Ribozyme'         :sbol_ribozyme,
-            'Ribonuclease'     :sbol_ribonuclease,
-            'ProteinStability' :sbol_protein_stability,
-            'Protease'         :sbol_protease,
-            'Operator'         :sbol_operator,
-            'Origin'           :sbol_origin,
-            'Insulator'        :sbol_insulator,
-            '5Overhang'        :sbol_5_overhang,
-            '3Overhang'        :sbol_3_overhang,
-            'RestrictionSite'  :sbol_restriction_site,
+            'Promoter'           :sbol_promoter, 
+            'CDS'                :sbol_cds, 
+            'Terminator'         :sbol_terminator,
+            'RBS'                :sbol_rbs,
+            'Scar'               :sbol_scar,
+            'Spacer'             :sbol_spacer,
+            'EmptySpace'         :sbol_empty_space,
+            'Ribozyme'           :sbol_ribozyme,
+            'Ribonuclease'       :sbol_stem_top,
+            'Protease'           :sbol_stem_top,
+            'DNACleavageSite'    :sbol_stem_top,
+            'RNACleavageSite'    :sbol_stem_top,
+            'ProteinCleavageSite':sbol_stem_top,
+            'DNALocation'        :sbol_stem_top,
+            'RNALocation'        :sbol_stem_top,
+            'ProteinLocation'    :sbol_stem_top,
+            'DNAStability'       :sbol_stem_top,
+            'RNAStability'       :sbol_stem_top,
+            'ProteinStability'   :sbol_stem_top,
+            'StemTop'            :sbol_stem_top,
+            'Operator'           :sbol_operator,
+            'Origin'             :sbol_origin,
+            'Insulator'          :sbol_insulator,
+            '5Overhang'          :sbol_5_overhang,
+            '3Overhang'          :sbol_3_overhang,
+            'RestrictionSite'    :sbol_restriction_site,
             'BluntRestrictionSite'   :sbol_blunt_restriction_site,
             'PrimerBindingSite'      :sbol_primer_binding_site,
             '5StickyRestrictionSite' :sbol_5_sticky_restriction_site,
@@ -2427,6 +2710,7 @@ class DNARenderer:
             '3ChromosomalLocus'      :sbol_3_chromosomal_locus,
             'UserDefined'      :sbol_user_defined,
             'Signature'        :sbol_signature}
+
 
     def trace_part_renderers (self):
         """ Return dictionary of all standard built-in trace part renderers.
@@ -2446,7 +2730,7 @@ class DNARenderer:
             'Activation' :induce,
             'Connection' :connect}
 
-    def renderDNA (self, ax, parts, part_renderers, regs=None, reg_renderers=None, plot_backbone=True):
+    def renderDNA (self, ax, parts, part_renderers, regs=None, reg_renderers=None, plot_backbone=True, circular=False):
         """ Render the parts on the DNA and regulation.
 
         Parameters
@@ -2508,12 +2792,11 @@ class DNARenderer:
             if 'type' in keys:
                 if 'fwd' not in keys:
                     part['fwd'] = True
-                else:
-                    if part['fwd'] == False:
-                        start = part['start']
-                        end = part['end']
-                        part['end'] = start
-                        part['start'] = end
+                elif part['fwd'] == False and 'start' in keys and 'end' in keys:
+                    start = part['start']
+                    end = part['end']
+                    part['end'] = start
+                    part['start'] = end
                 if 'start' not in keys:
                     if part['fwd'] == True:
                         part['start'] = part_num
@@ -2697,9 +2980,38 @@ class DNARenderer:
                 reg_num += 1
         # Plot the backbone (z=1)
         if plot_backbone == True:
-            l1 = Line2D([first_start-self.backbone_pad_left,prev_end+self.backbone_pad_right],[0,0], 
-                        linewidth=self.linewidth, color=self.linecolor, zorder=10)
-            ax.add_line(l1)
+            backbone_start = first_start-self.backbone_pad_left
+            backbone_end = prev_end+self.backbone_pad_right
+            kwargs = dict(linewidth=self.linewidth, color=self.linecolor, zorder=10)
+            if circular == False:
+                l1 = Line2D([backbone_start,backbone_end], [0,0], **kwargs)
+                ax.add_line(l1)
+            else:
+                rad = 5
+                if self.circular_depth < 2*rad:
+                    self.circular_depth = 2*rad
+                verts = [
+                    (backbone_start, 0),                                # moveto
+                    (backbone_start - rad, 0),                          # curve3 control
+                    (backbone_start - rad, -rad),                       # curve3 end
+                    (backbone_start - rad, -self.circular_depth + rad), # lineto
+                    (backbone_start - rad, -self.circular_depth),       # curve3 control
+                    (backbone_start, -self.circular_depth),             # curve3 end
+                    (backbone_end, -self.circular_depth),               # lineto
+                    (backbone_end + rad, -self.circular_depth),         # curve3 control
+                    (backbone_end + rad, -self.circular_depth + rad),   # curve3 end
+                    (backbone_end + rad, -rad),                         # lineto
+                    (backbone_end + rad, 0),                            # curve3 control
+                    (backbone_end, 0),                                  # curve3 end
+                    (backbone_start, 0),                                # lineto
+                ]
+                codes = [Path.MOVETO, Path.CURVE3, Path.CURVE3, Path.LINETO,
+                         Path.CURVE3, Path.CURVE3, Path.LINETO, Path.CURVE3,
+                         Path.CURVE3, Path.LINETO, Path.CURVE3, Path.CURVE3,
+                         Path.LINETO]
+                path = Path(verts, codes)
+                patch = PathPatch(path, fill=False, **kwargs)
+                ax.add_patch(patch)
         return first_start, prev_end
 
     def annotate (self, ax, part_renderers, part, annotate_zorder=1000):

@@ -1832,6 +1832,220 @@ def sbol_insulator (ax, type, num, start, end, prev_end, scale, linewidth, opts)
         return prev_end, final_end
 
 
+def sbol_5_chromosomal_locus  (ax, type, num, start, end, prev_end, scale, linewidth, opts):
+    """ Built-in SBOL 5' chromosomal locus renderer.
+    """
+    # Default options
+    zorder_add = 0.0
+    color = (0,0,0)
+    start_pad = 0.0
+    end_pad = 2.0
+    y_extent = 7.5
+    x_extent = 18.0
+    linestyle = '-'
+    dashed_end = True
+    # Reset defaults if provided
+    if opts != None:
+        if 'zorder_add' in list(opts.keys()):
+            zorder_add = opts['zorder_add']
+        if 'color' in list(opts.keys()):
+            color = opts['color']
+        if 'start_pad' in list(opts.keys()):
+            start_pad = opts['start_pad']
+        if 'end_pad' in list(opts.keys()):
+            end_pad = opts['end_pad']
+        if 'x_extent' in list(opts.keys()):
+            x_extent = opts['x_extent']
+        if 'y_extent' in list(opts.keys()):
+            y_extent = opts['y_extent']
+        if 'linestyle' in list(opts.keys()):
+            linestyle = opts['linestyle']
+        if 'linewidth' in list(opts.keys()):
+            linewidth = opts['linewidth']
+        if 'scale' in list(opts.keys()):
+            scale = opts['scale']
+        if 'dashed_end' in list(opts.keys()):
+            dashed_end = opts['dashed_end']
+
+    # Direction is meaningless for this part => start is always < end
+    if start > end:
+        temp_end = end
+        end = start
+        start = temp_end
+
+    # Check direction add start padding
+    final_start = prev_end
+    start = prev_end + start_pad
+    end = start + x_extent
+    final_end = end + end_pad
+    
+    # Construct glyph path
+    # Glyph is made of an S-shape segment that connects to the main DNA line,
+    # and a tail which is optionally dashed.
+    # The x-dimensions of these segments are given by s_extent and t_extent.
+    s_extent = x_extent*0.67
+    t_extent = x_extent - s_extent
+    # Vertical dimension of the tail
+    ty = y_extent*0.23
+    # The following controls the curvature of the s angles
+    sx = s_extent*0.32
+    sy = (y_extent - ty)*0.4
+    # Small distance to give a slope to the middle portion of the "s"
+    sd = (y_extent - 2*sy - ty)/(s_extent - 2*sx)*sx
+    # Small distance to give a slope to the last portion of the "s"
+    sdt = ty/(x_extent - sx)*sx
+    # Slope of the tail
+    t_slope = ty/(x_extent - sx)
+    # Determine "code" value depending on whether to dash ends
+    if dashed_end:
+        tail_code = 1
+    else:
+        tail_code = 2
+    # Create path
+    s_path = Path(vertices=[[end, 0],
+                            [end - s_extent + sx, 0],
+                            [end - s_extent, 0],
+                            [end - s_extent, -(sy - sd)],
+                            [end - s_extent + sx, -sy],
+                            [end - sx, -(y_extent - sy - ty)],
+                            [end, -(y_extent - sy - ty + sd)],
+                            [end, -(y_extent - ty - sdt)],
+                            [end - sx, -(y_extent - ty)],
+                            [start + t_extent, -(y_extent - t_extent*t_slope)],
+                            [start + t_extent*5/6., -(y_extent - t_extent*5/6.*t_slope)],
+                            [start + t_extent*4/6., -(y_extent - t_extent*4/6.*t_slope)],
+                            [start + t_extent*3/6., -(y_extent - t_extent*3/6.*t_slope)],
+                            [start + t_extent*2/6., -(y_extent - t_extent*2/6.*t_slope)],
+                            [start + t_extent*1/6., -(y_extent - t_extent*1/6.*t_slope)],
+                            [start, -y_extent]],
+                  codes=[1, 2, 4,4,4, 2, 4,4,4, 2, tail_code, 2, tail_code, 2, tail_code, 2])
+    s_patch = PathPatch(s_path, linewidth=linewidth, edgecolor=color,
+                facecolor='none', zorder=12+zorder_add, linestyle=linestyle)
+    ax.add_patch(s_patch)
+
+    # White rectangle overlays backbone line
+    p1 = Polygon([(start, y_extent),
+                  (start, -y_extent),
+                  (end, -y_extent),
+                  (end, y_extent)],
+                  edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=0, zorder=11+zorder_add,
+                  path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
+
+    ax.add_patch(p1)
+
+    if opts != None and 'label' in list(opts.keys()):
+        write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
+
+    return final_start, final_end
+
+
+def sbol_3_chromosomal_locus  (ax, type, num, start, end, prev_end, scale, linewidth, opts):
+    """ Built-in SBOL 3' chromosomal locus renderer.
+    """
+    # Default options
+    zorder_add = 0.0
+    color = (0,0,0)
+    start_pad = 2.0
+    end_pad = 0.0
+    y_extent = 7.5
+    x_extent = 18.0
+    linestyle = '-'
+    dashed_end = True
+    # Reset defaults if provided
+    if opts != None:
+        if 'zorder_add' in list(opts.keys()):
+            zorder_add = opts['zorder_add']
+        if 'color' in list(opts.keys()):
+            color = opts['color']
+        if 'start_pad' in list(opts.keys()):
+            start_pad = opts['start_pad']
+        if 'end_pad' in list(opts.keys()):
+            end_pad = opts['end_pad']
+        if 'x_extent' in list(opts.keys()):
+            x_extent = opts['x_extent']
+        if 'y_extent' in list(opts.keys()):
+            y_extent = opts['y_extent']
+        if 'linestyle' in list(opts.keys()):
+            linestyle = opts['linestyle']
+        if 'linewidth' in list(opts.keys()):
+            linewidth = opts['linewidth']
+        if 'scale' in list(opts.keys()):
+            scale = opts['scale']
+        if 'dashed_end' in list(opts.keys()):
+            dashed_end = opts['dashed_end']
+
+    # Direction is meaningless for this part => start is always < end
+    if start > end:
+        temp_end = end
+        end = start
+        start = temp_end
+
+    # Check direction add start padding
+    final_start = prev_end
+    start = prev_end + start_pad
+    end = start + x_extent
+    final_end = end + end_pad
+
+    # Construct glyph path
+    # Glyph is made of an S-shape segment that connects to the main DNA line,
+    # and a tail which is optionally dashed.
+    # The x-dimensions of these segments are given by s_extent and t_extent.
+    s_extent = x_extent*0.67
+    t_extent = x_extent - s_extent
+    # Vertical dimension of the tail
+    ty = y_extent*0.23
+    # The following controls the curvature of the s angles
+    sx = s_extent*0.32
+    sy = (y_extent - ty)*0.4
+    # Small distance to give a slope to the middle portion of the "s"
+    sd = (y_extent - 2*sy - ty)/(s_extent - 2*sx)*sx
+    # Small distance to give a slope to the last portion of the "s"
+    sdt = ty/(x_extent - sx)*sx
+    # Slope of the tail
+    t_slope = ty/(x_extent - sx)
+    # Determine "code" value depending on whether to dash ends
+    if dashed_end:
+        tail_code = 1
+    else:
+        tail_code = 2
+    # Create path
+    s_path = Path(vertices=[[start, 0],
+                            [start + s_extent - sx, 0],
+                            [start + s_extent, 0],
+                            [start + s_extent, -(sy - sd)],
+                            [start + s_extent - sx, -sy],
+                            [start + sx, -(y_extent - sy - ty)],
+                            [start, -(y_extent - sy - ty + sd)],
+                            [start, -(y_extent - ty - sdt)],
+                            [start + sx, -(y_extent - ty)],
+                            [end - t_extent, -(y_extent - t_extent*t_slope)],
+                            [end - t_extent*5/6., -(y_extent - t_extent*5/6.*t_slope)],
+                            [end - t_extent*4/6., -(y_extent - t_extent*4/6.*t_slope)],
+                            [end - t_extent*3/6., -(y_extent - t_extent*3/6.*t_slope)],
+                            [end - t_extent*2/6., -(y_extent - t_extent*2/6.*t_slope)],
+                            [end - t_extent*1/6., -(y_extent - t_extent*1/6.*t_slope)],
+                            [end, -y_extent]],
+                  codes=[1, 2, 4,4,4, 2, 4,4,4, 2, tail_code, 2, tail_code, 2, tail_code, 2])
+    s_patch = PathPatch(s_path, linewidth=linewidth, edgecolor=color,
+                facecolor='none', zorder=12+zorder_add, linestyle=linestyle)
+    ax.add_patch(s_patch)
+
+    # White rectangle overlays backbone line
+    p1 = Polygon([(start, y_extent),
+                  (start, -y_extent),
+                  (end, -y_extent),
+                  (end, y_extent)],
+                  edgecolor=(1,1,1), facecolor=(1,1,1), linewidth=0, zorder=11+zorder_add,
+                  path_effects=[Stroke(joinstyle="miter")]) # This is a work around for matplotlib < 1.4.0)
+
+    ax.add_patch(p1)
+
+    if opts != None and 'label' in list(opts.keys()):
+        write_label(ax, opts['label'], final_start+((final_end-final_start)/2.0), opts=opts)
+
+    return final_start, final_end
+
+
 # Not used at present
 def temporary_repressor (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     # Default options
@@ -2419,6 +2633,8 @@ class DNARenderer:
                       'PrimerBindingSite',
                       '5StickyRestrictionSite',
                       '3StickyRestrictionSite',
+                      '5ChromosomalLocus',
+                      '3ChromosomalLocus',
                       'UserDefined',
                       'Signature']
 
@@ -2490,8 +2706,11 @@ class DNARenderer:
             'PrimerBindingSite'      :sbol_primer_binding_site,
             '5StickyRestrictionSite' :sbol_5_sticky_restriction_site,
             '3StickyRestrictionSite' :sbol_3_sticky_restriction_site,
-            'UserDefined'        :sbol_user_defined,
-            'Signature'          :sbol_signature}
+            '5ChromosomalLocus'      :sbol_5_chromosomal_locus,
+            '3ChromosomalLocus'      :sbol_3_chromosomal_locus,
+            'UserDefined'      :sbol_user_defined,
+            'Signature'        :sbol_signature}
+
 
     def trace_part_renderers (self):
         """ Return dictionary of all standard built-in trace part renderers.

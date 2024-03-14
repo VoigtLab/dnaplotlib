@@ -39,7 +39,7 @@ def make_float_if_needed (s):
 
 def load_plot_parameters (filename):
 	plot_params = {}
-	param_reader = csv.reader(open(filename, 'rU'), delimiter=',')
+	param_reader = csv.reader(open(filename, 'r'), delimiter=',')
 	# Ignore header
 	header = next(param_reader)
 	# Process all parameters
@@ -51,7 +51,7 @@ def load_plot_parameters (filename):
 
 def load_part_information (filename):
 	part_info = {}
-	parts_reader = csv.reader(open(filename, 'rU'), delimiter=',')
+	parts_reader = csv.reader(open(filename, 'r'), delimiter=',')
 	header = next(parts_reader)
 	header_map = {}
 	for i in range(len(header)):
@@ -73,7 +73,7 @@ def load_part_information (filename):
 
 def load_dna_designs (filename, part_info, reverse_char='r'):
 	dna_designs = {}
-	design_reader = csv.reader(open(filename, 'rU'), delimiter=',')
+	design_reader = csv.reader(open(filename, 'r'), delimiter=',')
 	# Ignore header
 	header = next(design_reader)
 	# Process all parameters
@@ -108,7 +108,7 @@ def load_dna_designs (filename, part_info, reverse_char='r'):
 def load_regulatory_information (filename, part_info, dna_designs):
 	regs_info = {}
 	
-	reg_reader = csv.reader(open(filename, 'rU'), delimiter=',')
+	reg_reader = csv.reader(open(filename, 'r'), delimiter=',')
 	# Ignore header
 	header = next(reg_reader)
 	header_map = {}

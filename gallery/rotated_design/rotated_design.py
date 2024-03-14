@@ -14,7 +14,8 @@ import matplotlib.gridspec as gridspec
 from matplotlib.transforms import Affine2D
 import mpl_toolkits.axisartist.floating_axes as floating_axes
 import mpl_toolkits.axisartist.grid_helper_curvelinear as gh
-from mpl_toolkits.axes_grid.parasite_axes import SubplotHost, ParasiteAxesAuxTrans
+from mpl_toolkits.axes_grid1.parasite_axes import ParasiteAxes
+from mpl_toolkits.axisartist import SubplotHost
 from matplotlib import colors
 
 __author__  = 'Thomas Gorochowski <tom@chofski.co.uk>, Voigt Lab, MIT'
@@ -52,7 +53,7 @@ def load_design (filename, opt_map):
 	parts = {}
 	seq = ''
 	cur_bp = 0
-	reader = csv.reader(open(filename, 'rU'), delimiter=' ')
+	reader = csv.reader(open(filename, 'r'), delimiter=' ')
 	for row in reader:
 		if len(row) == 3:
 			p_type = row[0]
@@ -80,7 +81,7 @@ def load_design (filename, opt_map):
 	return design, seq, parts
 
 # Function to calculate the reverse complement of a sequence
-def revcomp(seq, trans=string.maketrans("ACGT", "TGCA")):
+def revcomp(seq, trans=str.maketrans("ACGT", "TGCA")):
 	return "".join(reversed(seq.translate(trans)))
 
 # Function to calculate number of shared bases between two sequences
@@ -163,10 +164,10 @@ def setup_rot_axes(fig, rect):
 	grid_helper = gh.GridHelperCurveLinear(tr)
 	ax1 = SubplotHost(fig, rect, grid_helper=grid_helper)
 	fig.add_subplot(ax1)
-	ax2 = ParasiteAxesAuxTrans(ax1, tr, "equal")
+	ax2 = ParasiteAxes(ax1, tr)
+	ax1.parasites.append(ax2)
 	ax1.set_ylim([end, start])
 	ax1.set_xlim([-8, 4])
-	ax2 = ax1.get_aux_axes(tr)
 	ax1.set_aspect('auto')
 	ax1.axis['top', 'right', 'left', 'bottom'].set_visible(False)
 	return ax1, ax2

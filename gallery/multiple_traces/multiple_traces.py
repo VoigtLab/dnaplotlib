@@ -58,7 +58,7 @@ design = [P1, RBS1, CDS1, RBS2, CDS2, T1, P2, CDS3, RBS3, P3, CDS4, RBS4, P4]
 
 # Loads a sequence file
 def load_seq (filename_in):
-	f_in = open(filename_in, 'rU')
+	f_in = open(filename_in, 'r')
 	seq = f_in.readline().strip()
 	f_in.close()
 	return seq
@@ -81,7 +81,7 @@ def load_trace (filename_in):
 	# data[0] is forward strand
 	# data[1] is reverse strand
 	data = [[],[]]
-	trace_reader = csv.reader(open(filename_in, 'rU'), delimiter=',')
+	trace_reader = csv.reader(open(filename_in, 'r'), delimiter=',')
 	data[0] = np.array([float(x) for x in next(trace_reader)])
 	data[1] = np.array([float(x) for x in next(trace_reader)])
 	return data

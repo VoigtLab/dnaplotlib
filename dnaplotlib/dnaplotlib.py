@@ -772,9 +772,9 @@ def sbol_stem_top (ax, type, num, start, end, prev_end, scale, linewidth, opts):
     if stemtype == 'straight':
         ax.add_line(straight_stem)
     elif stemtype == 'wavy':
-        ax.add_line(wavy_stem)
+        ax.add_patch(wavy_stem)
     elif stemtype == 'loopy':
-        ax.add_line(loop_stem)
+        ax.add_patch(loop_stem)
 
     # Add top patches and/or lines
     if toptype == 'O':
@@ -3205,7 +3205,7 @@ dpl_default_type_map = {'gene': 'CDS',
 def load_design_from_gff (filename, chrom, type_map=dpl_default_type_map, region=None):
     # Load the GFF data
     gff = []
-    data_reader = csv.reader(open(filename, 'rU'), delimiter='\t')
+    data_reader = csv.reader(open(filename, 'r'), delimiter='\t')
     for row in data_reader:
         if len(row) == 9:
             cur_chrom = row[0]
@@ -3248,7 +3248,7 @@ def load_design_from_gff (filename, chrom, type_map=dpl_default_type_map, region
 def load_profile_from_bed (filename, chrom, region):
     region_len = region[1]-region[0]
     profile = [0]*region_len
-    data_reader = csv.reader(open(filename, 'rU'), delimiter='\t')
+    data_reader = csv.reader(open(filename, 'r'), delimiter='\t')
     for row in data_reader:
         if len(row) == 5:
             cur_chrom = row[0]

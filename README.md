@@ -7,7 +7,7 @@ If you make use of DNAplotlib in any publications, we kindly ask that the follow
 <a href="http://pubs.acs.org/doi/abs/10.1021/acssynbio.6b00252">Der B.S., Glassey E., Bartley B.A., Enghuus C., Goodman D.B., Gordon D.B., Voigt C.A., Gorochowski T.E., "DNAplotlib: programmable visualization of genetic designs and associated data", _ACS Synthetic Biology_, 2016. (DOI: 10.1021/acssynbio.6b00252)</a>
 
 ## Installation
-The DNAplotlib library is contained within the `dnaplotlib.py` file in the `lib` directory and requires Python 2.6 and matplotlib 1.2 or newer. To install add the location of this file to your `PYTHONPATH` and you are good to: `import dnaplotlib`
+The DNAplotlib library is contained within the `dnaplotlib.py` file in the `lib` directory and requires Python 3.6+ and matplotlib 3.8+. To install add the location of this file to your `PYTHONPATH` and you are good to: `import dnaplotlib`
 
 ## Getting Started
 We provide an extensive gallery of use cases for DNAplotlib in the `gallery` directory. Click on a thumbnail below to go directly to the example code:
@@ -42,6 +42,12 @@ Create a virtual env:
 
 ```shell
 python3 -m venv .venv
+```
+
+activate the venv:
+
+```shell
+source .venv/bin/activate
 ```
 
 Install dependancies

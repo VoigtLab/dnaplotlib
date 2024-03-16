@@ -17,41 +17,41 @@ DNAplotlib SBOL Functionality
 
 import dnaplotlib as dpl
 
-__author__  = 'Bryan Bartley <bartleyba@sbolstandard.org>\n\
-               Thomas E. Gorochowski <tom@chofski.co.uk>'
-__license__ = 'MIT'
-__version__ = '1.0'
+__author__ = "Bryan Bartley <bartleyba@sbolstandard.org>\n\
+               Thomas E. Gorochowski <tom@chofski.co.uk>"
+__license__ = "MIT"
+__version__ = "1.0"
+
 
 class SBOLRenderer(dpl.DNARenderer):
 
     def SO_terms(self):
-        """ Return dictionary of all standard built-in SBOL part renderers referenced by Sequence Ontology term
-        """
+        """Return dictionary of all standard built-in SBOL part renderers referenced by Sequence Ontology term"""
         return {
-        'SO:0000167': 'Promoter',
-        'SO:0000316': 'CDS',
-        'SO:0000141': 'Terminator',
-        'SO:0000552': 'RBS',
-        'SO:0001953': 'Scar',
-        # No SO Term : 'Spacer',
-        # No SO Term : 'EmptySpace',
-        'SO:000037': 'Ribozyme',
-        'SO:0001977': 'Ribonuclease',
-        'SO:0001955': 'ProteinStability',
-        'SO:0001956': 'Protease',
-        'SO:0000057': 'Operator',
-        # SO term insulator does not have same semantics : 'Insulator',
-        'SO:0000296': 'Origin',
-        'SO:0001932': '5Overhang',
-        'SO:0001933': '3Overhang',
-        'SO:0001687': 'RestrictionSite',
-        'SO:0000299': 'RecombinaseSite',
-        'SO:0001691': 'BluntRestrictionSite',
-        'SO:0005850': 'PrimerBindingSite',
-        'SO:0001694': '5StickyRestrictionSite',
-        'SO:0001690': '3StickyRestrictionSite',
-        'SO:0000001': 'UserDefined',
-        'SO:0001978': 'Signature',
+            "SO:0000167": "Promoter",
+            "SO:0000316": "CDS",
+            "SO:0000141": "Terminator",
+            "SO:0000552": "RBS",
+            "SO:0001953": "Scar",
+            # No SO Term : 'Spacer',
+            # No SO Term : 'EmptySpace',
+            "SO:000037": "Ribozyme",
+            "SO:0001977": "Ribonuclease",
+            "SO:0001955": "ProteinStability",
+            "SO:0001956": "Protease",
+            "SO:0000057": "Operator",
+            # SO term insulator does not have same semantics : 'Insulator',
+            "SO:0000296": "Origin",
+            "SO:0001932": "5Overhang",
+            "SO:0001933": "3Overhang",
+            "SO:0001687": "RestrictionSite",
+            "SO:0000299": "RecombinaseSite",
+            "SO:0001691": "BluntRestrictionSite",
+            "SO:0005850": "PrimerBindingSite",
+            "SO:0001694": "5StickyRestrictionSite",
+            "SO:0001690": "3StickyRestrictionSite",
+            "SO:0000001": "UserDefined",
+            "SO:0001978": "Signature",
         }
 
     def renderSBOL(self, ax, target_component, part_renderers, opts=None, plot_backbone=True):
@@ -81,23 +81,28 @@ class SBOLRenderer(dpl.DNARenderer):
         """
         if not target_component.features:
             raise ValueError("DNAComponent does not have any features.  Cannot render SBOL.")
-        dpl_design = []  # The SBOL data will be converted to a list of dictionaries used by DNAPlotLib
+        dpl_design = (
+            []
+        )  # The SBOL data will be converted to a list of dictionaries used by DNAPlotLib
         for subcomponent in target_component.features:
             if not subcomponent.roles:
                 raise ValueError("Subcomponent does not have a role.  Cannot render SBOL.")
-            SO_term = subcomponent.roles[0].split('/')[-1]
+            SO_term = subcomponent.roles[0].split("/")[-1]
             if SO_term in list(self.SO_terms().keys()):
                 part = {}
-                part['type'] = self.SO_terms()[SO_term]
-                part['name'] = subcomponent.name
-                part['fwd'] = True
+                part["type"] = self.SO_terms()[SO_term]
+                name = subcomponent.name
+                if not name:
+                    name = subcomponent.display_id
+                part["name"] = name
+                part["fwd"] = True
                 if subcomponent.locations and len(subcomponent.locations) > 0:
-                    part['start'] = subcomponent.locations[0].start
-                    part['end'] = subcomponent.locations[0].end
+                    part["start"] = subcomponent.locations[0].start
+                    part["end"] = subcomponent.locations[0].end
                 if opts:
-                    part['opts'] = opts
+                    part["opts"] = opts
                 dpl_design.append(part)
         # sort the design by start position
-        dpl_design = sorted(dpl_design, key=lambda k: k.get('start', 0))
+        dpl_design = sorted(dpl_design, key=lambda k: k.get("start", 0))
         start, end = self.renderDNA(ax, dpl_design, part_renderers, plot_backbone=plot_backbone)
         return start, end

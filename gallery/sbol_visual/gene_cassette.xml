@@ -3,32 +3,12 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:sbol="http://sbols.org/v3#"
 >
-  <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette">
-    <sbol:displayId>GeneCassette</sbol:displayId>
-    <rdf:type rdf:resource="http://sbols.org/v3#Component"/>
-    <sbol:hasNamespace rdf:resource="http://sbols.org/dnaplotlib"/>
-    <sbol:type rdf:resource="https://identifiers.org/SBO:0000251"/>
-    <sbol:hasSequence rdf:resource="http://sbols.org/dnaplotlib/GeneCassetteSequence"/>
-    <sbol:hasFeature rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent1"/>
-    <sbol:hasFeature rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent2"/>
-    <sbol:hasFeature rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent3"/>
-    <sbol:hasFeature rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent4"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette/SubComponent1">
-    <sbol:displayId>SubComponent1</sbol:displayId>
-    <sbol:name>Promoter1</sbol:name>
-    <rdf:type rdf:resource="http://sbols.org/v3#SubComponent"/>
-    <sbol:role rdf:resource="https://identifiers.org/SO:0000167"/>
-    <sbol:instanceOf rdf:resource="https://identifiers.org/SBO:0000251"/>
-    <sbol:hasLocation rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent1/Range1"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette/SubComponent3">
-    <sbol:displayId>SubComponent3</sbol:displayId>
-    <sbol:name>CodingSequence1</sbol:name>
-    <rdf:type rdf:resource="http://sbols.org/v3#SubComponent"/>
-    <sbol:role rdf:resource="https://identifiers.org/SO:0000316"/>
-    <sbol:instanceOf rdf:resource="https://identifiers.org/SBO:0000251"/>
-    <sbol:hasLocation rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent3/Range1"/>
+  <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette/SubComponent2/Range1">
+    <sbol:displayId>Range1</sbol:displayId>
+    <rdf:type rdf:resource="http://sbols.org/v3#Range"/>
+    <sbol:hasSequence rdf:resource="http://sbols.org/dnaplotlib/RBS1Sequence"/>
+    <sbol:start rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</sbol:start>
+    <sbol:end rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">61</sbol:end>
   </rdf:Description>
   <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette/SubComponent4">
     <sbol:displayId>SubComponent4</sbol:displayId>
@@ -38,12 +18,13 @@
     <sbol:instanceOf rdf:resource="https://identifiers.org/SBO:0000251"/>
     <sbol:hasLocation rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent4/Range1"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette/SubComponent1/Range1">
-    <sbol:displayId>Range1</sbol:displayId>
-    <rdf:type rdf:resource="http://sbols.org/v3#Range"/>
-    <sbol:hasSequence rdf:resource="http://sbols.org/dnaplotlib/Promoter1Sequence"/>
-    <sbol:start rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</sbol:start>
-    <sbol:end rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">44</sbol:end>
+  <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette/SubComponent1">
+    <sbol:displayId>SubComponent1</sbol:displayId>
+    <sbol:name>Promoter1</sbol:name>
+    <rdf:type rdf:resource="http://sbols.org/v3#SubComponent"/>
+    <sbol:role rdf:resource="https://identifiers.org/SO:0000167"/>
+    <sbol:instanceOf rdf:resource="https://identifiers.org/SBO:0000251"/>
+    <sbol:hasLocation rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent1/Range1"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette/SubComponent3/Range1">
     <sbol:displayId>Range1</sbol:displayId>
@@ -51,13 +32,6 @@
     <sbol:hasSequence rdf:resource="http://sbols.org/dnaplotlib/CodingSequence1Sequence"/>
     <sbol:start rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">62</sbol:start>
     <sbol:end rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">922</sbol:end>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette/SubComponent4/Range1">
-    <sbol:displayId>Range1</sbol:displayId>
-    <rdf:type rdf:resource="http://sbols.org/v3#Range"/>
-    <sbol:hasSequence rdf:resource="http://sbols.org/dnaplotlib/Terminator1Sequence"/>
-    <sbol:start rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">923</sbol:start>
-    <sbol:end rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1025</sbol:end>
   </rdf:Description>
   <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette/SubComponent2">
     <sbol:displayId>SubComponent2</sbol:displayId>
@@ -67,11 +41,38 @@
     <sbol:instanceOf rdf:resource="https://identifiers.org/SBO:0000251"/>
     <sbol:hasLocation rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent2/Range1"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette/SubComponent2/Range1">
+  <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette">
+    <sbol:displayId>GeneCassette</sbol:displayId>
+    <sbol:name>Gene Cassette</sbol:name>
+    <rdf:type rdf:resource="http://sbols.org/v3#Component"/>
+    <sbol:hasNamespace rdf:resource="http://sbols.org/dnaplotlib"/>
+    <sbol:type rdf:resource="https://identifiers.org/SBO:0000251"/>
+    <sbol:hasSequence rdf:resource="http://sbols.org/dnaplotlib/GeneCassetteSequence"/>
+    <sbol:hasFeature rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent1"/>
+    <sbol:hasFeature rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent2"/>
+    <sbol:hasFeature rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent3"/>
+    <sbol:hasFeature rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent4"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette/SubComponent1/Range1">
     <sbol:displayId>Range1</sbol:displayId>
     <rdf:type rdf:resource="http://sbols.org/v3#Range"/>
-    <sbol:hasSequence rdf:resource="http://sbols.org/dnaplotlib/RBS1Sequence"/>
-    <sbol:start rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</sbol:start>
-    <sbol:end rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">61</sbol:end>
+    <sbol:hasSequence rdf:resource="http://sbols.org/dnaplotlib/Promoter1Sequence"/>
+    <sbol:start rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</sbol:start>
+    <sbol:end rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">44</sbol:end>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette/SubComponent3">
+    <sbol:displayId>SubComponent3</sbol:displayId>
+    <sbol:name>CodingSequence1</sbol:name>
+    <rdf:type rdf:resource="http://sbols.org/v3#SubComponent"/>
+    <sbol:role rdf:resource="https://identifiers.org/SO:0000316"/>
+    <sbol:instanceOf rdf:resource="https://identifiers.org/SBO:0000251"/>
+    <sbol:hasLocation rdf:resource="http://sbols.org/dnaplotlib/GeneCassette/SubComponent3/Range1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://sbols.org/dnaplotlib/GeneCassette/SubComponent4/Range1">
+    <sbol:displayId>Range1</sbol:displayId>
+    <rdf:type rdf:resource="http://sbols.org/v3#Range"/>
+    <sbol:hasSequence rdf:resource="http://sbols.org/dnaplotlib/Terminator1Sequence"/>
+    <sbol:start rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">923</sbol:start>
+    <sbol:end rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1025</sbol:end>
   </rdf:Description>
 </rdf:RDF>

@@ -32,6 +32,7 @@ class SBOLRenderer(dpl.DNARenderer):
             "SO:0000316": "CDS",
             "SO:0000141": "Terminator",
             "SO:0000552": "RBS",
+            "SO:0000139": "RBS",
             "SO:0001953": "Scar",
             # No SO Term : 'Spacer',
             # No SO Term : 'EmptySpace',
@@ -92,6 +93,8 @@ class SBOLRenderer(dpl.DNARenderer):
                 part = {}
                 part["type"] = self.SO_terms()[SO_term]
                 name = subcomponent.name
+                # SBOL standard prescribes using the name of the subcomponent for purpose of display
+                # the display_id is used if the name is not set
                 if not name:
                     name = subcomponent.display_id
                 part["name"] = name

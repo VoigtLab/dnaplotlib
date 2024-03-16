@@ -81,13 +81,13 @@ class SBOLRenderer(dpl.DNARenderer):
         """
         if not target_component.features:
             raise ValueError("DNAComponent does not have any features.  Cannot render SBOL.")
-        dpl_design = (
-            []
-        )  # The SBOL data will be converted to a list of dictionaries used by DNAPlotLib
+        # The SBOL data will be converted to a list of dictionaries used by DNAPlotLib
+        dpl_design = []
         for subcomponent in target_component.features:
             if not subcomponent.roles:
                 raise ValueError("Subcomponent does not have a role.  Cannot render SBOL.")
             SO_term = subcomponent.roles[0].split("/")[-1]
+            # TODO else if SO term of DNAComponent is not recognized, default to a USER_DEFINED sbol symbol
             if SO_term in list(self.SO_terms().keys()):
                 part = {}
                 part["type"] = self.SO_terms()[SO_term]

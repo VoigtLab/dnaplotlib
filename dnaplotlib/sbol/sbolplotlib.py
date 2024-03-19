@@ -15,54 +15,44 @@ DNAplotlib SBOL Functionality
 #    All rights reserved.
 #    OSI Open Software License 3.0 (OSL-3.0) license.
 
-import matplotlib
-import matplotlib.pyplot as plt
-
-from matplotlib.patches import Polygon, Ellipse, Wedge, Circle, PathPatch, Rectangle
-from matplotlib.path import Path
-from matplotlib.lines import Line2D
-from matplotlib.patheffects import Stroke
-import matplotlib.patches as patches
-import math
-
 import dnaplotlib as dpl
-import sbol
 
-__author__  = 'Bryan Bartley <bartleyba@sbolstandard.org>\n\
-               Thomas E. Gorochowski <tom@chofski.co.uk>'
-__license__ = 'MIT'
-__version__ = '1.0'
+__author__ = "Bryan Bartley <bartleyba@sbolstandard.org>\n\
+               Thomas E. Gorochowski <tom@chofski.co.uk>"
+__license__ = "MIT"
+__version__ = "1.0"
+
 
 class SBOLRenderer(dpl.DNARenderer):
 
     def SO_terms(self):
-        """ Return dictionary of all standard built-in SBOL part renderers referenced by Sequence Ontology term
-        """
+        """Return dictionary of all standard built-in SBOL part renderers referenced by Sequence Ontology term"""
         return {
-        'SO_0000167': 'Promoter',
-        'SO_0000316': 'CDS',
-        'SO_0000141': 'Terminator',
-        'SO_0000552': 'RBS',
-        'SO_0001953': 'Scar',
-        # No SO Term : 'Spacer',
-        # No SO Term : 'EmptySpace',
-        'SO_000037': 'Ribozyme',
-        'SO_0001977': 'Ribonuclease',
-        'SO_0001955': 'ProteinStability',
-        'SO_0001956': 'Protease',
-        'SO_0000057': 'Operator',
-        # SO term insulator does not have same semantics : 'Insulator',
-        'SO_0000296': 'Origin',
-        'SO_0001932': '5Overhang',
-        'SO_0001933': '3Overhang',
-        'SO_0001687': 'RestrictionSite',
-        'SO_0000299': 'RecombinaseSite',
-        'SO_0001691': 'BluntRestrictionSite',
-        'SO_0005850': 'PrimerBindingSite',
-        'SO_0001694': '5StickyRestrictionSite',
-        'SO_0001690': '3StickyRestrictionSite',
-        'SO_0000001': 'UserDefined',
-        'SO_0001978': 'Signature',
+            "SO:0000167": "Promoter",
+            "SO:0000316": "CDS",
+            "SO:0000141": "Terminator",
+            "SO:0000552": "RBS",
+            "SO:0000139": "RBS",
+            "SO:0001953": "Scar",
+            # No SO Term : 'Spacer',
+            # No SO Term : 'EmptySpace',
+            "SO:000037": "Ribozyme",
+            "SO:0001977": "Ribonuclease",
+            "SO:0001955": "ProteinStability",
+            "SO:0001956": "Protease",
+            "SO:0000057": "Operator",
+            # SO term insulator does not have same semantics : 'Insulator',
+            "SO:0000296": "Origin",
+            "SO:0001932": "5Overhang",
+            "SO:0001933": "3Overhang",
+            "SO:0001687": "RestrictionSite",
+            "SO:0000299": "RecombinaseSite",
+            "SO:0001691": "BluntRestrictionSite",
+            "SO:0005850": "PrimerBindingSite",
+            "SO:0001694": "5StickyRestrictionSite",
+            "SO:0001690": "3StickyRestrictionSite",
+            "SO:0000001": "UserDefined",
+            "SO:0001978": "Signature",
         }
 
     def renderSBOL(self, ax, target_component, part_renderers, opts=None, plot_backbone=True):
@@ -90,35 +80,32 @@ class SBOLRenderer(dpl.DNARenderer):
         end : float
             The x-point in the axis space that drawing ends.
         """
-        dpl_design = []  # The SBOL data will be converted to a list of dictionaries used by DNAPlotLib
-        sbol_design = []  # Contains a list of DNA components corresponding to the items in dpl_design
-        try:
-            current_ann = target_component.annotations[0]
-        except:
-            print("Target DNAComponent does not have any SequenceAnnotations.  Cannot render SBOL.")
-        END_OF_DESIGN = False
-        while not END_OF_DESIGN:
-            try:
-                subcomponent = current_ann.subcomponent
-            except:
-                print("DNAComponent does not have subcomponents.  Cannot render SBOL.")
-
-            # Translate from SBOL data model to DNAPlotLib dictionary specification for designs
-            SO_term = subcomponent.type.split('/')[-1]
+        if not target_component.features:
+            raise ValueError("DNAComponent does not have any features.  Cannot render SBOL.")
+        # The SBOL data will be converted to a list of dictionaries used by DNAPlotLib
+        dpl_design = []
+        for subcomponent in target_component.features:
+            if not subcomponent.roles:
+                raise ValueError("Subcomponent does not have a role.  Cannot render SBOL.")
+            SO_term = subcomponent.roles[0].split("/")[-1]
+            # TODO else if SO term of DNAComponent is not recognized, default to a USER_DEFINED sbol symbol
             if SO_term in list(self.SO_terms().keys()):
                 part = {}
-                part['type'] = self.SO_terms()[SO_term]
-                part['name'] = subcomponent.display_id
-                part['fwd'] = True
+                part["type"] = self.SO_terms()[SO_term]
+                name = subcomponent.name
+                # SBOL standard prescribes using the name of the subcomponent for purpose of display
+                # the display_id is used if the name is not set
+                if not name:
+                    name = subcomponent.display_id
+                part["name"] = name
+                part["fwd"] = True
+                if subcomponent.locations and len(subcomponent.locations) > 0:
+                    part["start"] = subcomponent.locations[0].start
+                    part["end"] = subcomponent.locations[0].end
                 if opts:
-                    part['opts'] = opts
+                    part["opts"] = opts
                 dpl_design.append(part)
-                sbol_design.append(subcomponent)
-            # TODO else if SO term of DNAComponent is not recognized, default to a USER_DEFINED sbol symbol
-            if len(current_ann.precedes) == 0:
-                END_OF_DESIGN = True
-            else:
-                current_ann = current_ann.precedes[0]  # Iterate to the next downstream annotation
-        
+        # sort the design by start position
+        dpl_design = sorted(dpl_design, key=lambda k: k.get("start", 0))
         start, end = self.renderDNA(ax, dpl_design, part_renderers, plot_backbone=plot_backbone)
         return start, end

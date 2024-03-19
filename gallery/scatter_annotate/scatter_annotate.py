@@ -14,7 +14,7 @@ __version__ = '1.0'
 
 # Read some data points for the scatter plot
 filename_in ='data_points.txt'
-data_reader = csv.reader(open(filename_in, 'rU'), delimiter=' ')
+data_reader = csv.reader(open(filename_in, 'r'), delimiter=' ')
 x = []
 y = []
 for row in data_reader:

@@ -55,3 +55,13 @@ Install dependancies
 ```shell
 pip install -r requirements.txt
 ```
+
+## Testing
+
+The tests are using [pytest-mpl](https://github.com/matplotlib/pytest-mpl) to check if the gallery examples remain the same (image comparison with some tolerance).
+The tests are run with github actions but you can also run it manually:
+
+```shell
+pip install -r requirements-test.txt
+pytest --mpl
+```
